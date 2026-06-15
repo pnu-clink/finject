@@ -176,20 +176,24 @@ The paper reports:
   both answers the original control correctly and refuses the corresponding
   unanswerable variant.
 
-## Construction and Validation Files
+## Construction Audit Files
 
-These files are for readers who want to audit how the benchmark was built:
+These files document the construction pipeline behind the final release. They
+are included so readers can inspect the perturbation instructions and validation
+logic, not to reproduce the private raw generation pool exactly.
 
 - `prompts/perturbation_generation.md`: prompt used to create initial
   perturbations and human-calibrated retries.
 - `stage1/`: deterministic structural gate that removes malformed or
-  wrong-shape perturbations before semantic judging.
+  wrong-shape perturbations before semantic judging. Stage 1 checks surface
+  form only; it does not decide whether the edited evidence is answer-critical.
 - `prompts/semantic_judge.md`: non-self LLM judge prompt for semantic
   unanswerability validation.
 - `stage2/README.md`: summary of the Stage 2 majority-vote protocol.
 
-Intermediate raw generations, audit workbooks, annotator scratch files, and API
-logs are not included.
+The released dataset has already passed automatic validation, balanced sampling,
+human verification, and repair/regeneration. Intermediate raw generations,
+spreadsheet audits, annotator scratch files, and API logs are not included.
 
 ## Citation
 
