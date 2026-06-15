@@ -48,6 +48,11 @@ Generator distribution:
 - `stage1_pass`, `stage2_final_pass`, `stage2_strict_final_pass`: automatic validation metadata.
 - `repair_status`, `manual_final_repair`: human verification and repair provenance.
 
-## Public Release Note
+## Validation
 
-`schema.json` and `splits.json` are generated from the final release files. The dataset card states the upstream FinanceReasoning dependency and the current license/redistribution status.
+`schema.json` and `splits.json` are generated from the final release files. To
+check the release counts and schema, run:
+
+```bash
+python3 ../../scripts/validate_dataset.py
+```

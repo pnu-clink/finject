@@ -11,9 +11,11 @@ This folder contains the 78 answerable original controls paired with the FInject
 
 The main FInject evaluation uses paired instances: a model should answer the original control when evidence is sufficient and refuse the corresponding unanswerable variant when evidence is missing or conflicting. Providing the 78 controls makes the paired evaluation reproducible without requiring users to reconstruct the seed subset manually.
 
-## Upstream Provenance
+## Source Provenance
 
-The controls are derived from the public FinanceReasoning benchmark. The full upstream FinanceReasoning dataset is not redistributed here. See `../../UPSTREAM_LICENSE_CHECK.md` and `../../LICENSE_PENDING.md` before public release.
+The controls correspond to the 78 FinanceReasoning seed problems used to build
+the final FInject benchmark. They are included so paired evaluation can be run
+directly from this repository.
 
 ## Core Fields
 

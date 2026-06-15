@@ -8,7 +8,6 @@ task_categories:
 pretty_name: FInject
 size_categories:
   - n<1K
-license: other
 ---
 
 # FInject Dataset Card
@@ -92,10 +91,6 @@ FInject focuses on English financial word problems and controlled single-instanc
 ## Ethics
 
 The benchmark is derived from public benchmark-style financial reasoning problems and synthetic perturbations. It does not contain private financial records. Generative AI tools were used during construction and judging, but final dataset inclusion was subject to validation and human review.
-
-## Licensing
-
-The final release depends on the redistribution terms of the upstream FinanceReasoning data. The upstream GitHub repository is public, but no explicit license file or GitHub-detected license was found during our 2026-06-15 check. Before public upload, confirm and state the final data license here. If code and data use different licenses, list them separately.
 
 ## Citation
 
