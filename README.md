@@ -171,9 +171,10 @@ The paper reports:
   over-refusing answerable controls.
 - **Hallucination rate**: how often the model still gives a numeric answer for
   unanswerable variants.
-- **PairSucc**: whether the model both answers the original control correctly
-  and refuses its paired unanswerable variant.
 - **MCScore**: refusal quality adjusted by hallucination rate.
+- **PairSucc**: the strict paired metric. A model receives credit only when it
+  both answers the original control correctly and refuses the corresponding
+  unanswerable variant.
 
 ## Construction and Validation Files
 
