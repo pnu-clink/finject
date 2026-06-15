@@ -13,6 +13,7 @@ paper/overleaf_source/**/*.fdb_latexmk
 paper/overleaf_source/**/*.fls
 paper/overleaf_source/**/*.log
 paper/overleaf_source/**/*.out
+paper/overleaf_source/main.pdf
 paper/overleaf_source/tables/archive_unused_*/
 
 # --- Virtual env ---

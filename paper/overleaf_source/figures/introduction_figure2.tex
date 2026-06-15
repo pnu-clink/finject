@@ -7,7 +7,7 @@
 \providecommand{\nw}[1]{{\fontsize{5.8}{7}\selectfont after:\ #1}}
 \providecommand{\eff}[1]{{\fontsize{5.6}{6.8}\selectfont\color{black!75}#1}}
 \providecommand{\dn}{{\fontsize{5.6}{5.6}\selectfont $\downarrow$}}
-% 인라인 아이콘: math axis(줄 중앙) 정렬
+% Inline icons aligned on the math axis.
 \providecommand{\fjicon}[1]{\ensuremath{\vcenter{\hbox{#1}}}}
 \providecommand{\cmark}{\fjicon{\tikz{\draw[line width=.8pt,green!45!black] (0,0)--(.12,-.12)--(.32,.16);}}}
 \providecommand{\xmark}{\fjicon{\tikz{\draw[line width=.8pt,red!55!black] (0,-.11)--(.24,.15) (0,.15)--(.24,-.11);}}}
@@ -40,12 +40,12 @@
                   font=\fontsize{6}{7}\selectfont\sffamily, inner sep=2pt},
 }
 
-\begin{figure}[H]% 제목 바로 밑 고정 (\usepackage{float} 필요; 안되면 [t])
+\begin{figure}[H]
 \centering
 \resizebox{0.9\columnwidth}{!}{%
 \begin{tikzpicture}[font=\sffamily, node distance=3.5mm and 5mm]
 
-  % ---- (1) 구체적 원본 문제 + 모델 풀이 ----
+  % ---- (1) Concrete original problem and model solution ----
   \node[vseed] (seed)
     {\coinicon~\textbf{A well-posed finance problem}\\[2pt]
      {\fontsize{6.6}{8.2}\selectfont\itshape ``A company takes out a one-year loan of
@@ -56,15 +56,15 @@
      {\fontsize{5.8}{6.8}\selectfont\color{black!60} every number it needs is present
       $\Rightarrow$ exactly one correct answer}};
 
-  % ---- (2) 동기 질문 ----
+  % ---- (2) Motivating question ----
   \node[vask, below=3mm of seed] (ask)
     {Real financial documents are often \textbf{incomplete} or \textbf{self-contradictory}.\\
      \warnicon~Does the model notice \textbf{when the problem can no longer be solved?}};
 
-  % ---- (3) unanswerability 주입 ----
+  % ---- (3) Unanswerability injection ----
   \node[vpill, below=3mm of ask] (pill) {INJECT UNANSWERABILITY};
 
-  % ---- 분기: 구체적 before -> after ----
+  % ---- Branches: concrete before-to-after transformations ----
   \node[vabs, below left =5mm and 1mm of pill] (abs)
     {\textbf{ABSENCE}~\subt{a needed number is gone}\\[2pt]
      \od{``The bank charges \textbf{6\%} annual interest.''}\\[1pt] \dn\\[1pt]
@@ -79,11 +79,11 @@
      \eff{$\Rightarrow$ which rate is right? $\to$ no unique answer}%
      \subline{IC-value \textbar\ IC-source \textbar\ IC-premise}};
 
-  % ---- (4) 모델 ----
+  % ---- (4) Model under test ----
   \node[vmodel] (model) at ($(abs.south)!0.5!(con.south)+(0,-11mm)$)
     {\textbf{\bench}\\[0pt]{\fontsize{6}{7}\selectfont\color{black!55}LLM under test}};
 
-  % ---- (5) 결과 ----
+  % ---- (5) Outcomes ----
   \node[vbad, below left =7mm and 1mm of model] (bad)
     {{\xmark}~\textbf{Answers anyway}\\[2pt]
      {\fontsize{6.2}{7.6}\selectfont\itshape ``The interest is \textbf{\$12{,}000}.''}\\[1pt]

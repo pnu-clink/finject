@@ -1,15 +1,13 @@
 % ============================================================
-%  finneg_taxonomy_radial.tex — 6-way perturbation radial (carry-trade 예시)
-%  중앙 원본 문제 → 6방향 유형별 변형 (original→changed 상세 비교).
-%  Absence(파랑)/Conflict(주황) 색 구분.
-%  사용:  \input{figures/taxonomy_radial}
-%  PREAMBLE 필요:  \usepackage{tikz}\usepackage{float}\usepackage{xcolor}
-%  (도서관은 파일 안에서 로드함)
+%  FInject 6-way perturbation taxonomy figure.
+%  Center seed problem with six before-to-after perturbation types.
+%  Blue denotes Absence; orange denotes Conflict.
+%  Requires tikz, float, and xcolor in the preamble.
 % ============================================================
 \providecommand{\bench}{FInject}
 \providecommand{\Description}[1]{}
 \usetikzlibrary{arrows.meta,positioning,calc}
-% original / changed 한 줄 헬퍼
+% One-line original / changed helpers.
 \providecommand{\od}[1]{{\fontsize{5}{6}\selectfont\color{black!50}orig:\ #1}}
 \providecommand{\nw}[1]{{\fontsize{5.2}{6.2}\selectfont new:\ #1}}
 \providecommand{\dn}{{\fontsize{5}{5}\selectfont $\downarrow$}}
@@ -28,12 +26,12 @@
   cap/.style  ={font=\fontsize{5}{5.6}\selectfont\itshape,text=black!55},
 }
 
-\begin{figure}[H]% 제목 바로 밑 고정 (\usepackage{float} 필요; 안되면 [t]로)
+\begin{figure}[H]
 \centering
 \resizebox{\columnwidth}{!}{%
 \begin{tikzpicture}[font=\sffamily]
 
-  % ---------- 중앙: 원본 문제 ----------
+  % ---------- Center: original problem ----------
   \node[ctr] (ctr) at (0,0)
     {\textbf{Original problem}\\{\fontsize{5}{5.6}\selectfont\color{black!55}(solvable seed)}\\[3pt]
      {\fontsize{5.6}{6.8}\selectfont\itshape ``A global investor runs a carry trade: borrow
@@ -41,7 +39,7 @@
       convert to BRL at \textbf{exchange rate 0.05}, hold 1 year (rate assumed stable).''}\\[3pt]
      {\fontsize{5.2}{6}\selectfont Carry profit needs all three values.}};
 
-  % ---------- 좌측: ABSENCE (값 제거) ----------
+  % ---------- Left: Absence ----------
   \node[abss] (eap) at (-6.0, 3.0)
     {\textbf{EA-partial}~\subt{(explicit missing value)}\\[2pt]
      \od{``\dots exchange rate of \textbf{0.05}.''}\\ \dn\\
@@ -55,7 +53,7 @@
      \od{``\dots rate is extremely low \textbf{at 0.5\% p.a.}\dots''}\\ \dn\\
      \nw{``\dots rate is extremely low\colorbox{yellow!50}{ \,} \dots'' (value silently gone)}};
 
-  % ---------- 우측: CONFLICT (값 충돌) ----------
+  % ---------- Right: Conflict ----------
   \node[cons] (icv) at (6.0, 3.0)
     {\textbf{IC-value}~\subt{(intra-document)}\\[2pt]
      \od{``\dots Brazil \dots \textbf{at 5\% per annum}\dots''}\\ \dn\\
@@ -69,7 +67,7 @@
      \od{``\dots exchange rate \textbf{remains stable}\dots''}\\ \dn\\
      \nw{adds \colorbox{orange!35}{``repaid at a different year-end rate''} (contradicts ``stable'')}};
 
-  % ---------- 화살표 (색으로 그룹 구분) ----------
+  % ---------- Arrows ----------
   \draw[aarr] (ctr) -- (eap);
   \draw[aarr] (ctr) -- (eaf);
   \draw[aarr] (ctr) -- (sa);
@@ -77,7 +75,7 @@
   \draw[carr] (ctr) -- (ics);
   \draw[carr] (ctr) -- (icp);
 
-  % ---------- 그룹 라벨 ----------
+  % ---------- Group labels ----------
   \node[tagA] at (-6.0, 4.35) {ABSENCE \,/\, remove a value};
   \node[tagC] at ( 6.0, 4.35) {CONFLICT \,/\, add a value};
 

@@ -19,16 +19,10 @@
 \usepackage{float}
 \usepackage{xcolor}
 
-% \newcommand{\bench}{\textsc{FinNeg}\xspace}
 \newcommand{\bench}{\textsc{FInject}\xspace}
-\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
-
-\definecolor{gmg}{HTML}{146e7a}
-\newcommand{\mogan}[1]{\textcolor{gmg}{[Mogan: #1]}}
 
 \begin{document}
 
-% \title{\bench: A Financial Negative Benchmark for Abstention under Missing and Conflicting Numerical Evidence}
 \title{\bench: Expanding Finance Reasoning Problems through Injection of Unanswerability}
 
 \author{Jinkyu Kim}
@@ -102,18 +96,6 @@ Experiments show that \bench discriminates evidence-aware reasoning from surface
 Code and data are publicly available at \url{https://github.com/pnu-clink/finject} and \url{https://huggingface.co/datasets/pnu-clink/finject} (DOI: \href{https://doi.org/10.57967/hf/9057}{10.57967/hf/9057}).
 \end{abstract}
 
-% \begin{abstract}
-% Financial reasoning benchmarks typically assume that every problem is answerable once a model performs the right calculation.
-% Real financial documents are less tidy: material values may be omitted, silently removed, duplicated with incompatible values, or contradicted across sources.
-% We introduce \bench, a financial negative benchmark for evaluating whether large language models can abstain when numerical evidence is insufficient or irreconcilable.
-% Starting from 78 well-solved hard examples in FinanceReasoning, we construct answerable controls and negative variants using a six-way perturbation taxonomy: three absence types and three conflict types.
-% Each instance supports three complementary tasks: answerable/unanswerable detection, perturbation-type prediction, and natural-language rationale generation.
-% We further define a metacognitive score that combines refusal quality with hallucination avoidance.
-% \bench provides a reusable dataset, unanswerability injection protocol, annotation guideline, and evaluation harness for studying abstention in high-stakes numerical reasoning.
-% Code and data are publicly available at \url{https://github.com/pnu-clink/finject} and \url{https://huggingface.co/datasets/pnu-clink/finject} (DOI: \href{https://doi.org/10.57967/hf/9057}{10.57967/hf/9057}).
-
-% \end{abstract}
-
 \keywords{Financial NLP, Benchmark, Abstention, Hallucination, Numerical Reasoning, Large Language Models}
 
 \ccsdesc[500]{Computing methodologies~Natural language processing}
@@ -125,27 +107,16 @@ Code and data are publicly available at \url{https://github.com/pnu-clink/finjec
 \section{Introduction}
 
 
-% \begin{figure}[t]
-%   \centering
-%   % \includegraphics[width=\columnwidth]{figures/taxonomy.png}
-%   \includegraphics[width=\columnwidth]{figures/taxonomy2.pdf}
-%   \caption{Illustration of taxonomy}
-%   \label{fig:variation}
-% \end{figure}
-
-\begin{figure}[H]% 제목 바로 밑 고정 (\usepackage{float} 필요; 안되면 [t])
+\begin{figure}[H]
 \centering
-% \resizebox{0.9\columnwidth}{!}{%
 \includegraphics[width=0.7\columnwidth]{figures/teasor.pdf}
 \caption{\bench turns a well-posed finance problem into absence and conflict variants, separating models that hallucinate an answer from those that correctly abstain.}
 \label{fig:concept}
 \end{figure}
 
-% \input{figures/introduction_figure2}
 \input{figures/pipeline_overview}
 
 In real-world corporate enterprises, financial situations are tightly intertwined with \textbf{decision-making processes} (e.g., investment evaluation, risk management), where each decision can affect multiple aspects of business management, such as asset liquidity and sustainable profitability. Effective financial decision making requires an accurate assessment of the given situation, together with complex reasoning and problem-solving skills. However, some financial situations may either present \textit{insufficient context} or contain \textit{contradictory information}, rendering the underlying numerical problems unsolvable. Therefore, it is important to preemptively assess the answerability of the problem itself, before producing answers that may lead to disastrous decisions. 
-% \mogan{Do you think we should add an real-world example such as a business analyst ruining his company?}
 
 
 
@@ -178,118 +149,11 @@ Figure~\ref{fig:pipeline} summarizes the construction, validation, repair, and d
 
 Unanswerable QA benchmarks such as SQuAD 2.0 and AbstentionBench test whether models withhold answers under insufficient evidence~\cite{rajpurkar2018know,kirichenko2026abstentionbench}. Conflict-oriented resources such as ConflictBank, ContraDoc, and FaithEval study inconsistent evidence and context faithfulness~\cite{su2024conflictbank,li2024contradoc,ming2025faitheval}. In finance, FinQA, TAT-QA, and FinanceReasoning focus on answerable numerical reasoning~\cite{chen2021finqa,zhu2021tatqa,financereasoning2025}, while FinS-Pilot evaluates financial RAG systems where relevant information is expected to exist~\cite{finspilot2025}. Recent resources also emphasize fine-grained hallucination evaluation and metrics~\cite{cfaith2025,mirage2025}. \bench combines these directions: it keeps financial numerical reasoning as the base task, but makes evidence insufficiency and irreconcilability the object of evaluation.
 
-% Agentic
-
-% \section{Construction}
-
-% \subsection{Overview of FInject}
-% \mogan{Upon constructing the benchmark, we briefly describe the use of FinanceReasoning as our seed dataset and which LLMs we utilized for injecting unanswerability into the finance math problems.}
-
-% \subsection{Seed Problems}
-
-% \mogan{What does the FinanceReasoning dataset consist of?}
-% We start from the hard split of FinanceReasoning and use 78 seed problems whose original answers are verified through blind solving and executable reference solutions~\cite{financereasoning2025}. This step avoids a trivial negative benchmark in which models fail because the original financial calculation is already beyond their ability.
-% \mogan{The purpose of this step is to }The Python solution is retained during validation and human annotation to identify which quantities are load-bearing.
-
-% \subsection{Perturbation Taxonomy}
-% \subsection{Taxonomy of Unanswerability Injection}
-
-% For each seed, four generator families produce one candidate for each of six categories, yielding $78 \times 6 \times 4 = 1{,}872$ candidates before validation. Table~\ref{tab:taxonomy} summarizes the taxonomy.
-
-% \begin{table}[t]
-% \centering
-% \small
-% \caption{\bench perturbation taxonomy.}
-% \label{tab:taxonomy}
-% \begin{tabular}{lll}
-% \toprule
-% Group & Type & Manipulation \\
-% \midrule
-% Absence & EA-partial & Replace one essential value with a marker \\
-% Absence & EA-full & Delete the carrier clause or sentence \\
-% Absence & SA & Remove the value silently in fluent text \\
-% Conflict & IC-value & State the same quantity with two values \\
-% Conflict & IC-source & Give equal-authority source disagreement \\
-% Conflict & IC-premise & Add mutually incompatible premises \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
-
-% The absence categories remove load-bearing data. The conflict categories preserve enough apparent evidence to make the question look answerable, but introduce two plausible alternatives without a reliable preference cue. We explicitly reject conflicts resolved by audit status, recency, management confirmation, action anchors, or definitional arithmetic.
-
-% \subsection{Two-Stage Automatic Validation}
-
-
-% \mogan{Contemporary LLM benchmark studies have endeavored to achieve credibility and quality in LLM-generated data through systematic verification practices. We constructed a two-stage automatic validation pipline to ensure \bench's reliability. The first stage checks whether each problem was successfully injected with its corresponding type as intended. }
-
-% LLM generation spans a vast, open-ended space of fluent yet error-prone outputs. Recent work therefore pairs it with explicit verification, which may be deterministic and tool-based, semantic and model-based, or both. Such verification is increasingly used to constrain generation and improve quality in domains like math~\cite{kung2026leapsuperchargingllmsformal} and travel~\cite{cheng2025travelbench}, in agentic systems~\cite{liu2026autoresearchclaw}, and in self-verified data construction~\cite{lee2026selfverifieddistillation}.
-
-% \textbf{Stage~1} is a deterministic structural gate. % ref - appendix algo : reusable, understandable
-% It checks whether the transformed instance has the intended surface form before any semantic judging. 
-% The gate applies category-specific predicates: EA-partial must introduce exactly one \texttt{[DATA MISSING]} marker at a load-bearing value; EA-full must remove the carrier sentence or clause without leaving an explicit marker; SA must remove the value without an explicit marker or broken deletion artifact; IC-value must introduce two values for the same load-bearing quantity; IC-source must attribute two conflicting values to two named sources; and IC-premise must add a premise that conflicts with an existing load-bearing premise rather than a mere numeric variant. Candidates that fail these structural predicates are excluded before Stage~2. Across the 1,872 candidates, 1,694 pass Stage~1. 
-% Table~\ref{tab:stage1} reports the current construction audit.
-
-% \mogan{I would use itemize like below,}
-% \begin{itemize}
-%     \item \textbf{Partial (EA-partial): }
-%     \item Partial 
-%     \item Partial 
-%     \item Partial 
-%     \item Partial 
-%     \item Partial 
-% \end{itemize}
-
-% \begin{table}[!t]
-% \centering
-% \small
-% \caption{Stage~1 structural pass rates before semantic judging.}
-% \label{tab:stage1}
-% \begin{tabular}{lrr}
-% \toprule
-% Generator & Pass & Macro pass rate \\
-% \midrule
-% Claude Opus & 446/468 & 95.3 \\
-% GPT/Codex & 440/468 & 94.0 \\
-% Gemini 2.5 Pro & 413/468 & 88.2 \\
-% R1-Distill-32B & 395/468 & 84.4 \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
-% \FloatBarrier
-
-% \textbf{Stage~2} is a semantic judge gate over the Stage~1 survivors. Judges answer two binary questions: whether the candidate preserves the assigned category semantics and whether the transformed problem is genuinely unanswerable. The category-specific unanswerability rules are as follows. For EA-partial, EA-full, and SA, the removed value or evidence must be required by the reference solution, absent from the remaining text, not recoverable by algebra or unit conversion, and not replaced by an equivalent final answer. For IC-value, the two values must refer to the same load-bearing quantity, both values must be plausible, and the conflict must not be resolved by an action anchor, implausible alternative, unit conversion, or back-derivation. For IC-source, the two values must be clearly attributed to named sources, and neither source may have a one-sided priority cue such as audited, official, latest, corrected, system-of-record, or management-confirmed. For IC-premise, the added premise must conflict with an existing load-bearing premise and must not be reconcilable as a more specific condition that still yields a determinate answer. To reduce generator-family bias, each candidate is judged only by non-self model families. The main Stage~2 decision is:
-% \[
-%   \mathrm{Stage2Pass}(x)=
-%   \mathbb{1}\left[\sum_{j \in J_x}
-%   \mathbb{1}(\mathrm{Unanswerable}_j(x)=\mathrm{PASS}) \ge 2\right],
-% \]
-% where $J_x$ is the set of eligible non-self judges. The main automatic criterion is:
-% \[
-%   \mathrm{FinalPass}(x)=\mathrm{Stage1Pass}(x) \land \mathrm{Stage2Pass}(x).
-% \]
-% Judges also emit a category-fidelity label. We use it for strict sensitivity analysis rather than as the main metric, because Stage~1 already enforces structural category conformance:
-% \[
-%   \mathrm{StrictPass}(x)=
-%   \mathrm{Stage1Pass}(x) \land
-%   \mathbb{1}\left[\sum_{j \in J_x}s_j(x)\ge2\right],
-% \]
-% where $s_j(x)=1$ only if judge $j$ assigns PASS to both fidelity and unanswerability.
-
-% \subsection{Release Sampling and Human Verification}
-
-% We use generator pass rates to characterize the construction pool, but we do not release only the strongest generator's outputs. Instead, the benchmark split is sampled from the validated FinalPass pool using a pre-specified stratified rule. For each category, we first collect source problem identifiers with at least one candidate satisfying $\mathrm{FinalPass}(x)=1$. The bottleneck categories, IC-source and IC-premise, contain 71 such identifiers, so we set the per-category target to 71 and construct a balanced 426-instance split. Within a category, sampling is without replacement over source problem identifiers, so no original problem appears twice in the same category. The same source problem may appear across different categories because each row tests a distinct perturbation objective. When multiple generators produce a valid candidate for the same source problem and category, we choose one by deterministic quota-balanced assignment that minimizes generator imbalance subject to candidate availability; remaining ties are broken with fixed seed 20260603. This separates pool characterization from benchmark construction, reduces dependence on a single generator family, and makes the release split reproducible.
-
-% Human verification is then applied to the sampled release candidates. The annotation interface hides automatic judge outputs and generator identity, but shows the original problem, transformed problem, intended category, and Python solution. Annotators assign binary labels for \emph{category validity} and \emph{unanswerability}; ambiguous cases are marked as failures with category-specific reason codes. The guideline explicitly separates structural invalidity from semantic answerability, so a candidate can fail one axis while passing the other. Final inclusion requires two-annotator agreement or adjudication on both axes.
-% The final resource report includes the Stage~2 majority pass matrix, strict-sensitivity matrix, raw agreement, Cohen's kappa, adjudicated counts, and representative failures.
-
-
 \section{Construction}
 
 \subsection{Overview of \bench}
 
 \bench turns answerable financial numerical reasoning problems into controlled unanswerable variants. We select seeds from FinanceReasoning, whose finance word problems pair a question and context with a numeric answer and executable reasoning procedure~\cite{financereasoning2025}. Four generator families---Claude Opus, GPT-5.5, Gemini 2.5 Pro, and R1-Distill-32B---inject six types of unanswerability, after which candidates pass through structural validation, non-self semantic judging, balanced sampling, and human verification with repair.
-
-% \input{figures/finneg_taxonomy_flow}
 
 \begin{figure}[t]
   \centering
@@ -488,5 +352,4 @@ The authors used generative AI tools, including OpenAI GPT-family tools, Anthrop
 \bibliography{main}
 
 \end{document}
-
 
