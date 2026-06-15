@@ -11,6 +11,10 @@ injecting irreconcilable conflicts.
 The repository contains the dataset, original paired controls, prompt templates,
 validation utilities, and the submitted paper artifacts.
 
+<p align="center">
+  <img src="assets/finject_teaser.png" alt="FInject concept: absence and conflict variants should trigger refusal instead of hallucination" width="420">
+</p>
+
 ## Dataset
 
 | Split | Rows | Description |
@@ -33,6 +37,16 @@ Each final row includes the original question, original context, perturbed
 context, original reference answer, executable reference solution, perturbation
 category, generator provenance, automatic validation metadata, and human repair
 provenance.
+
+## Perturbation Taxonomy
+
+FInject creates two families of unanswerability: **absence**, where required
+evidence is missing, and **conflict**, where the context contains incompatible
+evidence without a reliable cue for choosing one value or premise.
+
+<p align="center">
+  <img src="assets/finject_taxonomy.png" alt="FInject perturbation taxonomy with absence and conflict examples" width="900">
+</p>
 
 ## Tasks
 
@@ -60,6 +74,9 @@ paper/
   main.pdf                Submitted paper
   supplementary.pdf       Supplementary material
   overleaf_source/        TeX source used to compile the submitted files
+assets/
+  finject_teaser.png      Concept figure for GitHub rendering
+  finject_taxonomy.png    Perturbation taxonomy figure
 prompts/
   perturbation_generation.md
   semantic_judge.md
