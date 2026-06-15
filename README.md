@@ -50,13 +50,16 @@ evidence without a reliable cue for choosing one value or premise.
 
 ## Tasks
 
-FInject supports three evaluation tasks:
+FInject can be used to evaluate three evidence-awareness abilities:
 
-1. **Answerability detection**: decide whether the provided context supports a
-   unique answer.
-2. **Perturbation-type prediction**: identify why an unanswerable instance is
-   unanswerable.
-3. **Rationale generation**: explain the missing or conflicting evidence.
+1. **Answerability detection**: determine whether the given finance problem has
+   enough consistent evidence to support a unique answer. This is the main task
+   evaluated in the paper.
+2. **Failure-type classification**: for unanswerable variants, identify the
+   reason the problem cannot be solved, such as a missing value, silent
+   omission, value conflict, source conflict, or premise conflict.
+3. **Evidence-gap explanation**: generate a short rationale that points to the
+   missing or conflicting evidence that prevents a unique answer.
 
 The main paper focuses on answerability detection with paired evaluation:
 models should answer the 78 original controls and refuse the corresponding
