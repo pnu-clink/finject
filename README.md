@@ -65,18 +65,21 @@ unanswerable variants.
 ## Repository Layout
 
 ```text
+README.md                  Overview and usage guide
+DATASET_CARD.md            Dataset card with fields, tasks, and limitations
+CITATION.cff               Provisional repository citation
 data/
   final_release/          Final 426-instance unanswerable benchmark
   original_controls/      78 answerable controls for paired evaluation
+assets/
+  finject_teaser.png      Concept figure for GitHub rendering
+  finject_taxonomy.png    Perturbation taxonomy figure
 examples/
   load_dataset.py         Minimal JSONL loading example
 paper/
   main.pdf                Submitted paper
   supplementary.pdf       Supplementary material
   overleaf_source/        TeX source used to compile the submitted files
-assets/
-  finject_teaser.png      Concept figure for GitHub rendering
-  finject_taxonomy.png    Perturbation taxonomy figure
 prompts/
   perturbation_generation.md
   semantic_judge.md
@@ -89,9 +92,24 @@ stage2/
   Semantic judge protocol summary
 ```
 
+For most users, the main files are:
+
+- `data/final_release/finject_final_426.jsonl` for the benchmark instances.
+- `data/original_controls/finject_original_controls_78.jsonl` for paired
+  answerable controls.
+- `prompts/answerability_evaluation.md` for running model evaluation.
+
 ## Quick Start
 
-Load the final release:
+Clone the repository and validate the release:
+
+```bash
+git clone https://github.com/pnu-clink/finject.git
+cd finject
+python3 scripts/validate_dataset.py
+```
+
+Load the final unanswerable benchmark:
 
 ```python
 import json
@@ -105,11 +123,14 @@ print(rows[0]["question"])
 print(rows[0]["perturbed_context"])
 ```
 
-Run the included validation checks:
+Load the paired answerable controls:
 
-```bash
-python3 scripts/validate_dataset.py
-python3 examples/load_dataset.py
+```python
+controls_path = Path("data/original_controls/finject_original_controls_78.jsonl")
+controls = [json.loads(line) for line in controls_path.read_text().splitlines()]
+
+print(len(controls))
+print(controls[0]["question"])
 ```
 
 Expected validation summary:
@@ -121,33 +142,48 @@ Source problems: 78
 Original controls: 78
 ```
 
-## Evaluation Format
+## Model Evaluation
 
-The answerability prompt expects one JSON object:
+The main benchmark task is answerability detection. For each item, give a model
+the `question` and either an answerable `original_context` or an unanswerable
+`perturbed_context`.
+
+Use `prompts/answerability_evaluation.md` as the evaluation prompt template. The
+model must return exactly one JSON object. If the context does not support a
+unique answer, the desired output is:
 
 ```json
 {"decision":"INSUFFICIENT_INFORMATION","answer":null}
 ```
 
-or:
+If the context is sufficient, the desired output is:
 
 ```json
 {"decision":"ANSWER","answer":123.45}
 ```
 
-The main metrics are original-control accuracy, refusal precision/recall/F1,
-hallucination rate on unanswerable variants, paired success, and MCScore. The
-full answerability prompt is provided in
-`prompts/answerability_evaluation.md`.
+The paper reports:
 
-## Construction Artifacts
+- **Original accuracy**: whether the model answers the 78 controls correctly.
+- **Refusal F1**: whether the model refuses unanswerable variants without
+  over-refusing answerable controls.
+- **Hallucination rate**: how often the model still gives a numeric answer for
+  unanswerable variants.
+- **PairSucc**: whether the model both answers the original control correctly
+  and refuses its paired unanswerable variant.
+- **MCScore**: refusal quality adjusted by hallucination rate.
 
-- `prompts/perturbation_generation.md` describes the generation and
-  human-calibrated re-perturbation prompts.
-- `stage1/` provides the deterministic structural gate used to remove malformed
-  perturbations before semantic judging.
-- `prompts/semantic_judge.md` and `stage2/README.md` describe the non-self
-  semantic judging protocol.
+## Construction and Validation Files
+
+These files are for readers who want to audit how the benchmark was built:
+
+- `prompts/perturbation_generation.md`: prompt used to create initial
+  perturbations and human-calibrated retries.
+- `stage1/`: deterministic structural gate that removes malformed or
+  wrong-shape perturbations before semantic judging.
+- `prompts/semantic_judge.md`: non-self LLM judge prompt for semantic
+  unanswerability validation.
+- `stage2/README.md`: summary of the Stage 2 majority-vote protocol.
 
 Intermediate raw generations, audit workbooks, annotator scratch files, and API
 logs are not included.
