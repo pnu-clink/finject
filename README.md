@@ -154,12 +154,15 @@ logs are not included.
 
 ## Citation
 
+If you use FInject, please cite this repository. The proceedings citation will
+be updated after publication.
+
 ```bibtex
-@inproceedings{finject2026,
+@misc{finject2026,
   title = {FInject: Expanding Finance Reasoning Problems through Injection of Unanswerability},
   author = {Kim, Jinkyu and Kim, Jinsu and Park, Wooik and Sung, Mujeen and Gim, Mogan and Choi, Donghee},
-  booktitle = {Proceedings of the 35th ACM International Conference on Information and Knowledge Management},
   year = {2026},
-  note = {Resource Track}
+  note = {Manuscript and dataset},
+  url = {https://github.com/pnu-clink/finject}
 }
 ```
