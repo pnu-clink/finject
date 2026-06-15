@@ -6,15 +6,6 @@ __pycache__/
 
 # --- tex directory(including figures and tables)---
 stage1/tex/
-paper/overleaf_source/**/*.aux
-paper/overleaf_source/**/*.bbl
-paper/overleaf_source/**/*.blg
-paper/overleaf_source/**/*.fdb_latexmk
-paper/overleaf_source/**/*.fls
-paper/overleaf_source/**/*.log
-paper/overleaf_source/**/*.out
-paper/overleaf_source/main.pdf
-paper/overleaf_source/tables/archive_unused_*/
 
 # --- Virtual env ---
 venv/

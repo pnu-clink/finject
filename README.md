@@ -79,7 +79,6 @@ examples/
 paper/
   main.pdf                Submitted paper
   supplementary.pdf       Supplementary material
-  overleaf_source/        TeX source used to compile the submitted files
 prompts/
   perturbation_generation.md
   semantic_judge.md
