@@ -15,6 +15,23 @@ validation utilities, and the submitted paper artifacts.
   <img src="assets/finject_teaser.png" alt="FInject concept: absence and conflict variants should trigger refusal instead of hallucination" width="420">
 </p>
 
+## Workflow
+
+FInject has two connected workflows: construction of the final unanswerable
+variants, and downstream model evaluation on paired answerable and unanswerable
+instances.
+
+<p align="center">
+  <img src="assets/finject_pipeline.png" alt="FInject construction and evaluation workflow" width="900">
+</p>
+
+The construction path starts from verified answerable seed controls, creates
+unanswerability-injected variants with multiple generators, filters them through
+Stage 1 structural validation and Stage 2 semantic judging, samples a balanced
+release split, and applies human verification with repair. The evaluation path
+then pairs the original controls with the final unanswerable variants and scores
+models with the same answerability prompt and parser.
+
 ## Dataset
 
 | Split | Rows | Description |
@@ -76,6 +93,7 @@ data/
   original_controls/      78 answerable controls for paired evaluation
 assets/
   finject_teaser.png      Concept figure for GitHub rendering
+  finject_pipeline.png    Construction and evaluation workflow figure
   finject_taxonomy.png    Perturbation taxonomy figure
 examples/
   load_dataset.py         Minimal JSONL loading example
@@ -187,9 +205,10 @@ logic, not to reproduce the private raw generation pool exactly.
 - `stage1/`: deterministic structural gate that removes malformed or
   wrong-shape perturbations before semantic judging. Stage 1 checks surface
   form only; it does not decide whether the edited evidence is answer-critical.
-- `prompts/semantic_judge.md`: non-self LLM judge prompt for semantic
-  unanswerability validation.
-- `stage2/README.md`: summary of the Stage 2 majority-vote protocol.
+- `stage2/README.md`: protocol summary for Stage 2 semantic judging, including
+  non-self judge assignment, majority voting, and reported outputs.
+- `prompts/semantic_judge.md`: the actual LLM prompt template used inside the
+  Stage 2 protocol.
 
 The released dataset has already passed automatic validation, balanced sampling,
 human verification, and repair/regeneration. Intermediate raw generations,

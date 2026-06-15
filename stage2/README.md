@@ -2,6 +2,9 @@
 
 Stage 2 validates semantic unanswerability after Stage 1 removes malformed or wrong-shape perturbations.
 
+This file explains the Stage 2 protocol. The actual LLM prompt template used by
+the protocol is in `../prompts/semantic_judge.md`.
+
 ## Purpose
 
 Stage 1 only checks whether a candidate has the intended structural form. Stage 2 asks whether the transformed problem actually lacks a uniquely supported answer.
@@ -32,7 +35,8 @@ The judge does not receive human labels, release sampling decisions, downstream 
 
 ## Judge Prompt
 
-The public prompt template is available at:
+The prompt file is not a separate protocol; it is the reusable template sent to
+each eligible non-self judge within this Stage 2 protocol:
 
 - `../prompts/semantic_judge.md`
 

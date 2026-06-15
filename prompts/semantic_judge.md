@@ -1,6 +1,12 @@
 # Stage 2 Semantic Judge Prompt
 
-Stage 2 checks semantic unanswerability after Stage 1 removes malformed candidates. Each candidate is judged only by model families different from the generator family.
+This file contains the LLM prompt template used inside the Stage 2 semantic
+judge protocol. The protocol itself, including non-self judge assignment and
+majority voting, is described in `../stage2/README.md`.
+
+Stage 2 checks semantic unanswerability after Stage 1 removes malformed
+candidates. Each candidate is judged only by model families different from the
+generator family.
 
 ```text
 You are validating whether a perturbation of a financial reasoning problem is a
