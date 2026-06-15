@@ -43,6 +43,7 @@ FInject is a financial unanswerability benchmark built by transforming answerabl
 ## Files
 
 - `data/original_controls/finject_original_controls_78.jsonl`: answerable controls used for paired evaluation.
+- `data/original_controls/finject_original_controls_78.json`: JSON-array copy.
 - `data/final_release/finject_final_426.jsonl`: primary unanswerable-variant dataset file.
 - `data/final_release/finject_final_426.json`: JSON-array copy.
 - `data/final_release/schema.json`: field schema.
