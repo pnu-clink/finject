@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FInject original answerable control",
+  "type": "object",
+  "required": [
+    "control_id",
+    "source_dataset",
+    "source_qid",
+    "question",
+    "original_context",
+    "origin_ground_truth",
+    "origin_python_solution",
+    "gold_label_solvable"
+  ],
+  "properties": {
+    "control_id": {
+      "type": "string",
+      "description": "Unique FInject original-control identifier."
+    },
+    "source_dataset": {
+      "type": "string",
+      "description": "Upstream dataset name."
+    },
+    "source_qid": {
+      "type": "string",
+      "description": "Upstream FinanceReasoning problem identifier."
+    },
+    "question": {
+      "type": "string",
+      "description": "Original answerable question."
+    },
+    "original_context": {
+      "type": "string",
+      "description": "Original answerable context."
+    },
+    "origin_ground_truth": {
+      "type": [
+        "number",
+        "boolean",
+        "string",
+        "array",
+        "object",
+        "null"
+      ],
+      "description": "Answer for the original problem. Most controls are numeric; upstream controls may include boolean answers."
+    },
+    "origin_python_solution": {
+      "type": "string",
+      "description": "Executable reference solution."
+    },
+    "gold_label_solvable": {
+      "type": "boolean",
+      "const": true,
+      "description": "Gold answerability label for controls."
+    },
+    "paired_unanswerable_categories": {
+      "type": "array",
+      "description": "FInject unanswerable categories available for the same source problem."
+    }
+  }
+}

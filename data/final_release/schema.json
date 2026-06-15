@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FInject final release instance",
+  "type": "object",
+  "required": [
+    "dataset_version",
+    "sample_id",
+    "source_qid",
+    "category",
+    "generator_model",
+    "generator_display",
+    "question",
+    "original_context",
+    "perturbed_context",
+    "origin_ground_truth",
+    "origin_python_solution",
+    "gold_label_solvable",
+    "gold_label_category",
+    "stage1_pass",
+    "stage2_final_pass",
+    "stage2_strict_final_pass",
+    "stage2_eligible_judges",
+    "stage2_judged_count",
+    "stage2_unanswerable_pass_votes",
+    "stage2_strict_pass_votes",
+    "sampling_seed",
+    "sampling_policy",
+    "source_candidate_sample_id",
+    "repair_status",
+    "manual_final_repair"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "dataset_version": {
+      "type": "string",
+      "description": "Release version identifier."
+    },
+    "sample_id": {
+      "type": "string",
+      "description": "Unique FInject release instance identifier."
+    },
+    "source_qid": {
+      "type": "string",
+      "description": "Original FinanceReasoning seed problem identifier."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "EA-partial",
+        "EA-full",
+        "SA",
+        "IC-value",
+        "IC-source",
+        "IC-premise"
+      ],
+      "description": "Perturbation category."
+    },
+    "generator_model": {
+      "type": "string",
+      "description": "Generator model family identifier."
+    },
+    "generator_display": {
+      "type": "string",
+      "description": "Human-readable generator family name."
+    },
+    "question": {
+      "type": "string",
+      "description": "Original answerable question."
+    },
+    "original_context": {
+      "type": "string",
+      "description": "Original answerable context."
+    },
+    "perturbed_context": {
+      "type": "string",
+      "description": "Final unanswerable context."
+    },
+    "origin_ground_truth": {
+      "type": [
+        "number",
+        "boolean",
+        "string",
+        "array",
+        "object",
+        "null"
+      ],
+      "description": "Answer for the original problem. Most rows are numeric; upstream controls may include boolean answers."
+    },
+    "origin_python_solution": {
+      "type": "string",
+      "description": "Executable reference solution for the original problem."
+    },
+    "gold_label_solvable": {
+      "type": "boolean",
+      "const": false,
+      "description": "Gold answerability label for perturbed contexts; false for all final-release rows."
+    },
+    "gold_label_category": {
+      "type": "string",
+      "description": "Gold perturbation category label."
+    },
+    "stage1_pass": {
+      "type": "boolean",
+      "description": "Whether the instance passed deterministic structural validation during construction."
+    },
+    "stage2_final_pass": {
+      "type": "boolean",
+      "description": "Whether the instance passed semantic non-self majority validation."
+    },
+    "stage2_strict_final_pass": {
+      "type": "boolean",
+      "description": "Whether the instance passed strict semantic validation including category validity."
+    },
+    "stage2_eligible_judges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Non-self judge family identifiers used during Stage 2 semantic validation."
+    },
+    "stage2_judged_count": {
+      "type": "integer",
+      "description": "Number of parsed Stage 2 judge outputs."
+    },
+    "stage2_unanswerable_pass_votes": {
+      "type": "integer",
+      "description": "Number of Stage 2 unanswerability PASS votes."
+    },
+    "stage2_strict_pass_votes": {
+      "type": "integer",
+      "description": "Number of Stage 2 strict PASS votes."
+    },
+    "sampling_seed": {
+      "type": "integer",
+      "description": "Fixed seed used for deterministic release sampling."
+    },
+    "sampling_policy": {
+      "type": "string",
+      "description": "Release sampling policy."
+    },
+    "source_candidate_sample_id": {
+      "type": "string",
+      "description": "Identifier of the sampled pre-repair candidate."
+    },
+    "repair_status": {
+      "type": "string",
+      "enum": [
+        "accepted_without_repair",
+        "regenerated_after_human_review",
+        "manually_repaired_after_human_review"
+      ],
+      "description": "Human verification and repair status for the final row."
+    },
+    "manual_final_repair": {
+      "type": "boolean",
+      "description": "Whether a final manual repair was applied."
+    }
+  }
+}

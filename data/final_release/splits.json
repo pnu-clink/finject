@@ -1,0 +1,68 @@
+{
+  "dataset": "FInject final release",
+  "version": "finject_final_reperturbed_20260606",
+  "total_rows": 426,
+  "source_problem_count": 78,
+  "categories": {
+    "EA-full": 71,
+    "EA-partial": 71,
+    "IC-premise": 71,
+    "IC-source": 71,
+    "IC-value": 71,
+    "SA": 71
+  },
+  "generators": {
+    "R1-Distill-32B": 104,
+    "claude-opus-4-7": 108,
+    "codex-5.5": 106,
+    "gemini-2.5-pro": 108
+  },
+  "category_generator_counts": {
+    "EA-full": {
+      "R1-Distill-32B": 18,
+      "claude-opus-4-7": 18,
+      "codex-5.5": 17,
+      "gemini-2.5-pro": 18
+    },
+    "EA-partial": {
+      "R1-Distill-32B": 18,
+      "claude-opus-4-7": 18,
+      "codex-5.5": 17,
+      "gemini-2.5-pro": 18
+    },
+    "IC-premise": {
+      "R1-Distill-32B": 15,
+      "claude-opus-4-7": 19,
+      "codex-5.5": 18,
+      "gemini-2.5-pro": 19
+    },
+    "IC-source": {
+      "R1-Distill-32B": 17,
+      "claude-opus-4-7": 18,
+      "codex-5.5": 18,
+      "gemini-2.5-pro": 18
+    },
+    "IC-value": {
+      "R1-Distill-32B": 18,
+      "claude-opus-4-7": 18,
+      "codex-5.5": 18,
+      "gemini-2.5-pro": 17
+    },
+    "SA": {
+      "R1-Distill-32B": 18,
+      "claude-opus-4-7": 17,
+      "codex-5.5": 18,
+      "gemini-2.5-pro": 18
+    }
+  },
+  "files": {
+    "jsonl": "finject_final_426.jsonl",
+    "json": "finject_final_426.json",
+    "schema": "schema.json"
+  },
+  "original_controls": {
+    "rows": 78,
+    "source_problem_count": 78,
+    "file": "../original_controls/finject_original_controls_78.jsonl"
+  }
+}

@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+title: "FInject: Expanding Finance Reasoning Problems through Injection of Unanswerability"
+message: "If you use FInject, please cite the accompanying CIKM 2026 Resource Track paper."
+type: dataset
+authors:
+  - family-names: Kim
+    given-names: Jinkyu
+  - family-names: Kim
+    given-names: Jinsu
+  - family-names: Park
+    given-names: Wooik
+  - family-names: Sung
+    given-names: Mujeen
+  - family-names: Gim
+    given-names: Mogan
+  - family-names: Choi
+    given-names: Donghee
+year: 2026
+repository-code: "https://github.com/pnu-clink/finject"
+url: "https://github.com/pnu-clink/finject"
+preferred-citation:
+  type: conference-paper
+  title: "FInject: Expanding Finance Reasoning Problems through Injection of Unanswerability"
+  authors:
+    - family-names: Kim
+      given-names: Jinkyu
+    - family-names: Kim
+      given-names: Jinsu
+    - family-names: Park
+      given-names: Wooik
+    - family-names: Sung
+      given-names: Mujeen
+    - family-names: Gim
+      given-names: Mogan
+    - family-names: Choi
+      given-names: Donghee
+  conference:
+    name: "The 35th ACM International Conference on Information and Knowledge Management"
+  year: 2026

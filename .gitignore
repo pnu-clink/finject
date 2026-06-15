@@ -1,0 +1,69 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- tex directory(including figures and tables)---
+stage1/tex/
+paper/overleaf_source/**/*.aux
+paper/overleaf_source/**/*.bbl
+paper/overleaf_source/**/*.blg
+paper/overleaf_source/**/*.fdb_latexmk
+paper/overleaf_source/**/*.fls
+paper/overleaf_source/**/*.log
+paper/overleaf_source/**/*.out
+paper/overleaf_source/tables/archive_unused_*/
+
+# --- Virtual env ---
+venv/
+.venv/
+.verify_venv/
+env/
+ENV/
+
+# --- macOS / Editor ---
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+.idea/
+.vscode/
+
+# --- Claude / Cowork meta ---
+.claude/
+.claude_isolated/
+.gstack/
+.remote-plugins/
+
+# --- Build artifacts that don't belong in baseline ---
+*.egg-info/
+dist/
+build/
+
+# --- Temporary credentials / keys ---
+*.pem
+*.key
+.env
+.env.local
+
+# --- Obsidian workspace ---
+.obsidian/
+
+# --- User backups / archives ---
+*.bak_*
+*.tar.gz
+archive/
+
+# --- Excel lock files ---
+~$*.xlsx
+
+# --- Outputs: track only .json in results/ ---
+results/*
+!results/*.json
+!results/.gitkeep
+
+# --- Stage1 local-only dev/verification assets (kept on disk, not tracked) ---
+stage1/.golden_baseline.json
+stage1/.golden_verify.py
+stage1/.logic_preserve_check.py
