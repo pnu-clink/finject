@@ -8,6 +8,22 @@ task_categories:
 pretty_name: FInject
 size_categories:
   - n<1K
+license: cc-by-4.0
+tags:
+  - finance
+  - financial-reasoning
+  - abstention
+  - unanswerable
+  - llm-evaluation
+configs:
+  - config_name: default
+    data_files:
+      - split: test
+        path: finject_final_426.jsonl
+  - config_name: original_controls
+    data_files:
+      - split: test
+        path: finject_original_controls_78.jsonl
 ---
 
 # FInject Dataset Card
@@ -53,17 +69,15 @@ FInject is a financial unanswerability benchmark built by transforming answerabl
 - `prompts/`: perturbation generation, semantic judge, and answerability evaluation prompts.
 - `paper/`: submitted paper and supplementary material.
 
-The same files are mirrored on Hugging Face under
-`pnu-clink/finject`. They can be loaded with:
+The same benchmark release is mirrored on Hugging Face under
+`pnu-clink/finject`. The default config loads the final 426 unanswerable
+variants; the `original_controls` config loads the 78 answerable controls:
 
 ```python
 from datasets import load_dataset
 
-final = load_dataset(
-    "pnu-clink/finject",
-    data_files="data/final_release/finject_final_426.jsonl",
-    split="train",
-)
+final = load_dataset("pnu-clink/finject", split="test")
+controls = load_dataset("pnu-clink/finject", "original_controls", split="test")
 ```
 
 ## Core Fields
@@ -75,7 +89,7 @@ final = load_dataset(
 - `question`: original question.
 - `original_context`: answerable original context.
 - `perturbed_context`: final unanswerable context.
-- `origin_ground_truth`: answer to the original control problem. Most rows are numeric, while one upstream control has a boolean answer.
+- `origin_ground_truth`: string-serialized answer to the original control problem.
 - `origin_python_solution`: executable reference solution for the original answerable problem.
 - `gold_label_solvable`: always `false` for final unanswerable variants.
 - `gold_label_category`: target perturbation category.

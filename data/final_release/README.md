@@ -41,7 +41,7 @@ Generator distribution:
 - `question`: original question.
 - `original_context`: answerable original context.
 - `perturbed_context`: final unanswerable context.
-- `origin_ground_truth`: answer to the original control problem. Most rows are numeric, while one upstream control has a boolean answer.
+- `origin_ground_truth`: string-serialized answer to the original control problem.
 - `origin_python_solution`: executable reference solution used to identify answer-critical evidence.
 - `gold_label_solvable`: always `false` for final unanswerable variants.
 - `gold_label_category`: target perturbation category.

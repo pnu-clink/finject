@@ -166,7 +166,8 @@ print(controls[0]["question"])
 ### Load From Hugging Face
 
 If you prefer the Hugging Face dataset mirror, install `datasets` and load the
-same JSONL files from `pnu-clink/finject`:
+final unanswerable variants with the default config. The paired answerable
+controls are available through the `original_controls` config:
 
 ```bash
 pip install datasets
@@ -177,16 +178,8 @@ from datasets import load_dataset
 
 dataset_id = "pnu-clink/finject"
 
-final = load_dataset(
-    dataset_id,
-    data_files="data/final_release/finject_final_426.jsonl",
-    split="train",
-)
-controls = load_dataset(
-    dataset_id,
-    data_files="data/original_controls/finject_original_controls_78.jsonl",
-    split="train",
-)
+final = load_dataset(dataset_id, split="test")
+controls = load_dataset(dataset_id, "original_controls", split="test")
 
 print(len(final), len(controls))
 print(final[0]["sample_id"])

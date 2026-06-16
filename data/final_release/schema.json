@@ -76,15 +76,8 @@
       "description": "Final unanswerable context."
     },
     "origin_ground_truth": {
-      "type": [
-        "number",
-        "boolean",
-        "string",
-        "array",
-        "object",
-        "null"
-      ],
-      "description": "Answer for the original problem. Most rows are numeric; upstream controls may include boolean answers."
+      "type": "string",
+      "description": "String-serialized answer for the original answerable problem. Values are serialized as strings for JSONL and Hugging Face dataset compatibility."
     },
     "origin_python_solution": {
       "type": "string",

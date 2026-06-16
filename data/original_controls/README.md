@@ -24,7 +24,7 @@ directly from this repository.
 - `source_qid`: upstream FinanceReasoning problem identifier.
 - `question`: original answerable question.
 - `original_context`: original answerable context.
-- `origin_ground_truth`: answer to the original control problem. Most controls are numeric, while one upstream control has a boolean answer.
+- `origin_ground_truth`: string-serialized answer to the original control problem.
 - `origin_python_solution`: executable reference solution.
 - `gold_label_solvable`: `true`.
 - `paired_unanswerable_categories`: categories available for the same source problem in the final release.
