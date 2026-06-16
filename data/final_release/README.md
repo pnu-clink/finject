@@ -4,7 +4,7 @@ This folder contains the final 426-instance FInject release used by the submitte
 
 ## Files
 
-- `finject_final_426.jsonl`: one JSON object per line. This should be the primary file for loading and Hugging Face upload.
+- `finject_final_426.jsonl`: one JSON object per line. This is the primary file for local loading and the Hugging Face dataset mirror.
 - `finject_final_426.json`: the same rows as a JSON array.
 
 ## Counts

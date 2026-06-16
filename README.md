@@ -2,6 +2,11 @@
 
 **FInject: Expanding Finance Reasoning Problems through Injection of Unanswerability**
 
+<p>
+  <a href="https://huggingface.co/datasets/pnu-clink/finject"><img src="https://img.shields.io/badge/Hugging%20Face-Dataset-yellow?logo=huggingface" alt="Hugging Face Dataset"></a>
+  <a href="https://github.com/pnu-clink/finject"><img src="https://img.shields.io/badge/GitHub-pnu--clink%2Ffinject-blue?logo=github" alt="GitHub Repository"></a>
+</p>
+
 FInject is a financial unanswerability benchmark for evaluating whether language
 models can recognize when a finance reasoning problem does not support a unique
 answer. The benchmark starts from answerable FinanceReasoning seed problems and
@@ -9,7 +14,9 @@ creates controlled unanswerable variants by removing answer-critical evidence or
 injecting irreconcilable conflicts.
 
 The repository contains the dataset, original paired controls, prompt templates,
-validation utilities, and the submitted paper artifacts.
+validation utilities, and the submitted paper artifacts. The dataset is also
+mirrored on Hugging Face at
+[`pnu-clink/finject`](https://huggingface.co/datasets/pnu-clink/finject).
 
 <p align="center">
   <img src="assets/finject_teaser.png" alt="FInject concept: absence and conflict variants should trigger refusal instead of hallucination" width="420">
@@ -38,6 +45,8 @@ models with the same answerability prompt and parser.
 | --- | ---: | --- |
 | `data/final_release/finject_final_426.jsonl` | 426 | Final unanswerable variants |
 | `data/original_controls/finject_original_controls_78.jsonl` | 78 | Answerable original controls for paired evaluation |
+
+Hugging Face mirror: <https://huggingface.co/datasets/pnu-clink/finject>
 
 The 426 unanswerable variants are balanced across six perturbation categories:
 
@@ -97,6 +106,7 @@ assets/
   finject_taxonomy.png    Perturbation taxonomy figure
 examples/
   load_dataset.py         Minimal JSONL loading example
+  load_huggingface.py     Optional Hugging Face loading example
 paper/
   main.pdf                Submitted paper
   supplementary.pdf       Supplementary material
@@ -121,7 +131,7 @@ For most users, the main files are:
 
 ## Quick Start
 
-Clone the repository and validate the release:
+### Load From GitHub
 
 ```bash
 git clone https://github.com/pnu-clink/finject.git
@@ -151,6 +161,36 @@ controls = [json.loads(line) for line in controls_path.read_text().splitlines()]
 
 print(len(controls))
 print(controls[0]["question"])
+```
+
+### Load From Hugging Face
+
+If you prefer the Hugging Face dataset mirror, install `datasets` and load the
+same JSONL files from `pnu-clink/finject`:
+
+```bash
+pip install datasets
+```
+
+```python
+from datasets import load_dataset
+
+dataset_id = "pnu-clink/finject"
+
+final = load_dataset(
+    dataset_id,
+    data_files="data/final_release/finject_final_426.jsonl",
+    split="train",
+)
+controls = load_dataset(
+    dataset_id,
+    data_files="data/original_controls/finject_original_controls_78.jsonl",
+    split="train",
+)
+
+print(len(final), len(controls))
+print(final[0]["sample_id"])
+print(final[0]["category"])
 ```
 
 Expected validation summary:

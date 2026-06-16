@@ -22,6 +22,8 @@ FInject is a financial unanswerability benchmark built by transforming answerabl
 - Balance: 6 perturbation categories x 71 rows.
 - Generator families: Claude Opus 4.7, GPT-5.5, Gemini 2.5 Pro, and R1-Distill-32B.
 - Validation: deterministic Stage 1 structural validation, non-self Stage 2 semantic judging, balanced sampling, human verification, and repair/regeneration.
+- GitHub repository: https://github.com/pnu-clink/finject
+- Hugging Face mirror: https://huggingface.co/datasets/pnu-clink/finject
 
 ## Intended Tasks
 
@@ -50,6 +52,19 @@ FInject is a financial unanswerability benchmark built by transforming answerabl
 - `data/final_release/splits.json`: row counts by category and generator.
 - `prompts/`: perturbation generation, semantic judge, and answerability evaluation prompts.
 - `paper/`: submitted paper and supplementary material.
+
+The same files are mirrored on Hugging Face under
+`pnu-clink/finject`. They can be loaded with:
+
+```python
+from datasets import load_dataset
+
+final = load_dataset(
+    "pnu-clink/finject",
+    data_files="data/final_release/finject_final_426.jsonl",
+    split="train",
+)
+```
 
 ## Core Fields
 
