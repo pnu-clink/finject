@@ -80,6 +80,10 @@ final = load_dataset("pnu-clink/finject", split="test")
 controls = load_dataset("pnu-clink/finject", "original_controls", split="test")
 ```
 
+The YAML `configs` block at the top of this card follows the Hugging Face mirror
+layout, where the dataset files are stored at the dataset-repository root. In
+the GitHub repository, the same files are organized under `data/`.
+
 ## Core Fields
 
 - `sample_id`: unique release identifier.
