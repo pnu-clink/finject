@@ -1,0 +1,63 @@
+{
+  "$defs": {
+    "Patch": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "before": {
+          "title": "Before",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "element_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Element Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "before",
+        "text",
+        "element_ids"
+      ],
+      "title": "Patch",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "patches": {
+      "items": {
+        "$ref": "#/$defs/Patch"
+      },
+      "minItems": 1,
+      "title": "Patches",
+      "type": "array"
+    }
+  },
+  "required": [
+    "patches"
+  ],
+  "title": "RealizationResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:02-generation.02-generate-text.realization.response:v1"
+}

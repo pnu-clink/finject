@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ER 역산 · 두 평가자 Reject 검토</title><style>__STYLE__</style></head>
+<body>
+<header class="page-header">
+  <div class="header-top"><div><p class="eyebrow">FINJECT · HUMAN REVIEW</p><h1>두 평가자 Reject 검토</h1></div>
+    <div class="header-actions"><button id="sources-open">입력 파일</button><button id="help-open">? 단축키</button><button id="export-html" class="primary">단일 HTML 저장</button><a id="html-download" hidden>HTML 다운로드</a></div>
+  </div>
+  <p class="intro"><span id="reviewers"></span> · 어느 한 분이라도 Reject한 항목을 문항 순서대로 확인합니다.</p>
+  <div id="overview" class="overview"></div>
+</header>
+<div class="filter-bar" id="filters">
+  <div class="type-tabs" role="group" aria-label="ER 유형"><button data-type="EA_01" aria-pressed="true">ER-1 <span></span></button><button data-type="EA_02" aria-pressed="false">ER-2 <span></span></button><button data-type="all" aria-pressed="false">전체 <span></span></button></div>
+  <label class="filter-label">판정 조합<select id="scope" aria-label="판정 조합"><option value="any">한 분 이상 Reject</option><option value="disagree">불일치만</option><option value="both">두 분 모두 Reject</option><option value="first">정유미 Reject</option><option value="second">김진수 Reject</option></select></label>
+  <label class="filter-label">역산 판정<select id="inverse" aria-label="역산 판정"><option value="all">true / false 전체</option><option value="true">true · 역산 가능</option><option value="false">false · 복원 미확립</option></select></label>
+  <label class="search-label"><span class="sr-only">문항·질문·의견 검색</span><input id="search" type="search" placeholder="문항 번호 · 질문 · 의견 검색" autocomplete="off"></label>
+  <button id="reset">초기화</button>
+</div>
+<div class="layout">
+  <aside class="sidebar"><div class="sidebar-top"><h2>문항 목록</h2><span id="list-count"></span></div><p class="nav-legend">● 정유미 · ● 김진수 <span>초록 Accept / 빨강 Reject</span></p><nav id="case-nav" aria-label="Reject 항목 바로 이동"></nav><p class="sidebar-note">Q / E 이전·다음 항목<br>A / D ER-1·ER-2 선택</p></aside>
+  <main>
+    <div class="list-toolbar"><p id="visible-summary" aria-live="polite"></p><div class="reading-tools"><button id="expand">본문 모두 펼치기</button><button id="collapse">본문 모두 접기</button><label>글자<select id="font"><option value="15">보통</option><option value="17">크게</option><option value="19">더 크게</option></select></label></div></div>
+    <p class="reading-note">Accept는 저장된 역산 판정에 동의, Reject는 비동의입니다. 제거된 수치는 ER-1 <del class="er1-removal">분홍</del> / ER-2 <del class="er2-removal">보라</del> 취소선으로 표시합니다.</p>
+    <p id="message" role="status"></p><div id="items"></div><div id="empty" hidden><h2>조건에 맞는 항목이 없습니다.</h2><p>유형이나 판정 조합을 바꾸거나 검색어를 지워 주세요.</p><button id="empty-reset">필터 초기화</button></div>
+  </main>
+</div>
+<dialog id="sources-dialog"><div class="dialog-heading"><h2>입력 파일과 비교 기준</h2><button data-close="sources-dialog">닫기</button></div><div id="sources"></div><p id="mapping-note"></p><p>이 화면은 두 파일의 저장 판정을 비교합니다. 질문·본문·제거 위치·역산 판정은 두 분이 검토한 동일한 배포본에서 읽습니다.</p></dialog>
+<dialog id="help-dialog"><div class="dialog-heading"><h2>단축키</h2><button data-close="help-dialog">닫기</button></div><p><kbd>Q</kbd> 이전 항목 · <kbd>E</kbd> 다음 항목</p><p><kbd>A</kbd> ER-1 · <kbd>D</kbd> ER-2</p><p><kbd>/</kbd> 검색 · <kbd>?</kbd> 안내 · <kbd>Esc</kbd> 닫기</p><p>유형을 바꿀 때 같은 문항이 있으면 그 위치를 유지합니다. 입력란 안에서는 이동 단축키가 작동하지 않습니다.</p></dialog>
+<script id="comparison-data" type="application/json">__PACKAGE__</script><script>__UI__</script>
+</body></html>

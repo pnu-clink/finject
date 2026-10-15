@@ -1,0 +1,506 @@
+[
+  {
+    "document": "docs/02-experiments/00_input/README.md",
+    "steps": [
+      {
+        "id": "I00.01",
+        "name": "receive_results",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/00-input/dataset.py",
+            "function": "collected_results"
+          }
+        ]
+      },
+      {
+        "id": "I00.02",
+        "name": "check_delivery",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/00-input/dataset.py",
+            "function": "collected_results"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "document": "docs/02-experiments/01_evaluation/01_preparation/README.md",
+    "steps": [
+      {
+        "id": "E01.01",
+        "name": "select_cases",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/00-input/dataset.py",
+            "function": "select"
+          }
+        ]
+      },
+      {
+        "id": "E01.02",
+        "name": "split_solver_reference",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/00-input/dataset.py",
+            "function": "public_input"
+          }
+        ]
+      },
+      {
+        "id": "E01.03",
+        "name": "record_conditions",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/01-preparation/prepare.py",
+            "function": "prepare"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "document": "docs/02-experiments/01_evaluation/02_request/README.md",
+    "steps": [
+      {
+        "id": "E02.01",
+        "name": "prompt_and_schema",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/02-request/prepare.py",
+            "function": "prepare"
+          }
+        ]
+      },
+      {
+        "id": "E02.02",
+        "name": "build_input",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/04-validation/answer_format.py",
+            "function": "model_input"
+          }
+        ]
+      },
+      {
+        "id": "E02.03",
+        "name": "compose_requests",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/02-request/prepare.py",
+            "function": "prepare"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/02-request/request_order.py",
+            "function": "prioritize_pilot"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/02-request/request_order.py",
+            "function": "selection_from_manifests"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/02-request/request_order.py",
+            "function": "summarize_items"
+          }
+        ]
+      },
+      {
+        "id": "E02.04",
+        "name": "validate_and_freeze",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/providers.py",
+            "function": "validate_request"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "document": "docs/02-experiments/01_evaluation/03_execution/README.md",
+    "steps": [
+      {
+        "id": "E03.01",
+        "name": "check_execution",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/pipeline.py",
+            "function": "verify"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/providers.py",
+            "function": "preflight"
+          }
+        ]
+      },
+      {
+        "id": "E03.02",
+        "name": "LLM_solve",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/providers.py",
+            "function": "call"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/openai_api.py",
+            "function": "call"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/anthropic_api.py",
+            "function": "call"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/openai_batch.py",
+            "function": "process"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/anthropic_batch.py",
+            "function": "process"
+          }
+        ]
+      },
+      {
+        "id": "E03.03",
+        "name": "record_attempt",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/call_layout.py",
+            "function": "publish"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "document": "docs/02-experiments/01_evaluation/04_validation/README.md",
+    "steps": [
+      {
+        "id": "E04.01",
+        "name": "parse_response",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/03-execution/providers.py",
+            "function": "call"
+          }
+        ]
+      },
+      {
+        "id": "E04.02",
+        "name": "check_schema_and_fields",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/04-validation/answer_format.py",
+            "function": "response_errors"
+          },
+          {
+            "file": "src/finarch/experiments/01-evaluation/02-request/answer_contract.py",
+            "function": "response_errors"
+          }
+        ]
+      },
+      {
+        "id": "E04.03",
+        "name": "record_results",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/04-validation/reporting.py",
+            "function": "build"
+          }
+        ]
+      },
+      {
+        "id": "E04.04",
+        "name": "compare_reference",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/01-evaluation/04-validation/numeric_validation.py",
+            "function": "build"
+          }
+        ]
+      }
+    ],
+    "existing_sources": [
+      "src/finarch/experiments/01-evaluation/04-validation/numeric_analysis.py"
+    ],
+    "migration_note": "Numeric comparison is implemented under Evaluation/E04; frozen criteria and historical saved results are preserved."
+  },
+  {
+    "document": "docs/02-experiments/02_analysis/01_results/README.md",
+    "status": "IMPLEMENTED",
+    "categories": [
+      "response_patterns"
+    ],
+    "boundary": "Analyze saved experiment results; no independent question answerability verification gate.",
+    "target_run": {
+      "path": "02_analysis/01_results",
+      "files": [
+        "README.md",
+        "responses.jsonl",
+        "state.json"
+      ],
+      "status": "OBSERVED_ON_DISK",
+      "observed_run": "reports/experiments-run/20260927-exp-006"
+    },
+    "existing_sources": [
+      "src/finarch/experiments/02-analysis/01-results/results.py"
+    ],
+    "steps": [
+      {
+        "id": "A01.01",
+        "name": "collect_saved_results",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/01-results/results.py",
+            "function": "build"
+          }
+        ]
+      },
+      {
+        "id": "A01.02",
+        "name": "attach_existing_context",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/01-results/results.py",
+            "function": "build"
+          }
+        ]
+      },
+      {
+        "id": "A01.03",
+        "name": "record_response_rows",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/01-results/results.py",
+            "function": "render"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/01-results/results.py",
+            "function": "verify_reuse"
+          }
+        ]
+      }
+    ],
+    "implementation_scope": "Same-run or reused Evaluation; deterministic relationships; configurable Codex CLI or native API Batch analysis. Live completion is recorded per run."
+  },
+  {
+    "document": "docs/02-experiments/02_analysis/02_comparison/README.md",
+    "status": "IMPLEMENTED",
+    "categories": [
+      "original_variant_relationship",
+      "condition_model_effects",
+      "variant_patterns",
+      "response_element_relationships",
+      "counterexamples"
+    ],
+    "boundary": "Analyze saved experiment results; no independent question answerability verification gate.",
+    "target_run": {
+      "path": "02_analysis/02_comparison",
+      "files": [
+        "README.md",
+        "comparisons.json",
+        "interpretations.jsonl",
+        "state.json"
+      ],
+      "status": "OBSERVED_ON_DISK",
+      "conditional_files": {
+        "when": "An analysis LLM step is executed",
+        "files": [
+          "prompt.md",
+          "schema.json",
+          "manifest.jsonl",
+          "calls/"
+        ]
+      },
+      "observed_run": "reports/experiments-run/20260927-exp-006"
+    },
+    "existing_sources": [
+      "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+      "src/finarch/experiments/02-analysis/pipeline.py",
+      "src/finarch/experiments/02-analysis/contracts.py",
+      "src/finarch/experiments/02-analysis/llm_backend.py"
+    ],
+    "steps": [
+      {
+        "id": "A02.01",
+        "name": "pair_conditions",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+            "function": "pair"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+            "function": "group_pairs"
+          }
+        ]
+      },
+      {
+        "id": "A02.02",
+        "name": "aggregate_relations",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+            "function": "summary"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+            "function": "build"
+          }
+        ]
+      },
+      {
+        "id": "A02.03",
+        "name": "compare_variant_patterns",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+            "function": "choice"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/02-comparison/comparison.py",
+            "function": "position"
+          }
+        ]
+      },
+      {
+        "id": "A02.04",
+        "name": "LLM_interpret_patterns",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/pipeline.py",
+            "function": "comparison_requests"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/llm_backend.py",
+            "function": "run"
+          }
+        ],
+        "note": "Configured Codex CLI or native OpenAI Batch. Current-session recorder retained for historical runs."
+      },
+      {
+        "id": "A02.05",
+        "name": "record_comparisons",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/pipeline.py",
+            "function": "collect_interpretations"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/contracts.py",
+            "function": "validate_response"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/pipeline.py",
+            "function": "update"
+          }
+        ]
+      }
+    ],
+    "implementation_scope": "Same-run or reused Evaluation; deterministic relationships; configurable Codex CLI or native API Batch analysis. Live completion is recorded per run."
+  },
+  {
+    "document": "docs/02-experiments/02_analysis/03_research/README.md",
+    "status": "IMPLEMENTED",
+    "categories": [
+      "research_interpretation"
+    ],
+    "boundary": "Analyze saved experiment results; no independent question answerability verification gate.",
+    "target_run": {
+      "path": "02_analysis/03_research",
+      "files": [
+        "README.md",
+        "findings.json",
+        "findings.md",
+        "state.json"
+      ],
+      "status": "OBSERVED_ON_DISK",
+      "conditional_files": {
+        "when": "An analysis LLM step is executed",
+        "files": [
+          "prompt.md",
+          "schema.json",
+          "manifest.jsonl",
+          "calls/"
+        ]
+      },
+      "observed_run": "reports/experiments-run/20260927-exp-006"
+    },
+    "existing_sources": [
+      "src/finarch/experiments/02-analysis/pipeline.py",
+      "src/finarch/experiments/02-analysis/llm_backend.py",
+      "src/finarch/experiments/02-analysis/contracts.py",
+      "src/finarch/experiments/02-analysis/03-research/research.py"
+    ],
+    "steps": [
+      {
+        "id": "A03.01",
+        "name": "assemble_evidence",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/pipeline.py",
+            "function": "research_requests"
+          }
+        ]
+      },
+      {
+        "id": "A03.02",
+        "name": "LLM_synthesize_findings",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/llm_backend.py",
+            "function": "run"
+          }
+        ],
+        "note": "Configured Codex CLI or native OpenAI Batch. Current-session recorder retained for historical runs."
+      },
+      {
+        "id": "A03.03",
+        "name": "discuss_improvements",
+        "status": "USER_DISCUSSION_PENDING",
+        "calls": []
+      },
+      {
+        "id": "A03.04",
+        "name": "publish_findings",
+        "status": "IMPLEMENTED",
+        "calls": [
+          {
+            "file": "src/finarch/experiments/02-analysis/pipeline.py",
+            "function": "collect_findings"
+          },
+          {
+            "file": "src/finarch/experiments/02-analysis/03-research/research.py",
+            "function": "finish"
+          }
+        ]
+      }
+    ],
+    "implementation_scope": "Same-run or reused Evaluation; deterministic relationships; configurable Codex CLI or native API Batch analysis. Live completion is recorded per run."
+  }
+]

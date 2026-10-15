@@ -1,0 +1,491 @@
+{
+  "$defs": {
+    "CalculationSourceUsage": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "IN_CONTEXT_DATA",
+            "EXTERNAL_RULE",
+            "EXTERNAL_DATA"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "fact_ids": {
+          "description": "Numeric fact references. May be empty for a supplied textual instruction/condition with an exact Q/C quote; numeric operands still require facts.",
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Fact Ids",
+          "type": "array"
+        },
+        "evidence_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "acquisition": {
+          "enum": [
+            "SUPPLIED",
+            "MODEL_KNOWLEDGE",
+            "RETRIEVED",
+            "UNAVAILABLE"
+          ],
+          "title": "Acquisition",
+          "type": "string"
+        },
+        "source_title": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source Title"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Source Url"
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Locator"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Quote"
+        },
+        "applicability": {
+          "minLength": 1,
+          "title": "Applicability",
+          "type": "string"
+        },
+        "code_lines": {
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "title": "Code Lines",
+          "type": "array"
+        },
+        "output_variables": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Output Variables",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "description",
+        "fact_ids",
+        "evidence_ids",
+        "acquisition",
+        "source_title",
+        "source_url",
+        "locator",
+        "quote",
+        "applicability",
+        "code_lines",
+        "output_variables"
+      ],
+      "title": "CalculationSourceUsage",
+      "type": "object"
+    },
+    "ExternalEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "source_title": {
+          "minLength": 1,
+          "title": "Source Title",
+          "type": "string"
+        },
+        "source_url": {
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "locator": {
+          "minLength": 1,
+          "title": "Locator",
+          "type": "string"
+        },
+        "selected_value": {
+          "minLength": 1,
+          "title": "Selected Value",
+          "type": "string"
+        },
+        "selection_conditions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Selection Conditions",
+          "type": "array"
+        },
+        "assumptions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "application_note": {
+          "minLength": 1,
+          "title": "Application Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source_title",
+        "source_url",
+        "locator",
+        "selected_value",
+        "selection_conditions",
+        "assumptions",
+        "application_note"
+      ],
+      "title": "ExternalEvidence",
+      "type": "object"
+    },
+    "ExternalKnowledgeRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "tag": {
+          "enum": [
+            "EXTERNAL_RULE",
+            "EXTERNAL_DATA"
+          ],
+          "title": "Tag",
+          "type": "string"
+        },
+        "source_usage_id": {
+          "minLength": 1,
+          "title": "Source Usage Id",
+          "type": "string"
+        },
+        "triggers": {
+          "items": {
+            "$ref": "#/$defs/KnowledgeTrigger"
+          },
+          "minItems": 1,
+          "title": "Triggers",
+          "type": "array"
+        },
+        "why_external": {
+          "minLength": 1,
+          "title": "Why External",
+          "type": "string"
+        },
+        "definition": {
+          "minLength": 1,
+          "title": "Definition",
+          "type": "string"
+        },
+        "formula": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Formula"
+        },
+        "bindings": {
+          "items": {
+            "$ref": "#/$defs/FormulaBinding"
+          },
+          "title": "Bindings",
+          "type": "array"
+        },
+        "data_requirements": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Data Requirements",
+          "type": "array"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        }
+      },
+      "required": [
+        "id",
+        "tag",
+        "source_usage_id",
+        "triggers",
+        "why_external",
+        "definition",
+        "formula",
+        "bindings",
+        "data_requirements",
+        "unit"
+      ],
+      "title": "ExternalKnowledgeRequirement",
+      "type": "object"
+    },
+    "Fact": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Span",
+          "type": "array"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "value": {
+          "minLength": 1,
+          "title": "Value",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unit"
+        },
+        "origin": {
+          "default": "CONTEXT",
+          "enum": [
+            "CONTEXT",
+            "QUESTION"
+          ],
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "span",
+        "text",
+        "value",
+        "unit"
+      ],
+      "title": "Fact",
+      "type": "object"
+    },
+    "FormulaBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "symbol": {
+          "minLength": 1,
+          "title": "Symbol",
+          "type": "string"
+        },
+        "code_variable": {
+          "minLength": 1,
+          "title": "Code Variable",
+          "type": "string"
+        },
+        "meaning": {
+          "minLength": 1,
+          "title": "Meaning",
+          "type": "string"
+        }
+      },
+      "required": [
+        "symbol",
+        "code_variable",
+        "meaning"
+      ],
+      "title": "FormulaBinding",
+      "type": "object"
+    },
+    "KnowledgeTrigger": {
+      "additionalProperties": false,
+      "properties": {
+        "origin": {
+          "enum": [
+            "QUESTION",
+            "CONTEXT"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Span",
+          "type": "array"
+        }
+      },
+      "required": [
+        "origin",
+        "quote",
+        "span"
+      ],
+      "title": "KnowledgeTrigger",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "description": "Python solution source; arithmetic operators are not restricted by this schema",
+      "minLength": 1,
+      "title": "Code",
+      "type": "string"
+    },
+    "facts": {
+      "items": {
+        "$ref": "#/$defs/Fact"
+      },
+      "title": "Facts",
+      "type": "array"
+    },
+    "grounding": {
+      "description": "Explanation of how the cited facts support the solution",
+      "minLength": 1,
+      "title": "Grounding",
+      "type": "string"
+    },
+    "external_evidence": {
+      "description": "Reviewed catalog IDs used by evidence(id, selectors...) and explicit application assumptions; empty if none",
+      "items": {
+        "$ref": "#/$defs/ExternalEvidence"
+      },
+      "title": "External Evidence",
+      "type": "array"
+    },
+    "calculation_input_sources": {
+      "items": {
+        "enum": [
+          "IN_CONTEXT_DATA",
+          "EXTERNAL_RULE",
+          "EXTERNAL_DATA"
+        ],
+        "type": "string"
+      },
+      "title": "Calculation Input Sources",
+      "type": "array"
+    },
+    "source_usage": {
+      "items": {
+        "$ref": "#/$defs/CalculationSourceUsage"
+      },
+      "title": "Source Usage",
+      "type": "array"
+    },
+    "external_knowledge_requirements": {
+      "items": {
+        "$ref": "#/$defs/ExternalKnowledgeRequirement"
+      },
+      "title": "External Knowledge Requirements",
+      "type": "array"
+    }
+  },
+  "required": [
+    "code",
+    "facts",
+    "grounding",
+    "external_evidence",
+    "calculation_input_sources",
+    "source_usage",
+    "external_knowledge_requirements"
+  ],
+  "title": "ProgramResponseV5",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.03-calculation.pot.response:v5"
+}

@@ -1,0 +1,77 @@
+# Independent 1,080-original Luna run. The source cohort's production annotations
+# stay private and are supplied only to post-evaluation analysis.
+version = 1
+
+[evaluation.schedule.dataset]
+source_run = "reports/run/20260917-002"
+input_path = "data/prepared/tatqa/full-20260917/input.json"
+count = 1080
+require_all_variants_pass = true
+require_external_knowledge = true
+
+[evaluation.run]
+transport = "batch"
+cache = "off"
+seed = 20260920
+run_label = "luna"
+definition_source_run = "reports/experiments-run/20260927-exp-007-luna"
+
+[evaluation.run.models.luna-api]
+off = "luna6-none-api"
+on = "luna6-medium-api"
+
+[analysis.schedule]
+concurrency = 100
+timeout_seconds = 600
+
+[analysis.schedule.adaptive]
+enabled = true
+interval_seconds = 60
+cpu_threshold_percent = 60
+growth_percent = 10
+
+[analysis.run]
+backend = "codex"
+technical_retry_limit = 1
+
+[analysis.run.models]
+codex = "sol61-low-cli"
+api = "sol61-low-api"
+
+[profiles.luna6-none-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "none"
+max_output_tokens = 65536
+
+[profiles.luna6-medium-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "medium"
+max_output_tokens = 65536
+
+[profiles.sol6-max-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6-sol", "-c", "model_reasoning_effort=max", "--skip-git-repo-check"]
+
+[profiles.sol6-max-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-sol"
+effort = "max"
+max_output_tokens = 65536
+
+[profiles.sol61-low-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6.1-sol", "-c", "model_reasoning_effort=low", "--skip-git-repo-check"]
+
+[profiles.sol61-low-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6.1-sol"
+effort = "low"
+max_output_tokens = 65536

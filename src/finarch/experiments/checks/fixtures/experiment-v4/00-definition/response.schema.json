@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FinancialAnswerMagnitudeV4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "answer",
+    "answer_meta",
+    "explanation",
+    "evidence"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "answered",
+        "abstained"
+      ],
+      "description": "answered commits to one numeric result; abstained makes no single numeric commitment."
+    },
+    "answer": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "description": "For answered, an unsigned absolute decimal magnitude STRING at answer_format.decimal_places, in the scale requested by Q or established by C. Digits and a decimal point only. No currency, sign, comma, percentage symbol, unit, or scale word. For abstained, null."
+    },
+    "answer_meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "negative",
+        "scale"
+      ],
+      "properties": {
+        "negative": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "For answered, true iff the final rounded result is negative; false for zero. For abstained, null. The only field carrying the sign."
+        },
+        "scale": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "one",
+            "hundred",
+            "thousand",
+            "million",
+            "billion",
+            "trillion",
+            "percent",
+            null
+          ],
+          "description": "Reporting scale of the numeric answer from Q/C. Null if unknown. A record of the requested representation, not a currency name and not an instruction to multiply the reported coefficient again."
+        }
+      },
+      "description": "Metadata for this computed answer. Keep the sign and reporting scale here; do not place them at the top level."
+    },
+    "explanation": {
+      "type": "string",
+      "description": "A brief English justification with the key calculation or reason for abstaining. No detailed internal reasoning trace."
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Exact excerpts from the question or context. Empty array if there is no relevant excerpt."
+    }
+  }
+}

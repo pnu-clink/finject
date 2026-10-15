@@ -1,0 +1,114 @@
+{
+  "version": 2,
+  "shared": {
+    "api": {
+      "concurrency": 200
+    }
+  },
+  "preparation": {
+    "schedule": {
+      "concurrency": 100,
+      "monitor_interval_seconds": 3,
+      "cpu_threshold_percent": 50,
+      "increase_by": 10,
+      "dataset": {
+        "count": 2050,
+        "input_path": "data/prepared/finance-reasoning/full-20260917-v2/input.json"
+      },
+      "max_rounds": 3,
+      "failure_interpretation": {
+        "concurrency": 100,
+        "monitor_interval_seconds": 3,
+        "max_calls_per_target": 2
+      }
+    },
+    "run": {
+      "models": {
+        "generation_profile": "luna-max-api",
+        "validation_profile": "luna-max-api",
+        "source_review": "luna-max-api",
+        "pot_generation": "sol-medium-api",
+        "verification": "luna-max-api",
+        "exception_feedback": "luna-max-api",
+        "text_generation": "luna-max-api",
+        "failure_interpretation": "luna-max-api",
+        "failure_display_translation": "luna-max-api"
+      },
+      "revision_attempts": 1
+    }
+  },
+  "generation": {
+    "schedule": {
+      "concurrency": 100,
+      "monitor_interval_seconds": 3,
+      "cpu_threshold_percent": 50,
+      "increase_by": 10,
+      "max_rounds": 3,
+      "feedback": {
+        "concurrency": 3
+      },
+      "failure_interpretation": {
+        "concurrency": 100,
+        "monitor_interval_seconds": 3,
+        "max_calls_per_target": 2
+      }
+    },
+    "run": {
+      "models": {
+        "generation_profile": "luna-max-api",
+        "validation_profile": "luna-max-api",
+        "source_review": "luna-max-api",
+        "pot_generation": "sol-medium-api",
+        "verification": "luna-max-api",
+        "ea_inverse_review": "sol61-high-api",
+        "exception_feedback": "luna-max-api",
+        "text_generation": "luna-max-api",
+        "failure_interpretation": "luna-max-api",
+        "failure_display_translation": "luna-max-api"
+      },
+      "variant_concurrency": 5
+    }
+  },
+  "evaluation": {
+    "schedule": {
+      "dataset": {
+        "source_run": "reports/run/20260917-003",
+        "input_path": "data/prepared/tatqa/full-20260917/input.json",
+        "count": 557,
+        "require_all_variants_pass": true
+      }
+    },
+    "run": {
+      "models": {
+        "luna-api": {
+          "off": "luna6-none-api",
+          "on": "luna6-medium-api"
+        }
+      },
+      "transport": "batch",
+      "cache": "off",
+      "seed": 20260920,
+      "definition_source_run": null
+    }
+  },
+  "analysis": {
+    "schedule": {
+      "concurrency": 100,
+      "timeout_seconds": 1800,
+      "adaptive": {
+        "enabled": false,
+        "interval_seconds": 60,
+        "cpu_threshold_percent": 60,
+        "growth_percent": 10
+      }
+    },
+    "run": {
+      "backend": "codex",
+      "models": {
+        "codex": "sol61-low-cli",
+        "api": "sol61-low-api"
+      },
+      "technical_retry_limit": 1
+    }
+  }
+}

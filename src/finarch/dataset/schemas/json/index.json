@@ -1,0 +1,202 @@
+[
+  {
+    "schema_id": "02-generation.03-validation.ea-recoverability-review.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "17e715649f6f7e43c8000d9542e5965bf5e2f51bf3d784b63448308559767515",
+    "file": "02-generation.03-validation.ea-recoverability-review.request.schema.json"
+  },
+  {
+    "schema_id": "02-generation.03-validation.ea-recoverability-review.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "77d8d7467d9354d74aeb27c8927eff6ce6800b05f245a64e3a204f9bf416480a",
+    "file": "02-generation.03-validation.ea-recoverability-review.response.schema.json"
+  },
+  {
+    "schema_id": "02-generation.03-validation.ea-recovery-bindings",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "c2a6aed841b7b53bc00f572ce4932c682bb6f783f202ba772b00bd89c0bce978",
+    "file": "02-generation.03-validation.ea-recovery-bindings.schema.json"
+  },
+  {
+    "schema_id": "shared.01-07.02-05.failure-interpretation.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "1e86dae20b2556533dbf0e47b3ef2c78f5c15b14763348a4b6f5c62ac108edc4",
+    "file": "shared.01-07.02-05.failure-interpretation.request.schema.json"
+  },
+  {
+    "schema_id": "shared.01-07.02-05.failure-interpretation.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "b520c48b827c9812b5c7063195709d06f2c3a1402f37fb8eca5cc30c7f8cc0dc",
+    "file": "shared.01-07.02-05.failure-interpretation.response.schema.json"
+  },
+  {
+    "schema_id": "shared.01-07.02-05.display-translation.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "c55be77e5084d0aaeae6f6c2d75ca58a6d16ed5db353e3586a3622095ea0d9c9",
+    "file": "shared.01-07.02-05.display-translation.request.schema.json"
+  },
+  {
+    "schema_id": "shared.01-07.02-05.display-translation.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "4109c769eb61eff01a7762014af75be8cfa19e66a08fc233de9ea3a30083a396",
+    "file": "shared.01-07.02-05.display-translation.response.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.05-verification.semantic.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "1374d7172ed4c655cc4927535b80f1b51608cb98c5cb8a5bbcaee728014d700d",
+    "file": "01-preparation.05-verification.semantic.request.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.05-verification.semantic.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "1a6bd5df73c8d32270228104a54608b7c45d73adf32e5cfde1429dc6aafac176",
+    "file": "01-preparation.05-verification.semantic.response.schema.json"
+  },
+  {
+    "schema_id": "shared.01-06.02-04.exception-handler.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "4735b39a91d3cf56144491226671a812b3d071f03ffe43cbd22a0c509f9b9f42",
+    "file": "shared.01-06.02-04.exception-handler.request.schema.json"
+  },
+  {
+    "schema_id": "shared.01-06.02-04.exception-handler.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "add4ca391e4c9e725a9fb41267e2d114e1e99e3b4fafd9b07f27689d7fb75552",
+    "file": "shared.01-06.02-04.exception-handler.response.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.02-review-and-correct.revision.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "34a151d7b91c3e3cab7be6789174ca47ac433c6e481e2e0daeee6f440e7c156c",
+    "file": "01-preparation.02-review-and-correct.revision.request.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.02-review-and-correct.revision.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "74c6c2b28ed66c465699037ca69bbadee259152d63bade3b819a1e31a846f2fb",
+    "file": "01-preparation.02-review-and-correct.revision.response.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.03-calculation.review-answer-evidence.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "5d7d942ac639e5196020e5520781a72a7bdb40882f5c3079d807e5315d5ac402",
+    "file": "01-preparation.03-calculation.review-answer-evidence.request.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.03-calculation.review-answer-evidence.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "2755d88faa20c8cff76f8f98216452e397f12f58c09877a1eef096e5a9e09c34",
+    "file": "01-preparation.03-calculation.review-answer-evidence.response.schema.json"
+  },
+  {
+    "schema_id": "02-generation.feedback.case-feedback.request",
+    "version": 2,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "6de79f5cd5739410c125f13f28794fda39e69e327dd769afcea30ee532a19d1f",
+    "file": "02-generation.feedback.case-feedback.request.schema.json"
+  },
+  {
+    "schema_id": "02-generation.feedback.case-feedback.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "21537165291b41715194e8075fd8858779613b94431d76a6b1d96d5006278f23",
+    "file": "02-generation.feedback.case-feedback.response.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.01-source.prepared-input",
+    "version": 2,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "f535d33ec4050ec96cf4d3feb7bd70b9c92be003d8e7f58d64f884eb75cba9e1",
+    "file": "01-preparation.01-source.prepared-input.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.03-calculation.pot.request",
+    "version": 2,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "2cdd0ec6fbe14f8c2de849af507fd31a02955292764f9d62444df48c528afe8c",
+    "file": "01-preparation.03-calculation.pot.request.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.03-calculation.pot.response",
+    "version": 5,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "e264a766f2eb4702ad04cd79c9560438640664b010a9bd17ad7e1a9edc9c7972",
+    "file": "01-preparation.03-calculation.pot.response.schema.json"
+  },
+  {
+    "schema_id": "02-generation.02-generate-text.realization.response",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "6141c1bd2f64e5a731189b510de7e75f2c7dc3339c2408da2ecf21368839567b",
+    "file": "02-generation.02-generate-text.realization.response.schema.json"
+  },
+  {
+    "schema_id": "02-generation.02-generate-text.realization.request",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "da8a79cf5ff4dff87ba038f98bd8398fceee1232a83ef757e6fd9bd950e676b2",
+    "file": "02-generation.02-generate-text.realization.request.schema.json"
+  },
+  {
+    "schema_id": "shared.01-02.02-03.review-and-validation.request",
+    "version": 2,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "36f6d926374bdf9911bd92df24299d9dc8b60612d1581dbe554d984255b94210",
+    "file": "shared.01-02.02-03.review-and-validation.request.schema.json"
+  },
+  {
+    "schema_id": "shared.01-02.02-03.review-and-validation.response",
+    "version": 4,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "5cd8782602d83784f88ae1c4baf2a621c13728aaeee1efb9aa483adc784e7b43",
+    "file": "shared.01-02.02-03.review-and-validation.response.schema.json"
+  },
+  {
+    "schema_id": "shared.01-02.02-03.review-and-validation.response.v2",
+    "version": 2,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "002e7a6a51dca614b9a7a242be94c829f570b437a21aec85776a5cbdf7764ee0",
+    "file": "shared.01-02.02-03.review-and-validation.response.v2.schema.json"
+  }
+]

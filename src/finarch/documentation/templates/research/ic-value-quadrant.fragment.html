@@ -1,0 +1,309 @@
+<div id="ic-value-quadrant" lang="ko" data-view-count="2">
+  <style>
+    #ic-value-quadrant{--q-ink:#382b22;--q-muted:#78695b;--q-line:#dfd3c5;--q-paper:#fffdf9;--q-base:#f6eee2;--q-brown:#755137;--q-up:#8d1730;--q-down:#245f9d;--q-gain-color:#edb455;color:var(--q-ink);background:var(--q-paper);font:13px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px;box-sizing:border-box;border-radius:6px;max-width:1740px;margin:auto}
+    #ic-value-quadrant *{box-sizing:border-box}
+    #ic-value-quadrant h1,#ic-value-quadrant h2,#ic-value-quadrant h3,#ic-value-quadrant p{margin:0}
+    #ic-value-quadrant h1{font-size:19px;line-height:1.25;font-weight:700}
+    #ic-value-quadrant h2{font-size:14px;font-weight:700}
+    #ic-value-quadrant h3{font-size:12px;font-weight:650}
+    #ic-value-quadrant button,#ic-value-quadrant select{font:inherit}
+    #ic-value-quadrant button:focus-visible,#ic-value-quadrant summary:focus-visible{outline:3px solid #b99a70;outline-offset:2px}
+    #ic-value-quadrant .q-header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+    #ic-value-quadrant .q-eyebrow{font-size:11px;letter-spacing:.08em;font-weight:700;color:var(--q-brown);margin-bottom:2px}
+    #ic-value-quadrant .q-subtitle{color:var(--q-muted);font-size:11px;margin-top:3px}
+    #ic-value-quadrant .q-view-controls,#ic-value-quadrant .q-models,#ic-value-quadrant .q-datasets{display:flex;gap:5px;flex-wrap:wrap}
+    #ic-value-quadrant .q-button{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--q-line);border-radius:3px;background:var(--q-paper);color:var(--q-ink);padding:4px 7px;font-size:11px}
+    #ic-value-quadrant .q-button[aria-pressed="true"],#ic-value-quadrant .q-button[aria-selected="true"]{border-color:var(--q-brown);background:var(--q-base);box-shadow:inset 0 -2px var(--q-brown)}
+    #ic-value-quadrant .q-button:disabled{color:var(--q-muted);border-style:dashed}
+    #ic-value-quadrant .q-assumption{font-size:11px;color:var(--q-muted);padding:5px 0;margin-top:5px;border-top:1px solid var(--q-line)}
+    #ic-value-quadrant .q-assumption strong{color:var(--q-brown);font-weight:650}
+    #ic-value-quadrant .q-workspace{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:6px}
+    #ic-value-quadrant[data-view-count="1"] .q-workspace{grid-template-columns:minmax(0,1fr)}
+    #ic-value-quadrant .q-pane{min-width:0;container-type:inline-size}
+    #ic-value-quadrant .q-pane[hidden]{display:none}
+    #ic-value-quadrant .q-pane-head{display:flex;align-items:center;gap:7px;padding:5px 7px;background:var(--q-base);border-top:2px solid var(--q-brown)}
+    #ic-value-quadrant .q-screen-label{color:var(--q-brown);font-size:11px;white-space:nowrap}
+    #ic-value-quadrant .q-scope{display:flex;align-items:center;gap:5px 10px;flex-wrap:wrap;margin:6px 0}
+    #ic-value-quadrant .q-cohort-field{display:flex;gap:4px;align-items:center;font-size:11px;max-width:100%}
+    #ic-value-quadrant .q-cohort-field[hidden]{display:none}
+    #ic-value-quadrant .q-cohort-field select{max-width:100%;min-width:0;padding:3px;border:1px solid var(--q-line);border-radius:3px;color:var(--q-ink);background:var(--q-paper)}
+    #ic-value-quadrant .q-feature-tabs{display:flex;gap:3px;flex-wrap:wrap;margin:6px 0;border-bottom:1px solid var(--q-line);padding-bottom:5px}
+    #ic-value-quadrant .q-feature-tabs .q-button{padding:4px 6px}
+    #ic-value-quadrant .q-dataset-meta{font-size:11px;color:var(--q-muted);overflow-wrap:anywhere}
+    #ic-value-quadrant .q-notice{margin-top:4px;padding:4px 5px;background:var(--q-base);color:var(--q-brown);font-size:11px}
+    #ic-value-quadrant .q-toolbar{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+    #ic-value-quadrant .q-model-dot{display:inline-block;width:7px;height:7px;background:var(--model-color);border-radius:50%;flex:none}
+    #ic-value-quadrant .q-quadrants{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;position:relative;margin:6px 0}
+    #ic-value-quadrant .q-quadrants:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--q-line)}
+    #ic-value-quadrant .q-quadrants:after{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:var(--q-line)}
+    #ic-value-quadrant .q-quadrant{position:relative;min-width:0;border:1px solid var(--q-line);border-radius:3px;padding:6px;background:var(--q-paper)}
+    #ic-value-quadrant .q-quadrant.q-baseline{background:var(--q-base);border:2px solid #a38361;padding:5px}
+    #ic-value-quadrant .q-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:4px;margin-bottom:4px}
+    #ic-value-quadrant .q-reasoning{color:var(--q-muted);font-size:11px;margin-top:1px}
+    #ic-value-quadrant .q-condition-marker{font-size:11px;color:var(--q-brown);max-width:68px;text-align:right}
+    #ic-value-quadrant .q-card-columns,#ic-value-quadrant .q-row{display:grid;grid-template-columns:minmax(0,1fr) 76px 77px;gap:3px;padding:2px}
+    #ic-value-quadrant .q-card-columns{font-size:11px;color:var(--q-muted)}
+    #ic-value-quadrant .q-card-columns span:not(:first-child){text-align:right}
+    #ic-value-quadrant .q-row{align-items:center;min-height:32px;border-top:1px solid #eee5db}
+    #ic-value-quadrant .q-row-name{display:flex;align-items:center;gap:3px;font-size:11px;overflow-wrap:anywhere}
+    #ic-value-quadrant .q-choice-code{display:inline-flex;align-items:center;justify-content:center;min-width:14px;height:15px;border-radius:2px;background:#eee9e1;color:#655548;font-size:11px;font-weight:650;flex:none}
+    #ic-value-quadrant .q-current{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+    #ic-value-quadrant .q-current strong{display:block;font-size:11px;font-weight:650}
+    #ic-value-quadrant .q-current small{display:block;font-size:11px;color:var(--q-muted)}
+    #ic-value-quadrant .q-change{display:block;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+    #ic-value-quadrant .q-change-top{display:flex;align-items:center;justify-content:flex-end;gap:1px}
+    #ic-value-quadrant .q-change strong{font-size:11px;font-weight:700}
+    #ic-value-quadrant .q-change small{display:block;font-size:11px;color:var(--q-muted)}
+    #ic-value-quadrant .q-up{color:var(--q-up)}
+    #ic-value-quadrant .q-down{color:var(--q-down)}
+    #ic-value-quadrant .q-zero{color:var(--q-muted)}
+    #ic-value-quadrant .q-gain-1{background:color-mix(in srgb,var(--q-gain-color) 10%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-2{background:color-mix(in srgb,var(--q-gain-color) 20%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-3{background:color-mix(in srgb,var(--q-gain-color) 30%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-4{background:color-mix(in srgb,var(--q-gain-color) 40%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-5{background:color-mix(in srgb,var(--q-gain-color) 50%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-6{background:color-mix(in srgb,var(--q-gain-color) 60%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-7{background:color-mix(in srgb,var(--q-gain-color) 70%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-8{background:color-mix(in srgb,var(--q-gain-color) 80%,var(--q-paper))}
+    #ic-value-quadrant .q-gain-9{background:color-mix(in srgb,var(--q-gain-color) 90%,var(--q-paper))}
+    #ic-value-quadrant [class*="q-gain-"]{--q-muted:#594332}
+    #ic-value-quadrant .q-arrow{display:inline-block;flex:none;width:13px;height:14px;color:var(--model-color);overflow:visible}
+    #ic-value-quadrant .q-scale{display:flex;align-items:center;gap:4px 9px;flex-wrap:wrap;font-size:11px;color:var(--q-muted);padding:5px 0;border-top:1px solid var(--q-line);margin-top:6px}
+    #ic-value-quadrant .q-scale-item{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+    #ic-value-quadrant .q-scale-swatch{display:inline-block;width:17px;height:10px;border-radius:1px}
+    #ic-value-quadrant .q-explainer{font-size:11px;color:var(--q-muted);margin-top:3px}
+    #ic-value-quadrant .q-comparison{margin-top:7px;padding-top:6px;border-top:1px solid var(--q-line);max-width:100%}
+    #ic-value-quadrant .q-comparison-head{display:flex;align-items:center;justify-content:space-between;gap:5px;flex-wrap:wrap;margin-bottom:4px}
+    #ic-value-quadrant .q-comparison-models{display:flex;gap:4px 9px;flex-wrap:wrap;margin:4px 0 6px}
+    #ic-value-quadrant .q-model-check{display:inline-flex;align-items:center;gap:4px;min-width:0;font-size:11px;padding:2px 3px;border-radius:2px}
+    #ic-value-quadrant .q-model-check input{margin:0;accent-color:var(--q-brown);flex:none}
+    #ic-value-quadrant .q-model-check>span{display:inline-flex;align-items:center;gap:4px}
+    #ic-value-quadrant .q-model-check.q-focused-model{background:var(--q-base);box-shadow:inset 0 -2px var(--q-brown)}
+    #ic-value-quadrant .q-model-check.q-pending-model{color:var(--q-muted)}
+    #ic-value-quadrant .q-multi-columns,#ic-value-quadrant .q-multi-row{display:grid;grid-template-columns:var(--comparison-columns);min-width:0}
+    #ic-value-quadrant .q-multi-columns{align-items:stretch;font-size:11px;padding-bottom:3px}
+    #ic-value-quadrant .q-multi-model{display:flex;flex-direction:column;justify-content:center;text-align:center;min-width:0;overflow-wrap:anywhere;padding:2px}
+    #ic-value-quadrant .q-multi-model>span{display:inline-flex;align-items:center;justify-content:center;gap:3px}
+    #ic-value-quadrant .q-multi-row{border-top:1px solid #eee5db;align-items:stretch;min-height:34px}
+    #ic-value-quadrant .q-multi-choice{display:flex;align-items:center;justify-content:center;padding:3px 2px;min-width:0}
+    #ic-value-quadrant .q-choice-legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11px;color:var(--q-muted);margin:5px 0 2px}
+    #ic-value-quadrant .q-choice-legend-item{display:inline-flex;align-items:center;gap:3px}
+    #ic-value-quadrant .q-multi-value{container-name:comparison-value;container-type:inline-size;min-width:0;border-left:1px solid var(--q-line);font-variant-numeric:tabular-nums}
+    #ic-value-quadrant .q-multi-value.q-focused-model,#ic-value-quadrant .q-multi-model.q-focused-model{box-shadow:inset 0 0 0 1px var(--q-brown)}
+    #ic-value-quadrant .q-multi-content{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:34px;padding:2px 1px}
+    #ic-value-quadrant .q-multi-current{font-size:11px;text-align:center;white-space:nowrap}
+    #ic-value-quadrant .q-multi-current strong{font-weight:650}
+    #ic-value-quadrant .q-multi-extra{font-size:11px;color:var(--q-muted);margin-left:3px}
+    #ic-value-quadrant .q-multi-content .q-change{display:flex;align-items:center;justify-content:center;gap:3px}
+    #ic-value-quadrant .q-multi-content .q-change-top{justify-content:center}
+    #ic-value-quadrant .q-multi-content .q-change small{display:inline}
+    #ic-value-quadrant .q-multi-content .q-arrow{width:11px;height:13px}
+    #ic-value-quadrant .q-baseline-number{display:none}
+    #ic-value-quadrant .q-comparison-empty{padding:9px 4px;color:var(--q-muted);font-size:12px}
+    #ic-value-quadrant .q-multi-quadrants.q-no-models{display:block}
+    #ic-value-quadrant .q-multi-quadrants.q-no-models:before,#ic-value-quadrant .q-multi-quadrants.q-no-models:after{display:none}
+    @container comparison-value (max-width:145px){#ic-value-quadrant .q-multi-extra,#ic-value-quadrant .q-multi-content .q-change small,#ic-value-quadrant .q-baseline-label{display:none}#ic-value-quadrant .q-baseline-number{display:inline}}
+    @container comparison-value (max-width:78px){#ic-value-quadrant .q-multi-content .q-arrow{display:none}}
+    #ic-value-quadrant .q-protocol-tag{font-size:11px;color:var(--q-muted)}
+    #ic-value-quadrant .q-source{font-size:11px;margin-top:7px;border-top:1px solid var(--q-line);padding-top:5px;color:var(--q-muted)}
+    #ic-value-quadrant summary{color:var(--q-brown);font-weight:600}
+    #ic-value-quadrant .q-source-content{margin-top:8px;display:grid;gap:7px;overflow-wrap:anywhere}
+    #ic-value-quadrant .q-source code{font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--q-ink)}
+    #ic-value-quadrant .q-source strong{font-weight:600;color:var(--q-ink)}
+    #ic-value-quadrant .q-error{color:var(--q-up);border:1px solid var(--q-up);padding:10px;margin-top:10px}
+    #ic-value-quadrant .q-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @container(min-width:750px){#ic-value-quadrant .q-row,#ic-value-quadrant .q-card-columns{grid-template-columns:minmax(112px,1fr) 130px 126px;gap:5px}#ic-value-quadrant .q-current strong,#ic-value-quadrant .q-current small{display:inline}#ic-value-quadrant .q-current small{margin-left:4px}#ic-value-quadrant .q-row .q-change{display:flex;gap:3px;justify-content:flex-end;align-items:center}#ic-value-quadrant .q-row .q-change small{display:inline}#ic-value-quadrant .q-row{min-height:27px}}
+    @container(max-width:420px){#ic-value-quadrant .q-quadrants{grid-template-columns:minmax(0,1fr)}#ic-value-quadrant .q-quadrants:before,#ic-value-quadrant .q-quadrants:after{display:none}#ic-value-quadrant .q-quadrant[data-condition="unguided/off"]{order:0}#ic-value-quadrant .q-quadrant[data-condition="unguided/on"]{order:1}#ic-value-quadrant .q-quadrant[data-condition="guided/off"]{order:2}#ic-value-quadrant .q-quadrant[data-condition="guided/on"]{order:3}}
+    @media(max-width:880px){#ic-value-quadrant .q-workspace{grid-template-columns:minmax(0,1fr)}#ic-value-quadrant .q-pane+.q-pane{margin-top:8px}}
+    @media(max-width:380px){#ic-value-quadrant{padding:8px}#ic-value-quadrant .q-card-columns{display:none}#ic-value-quadrant .q-condition-marker{max-width:60px}}
+    @media(pointer:coarse){#ic-value-quadrant .q-button,#ic-value-quadrant .q-cohort-field select,#ic-value-quadrant .q-model-check{min-height:44px}#ic-value-quadrant .q-cohort-field select{font-size:16px}}
+    @media print{#ic-value-quadrant{padding:0;max-width:none}#ic-value-quadrant .q-workspace{grid-template-columns:minmax(0,1fr)}#ic-value-quadrant .q-quadrant{break-inside:avoid}#ic-value-quadrant *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style>
+  <header class="q-header">
+    <div><p class="q-eyebrow">FIN-ARCH / EXPERIMENTS · 데이터셋별 비교</p><h1>7조건 사분면 · 모델 비교</h1><p class="q-subtitle">가로: Unguided → Criteria-Guided · 세로: Reasoning OFF → ON</p></div>
+    <div class="q-view-controls" role="group" aria-label="동시에 표시할 화면 수"><button class="q-button cursor-interaction" type="button" data-view-count="1" aria-pressed="false">1화면</button><button class="q-button cursor-interaction" type="button" data-view-count="2" aria-pressed="true">2화면 비교</button></div>
+  </header>
+  <p class="q-assumption"><strong>비교 기준</strong> 각 모델의 Unguided / Reasoning OFF · 이 조건이 가장 좋지 않다는 해석 가정 · ▲·▼는 실제 증감</p>
+  <div class="q-workspace" id="ic-value-screens"></div>
+  <div class="q-scale" aria-label="증감 및 배경 농도 범례"><span class="q-scale-item"><strong class="q-up">▲ 증가</strong><strong class="q-down">▼ 감소</strong></span><span class="q-scale-item">증가 배경</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-1" aria-hidden="true"></i>10%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-2" aria-hidden="true"></i>20%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-3" aria-hidden="true"></i>30%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-4" aria-hidden="true"></i>40%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-5" aria-hidden="true"></i>50%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-6" aria-hidden="true"></i>60%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-7" aria-hidden="true"></i>70%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-8" aria-hidden="true"></i>80%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-9" aria-hidden="true"></i>90%</span></div>
+  <p class="q-explainer">증가 비중 10%p마다 농도 한 단계 · 화살표 색 = 모델 · 숫자 일치·null·증감만으로 정답 개선을 확정하지 않습니다.</p>
+  <template id="ic-value-screen-template">
+    <section class="q-pane">
+      <header class="q-pane-head"><span class="q-screen-label"></span><h2 class="q-feature-title"></h2></header>
+      <div class="q-scope"><div class="q-datasets" role="group" aria-label="데이터셋 선택"></div><label class="q-cohort-field" hidden>입력 묶음<select aria-label="동일 입력 문항 묶음"></select></label></div>
+      <div class="q-feature-tabs" role="tablist" aria-label="7조건 선택"></div>
+      <div class="q-feature-content" role="tabpanel">
+        <p class="q-dataset-meta"></p><p class="q-notice" hidden></p>
+        <div class="q-toolbar"><div class="q-models" role="group" aria-label="사분면에 표시할 모델"></div></div>
+        <div class="q-quadrants" aria-label="네 조건 사분면"></div><div class="q-sr-only q-status" role="status" aria-live="polite"></div>
+        <section class="q-comparison"><div class="q-comparison-head"><div><h3>모델별 사분면 비교</h3><p class="q-subtitle">체크한 모델을 각 분면에서 비교 · 위에서 선택한 모델은 테두리로 강조</p></div></div><div class="q-comparison-models" role="group" aria-label="함께 비교할 모델"></div><div class="q-quadrants q-multi-quadrants" aria-label="선택 모델의 네 조건 사분면"></div><div class="q-choice-legend" role="group" aria-label="응답 기호 범례"></div><p class="q-explainer q-denominator"></p><div class="q-sr-only q-comparison-status" role="status" aria-live="polite"></div></section>
+        <details class="q-source"><summary class="cursor-interaction">사용 자료 · 숫자를 읽는 기준</summary><div class="q-source-content"></div></details>
+      </div>
+    </section>
+  </template>
+  <noscript><p class="q-error">차트를 표시하려면 JavaScript를 켜 주세요. 데이터는 이 HTML 안에 포함되어 있습니다.</p></noscript>
+  <script type="application/json" id="ic-value-quadrant-data">__SNAPSHOT_JSON__</script>
+  <script>
+  (() => {
+    'use strict';
+    const root=document.getElementById('ic-value-quadrant');
+    let data;
+    const conditions=[{key:'unguided/off',prompt:'Unguided Solving',reasoning:'Reasoning OFF',direction:'base'},{key:'unguided/on',prompt:'Unguided Solving',reasoning:'Reasoning ON',direction:'up'},{key:'guided/off',prompt:'Criteria-Guided Solving',reasoning:'Reasoning OFF',direction:'right'},{key:'guided/on',prompt:'Criteria-Guided Solving',reasoning:'Reasoning ON',direction:'diagonal'}];
+    const choiceCodes={A:'A',B:'B',ORIGINAL_VALUE:'=',OTHER:'≠',NULL:'∅',FORMAT_OR_EXECUTION_FAILED:'!'};
+    const fmt=value=>value.toLocaleString('en-US');
+    const percent=(count,total)=>(100*count/total).toFixed(1);
+    const sign=value=>value>0?'+':value<0?'−':'';
+    const band=pp=>Math.min(9,Math.max(1,Math.ceil(pp/10)));
+    const screens=[];
+    let viewCount=2;
+    function el(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;}
+    function modelLabel(model){const label=el('span');label.style.setProperty('--model-color',model.color);label.append(el('i','q-model-dot'),document.createTextNode(model.label));return label;}
+    function arrow(direction,pp,model){
+      const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),path=document.createElementNS(ns,'path');
+      svg.setAttribute('viewBox','0 0 30 30');svg.setAttribute('class','q-arrow');svg.setAttribute('aria-hidden','true');
+      path.setAttribute('d',direction==='up'?'M15 26V5M7 13L15 5L23 13':direction==='right'?'M4 15H26M18 7L26 15L18 23':'M5 25L25 5M13 5H25V17');
+      path.setAttribute('fill','none');path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width',String(1.4+0.4*band(pp)));path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');
+      svg.style.setProperty('--model-color',model.color);svg.append(path);return svg;
+    }
+    function persist(){
+      const state={schemaVersion:3,viewCount,screens:screens.map(screen=>screen.snapshot())};
+      window.openai?.setWidgetState?.({modelContent:state,privateContent:null})?.catch(()=>{});
+      try{localStorage.setItem('finarch-quadrant-screens-v3',JSON.stringify(state));}catch{}
+    }
+    function setViewCount(value){
+      viewCount=value===1?1:2;root.dataset.viewCount=String(viewCount);
+      if(screens[1])screens[1].element.hidden=viewCount===1;
+      root.querySelectorAll('button[data-view-count]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.viewCount)===viewCount)));
+    }
+    function createScreen(index){
+      const pane=root.querySelector('#ic-value-screen-template').content.firstElementChild.cloneNode(true);
+      pane.id=`ic-value-screen-${index+1}`;pane.dataset.screen=String(index+1);
+      pane.querySelector('.q-choice-legend').id=`${pane.id}-choice-legend`;
+      pane.querySelector('.q-multi-quadrants').setAttribute('aria-describedby',`${pane.id}-choice-legend`);
+      pane.querySelector('.q-screen-label').textContent=`화면 ${index+1}`;
+      const content=pane.querySelector('.q-feature-content');content.id=`${pane.id}-content`;
+      const title=pane.querySelector('.q-feature-title');title.id=`${pane.id}-title`;pane.setAttribute('aria-labelledby',title.id);
+      root.querySelector('#ic-value-screens').append(pane);
+      let dataset,cohort,feature,selectedModel,comparisonModels=[];
+      const featureInfo=()=>cohort.features[feature.key];
+      const modelCells=model=>model.features[feature.key].cells;
+      function choiceLabel(key){
+        if(key==='A')return '원래 후보 A와 일치';
+        if(key==='B')return '추가 후보 B와 일치';
+        if(key==='ORIGINAL_VALUE')return '원본 답과 숫자 일치';
+        if(key==='OTHER')return feature.key.startsWith('EA_')?'원본 답과 다른 숫자':'두 후보와 다른 숫자';
+        return key==='NULL'?'null 답':'형식·실행 실패';
+      }
+      function choiceName(key){const node=el('span','q-row-name');node.append(el('span','q-choice-code',choiceCodes[key]),el('span','',choiceLabel(key)));return node;}
+      function diff(model,condition,key){const cells=modelCells(model),base=cells['unguided/off'],current=cells[condition];return {count:current.counts[key]-base.counts[key],pp:100*(current.counts[key]/current.total-base.counts[key]/base.total)};}
+      function changeNode(model,condition,key,compact=false){
+        const delta=diff(model,condition.key,key),block=el('div','q-change');
+        if(condition.direction==='base'){block.append(el('small','q-zero','기준'));return block;}
+        const top=el('div','q-change-top');if(delta.count>0)top.append(arrow(condition.direction,delta.pp,model));
+        const dir=delta.count>0?'▲':delta.count<0?'▼':'–',tone=delta.count>0?'q-up':delta.count<0?'q-down':'q-zero';
+        top.append(el('strong',tone,`${dir}${sign(delta.count)}${compact?Math.abs(delta.count):fmt(Math.abs(delta.count))}`));
+        block.append(top,el('small','',`${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}${compact?'':'%p'}`));
+        block.setAttribute('aria-label',`${choiceLabel(key)}: 기준 대비 ${delta.count>0?'증가':delta.count<0?'감소':'변화 없음'} ${fmt(Math.abs(delta.count))}건, ${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}퍼센트포인트`);return block;
+      }
+      function renderQuadrants(modelKey){
+        const model=cohort.models.find(item=>item.key===modelKey)||cohort.models[0],out=pane.querySelector('.q-feature-content>.q-quadrants');out.replaceChildren();
+        for(const key of ['unguided/on','guided/on','unguided/off','guided/off']){
+          const condition=conditions.find(item=>item.key===key),cell=modelCells(model)[key],card=el('article',`q-quadrant${key==='unguided/off'?' q-baseline':''}`);
+          card.dataset.condition=key;card.dataset.model=model.key;card.dataset.feature=feature.key;card.setAttribute('aria-label',`${feature.label} · ${model.label} · ${condition.prompt} · ${condition.reasoning}`);
+          const head=el('div','q-card-head'),heading=el('div');heading.append(el('h3','',condition.prompt),el('p','q-reasoning',condition.reasoning));head.append(heading,el('span','q-condition-marker',condition.direction==='base'?'비교 기준':condition.direction==='diagonal'?'두 설정 변경':condition.direction==='up'?'추론만 변경':'풀이 기준 제시'));
+          const columns=el('div','q-card-columns');columns.append(el('span','','응답 형태'),el('span','','현재'),el('span','','기준 대비'));card.append(head,columns);
+          for(const choice of feature.choices){const delta=diff(model,key,choice),row=el('div',`q-row${delta.count>0?' q-gain-'+band(delta.pp):''}`),current=el('div','q-current');row.dataset.choice=choice;current.append(el('strong','',`${fmt(cell.counts[choice])}/${fmt(cell.total)}`),el('small','',`${percent(cell.counts[choice],cell.total)}%`));row.append(choiceName(choice),current,changeNode(model,condition,choice));card.append(row);}
+          out.append(card);
+        }
+        pane.querySelectorAll('button[data-model]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.model===model.key)));
+        pane.querySelector('.q-status').textContent=`화면 ${index+1}: ${dataset.label}, ${feature.label}, ${featureInfo().case_count}문항, ${model.label}. 기준은 같은 모델의 Unguided Solving, Reasoning OFF입니다.`;
+        pane.dataset.model=model.key;return model.key;
+      }
+      function renderComparison(){
+        const models=cohort.models.filter(model=>comparisonModels.includes(model.key)),out=pane.querySelector('.q-multi-quadrants');out.replaceChildren();
+        const legend=pane.querySelector('.q-choice-legend');legend.replaceChildren();for(const choice of feature.choices){const item=el('span','q-choice-legend-item');item.dataset.choice=choice;item.append(el('span','q-choice-code',choiceCodes[choice]),el('span','',choiceLabel(choice)));legend.append(item);}
+        out.classList.toggle('q-no-models',!models.length);
+        pane.querySelectorAll('.q-model-check').forEach(label=>{const input=label.querySelector('input');input.checked=comparisonModels.includes(input.value);label.classList.toggle('q-focused-model',input.value===selectedModel&&input.checked);});
+        pane.querySelector('.q-comparison-status').textContent=`화면 ${index+1}: ${models.length}개 비교 모델 선택. ${models.map(model=>model.label).join(', ')}`;
+        pane.querySelector('.q-denominator').textContent=`각 모델·조건 ${fmt(featureInfo().case_count)}건 · 출력 잘림·형식·실행 실패 포함`;
+        if(!models.length){out.append(el('p','q-comparison-empty','비교할 모델을 체크해 주세요.'));return;}
+        for(const key of ['unguided/on','guided/on','unguided/off','guided/off']){
+          const condition=conditions.find(item=>item.key===key),card=el('article',`q-quadrant q-multi-card${key==='unguided/off'?' q-baseline':''}`);
+          card.dataset.condition=key;card.dataset.feature=feature.key;card.dataset.modelCount=String(models.length);card.setAttribute('aria-label',`${feature.label} · ${condition.prompt} · ${condition.reasoning} · ${models.map(model=>model.label).join(', ')}`);
+          card.style.setProperty('--comparison-columns',`24px repeat(${models.length},minmax(0,1fr))`);
+          const head=el('div','q-card-head'),heading=el('div');heading.append(el('h3','',condition.prompt),el('p','q-reasoning',condition.reasoning));head.append(heading,el('span','q-condition-marker',condition.direction==='base'?'비교 기준':condition.direction==='diagonal'?'두 설정 변경':condition.direction==='up'?'추론만 변경':'풀이 기준 제시'));card.append(head);
+          const columns=el('div','q-multi-columns');columns.append(el('span','q-multi-choice'));
+          for(const model of models){const label=el('div',`q-multi-model${model.key===selectedModel?' q-focused-model':''}`);label.dataset.model=model.key;label.append(modelLabel(model));if(!cohort.protocols_equal)label.append(el('span','q-protocol-tag',model.protocol_label));columns.append(label);}card.append(columns);
+          for(const choice of feature.choices){
+            const row=el('div','q-multi-row'),name=el('div','q-multi-choice');row.dataset.choice=choice;name.append(el('span','q-choice-code',choiceCodes[choice]));row.append(name);
+            for(const model of models){
+              const cell=modelCells(model)[key],delta=diff(model,key,choice),value=cell.counts[choice],box=el('div',`q-multi-value${model.key===selectedModel?' q-focused-model':''}${delta.count>0?' q-gain-'+band(delta.pp):''}`);
+              box.dataset.model=model.key;box.dataset.condition=key;box.dataset.choice=choice;box.dataset.feature=feature.key;
+              box.setAttribute('aria-label',`${model.label} · ${choiceLabel(choice)} · ${fmt(value)}/${fmt(cell.total)}건 · ${percent(value,cell.total)}% · 증감 ${sign(delta.count)}${fmt(Math.abs(delta.count))}건 · ${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}%p`);
+              const content=el('div','q-multi-content'),current=el('div','q-multi-current');current.append(el('strong','',String(value)),el('span','q-multi-extra',`/${fmt(cell.total)} · ${percent(value,cell.total)}%`));
+              let change;if(condition.direction==='base'){change=el('div','q-change');change.append(el('span','q-zero q-baseline-label','기준'),el('strong','q-zero q-baseline-number','–0'));}else{change=changeNode(model,condition,choice,true);change.querySelector('small').textContent+= '%p';}
+              content.append(current,change);box.append(content);row.append(box);
+            }
+            card.append(row);
+          }
+          out.append(card);
+        }
+      }
+      function renderSources(){
+        const container=pane.querySelector('.q-source-content');container.replaceChildren();const info=featureInfo();
+        container.append(el('strong','',`${dataset.label} · ${feature.label} · ${fmt(info.case_count)}문항 · 제작 run ${cohort.source_run.split('/').pop()}`),el('code','',cohort.provenance_path),el('p','',`입력 해시 ${cohort.input_sha256.slice(0,12)} · 문항 ${info.case_ids_sha256.slice(0,12)} · 비교 기준 ${info.candidate_sha256.slice(0,12)}`));
+        for(const model of cohort.models){
+          const row=el('div');row.append(el('strong','',`${model.label} · ${model.model_id} · 프롬프트 ${model.protocol_label}`),el('div','',model.run),el('code','',model.source.path));const absent=conditions.filter(condition=>modelCells(model)[condition.key].parsed_response_absent>0).map(condition=>`${condition.prompt} / ${condition.reasoning}: ${modelCells(model)[condition.key].parsed_response_absent}건`);
+          if(absent.length)row.append(el('p','',`파싱된 응답 본문 없음(실패 합계에 포함): ${absent.join(' · ')}`));row.append(el('p','',`실행 설정: ${JSON.stringify(model.settings)}`));if(model.evaluation_source!==model.run)row.append(el('p','',`평가 원자료: ${model.evaluation_source}`));if(model.previous_runs.length)row.append(el('p','',`같은 설정의 이전 실행(중복 합산하지 않음): ${model.previous_runs.join(', ')}`));container.append(row);
+        }
+        for(const pending of cohort.pending_models)container.append(el('p','',`${pending.label}: 저장 집계 없음 · ${pending.run} · ${pending.reason}`));
+        container.append(el('p','',`대상: ${feature.key}. 같은 공개 입력·문항·7조건의 비교 기준을 가진 실행만 묶습니다. 같은 설정의 재실행은 가장 최근 저장 집계를 사용합니다.`),el('p','',feature.key.startsWith('EA_')?'EA에는 추가 숫자 후보 B가 없습니다. 원본 답과의 숫자 일치·다른 숫자·null·실패를 그대로 표시합니다.':'A/B는 저장된 원래·추가 후보와의 숫자 일치입니다. 두 후보와 다른 숫자는 OTHER입니다.'),el('p','','프롬프트 v1/v2는 저장 파일의 해시 차이입니다. 실행 설정이 다르면 모델 자체의 효과만으로 해석할 수 없습니다.'),el('p','','분모는 계획된 전체 문항입니다. 출력 잘림·형식·실행 실패를 빼지 않습니다. 후보 일치나 null은 의미 정답 판정이 아닙니다. 증감은 전체 분포의 차이이며 개별 문항 이동 건수가 아닙니다.'),el('p','','배경 농도는 10~90%의 9단계입니다. 비중 증가가 0%p 초과–10%p 이하면 농도 10%, 10%p 초과–20%p 이하면 20%이며 80%p 초과부터 최대 90%입니다. 실패 증가는 개선으로 해석하지 않습니다.'),el('p','',`Python으로 저장 집계를 읽은 시점: ${new Date(data.generated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}. 새 결과는 다시 생성해야 반영됩니다. 모델 호출·재채점 없음. 전체 실행 목록은 run-inventory.json에 있습니다.`));
+        if(data.viewer)container.lastElementChild.textContent=`Python으로 저장 집계를 읽은 시점: ${new Date(data.generated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}. 새 결과는 뷰어의 새로 읽기로 반영합니다. 모델 호출·재채점 없음. 전체 실행 목록과 제외 사유는 화면 아래 수집 범위에서 확인합니다.`;
+      }
+      function restore(state={}){
+        feature=data.features.find(item=>item.key===state.feature)||data.features[index];dataset=data.datasets.find(item=>item.key===state.selectedDataset)||data.datasets[0];cohort=dataset.cohorts.find(item=>item.key===state.selectedCohort)||dataset.cohorts[0];
+        comparisonModels=Array.isArray(state.comparisonModels)?cohort.models.filter(model=>state.comparisonModels.includes(model.key)).map(model=>model.key):cohort.models.map(model=>model.key);
+        if(Array.isArray(state.comparisonModels)&&state.comparisonModels.length&&!comparisonModels.length)comparisonModels=cohort.models.map(model=>model.key);
+        pane.dataset.feature=feature.key;pane.dataset.dataset=dataset.key;pane.dataset.cohort=cohort.key;title.textContent=feature.label;
+        pane.querySelectorAll('button[data-dataset]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.dataset===dataset.key)));
+        pane.querySelectorAll('button[data-feature]').forEach(button=>{const active=button.dataset.feature===feature.key;button.setAttribute('aria-selected',String(active));if(active)content.setAttribute('aria-labelledby',button.id);});
+        const selector=pane.querySelector('select');selector.replaceChildren();for(const item of dataset.cohorts){const option=el('option','',`${fmt(item.features[feature.key].case_count)}문항 · ${item.models.length}모델`);option.value=item.key;selector.append(option);}selector.value=cohort.key;pane.querySelector('.q-cohort-field').hidden=dataset.cohorts.length<2;
+        pane.querySelector('.q-dataset-meta').textContent=`${dataset.label} · 동일 입력 ${fmt(featureInfo().case_count)}문항 · 비교 ${cohort.models.length}모델 · 제작 ${cohort.source_run.split('/').pop()}`;
+        const notice=pane.querySelector('.q-notice');notice.hidden=cohort.protocols_equal;notice.textContent=cohort.protocols_equal?'':`프롬프트 차이: ${cohort.models.map(model=>`${model.label} ${model.protocol_label}`).join(' · ')}`;
+        const controls=pane.querySelector('.q-models'),comparisonControls=pane.querySelector('.q-comparison-models');controls.replaceChildren();comparisonControls.replaceChildren();const ordered=[...cohort.models,...cohort.pending_models.map(model=>({...model,pending:true}))].sort((a,b)=>a.order-b.order||a.label.localeCompare(b.label));
+        for(const model of ordered){
+          const button=el('button','q-button q-model-button cursor-interaction');button.type='button';
+          const label=el('label',`q-model-check cursor-interaction${model.pending?' q-pending-model':''}`),input=el('input');input.type='checkbox';input.value=model.key;input.dataset.comparisonModel=model.key;
+          if(model.pending){button.textContent=`${model.label} · 집계 없음`;button.disabled=true;input.disabled=true;label.append(input,el('span','',`${model.label} · 집계 없음`));}
+          else{
+            button.dataset.model=model.key;button.setAttribute('aria-pressed','false');button.append(modelLabel(model));button.addEventListener('click',()=>{selectedModel=renderQuadrants(model.key);if(!comparisonModels.includes(model.key))comparisonModels.push(model.key);renderComparison();persist();});
+            input.checked=comparisonModels.includes(model.key);label.append(input,modelLabel(model));input.addEventListener('change',()=>{comparisonModels=cohort.models.filter(item=>item.key===model.key?input.checked:comparisonModels.includes(item.key)).map(item=>item.key);if(comparisonModels.length&&!comparisonModels.includes(selectedModel))selectedModel=renderQuadrants(comparisonModels[0]);renderComparison();persist();});
+          }
+          controls.append(button);comparisonControls.append(label);
+        }
+        const focus=cohort.models.some(model=>model.key===state.selectedModel)?state.selectedModel:cohort.models[0].key;
+        selectedModel=renderQuadrants(comparisonModels.length&&!comparisonModels.includes(focus)?comparisonModels[0]:focus);renderComparison();renderSources();
+      }
+      function snapshot(){return {feature:feature.key,selectedDataset:dataset.key,selectedCohort:cohort.key,selectedModel,comparisonModels:cohort.models.filter(model=>comparisonModels.includes(model.key)).map(model=>model.key)};}
+      for(const item of data.datasets){const button=el('button','q-button cursor-interaction',item.label);button.type='button';button.dataset.dataset=item.key;button.setAttribute('aria-pressed','false');button.addEventListener('click',()=>{restore({...snapshot(),selectedDataset:item.key,selectedCohort:null});persist();});pane.querySelector('.q-datasets').append(button);}
+      const tabs=pane.querySelector('.q-feature-tabs');for(const item of data.features){const button=el('button','q-button cursor-interaction',item.label);button.type='button';button.dataset.feature=item.key;button.id=`${pane.id}-${item.key.toLowerCase()}`;button.setAttribute('role','tab');button.setAttribute('aria-controls',content.id);button.setAttribute('aria-selected','false');button.addEventListener('click',()=>{restore({...snapshot(),feature:item.key});persist();});tabs.append(button);}
+      tabs.addEventListener('keydown',event=>{const buttons=[...tabs.querySelectorAll('button')],position=buttons.indexOf(event.target);if(position<0)return;let next;if(event.key==='ArrowRight')next=(position+1)%buttons.length;else if(event.key==='ArrowLeft')next=(position+buttons.length-1)%buttons.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=buttons.length-1;else return;event.preventDefault();buttons[next].focus();buttons[next].click();});
+      pane.querySelector('select').addEventListener('change',event=>{restore({...snapshot(),selectedCohort:event.target.value});persist();});
+      return {element:pane,restore,snapshot};
+    }
+    function restoreAll(saved){
+      const states=Array.isArray(saved?.screens)?saved.screens: saved?.selectedDataset?[saved,{...saved,feature:data.features[1].key}]:[];
+      screens.forEach((screen,index)=>screen.restore(states[index]||{}));setViewCount(saved?.viewCount);
+    }
+    try{
+      data=JSON.parse(root.querySelector('#ic-value-quadrant-data').textContent);
+      if(data.schema_version!==3||data.features?.length!==7||!data.datasets?.length)throw new Error('7조건의 저장 집계가 없습니다. 생성된 HTML을 열어 주세요.');
+      for(const dataset of data.datasets)for(const cohort of dataset.cohorts)for(const model of cohort.models)for(const feature of data.features)for(const condition of conditions){const cell=model.features?.[feature.key]?.cells[condition.key],total=cohort.features?.[feature.key]?.case_count;if(!cell||!Number.isInteger(total)||total<=0||cell.total!==total||feature.choices.some(choice=>!Number.isInteger(cell.counts[choice])||cell.counts[choice]<0)||Object.keys(cell.counts).some(choice=>!feature.choices.includes(choice))||Object.values(cell.counts).reduce((sum,value)=>sum+value,0)!==total)throw new Error('조건별 분모 또는 집계 합계가 일치하지 않습니다.');}
+      for(let index=0;index<2;index++)screens.push(createScreen(index));
+      root.querySelectorAll('button[data-view-count]').forEach(button=>button.addEventListener('click',()=>{setViewCount(Number(button.dataset.viewCount));persist();}));
+      let saved=window.openai?.widgetState?.modelContent;if(!saved)try{saved=JSON.parse(localStorage.getItem('finarch-quadrant-screens-v3'))||JSON.parse(localStorage.getItem('finarch-quadrant-datasets-v2'));}catch{}restoreAll(saved);
+      window.addEventListener('openai:set_globals',event=>{const saved=event.detail?.globals?.widgetState?.modelContent;if(saved)restoreAll(saved);});
+    }catch(error){const message=el('p','q-error',`표시 중단: ${error.message}`);message.setAttribute('role','alert');root.querySelector('#ic-value-screens').replaceChildren(message);}
+  })();
+  </script>
+</div>

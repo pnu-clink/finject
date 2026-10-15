@@ -1,0 +1,109 @@
+{
+  "experiments": {
+    "version": 1,
+    "cache_policy": {
+      "mode": "forbidden",
+      "scope": [
+        "provider_prompt_cache_reads",
+        "provider_prompt_cache_writes",
+        "cross_run_response_reuse"
+      ],
+      "require_verified_transport_control": true,
+      "require_explicit_zero_cache_usage": true,
+      "on_violation": "STOP_NEW_CALLS_PRESERVE_RAW_RESPONSE",
+      "missing_usage": "UNKNOWN_NOT_ZERO"
+    },
+    "output_root": "reports/experiments-run",
+    "dataset": {
+      "name": "FinanceReasoning",
+      "source_run": "reports/run/20260917-002",
+      "input_path": "data/prepared/finance-reasoning/full-20260917-v2/input.json",
+      "count": 100,
+      "excluded_ids": [],
+      "require_all_variants_pass": true,
+      "require_collected_results": false,
+      "reuse_input_run": "reports/experiments-run/20260927-exp-001"
+    },
+    "schedule": {
+      "concurrency": 1,
+      "timeout_seconds": 300,
+      "max_rate_limit_attempts": 1,
+      "retry_delay_seconds": 65,
+      "cpu_adaptive": false,
+      "fallback_group_size": 1
+    },
+    "reasoning_modes": [
+      "off",
+      "on"
+    ],
+    "thinking_budget": 2048,
+    "max_output_tokens": 8192,
+    "seed": 20260920,
+    "models": [
+      {
+        "key": "luna-api",
+        "model": "gpt-6-luna",
+        "transport": "openai_batch",
+        "key_variable": "OPENAI_API_KEY",
+        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "reasoning_efforts": {
+          "off": "none",
+          "on": "medium"
+        },
+        "reference_price_per_million": {
+          "input": 0.05,
+          "output": 0.25,
+          "cached_input": 0.005,
+          "cache_write_input": 0.0625
+        },
+        "price_source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "batch_price_source": "https://developers.openai.com/api/docs/guides/batch",
+        "prices_checked_on": "2026-09-27"
+      }
+    ],
+    "semantic_evaluator": {
+      "enabled": true,
+      "model": "gpt-6-luna",
+      "transport": "openai_batch",
+      "input_assessment_before_response_review": true,
+      "status": "IMPLEMENTED_NATIVE_BATCH",
+      "max_output_tokens": 32768,
+      "reasoning_efforts": {
+        "input": "max",
+        "response": "high",
+        "audit": "max"
+      },
+      "technical_retry_attempts": 1
+    },
+    "billing": {
+      "paid_key_fallback": false,
+      "invoice_verified": false,
+      "authorization": "USER_APPROVED_SAME_100_ORIGINALS_700_VARIANTS_THREE_ROUNDS_BOTH_REASONING_NATIVE_BATCH_NO_SPENDING_CAP",
+      "authorization_date": "2026-09-27",
+      "active_mode": "PAID_OPENAI_BATCH",
+      "openai_paid_key_authorized": true,
+      "api_budget_usd": null,
+      "quota_policy_confirmation": "USER_MANAGED_ACCOUNT_USAGE_BY_EXPLICIT_REQUEST",
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "https://developers.openai.com/api/docs/guides/batch"
+      ]
+    },
+    "report_format": "markdown",
+    "active_backend": "openai",
+    "definition_source_run": null,
+    "response_contract": "FinancialAnswerV6",
+    "improvement": {
+      "campaign": "20260927-luna-three-rounds",
+      "round": 3,
+      "planned_rounds": 3,
+      "adaptation_scope": "EXPLORATORY_DEVELOPMENT_NOT_HELD_OUT_EVALUATION",
+      "account_usage_monitoring": "USER_MANAGED",
+      "input_correction": false,
+      "planned_solver_calls_per_round": 3000,
+      "prompt_revision": "P1_OUTPUT_ALIGNMENT_20260927",
+      "previous_run": "20260927-exp-002",
+      "review_of_previous_round": "2차의 충돌 탐지 개선을 유지하며, 조건별 최종값을 모두 계산할 수 있으면 CONDITIONAL로 표현하고 선언·answer/null·설명·precision을 최종 대조합니다. 과도한 유보 증가, 답 선언과 null의 모순, 조건부 분기의 계산·자릿수 오류가 개선 근거입니다. 동일 입력·common·P0·schema·분석 기준은 고정합니다."
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "version": 4,
+  "source_rules": [
+    {
+      "id": "align_adjacent_dollar_citation",
+      "kind": "remove_adjacent_currency_prefix",
+      "enabled": true,
+      "symbol": "$",
+      "description": "원문의 숫자 바로 앞에도 달러가 있고, 인용문과 지정 위치의 차이가 그 달러 하나뿐이면 계산용 인용문에서 제거한다."
+    }
+  ],
+  "rules": [
+    {
+      "id": "trim_numeric_whitespace",
+      "kind": "strip_whitespace",
+      "enabled": true,
+      "description": "Trim boundary whitespace in computation values only."
+    },
+    {
+      "id": "strip_currency_prefix",
+      "kind": "regex_replace",
+      "enabled": true,
+      "description": "Remove a recognized currency prefix from a complete numeric amount; preserve signs and source text.",
+      "match": "(?:US\\$|USD\\s*|[$€£¥₩])\\s*[+-]?(?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d+)?",
+      "pattern": "^(?:US\\$|USD\\s*|[$€£¥₩])\\s*",
+      "replacement": ""
+    },
+    {
+      "id": "strip_percent_unit_suffix",
+      "kind": "regex_replace",
+      "description": "숫자 뒤 퍼센트 기호를 값에서만 제거한다. 25%는 퍼센트 단위의 25이며 0.25로 바꾸지 않는다.",
+      "enabled": true,
+      "match": "[+-]?(?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d+)?%",
+      "pattern": "%$",
+      "replacement": ""
+    },
+    {
+      "id": "remove_thousands_commas",
+      "kind": "regex_replace",
+      "description": "천 단위 구분 쉼표만 계산용 값에서 제거한다. 원문·원응답은 보존한다.",
+      "enabled": true,
+      "match": "[+-]?\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?",
+      "pattern": ",",
+      "replacement": ""
+    }
+  ]
+}

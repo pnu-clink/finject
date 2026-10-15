@@ -1,0 +1,50 @@
+[
+  {
+    "name": "easy.json",
+    "path": "data/FinanceReasoning/easy.json",
+    "sha": "889872cbf6d7d78f968f6544942bc765cfdc6eef",
+    "size": 4052714,
+    "url": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/contents/data/FinanceReasoning/easy.json?ref=b0fe6455396f831955e4eb988472b4a563403bc5",
+    "html_url": "https://github.com/BUPT-Reasoning-Lab/FinanceReasoning/blob/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/easy.json",
+    "git_url": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/git/blobs/889872cbf6d7d78f968f6544942bc765cfdc6eef",
+    "download_url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/easy.json",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/contents/data/FinanceReasoning/easy.json?ref=b0fe6455396f831955e4eb988472b4a563403bc5",
+      "git": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/git/blobs/889872cbf6d7d78f968f6544942bc765cfdc6eef",
+      "html": "https://github.com/BUPT-Reasoning-Lab/FinanceReasoning/blob/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/easy.json"
+    }
+  },
+  {
+    "name": "hard.json",
+    "path": "data/FinanceReasoning/hard.json",
+    "sha": "f6b2e6a1ceb8e88ace020a10652914d7c2bb306a",
+    "size": 874349,
+    "url": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/contents/data/FinanceReasoning/hard.json?ref=b0fe6455396f831955e4eb988472b4a563403bc5",
+    "html_url": "https://github.com/BUPT-Reasoning-Lab/FinanceReasoning/blob/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/hard.json",
+    "git_url": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/git/blobs/f6b2e6a1ceb8e88ace020a10652914d7c2bb306a",
+    "download_url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/hard.json",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/contents/data/FinanceReasoning/hard.json?ref=b0fe6455396f831955e4eb988472b4a563403bc5",
+      "git": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/git/blobs/f6b2e6a1ceb8e88ace020a10652914d7c2bb306a",
+      "html": "https://github.com/BUPT-Reasoning-Lab/FinanceReasoning/blob/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/hard.json"
+    }
+  },
+  {
+    "name": "medium.json",
+    "path": "data/FinanceReasoning/medium.json",
+    "sha": "e6dc022e6794761686c39715cd8fe3dd35da0ece",
+    "size": 3610611,
+    "url": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/contents/data/FinanceReasoning/medium.json?ref=b0fe6455396f831955e4eb988472b4a563403bc5",
+    "html_url": "https://github.com/BUPT-Reasoning-Lab/FinanceReasoning/blob/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/medium.json",
+    "git_url": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/git/blobs/e6dc022e6794761686c39715cd8fe3dd35da0ece",
+    "download_url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/medium.json",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/contents/data/FinanceReasoning/medium.json?ref=b0fe6455396f831955e4eb988472b4a563403bc5",
+      "git": "https://api.github.com/repos/BUPT-Reasoning-Lab/FinanceReasoning/git/blobs/e6dc022e6794761686c39715cd8fe3dd35da0ece",
+      "html": "https://github.com/BUPT-Reasoning-Lab/FinanceReasoning/blob/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/medium.json"
+    }
+  }
+]

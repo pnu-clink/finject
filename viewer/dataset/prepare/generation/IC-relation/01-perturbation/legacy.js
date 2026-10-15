@@ -1,0 +1,12 @@
+function relationPlanView(p,r,plan,withGraphs){
+ p.append(el('h2','','IC-RELATION · 관계 계획'),el('p','banner','계산 계획만 확인했습니다. 아래 관계 문장은 로컬 초안이며 최종 문장·의미 검사는 미실행입니다.'),box('추가할 관계 문장 · 초안',plan.relation.draft_sentence),box('관계식',plan.relation.expression));
+ p.append(el('p','','원래 숫자와 질문은 보존합니다. 관계를 따르는 실행 사본에서만 한 관측 대신 다른 관측과 관계로 값을 계산합니다.'));
+ p.append(box('비교 기준 · 원본 + 관계 적용 한 방향','A는 원래 관측값, B는 판매 수수료를 기준으로 서비스 수수료를 두 배로 계산합니다. 반대 방향은 사용자 결정으로 이번 범위에서 생략했습니다. 가능한 답을 모두 열거한 것은 아닙니다.'));
+ relationFormulaComparison(p,r,plan);
+ const titles={A:'A · 원래 관측값을 모두 채택',B:'B · 판매 수수료와 두 배 관계를 채택',C:'C · 서비스 수수료와 두 배 관계를 채택'};
+ const table=el('table','events'),head=el('tr');['근거 분기','관계로 도출한 값','최종 조건부 답'].forEach(t=>head.append(el('th','',t)));table.append(head);
+ for(const key of ['A',...Object.keys(plan.branches)]){const b=plan.branches[key],g=plan.graphs[key],derived=b?g.nodes.find(n=>n.id===g.variables[b.derived_variable]):null,tr=el('tr');tr.append(el('td','',titles[key]),el('td','',derived?b.derived_variable+' = '+derived.computed:'원문 그대로'),el('td','',plan.answers[key].computed));table.append(tr)}p.append(table,el('p','small','소수 '+plan.answers.precision+'자리 적용. 원본과 선택한 관계 방향만 비교합니다. 반대 방향·원문 전체의 역산·우회 검증 완료를 뜻하지 않습니다.'));
+ if(withGraphs){for(const key of ['A',...Object.keys(plan.branches)]){const b=plan.branches[key],g=key==='A'?eventOf(r,'03-graph/04-save-graph/01-graph.json'):plan.graphs[key],program=eventOf(r,b?b.program_path:'02-calculation/02-prepare-code/03-program.json'),section=el('section','box');section.append(el('h3','',titles[key]+' → '+plan.answers[key].computed));if(b)section.append(el('p','small','주황색 노드·코드 줄: 추가 관계 계산. 원래 질문의 합산 계산은 유지합니다.'));p.append(section);drawLinkedGraph(section,g,program.code,r.sample.context,{...plan.answers[key],reference_precision:plan.answers.precision,policy:'ROUND_HALF_UP'});if(b){for(const node of section.querySelectorAll('.dag-node'))if(b.relation_node_ids.includes(node.dataset.nodeId)){node.querySelector('circle').setAttribute('fill','#ffc47d');node.querySelector('circle').setAttribute('stroke','#a75200')}const line=section.querySelectorAll('.dag-code-line')[b.relation_code_line-1];if(line)line.style.background='#ffe4bb';}}}
+ else{p.append(box('삽입 위치','기존 네 수익 항목 설명 뒤, 마지막 보고 목적 문장 앞'),box('질문 · 유지',r.sample.question),box('실제 LLM 응답','아직 호출하지 않았습니다.'))}
+ jsonBox(p,'관계 적용 속성 · 대상·연산·적용 위치',plan.relation.properties);jsonBox(p,'관계·원문 근거·계산 분기·검사 기록',plan);
+}

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "test-0026-06",
+    "source_path": "reports/run/20260916-001/02-generation/01-round/test-0026/06-ea-earlier-input/run.json",
+    "source_sha256": "12d8b6f6536ccc1d307880e4e2e76e7fa9088e609572a32904d569b1e448cce0",
+    "observation": {
+      "context": " | 2019 | 2018\nCurrent: Federal | $1,139,927 | $1,294,253\nCurrent: State |  | 423,209\n | 1,568,428 | 1,717,462\nDeferred: Federal | 34,466 | (470,166)\nDeferred: State | 6,106 | (83,296)\n | 40,572 | (553,462)\nIncome tax expense | $1,609,000 | $1,164,000\n\n7. INCOME TAXES:\nThe components of income tax expense from operations for fiscal 2019 and fiscal 2018 consisted of the following:",
+      "question": "What is the company's average current state tax expense between 2018 and 2019?"
+    },
+    "target_descriptor": {
+      "target_id": "current_state_tax_2019",
+      "kind": "current_tax",
+      "item": "State",
+      "entity": "company",
+      "period": "2019",
+      "unit": "USD"
+    }
+  },
+  {
+    "id": "test-0074-06",
+    "source_path": "reports/run/20260916-001/02-generation/01-round/test-0074/06-ea-earlier-input/run.json",
+    "source_sha256": "ef2afcfb5edc066bc1f66025b7dc94fd0f2c9d82de398d9d28b4f26814c82e30",
+    "observation": {
+      "context": "An investor is managing a diversified portfolio consisting of three different assets: Asset A, Asset B, and Asset C. The investor has allocated their portfolio among Asset A, Asset B, and Asset C, with 30% invested in Asset B and 30% in Asset C. The annual standard deviations for these assets are 15%, 20%, and 25%, respectively. The covariance matrix for the returns of these assets is given as follows:\n\n- Covariance between Asset A and Asset B: 0.02\n- Covariance between Asset A and Asset C: 0.03\n- Covariance between Asset B and Asset C: 0.04\n\nNote: The covariance values are provided in annual terms.\n\nThe investor is interested in calculating the overall annual standard deviation of the portfolio, which serves as a measure of risk.",
+      "question": "What is the overall annual standard deviation of the portfolio? Answer as a percentage to one decimal place."
+    },
+    "target_descriptor": {
+      "target_id": "f_weight_a",
+      "kind": "portfolio_weight",
+      "item": "Asset A",
+      "entity": "portfolio",
+      "period": "allocation",
+      "unit": "%"
+    }
+  },
+  {
+    "id": "test-0074-07",
+    "source_path": "reports/run/20260916-001/02-generation/01-round/test-0074/07-ea-later-input/run.json",
+    "source_sha256": "f2bc0f1353d03ae1b6c64edcd824a348d22081bc806a7c4eebeb026531777e67",
+    "observation": {
+      "context": "An investor is managing a diversified portfolio consisting of three different assets: Asset A, Asset B, and Asset C. The investor has allocated their portfolio such that 40% is invested in Asset A and 30% is invested in Asset C. The annual standard deviations for these assets are 15%, 20%, and 25%, respectively. The covariance matrix for the returns of these assets is given as follows:\n\n- Covariance between Asset A and Asset B: 0.02\n- Covariance between Asset A and Asset C: 0.03\n- Covariance between Asset B and Asset C: 0.04\n\nNote: The covariance values are provided in annual terms.\n\nThe investor is interested in calculating the overall annual standard deviation of the portfolio, which serves as a measure of risk.",
+      "question": "What is the overall annual standard deviation of the portfolio? Answer as a percentage to one decimal place."
+    },
+    "target_descriptor": {
+      "target_id": "f_weight_b",
+      "kind": "portfolio_weight",
+      "item": "Asset B",
+      "entity": "portfolio",
+      "period": "allocation",
+      "unit": "%"
+    }
+  }
+]

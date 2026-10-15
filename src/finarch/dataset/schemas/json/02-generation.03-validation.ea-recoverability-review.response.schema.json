@@ -1,0 +1,99 @@
+{
+  "$defs": {
+    "InverseEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "question",
+            "context"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "start",
+        "end",
+        "quote"
+      ],
+      "title": "InverseEvidence",
+      "type": "object"
+    },
+    "InverseReview": {
+      "additionalProperties": false,
+      "properties": {
+        "inverse_possible": {
+          "title": "Inverse Possible",
+          "type": "boolean"
+        },
+        "missing_quantity": {
+          "minLength": 1,
+          "title": "Missing Quantity",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/InverseEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "formula": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Formula"
+        }
+      },
+      "required": [
+        "inverse_possible",
+        "missing_quantity",
+        "reason",
+        "evidence",
+        "formula"
+      ],
+      "title": "InverseReview",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "inverse_review": {
+      "$ref": "#/$defs/InverseReview"
+    }
+  },
+  "required": [
+    "inverse_review"
+  ],
+  "title": "InverseResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:02-generation.03-validation.ea-recoverability-review.response:v1"
+}

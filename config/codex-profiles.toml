@@ -1,0 +1,113 @@
+# Project IDs; not Codex --profile. exec and isolation/schema arguments are supplied by Python.
+[selection]
+failure_interpretation = "luna-max-api"
+failure_display_translation = "luna-max-api"
+generation = "luna-max-api"
+validation = "luna-max-api"
+
+source_review = "luna-max-api"
+pot_generation = "sol-medium-api"
+verification = "luna-max-api"
+ea_inverse_review = "sol61-high-api"
+exception_feedback = "luna-max-api"
+text_generation = "luna-max-api"
+
+[profiles.agy-flash-low]
+provider = "agy"
+argv = ["--model", "gemini-3.8-flash-low", "--effort", "low"]
+
+[profiles.luna-none]
+argv = ["-m", "gpt-6-luna", "-c", "model_reasoning_effort=none", "--skip-git-repo-check"]
+
+[profiles.luna-low]
+argv = ["-m", "gpt-6-luna", "-c", "model_reasoning_effort=low", "--skip-git-repo-check"]
+
+[profiles.luna-medium]
+argv = ["-m", "gpt-6-luna", "-c", "model_reasoning_effort=medium", "--skip-git-repo-check"]
+
+# Purpose selection uses API profiles; explicit CLI profiles remain available.
+[profiles.luna-max-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "max"
+max_output_tokens = 32768
+total_token_budget = 500000
+
+[profiles.luna-max-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6-luna", "-c", "model_reasoning_effort=max", "--skip-git-repo-check"]
+
+# Explicit test configuration only; production selections above are unchanged.
+[profiles.luna-low-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "low"
+max_output_tokens = 32768
+total_token_budget = 500000
+
+[profiles.sol-medium-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6.1-sol"
+effort = "medium"
+max_output_tokens = 128000
+total_token_budget = 500000
+
+[profiles.astra-low-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-astra"
+effort = "low"
+max_output_tokens = 32768
+total_token_budget = 500000
+
+# Experiment profiles; dataset selections above are unchanged.
+[profiles.luna6-none-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "none"
+max_output_tokens = 65536
+
+[profiles.luna6-medium-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "medium"
+max_output_tokens = 65536
+
+[profiles.sol6-max-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6-sol", "-c", "model_reasoning_effort=max", "--skip-git-repo-check"]
+
+[profiles.sol6-max-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-sol"
+effort = "max"
+max_output_tokens = 65536
+
+[profiles.sol61-low-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6.1-sol", "-c", "model_reasoning_effort=low", "--skip-git-repo-check"]
+
+[profiles.sol61-low-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6.1-sol"
+effort = "low"
+max_output_tokens = 65536
+
+# Independent EA recoverability review; retain the existing review token limits.
+[profiles.sol61-high-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6.1-sol"
+effort = "high"
+max_output_tokens = 32768
+total_token_budget = 500000

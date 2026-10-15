@@ -1,0 +1,17 @@
+{
+  "default": "finject-20261007-er-inverse-agreement-20261012",
+  "comparisons": [
+    {
+      "id": "finject-20261007-er-inverse-agreement-20261012",
+      "run": "finject-20261007",
+      "report_directory": "finject-20261007-er-inverse-agreement-20261012",
+      "summary_sha256": "61c8d1f6fb32b44e7601318a9496cf280f297689a0de00901d9f545593572f62",
+      "comparison_sha256": "47f5da9a9874f49e76489b922d518e640f5ea000c0f52eaa80046f1bae08b1b5",
+      "annotators": ["정유미", "김진수"],
+      "source_sha256": [
+        "6155c9b42548254bf5d6cca049e95d8bd0858abfa8bc5484c7a9e5acfc492197",
+        "a927a2c42ac8884a1fd2d6b25402d2b44c78e8848dc1a45f4944dcb147b239de"
+      ]
+    }
+  ]
+}

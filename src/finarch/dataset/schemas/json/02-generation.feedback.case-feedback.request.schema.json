@@ -1,0 +1,102 @@
+{
+  "$defs": {
+    "FeedbackFailure": {
+      "additionalProperties": false,
+      "properties": {
+        "case": {
+          "minLength": 1,
+          "title": "Case",
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "request": {
+          "additionalProperties": true,
+          "title": "Request",
+          "type": "object"
+        },
+        "response": {
+          "additionalProperties": true,
+          "title": "Response",
+          "type": "object"
+        }
+      },
+      "required": [
+        "case",
+        "label",
+        "reason",
+        "request",
+        "response"
+      ],
+      "title": "FeedbackFailure",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "axis": {
+      "enum": [
+        "ANSWER",
+        "IC_VALUE",
+        "IC_SOURCE",
+        "IC_RELATION",
+        "EA"
+      ],
+      "title": "Axis",
+      "type": "string"
+    },
+    "target_role": {
+      "enum": [
+        "02-generation.02-generate-text.realization",
+        "shared.01-02.02-03.review-and-validation"
+      ],
+      "title": "Target Role",
+      "type": "string"
+    },
+    "common_and_type_instructions": {
+      "minLength": 1,
+      "title": "Common And Type Instructions",
+      "type": "string"
+    },
+    "feedback_scope": {
+      "default": "cumulative",
+      "enum": [
+        "cumulative",
+        "single_case_variant"
+      ],
+      "title": "Feedback Scope",
+      "type": "string"
+    },
+    "previous_guidance": {
+      "title": "Previous Guidance",
+      "type": "string"
+    },
+    "failures": {
+      "items": {
+        "$ref": "#/$defs/FeedbackFailure"
+      },
+      "minItems": 1,
+      "title": "Failures",
+      "type": "array"
+    }
+  },
+  "required": [
+    "axis",
+    "target_role",
+    "common_and_type_instructions",
+    "previous_guidance",
+    "failures"
+  ],
+  "title": "FeedbackRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:02-generation.feedback.case-feedback.request:v2"
+}

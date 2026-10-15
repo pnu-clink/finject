@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FInject / Draft 압축 v2</title>
+<style>DOCUMENT_STYLES</style>
+<style>
+html{scroll-behavior:auto}body{font-size:16px}.layout{display:block!important;max-width:980px!important;padding:20px!important}.layout>main{max-width:none!important}.paper-section{padding:24px!important;scroll-margin-top:16px;max-width:900px;margin:0 auto 18px}.section-top h2{font-size:24px!important}.paper-section.subsection .section-top h2{font-size:21px!important}.document-copy p{color:var(--ink);overflow-wrap:anywhere}.controls a{font-size:13px;text-decoration:none;padding:7px 12px;border:1px solid #c9d1db;border-radius:5px}body.framed>header{display:none}body.framed .layout{padding-bottom:calc(100vh - 40px)!important}.end-note{font-size:13px;color:#697380;text-align:center;padding:12px 24px 32px}.document-copy img{cursor:zoom-in}.paper-section h2{scroll-margin-top:20px}
+</style>
+<style id="table-content-alignment">
+table th, table td[data-cell-align="center"] { text-align: center !important; }
+table td[data-cell-align="right"] { text-align: right !important; }
+</style>
+</head>
+<body>
+<header><div class="brand">Draft 압축 v2<small>작업한 단원만 수록 / 한국어</small></div><div class="controls"><a href="/draft-side-by-side">원본과 나란히 보기</a><a href="/draft" target="_blank" rel="noopener">원본 Draft ↗</a></div></header>
+<div class="layout"><main><article id="paper"></article><p class="end-note">현재 파일에 등록된 압축 원고의 끝입니다.</p></main></div>
+<dialog id="zoom"><button id="close-zoom">닫기</button><img alt=""/></dialog>
+<script id="document-data" type="application/json">DOCUMENT_DATA</script>
+<script>
+'use strict';
+function spaceTermParagraphs(container){
+ for(const paragraph of container.querySelectorAll('p')){
+  const first=[...paragraph.childNodes].find(node=>node.textContent.trim());
+  const previous=paragraph.previousElementSibling;
+  const hasExplanation=first&&[...paragraph.childNodes].slice([...paragraph.childNodes].indexOf(first)+1).some(node=>node.textContent.trim());
+  const eligible=!paragraph.closest('table,figure,pre,li')&&first?.nodeType===1&&['STRONG','B'].includes(first.tagName)&&hasExplanation&&previous?.tagName==='P'&&previous.textContent.trim()&&!previous.matches('.table-caption,.table-note,.response-example-label,[data-equation-number]')&&!previous.querySelector('math[display="block"]');
+  paragraph.classList.toggle('term-lead-gap',Boolean(eligible));
+ }
+}
+
+const data=JSON.parse(document.querySelector('#document-data').textContent);
+if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('framed');
+const paper=document.querySelector('#paper');
+for(const item of data.sections){
+ const section=document.createElement('section');section.id=item.id;section.className='paper-section'+(item.level?' subsection':'');
+ const top=document.createElement('div');top.className='section-top';const title=document.createElement('h2');title.textContent=item.title;top.append(title);section.append(top);
+ const copy=document.createElement('div');copy.className='document-copy';copy.innerHTML=item.html;spaceTermParagraphs(copy);
+ section.append(copy);paper.append(section);
+}
+for(const link of paper.querySelectorAll('a[href]')){
+ const href=link.getAttribute('href');
+ if(href.startsWith('#')&&!document.getElementById(decodeURIComponent(href.slice(1)))){
+  const target=href.slice(1);
+  const sectionTarget=/^(?:s\d+(?:-.*)?|abstract|conclusion|references)$/.test(target);
+  link.href='/draft#'+(sectionTarget?'':'ko-')+target;
+ }
+ if(!link.getAttribute('href').startsWith('#')){link.target='_blank';link.rel='noopener';}
+}
+const zoom=document.querySelector('#zoom');paper.addEventListener('click',event=>{if(event.target.tagName==='IMG'){zoom.querySelector('img').src=event.target.src;zoom.querySelector('img').alt=event.target.alt;zoom.showModal();}});document.querySelector('#close-zoom').onclick=()=>zoom.close();zoom.addEventListener('click',event=>{if(event.target===zoom)zoom.close();});
+if(location.hash)document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+setInterval(async()=>{try{const response=await fetch('/api/draft-compressed-revision',{cache:'no-store'});if(!response.ok)return;const current=await response.json();if(current.revision!==data.revision)location.reload();}catch{}},2000);
+</script>
+</body></html>

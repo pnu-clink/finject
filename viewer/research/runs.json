@@ -1,0 +1,94 @@
+[
+  {
+    "id": "20261003-felix-english-comparison",
+    "title": "2026-10-03 · Felix Draft · 영문 나란히 비교"
+  },
+  {
+    "id": "20261003-academic-writing-felix",
+    "title": "2026-10-03 · Academic writing · Felix Draft"
+  },
+  {
+    "id": "20261003-review-applied",
+    "title": "2026-10-03 · 리뷰 적용 · 한·영 Draft와 로컬 PDF"
+  },
+  {
+    "id": "20261003-paper-local-sync",
+    "title": "2026-10-03 · 수치·그림 동기화 · 로컬 LaTeX 미리보기"
+  },
+  {
+    "id": "20261003-english-manuscript-review",
+    "title": "2026-10-03 · 영문 원고 리뷰 · 주장·문체·표·그림"
+  },
+  {
+    "id": "20261003-construction-revision",
+    "title": "2026-10-03 · 3장 재구성 · 제작·평가와 상세 부록"
+  },
+  {
+    "id": "20261003-overleaf-related-works",
+    "title": "2026-10-03 · Overleaf Related Works · 표별 페이지 분리"
+  },
+  {
+    "id": "20261003-paper-revision-draft",
+    "title": "2026-10-03 · 논문 전체 한·영 Revision Draft · Related Works"
+  },
+  {
+    "id": "20261003-overleaf-introduction",
+    "title": "2026-10-03 · Overleaf 서론과 Figure 1 반영"
+  },
+  {
+    "id": "20261002-intro-figure-0034",
+    "title": "2026-10-02 · 서론 그림 · 0034 충돌과 근거 제시"
+  },
+  {
+    "id": "20261002-overleaf-abstention-update",
+    "title": "2026-10-02 · Overleaf 백업 및 Abstention 원고 반영"
+  },
+  {
+    "id": "20261002-abstention-paper-en",
+    "title": "2026-10-02 · Abstention paper · English · Sections 1–5"
+  },
+  {
+    "id": "20261002-abstention-paper-draft",
+    "title": "2026-10-02 · Abstention 중심 논문 · 사용자 목차 1–5장"
+  },
+  {
+    "id": "20261002-naacl-overleaf",
+    "title": "2026-10-02 · NAACL/ARR 영문 Overleaf 원고"
+  },
+  {
+    "id": "20261001-qwen27-financial-reasoning",
+    "title": "2026-10-01 · Qwen 27B · 금융 계산·추론 재조사"
+  },
+  {
+    "id": "20261001-finance-model-survey",
+    "title": "2026-10-01 · 금융 소형 모델 · A100·vLLM 실행 후보"
+  },
+  {
+    "id": "20261001-meeting-paper-draft",
+    "title": "2026-10-01 · 회의록 기반 논문 MD 초안"
+  },
+  {
+    "id": "20260928-analysis-quadrant-map",
+    "title": "2026-09-28 · Analysis 사분면 맵 · Luna·Haiku와 23개 항목"
+  },
+  {
+    "id": "20260928-finject-quick-guide",
+    "title": "2026-09-28 · FInject 실험·평가와 실제 리뷰 4건"
+  },
+  {
+    "id": "20260924-paper-draft",
+    "title": "2026-09-28 · 한글 논문 초안 v0.27 · 제작 전체 로직 부록"
+  },
+  {
+    "id": "20260926-research-redesign",
+    "title": "2026-09-26 · 원논문 → 현재 연구 · 개선 방향과 실험 비교"
+  },
+  {
+    "id": "20260926-finject-section-guide",
+    "title": "2026-09-26 · FInject 원논문 단원별 상세 해설"
+  },
+  {
+    "id": "20260924-research-direction",
+    "title": "2026-09-24 · 전체 회의록 기반 연구 방향"
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "evaluation": {
+    "dataset": {
+      "generated_path": "data/generated/20261003-003",
+      "count": 291,
+      "require_all_variants_pass": true,
+      "require_external_knowledge": true,
+      "require_generated": true
+    },
+    "schedule": {"concurrency": 1},
+    "models": [{
+      "key": "gemini-2.5-flash-batch",
+      "model": "gemini-2.5-flash",
+      "transport": "gemini_batch",
+      "key_variable": "GEMINI_API_KEY",
+      "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+      "reference_price_per_million": {"input": 0.15, "output": 1.25},
+      "price_source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-2.5-flash",
+      "thinking_budget": 1024,
+      "output_limits": {"off": 8192, "on": 8192}
+    }],
+    "reasoning_modes": ["off", "on"],
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "definition_source_run": "reports/experiments-run/20261003-exp-004-tatqa-luna",
+    "run_label": "tatqa-gemini-2-5-flash",
+    "thinking_budget": 1024,
+    "max_output_tokens": 8192
+  },
+  "analysis": {"enabled": false}
+}

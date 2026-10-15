@@ -1,0 +1,102 @@
+[
+  {
+    "old": "src/finarch/program/pot-prompt.md",
+    "file": "01-preparation.03-calculation.pot.md",
+    "sha256": "bbd61c6fd740811235ea4103123148207928ca7dfc67861e6648b90593428352"
+  },
+  {
+    "old": "src/finarch/program/feedback-prompt.md",
+    "file": "02-generation.feedback.case-feedback.md",
+    "sha256": "39d1177628e30caa75c7906bdd1149de03de9cf0b5e185dcfec7889d39248e23"
+  },
+  {
+    "old": "src/finarch/program/explanation-prompt.md",
+    "file": "shared.01.02.explanation.md",
+    "sha256": "0272c4386b673e82bbe91f0a4c8df1ba8378cce529ce66f44cff5f8ca6380373"
+  },
+  {
+    "old": "src/finarch/program/audit-prompt.md",
+    "file": "legacy.shared.01-02.02-03.review-and-validation.md",
+    "sha256": "580cccc6f2769f3dde8589297a6b9b14f39b242552314078e1fdf915e29bab71"
+  },
+  {
+    "old": "src/finarch/program/realize-prompt.md",
+    "file": "legacy.02-generation.02-generate-text.realization.md",
+    "sha256": "bce216a53d2ba0098b0556b669ea9b5f3f93c4e39bf3552de9da315b8f3b5daa"
+  },
+  {
+    "old": "src/finarch/program/audit-prompts/common.md",
+    "file": "shared.01-02.02-03.review-and-validation.common.md",
+    "sha256": "ad55a3b92f9a0f80cce7bfaeb733da00dacc6dc16e28aca24ee622d342f3b651"
+  },
+  {
+    "old": "src/finarch/program/audit-prompts/ea.md",
+    "file": "shared.01-02.02-03.review-and-validation.ea.md",
+    "sha256": "bb609ae2af9ae1fbc5f80346f94911c24aaf11bc8771fc0105be8df499bc4542"
+  },
+  {
+    "old": "src/finarch/program/audit-prompts/answer.md",
+    "file": "01-preparation.02-review-and-correct.answer.md",
+    "sha256": "f3f694801d4bfe7d034182ef9b2472e7ec38979a7bfb0420bfbc8a344f3c0e83"
+  },
+  {
+    "old": "src/finarch/program/audit-prompts/ic-relation.md",
+    "file": "shared.01-02.02-03.review-and-validation.ic-relation.md",
+    "sha256": "564bdc48be9d1acca9fd43a4b37081a9dc4373fe0606e581e40b3de3a588ac0e"
+  },
+  {
+    "old": "src/finarch/program/audit-prompts/ic-value.md",
+    "file": "shared.01-02.02-03.review-and-validation.ic-value.md",
+    "sha256": "6fff06c8cecd1c439a246c3a8c0fe22ed581c502dc7f835e01996aa4ddfb51ab"
+  },
+  {
+    "old": "src/finarch/program/audit-prompts/ic-source.md",
+    "file": "shared.01-02.02-03.review-and-validation.ic-source.md",
+    "sha256": "5c0730429b6585ca8ee011d3cde3e7568874b0452381705e4330be1348fb9a95"
+  },
+  {
+    "old": "src/finarch/program/realize-prompts/common.md",
+    "file": "02-generation.02-generate-text.common.md",
+    "sha256": "71e80abfb730b1af974ae476919adc6ce408c225e33d690dd081754baa693044"
+  },
+  {
+    "old": "src/finarch/program/realize-prompts/ea.md",
+    "file": "02-generation.02-generate-text.ea.md",
+    "sha256": "2e68337934384d02c788aa9eee0898221945eeae1137458d489f73338bebd70b"
+  },
+  {
+    "old": "src/finarch/program/realize-prompts/ic-relation.md",
+    "file": "02-generation.02-generate-text.ic-relation.md",
+    "sha256": "35151710248d23c35138c141a56feee5d98e1895f56b2248c90bfcb8a3b564c8"
+  },
+  {
+    "old": "src/finarch/program/realize-prompts/ic-value.md",
+    "file": "02-generation.02-generate-text.ic-value.md",
+    "sha256": "de8291c17804324e872ca757ea250aeea8699a41ec43bded68850905d89aaeba"
+  },
+  {
+    "old": "src/finarch/program/realize-prompts/ic-source.md",
+    "file": "02-generation.02-generate-text.ic-source.md",
+    "sha256": "7f76d0ce5882a9ee81d4f4cdbcf1308d4b711fa4c3edd93206d6f9dc4b3ee1fa"
+  },
+  {
+    "old": "src/finarch/dataset/01-preparation/02-review/revisions.py:REVISION_PROMPT",
+    "file": "01-preparation.02-review-and-correct.revision.md",
+    "sha256": "7012d293e866822e1697403ad1709802e632de9617e8c1e8a33aa90ba45e9722"
+  },
+  {
+    "old": "src/finarch/dataset/01-preparation/02-review/revisions.py:EVIDENCE_PROMPT",
+    "file": "01-preparation.03-calculation.review-answer-evidence.md",
+    "sha256": "61af912b44c37febc1e28aebadb8d9d58799a900a7c72e71a0b810ce9ce92b82"
+  },
+  {
+    "old": "src/finarch/dataset/01-preparation/03-calculation/preparation_repairs.py:REVISION_PROMPT",
+    "file": "01-preparation.03-calculation.source-revision.md",
+    "sha256": "dd5f02e41551bfaec504f88ef7c9abd9e0875fa03d32b4990342fcb1ace82b84"
+  },
+  {
+    "old": "src/finarch/dataset/01-preparation/03-calculation/preparation_repairs.py:EVIDENCE_PROMPT",
+    "file": "01-preparation.03-calculation.review-answer-evidence.md",
+    "sha256": "61af912b44c37febc1e28aebadb8d9d58799a900a7c72e71a0b810ce9ce92b82"
+  }
+]

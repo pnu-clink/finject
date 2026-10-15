@@ -1,0 +1,190 @@
+{
+  "$defs": {
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "statement": {
+          "minLength": 1,
+          "title": "Statement",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "RECORDED",
+            "INFERRED"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "statement",
+        "evidence_ids",
+        "kind"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "RepairPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "REPAIR_AND_VERIFY",
+            "REVERIFY",
+            "HUMAN_REQUIRED"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "target_step": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Target Step"
+        },
+        "evidence_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "instructions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Instructions",
+          "type": "array"
+        },
+        "preserve": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Preserve",
+          "type": "array"
+        },
+        "acceptance_checks": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Acceptance Checks",
+          "type": "array"
+        },
+        "required_information": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Required Information",
+          "type": "array"
+        }
+      },
+      "required": [
+        "action",
+        "target_step",
+        "evidence_ids",
+        "instructions",
+        "preserve",
+        "acceptance_checks",
+        "required_information"
+      ],
+      "title": "RepairPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "repair_plan": {
+      "$ref": "#/$defs/RepairPlan"
+    },
+    "rejection_summary": {
+      "minLength": 1,
+      "title": "Rejection Summary",
+      "type": "string"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "minItems": 1,
+      "title": "Observations",
+      "type": "array"
+    },
+    "assessment": {
+      "enum": [
+        "JUSTIFIED",
+        "TOO_STRICT",
+        "WRONG_CAUSE",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "title": "Assessment",
+      "type": "string"
+    },
+    "rationale": {
+      "minLength": 1,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "recommended_action": {
+      "minLength": 1,
+      "title": "Recommended Action",
+      "type": "string"
+    },
+    "target_step": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Target Step"
+    },
+    "limitations": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "repair_plan",
+    "rejection_summary",
+    "observations",
+    "assessment",
+    "rationale",
+    "recommended_action",
+    "target_step",
+    "limitations"
+  ],
+  "title": "InterpretationResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:shared.01-07.02-05.display-translation.response:v1"
+}

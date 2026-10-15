@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FinancialAnswerV5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "answer",
+    "answer_meta",
+    "explanation",
+    "evidence"
+  ],
+  "properties": {
+    "answer": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "answer_meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "negative",
+        "scale"
+      ],
+      "properties": {
+        "negative": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "scale": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "one",
+            "hundred",
+            "thousand",
+            "million",
+            "billion",
+            "trillion",
+            "percent",
+            null
+          ]
+        }
+      }
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

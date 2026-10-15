@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "note": "Workstream grouping is an editorial project view. Real parent-child links come only from thread_spawn_edges.",
+  "sessions": {
+    "01a0ec4f-888c-7f92-9b85-9de862a95d94": "coordination",
+    "01a0ec40-1d8b-7d03-a66c-ca5078d9e34e": "dataset",
+    "01a07b1b-3024-7eb1-908a-dc353ecdb2b1": "dataset",
+    "01a0bf51-be1b-7991-8b5e-6ad30c5445da": "dataset",
+    "01a0b8f5-bca5-7141-9b8c-2faabadbd08a": "dataset",
+    "01a0e2a2-64dd-7510-9294-b76c94b82ceb": "evaluation",
+    "01a0c9c9-0803-7852-8100-dfff2e5e7b00": "evaluation",
+    "01a0e633-9591-7061-a20b-ddc5b34222ff": "analysis",
+    "01a0e53e-6f69-7872-a5ff-e017044fcbb2": "research",
+    "01a0e628-ecf9-77f2-a132-9397620847ae": "research",
+    "01a093a9-0a16-7ce2-897f-550a454ab8f7": "research",
+    "01a0bd11-d386-7332-9187-10251c333670": "viewer",
+    "01a07ab6-4be9-7723-ac0a-a1501f1c37fe": "viewer",
+    "01a0e064-44ab-7ee0-9def-921ffb89d51b": "viewer"
+  }
+}

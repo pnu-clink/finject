@@ -1,0 +1,96 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion": {
+          "enum": [
+            "grounding_binding",
+            "operation_semantics",
+            "units_roles",
+            "context_sufficiency",
+            "solvability_uniqueness"
+          ],
+          "title": "Criterion",
+          "type": "string"
+        },
+        "judgment": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ],
+          "title": "Judgment",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "criterion",
+        "judgment",
+        "reason",
+        "evidence"
+      ],
+      "title": "Finding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "cohort": {
+      "enum": [
+        "INTERNAL",
+        "EXTERNAL",
+        "PENDING"
+      ],
+      "title": "Cohort",
+      "type": "string"
+    },
+    "cohort_reason": {
+      "minLength": 1,
+      "title": "Cohort Reason",
+      "type": "string"
+    },
+    "required_external_sources": {
+      "items": {
+        "enum": [
+          "EXTERNAL_RULE",
+          "EXTERNAL_DATA"
+        ],
+        "type": "string"
+      },
+      "title": "Required External Sources",
+      "type": "array"
+    }
+  },
+  "required": [
+    "findings",
+    "cohort",
+    "cohort_reason",
+    "required_external_sources"
+  ],
+  "title": "VerificationResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.05-verification.semantic.response:v1"
+}

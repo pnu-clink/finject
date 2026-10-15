@@ -1,0 +1,48 @@
+{
+  "as_of": "2026-10-01",
+  "currency": "USD",
+  "billing_status": "Published standard API rates; estimates are not invoices.",
+  "usage_source": "https://developers.openai.com/api/reference/typescript/resources/responses/methods/create",
+  "models": {
+    "gpt-6-luna": {
+      "input_per_million": 0.1,
+      "cached_input_per_million": 0.01,
+      "output_per_million": 0.5,
+      "cache_write_multiplier": 1.25,
+      "source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+      "verified_at": "2026-10-01"
+    },
+    "gpt-6.1-sol": {
+      "input_per_million": 2.0,
+      "cached_input_per_million": 0.1,
+      "output_per_million": 10.0,
+      "cache_write_multiplier": 1.25,
+      "source": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+      "verified_at": "2026-10-01"
+    },
+    "gpt-5.6-sol": {
+      "input_per_million": 4.0,
+      "cached_input_per_million": 0.4,
+      "output_per_million": 20.0,
+      "cache_write_multiplier": 1.25,
+      "source": "https://developers.openai.com/api/docs/models/gpt-5.6-sol"
+    },
+    "gpt-5.6-luna": {
+      "input_per_million": 0.2,
+      "cached_input_per_million": 0.02,
+      "output_per_million": 1.2,
+      "cache_write_multiplier": 1.25,
+      "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+    },
+    "gpt-6-astra": {
+      "input_per_million": 10.0,
+      "cached_input_per_million": 1.0,
+      "output_per_million": 50.0,
+      "cache_write_multiplier": 1.25,
+      "source": "https://developers.openai.com/api/docs/models/gpt-6-astra",
+      "verified_at": "2026-09-16"
+    }
+  },
+  "long_context_input_threshold": 272000,
+  "long_context_policy": "Above the threshold, this estimator leaves cost unknown pending an explicit long-context rate policy. The 500K token budget includes input and output and does not define a pricing tier."
+}

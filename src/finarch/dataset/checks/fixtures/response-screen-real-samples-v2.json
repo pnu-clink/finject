@@ -1,0 +1,62 @@
+[
+  {
+    "id": "test-0001/01-ic-value-before",
+    "source": {
+      "path": "reports/run/20260916-001/03-experiment/qwen-8b/01-repeat/0001/response.json",
+      "sha256": "6b1c04a621775a6ab846b4a3d727380ad3ef416a00d00ec22c594119cf780e8a"
+    },
+    "quote": "3150",
+    "method": "BOUNDED_AGENT_INSPECTION",
+    "scope": "CUE_EXTRACTION_AND_EXECUTION_ONLY",
+    "semantic_verdict": "UNKNOWN",
+    "note": "A bare numeric answer is present. Its unit is not explicit, so semantic correctness and A/B selection remain unknown."
+  },
+  {
+    "id": "test-0001/02-ic-value-after",
+    "source": {
+      "path": "reports/run/20260916-001/03-experiment/qwen-8b/01-repeat/0002/response.json",
+      "sha256": "42391fa988190ecb1f64317b765ce89015df46f6b5bcd6fb25fa872667b7019e"
+    },
+    "quote": "",
+    "method": "BOUNDED_AGENT_INSPECTION",
+    "scope": "CUE_EXTRACTION_AND_EXECUTION_ONLY",
+    "semantic_verdict": "NOT_EVALUATED",
+    "note": "Raw finish_reason is length and content is null. No semantic answer is reviewed."
+  },
+  {
+    "id": "test-0003/02-ic-value-after",
+    "source": {
+      "path": "reports/run/20260916-001/03-experiment/qwen-8b/01-repeat/0016/response.json",
+      "sha256": "84fd80424d7439c065954e3ceb1dcbf9d324291aa371763584791f8d5c641751"
+    },
+    "quote": "If the correct amount were $495,000, the tax would be $17,150. If it were $450,000, the tax would be $14,000.",
+    "method": "BOUNDED_AGENT_INSPECTION",
+    "scope": "CUE_EXTRACTION_AND_EXECUTION_ONLY",
+    "semantic_verdict": "UNKNOWN",
+    "note": "Conflict, inability and condition cues coexist. Two conditional tax answers are present in prose; the bare-number extractor intentionally returns none. Their semantic correctness was not adjudicated."
+  },
+  {
+    "id": "test-0009/02-ic-value-after",
+    "source": {
+      "path": "reports/run/20260916-001/03-experiment/qwen-8b/01-repeat/0051/response.json",
+      "sha256": "c2d2e5bf3983c8a3f62c7da23eee57269f6002eed5213a2c9fc206876562ac2f"
+    },
+    "quote": "However, if the 16.5 hours is considered correct",
+    "method": "BOUNDED_AGENT_INSPECTION",
+    "scope": "CUE_EXTRACTION_AND_EXECUTION_ONLY",
+    "semantic_verdict": "UNKNOWN",
+    "note": "Conflict, inability and condition cues coexist. Explanation operands must not be treated as final answers. The prose extraction and correctness remain unresolved."
+  },
+  {
+    "id": "test-0059/01-ic-value-before",
+    "source": {
+      "path": "reports/run/20260916-001/03-experiment/qwen-8b/01-repeat/0365/response.json",
+      "sha256": "2b4201e18908b9db79e09e796ac11472bbfcb457c42b3e22ed524b1c78bba48c"
+    },
+    "quote": "{\"answer\":",
+    "method": "BOUNDED_AGENT_INSPECTION",
+    "scope": "CUE_EXTRACTION_AND_EXECUTION_ONLY",
+    "semantic_verdict": "NOT_EVALUATED",
+    "note": "Raw finish_reason is length with partial malformed content. It remains truncated, not a semantic rejection or a schema-only failure."
+  }
+]

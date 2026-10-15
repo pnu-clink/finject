@@ -1,0 +1,74 @@
+{
+  "execution_enabled": false,
+  "cli_limits": {
+    "timeout_seconds": 300
+  },
+  "profiles_path": "codex-profiles.toml",
+  "use_model_selection": false,
+  "preparation_revision_attempts": 1,
+  "parallelism": {
+    "preparation": 10,
+    "generation": 2
+  },
+  "provider": "openai",
+  "roles": {
+    "01-preparation.03-calculation.pot": {
+      "profile_id": "luna-low-api"
+    },
+    "02-generation.02-generate-text.realization": {
+      "profile_id": "luna-low-api"
+    },
+    "shared.01-02.02-03.review-and-validation": {
+      "profile_id": "luna-low-api"
+    },
+    "01-preparation.02-review-and-correct.revision": {
+      "profile_id": "luna-low-api"
+    },
+    "01-preparation.03-calculation.review-answer-evidence": {
+      "profile_id": "luna-low-api"
+    },
+    "02-generation.feedback.case-feedback": {
+      "profile_id": "luna-low-api"
+    },
+    "shared.01-06.02-04.exception-handler": {
+      "profile_id": "luna-low-api"
+    },
+    "01-preparation.05-verification.semantic": {
+      "profile_id": "luna-low-api"
+    }
+  },
+  "capabilities": {
+    "01-preparation.03-calculation.pot": {
+      "tools": [],
+      "skills": []
+    },
+    "02-generation.02-generate-text.realization": {
+      "tools": [],
+      "skills": []
+    },
+    "shared.01-02.02-03.review-and-validation": {
+      "tools": [],
+      "skills": []
+    },
+    "01-preparation.02-review-and-correct.revision": {
+      "tools": [],
+      "skills": []
+    },
+    "01-preparation.03-calculation.review-answer-evidence": {
+      "tools": [],
+      "skills": []
+    },
+    "02-generation.feedback.case-feedback": {
+      "tools": [],
+      "skills": []
+    },
+    "shared.01-06.02-04.exception-handler": {
+      "tools": [],
+      "skills": []
+    },
+    "01-preparation.05-verification.semantic": {
+      "tools": [],
+      "skills": []
+    }
+  }
+}

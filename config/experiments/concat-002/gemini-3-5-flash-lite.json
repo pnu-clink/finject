@@ -1,0 +1,46 @@
+{
+  "evaluation": {
+    "dataset": {
+      "generated_path": "data/generated/20261003-concat-002",
+      "count": 1260,
+      "require_all_variants_pass": true,
+      "require_external_knowledge": true,
+      "require_generated": true
+    },
+    "schedule": {
+      "concurrency": 1
+    },
+    "models": [
+      {
+        "key": "gemini-3.5-flash-lite-batch",
+        "model": "gemini-3.5-flash-lite",
+        "transport": "gemini_batch",
+        "key_variable": "GEMINI_API_KEY",
+        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "reference_price_per_million": {
+          "input": 0.15,
+          "output": 1.25
+        },
+        "price_source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.5-flash-lite",
+        "thinking_levels": {
+          "on": "medium"
+        },
+        "output_limits": {
+          "on": 8192
+        },
+        "submit_all_before_poll": true
+      }
+    ],
+    "reasoning_modes": [
+      "on"
+    ],
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "definition_source_run": null,
+    "run_label": "concat-002-gemini-3-5-flash-lite",
+    "max_output_tokens": 8192
+  },
+  "analysis": {
+    "enabled": false
+  }
+}

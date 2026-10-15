@@ -1,0 +1,75 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "ProgramAnswerMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "scale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Scale"
+        }
+      },
+      "required": [
+        "scale"
+      ],
+      "title": "ProgramAnswerMetadata",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "minLength": 1,
+      "title": "Context",
+      "type": "string"
+    },
+    "question": {
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "reference_answer_type": {
+      "enum": [
+        "integer",
+        "float"
+      ],
+      "title": "Reference Answer Type",
+      "type": "string"
+    },
+    "reference_precision": {
+      "maximum": 100,
+      "minimum": 0,
+      "title": "Reference Precision",
+      "type": "integer"
+    },
+    "answer_metadata": {
+      "$ref": "#/$defs/ProgramAnswerMetadata"
+    },
+    "provider_record": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "description": "Source identifiers and mechanically extracted numeric spans; no reference answer",
+      "title": "Provider Record",
+      "type": "object"
+    }
+  },
+  "required": [
+    "context",
+    "question",
+    "reference_answer_type",
+    "reference_precision",
+    "answer_metadata"
+  ],
+  "title": "ProgramRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.03-calculation.pot.request:v2"
+}

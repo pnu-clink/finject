@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "Artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "minLength": 1,
+          "title": "Sha256",
+          "type": "string"
+        },
+        "content": {
+          "title": "Content",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "path",
+        "sha256",
+        "content"
+      ],
+      "title": "Artifact",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "run": {
+      "minLength": 1,
+      "title": "Run",
+      "type": "string"
+    },
+    "phase": {
+      "enum": [
+        "preparation",
+        "generation"
+      ],
+      "title": "Phase",
+      "type": "string"
+    },
+    "case": {
+      "minLength": 1,
+      "title": "Case",
+      "type": "string"
+    },
+    "variant": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Variant"
+    },
+    "round": {
+      "title": "Round",
+      "type": "string"
+    },
+    "failed_step": {
+      "minLength": 1,
+      "title": "Failed Step",
+      "type": "string"
+    },
+    "current_rejection": {
+      "title": "Current Rejection",
+      "type": "string"
+    },
+    "artifacts": {
+      "items": {
+        "$ref": "#/$defs/Artifact"
+      },
+      "minItems": 1,
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "missing_stages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Stages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run",
+    "phase",
+    "case",
+    "variant",
+    "round",
+    "failed_step",
+    "current_rejection",
+    "artifacts",
+    "missing_stages"
+  ],
+  "title": "InterpretationRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:shared.01-07.02-05.failure-interpretation.request:v1"
+}

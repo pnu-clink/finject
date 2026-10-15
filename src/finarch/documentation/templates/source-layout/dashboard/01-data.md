@@ -1,0 +1,9 @@
+# 대시보드 자료 연결
+
+[문서의 단계·요구·실행 흐름](../../../../docs/03-dashboard/README.md) · [전체 소스 구조](../../../../docs/01-dataset/90-operations/05-source-layout.md)
+
+이 폴더는 위 문서 단계의 실행 코드를 소유합니다. 결과의 물리 경로는 기존 run 계약을 따릅니다.
+
+|파일|역할|
+|---|---|
+|[data.py](data.py)|Read saved experiment evidence for dashboards without altering any source file.|

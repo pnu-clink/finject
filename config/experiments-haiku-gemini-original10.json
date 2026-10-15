@@ -1,0 +1,127 @@
+{
+  "experiments": {
+    "version": 1,
+    "cache_policy": {
+      "mode": "forbidden",
+      "scope": [
+        "provider_prompt_cache_reads",
+        "provider_prompt_cache_writes",
+        "cross_run_response_reuse"
+      ],
+      "require_verified_transport_control": true,
+      "require_explicit_zero_cache_usage": true,
+      "on_violation": "STOP_NEW_CALLS_PRESERVE_RAW_RESPONSE",
+      "missing_usage": "UNKNOWN_NOT_ZERO"
+    },
+    "output_root": "reports/experiments-run",
+    "dataset": {
+      "name": "FinanceReasoning",
+      "source_run": "reports/run/20260917-002",
+      "input_path": "data/prepared/finance-reasoning/full-20260917-v2/input.json",
+      "count": 10,
+      "excluded_ids": [],
+      "require_all_variants_pass": true,
+      "originals_only": true
+    },
+    "schedule": {
+      "concurrency": 2,
+      "fallback_group_size": 1,
+      "timeout_seconds": 300,
+      "max_rate_limit_attempts": 1,
+      "retry_delay_seconds": 65,
+      "cpu_adaptive": false,
+      "initial_concurrency": 2,
+      "monitor_interval_seconds": 2,
+      "cpu_threshold_percent": 50,
+      "increase_by": 50,
+      "memory_threshold_percent": 85,
+      "minimum_available_memory_gb": 2,
+      "report_interval_seconds": 20
+    },
+    "reasoning_modes": [
+      "off"
+    ],
+    "thinking_budget": 2048,
+    "max_output_tokens": 8192,
+    "seed": 20260920,
+    "models": [
+      {
+        "key": "haiku-4.5-api",
+        "model": "claude-haiku-4-5-20251001",
+        "transport": "anthropic_api",
+        "workspace_id": "wrkspc_01WERzonMgRrxHvcoc5FSSfW",
+        "key_variable": "CLAUDE_API_KEY",
+        "key_file": ".env",
+        "reference_price_per_million": {
+          "input": 1.0,
+          "output": 5.0
+        },
+        "price_source": "https://platform.claude.com/docs/en/models/overview"
+      },
+      {
+        "key": "gemini-2.5-flash-lite-api",
+        "model": "gemini-2.5-flash-lite",
+        "transport": "gemini_paid_api",
+        "key_variable": "GEMINI_API_KEY",
+        "key_file": ".env",
+        "reference_price_per_million": {
+          "input": 0.1,
+          "output": 0.4,
+          "cached_input": 0.01
+        },
+        "price_source": "https://ai.google.dev/gemini-api/docs/pricing"
+      }
+    ],
+    "semantic_evaluator": {
+      "enabled": false,
+      "status": "NOT_REVIEWED",
+      "rubric_work": "PAUSED_BY_USER"
+    },
+    "billing": {
+      "active_mode": "PAID_PROVIDER_API_PILOT",
+      "invoice_verified": false,
+      "prices_checked_on": "2026-09-24",
+      "sources": [
+        "https://platform.claude.com/docs/en/models/overview",
+        "https://ai.google.dev/gemini-api/docs/pricing"
+      ],
+      "authorization": "USER_REQUESTED_HAIKU_AND_GEMINI_FLASH_LITE_TEN_EACH_2026_09_24"
+    },
+    "report_format": "markdown",
+    "active_backend": "openai",
+    "definition_source_run": "reports/experiments-run/20260923-exp-009",
+    "response_contract": "FinancialAnswerV6",
+    "improvement": {
+      "pilot_cases": [
+        "test-0006",
+        "test-0007",
+        "test-0008",
+        "test-0010",
+        "test-0015",
+        "test-0016",
+        "test-0019",
+        "test-0020",
+        "test-0023",
+        "test-0025"
+      ]
+    },
+    "pilot": {
+      "scope": "TEN_IDENTICAL_ORIGINALS_P0_REASONING_OFF_PER_MODEL",
+      "case_ids": [
+        "test-0006",
+        "test-0007",
+        "test-0008",
+        "test-0010",
+        "test-0015",
+        "test-0016",
+        "test-0019",
+        "test-0020",
+        "test-0023",
+        "test-0025"
+      ],
+      "claim_limit": "EXPLORATORY_PROVIDER_PILOT_NOT_R0_R1_CONTRAST",
+      "model_access_status": "PREFLIGHT_PENDING",
+      "gemini_cache_exception": "AWAITING_USER_DECISION"
+    }
+  }
+}

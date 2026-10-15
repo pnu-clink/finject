@@ -1,0 +1,23 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync('viewer/dataset/index.html','utf8');
+new vm.Script(html.split('<script>')[1].split('</script>')[0]);
+const ctx=vm.createContext({eventOf:(r,p)=>r.files[p],sameJson:(a,b)=>JSON.stringify(a)===JSON.stringify(b),realizationStage:r=>r.stage,auditRecord:r=>r.audit});
+vm.runInContext(html.slice(html.indexOf('function answerRecord('),html.indexOf('function independentAnswerPanel(')),ctx);
+let count=0;
+function ok(fn){fn();count++;}
+const stage='05-text/EA_01/answers/v1',realized='05-text/EA_01/01-generate-text/v3';
+const r={axis:'EA',label:'EA_01',stage:realized,variant:{plan:{target:'A'}},files:{},audit:{stage:'audit-v1',report:{status:'PASS',observation_sha256:'same'},stale:false}};
+r.files['05-text/EA_01/latest-answer.json']={stage};
+const report=r.files[stage+'/independent-answer.json']={status:'RECEIVED',response:{text:'observed answer'},audit_ref:'audit-v1',stage16_ref:realized,plan_snapshot:{target:'A'},observation_sha256:'same'};
+r.files[stage+'/01-input.json']={context:'C',question:'Q'};r.files[realized+'/04-final-observation.json']={context:'C',question:'Q'};
+ok(()=>assert.equal(ctx.answerRecord(r).stale,false));
+r.files[realized+'/04-final-observation.json'].context='new';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.files[realized+'/04-final-observation.json'].context='C';
+r.audit.stage='audit-v2';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.audit.stage='audit-v1';
+r.audit.report.status='FAIL';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.audit.report.status='PASS';
+r.variant.plan.target='B';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.variant.plan.target='A';
+report.status='FAIL';report.response=null;ok(()=>assert.match(ctx.answerStatus(r),/실패/));
+report.status='RECEIVED';report.response={text:'observed answer'};
+r.files[stage+'/behavior-review.json']={response:{text:'other answer'},observation_sha256:'same'};ok(()=>assert.equal(ctx.answerRecord(r).review,null));
+r.files[stage+'/behavior-review.json'].response=report.response;ok(()=>assert.ok(ctx.answerRecord(r).review));
+r.files['05-text/EA_01/latest-answer.json'].stage='05-text/OTHER/answers/v1';ok(()=>assert.equal(ctx.answerRecord(r),null));
+console.log(`viewer answer: ${count} checks PASS (current/stale text, audit, plan, failure, review and foreign pointer)`);

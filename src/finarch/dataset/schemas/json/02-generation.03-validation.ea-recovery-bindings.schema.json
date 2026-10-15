@@ -1,0 +1,54 @@
+{
+  "$defs": {
+    "RecoveryBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "variable": {
+          "minLength": 1,
+          "title": "Variable",
+          "type": "string"
+        },
+        "field": {
+          "enum": [
+            "context",
+            "question"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Span",
+          "type": "array"
+        },
+        "text": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "variable",
+        "field",
+        "span",
+        "text"
+      ],
+      "title": "RecoveryBinding",
+      "type": "object"
+    }
+  },
+  "items": {
+    "$ref": "#/$defs/RecoveryBinding"
+  },
+  "maxItems": 16,
+  "title": "RecoveryBindings",
+  "type": "array",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:02-generation.03-validation.ea-recovery-bindings:v1"
+}

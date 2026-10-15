@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:ea-inverse-review-dataset:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "InverseEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "question",
+            "context"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "start",
+        "end",
+        "quote"
+      ],
+      "title": "InverseEvidence",
+      "type": "object"
+    },
+    "InverseReview": {
+      "additionalProperties": false,
+      "properties": {
+        "inverse_possible": {
+          "title": "Inverse Possible",
+          "type": "boolean"
+        },
+        "missing_quantity": {
+          "minLength": 1,
+          "title": "Missing Quantity",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/InverseEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "formula": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Formula"
+        }
+      },
+      "required": [
+        "inverse_possible",
+        "missing_quantity",
+        "reason",
+        "evidence",
+        "formula"
+      ],
+      "title": "InverseReview",
+      "type": "object"
+    },
+    "ReviewRecord": {
+      "type": "object",
+      "required": [
+        "kind",
+        "status",
+        "observation_sha256",
+        "inverse_review",
+        "affects_quality_status"
+      ],
+      "properties": {
+        "kind": {
+          "const": "EA_INVERSE_REVIEW"
+        },
+        "status": {
+          "enum": [
+            "COMPLETED",
+            "CALL_FAILED",
+            "RESPONSE_INVALID",
+            "NOT_RUN"
+          ]
+        },
+        "observation_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "inverse_review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/InverseReview"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "affects_quality_status": {
+          "const": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "inverse_review": {
+                "$ref": "#/$defs/InverseReview"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "inverse_review": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "item_id",
+        "question",
+        "context",
+        "content_sha256",
+        "availability",
+        "status",
+        "inverse_possible",
+        "review_record",
+        "evidence_display_check",
+        "source"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "EA_01",
+            "EA_02"
+          ]
+        },
+        "item_id": {
+          "type": "string"
+        },
+        "question": {
+          "type": "string"
+        },
+        "context": {
+          "type": "string"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "availability": {
+          "enum": [
+            "RECORDED",
+            "MISSING"
+          ]
+        },
+        "status": {
+          "enum": [
+            "COMPLETED",
+            "CALL_FAILED",
+            "RESPONSE_INVALID",
+            "NOT_RUN",
+            "NOT_RECORDED"
+          ]
+        },
+        "inverse_possible": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "review_record": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReviewRecord"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_display_check": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "source": {
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "MISSING"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "NOT_RECORDED"
+              },
+              "inverse_possible": {
+                "type": "null"
+              },
+              "review_record": {
+                "type": "null"
+              },
+              "evidence_display_check": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "review_record": {
+                "$ref": "#/$defs/ReviewRecord"
+              },
+              "status": {
+                "enum": [
+                  "COMPLETED",
+                  "CALL_FAILED",
+                  "RESPONSE_INVALID",
+                  "NOT_RUN"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "inverse_possible": {
+                "type": "boolean"
+              },
+              "availability": {
+                "const": "RECORDED"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "inverse_possible": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "format",
+    "run",
+    "id",
+    "source_dataset",
+    "source_run",
+    "source_case_id",
+    "variants"
+  ],
+  "properties": {
+    "format": {
+      "const": "finarch-ea-inverse-review-dataset-v1"
+    },
+    "run": {
+      "const": "finject-20261007"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^id-[0-9]{4}$"
+    },
+    "source_dataset": {
+      "enum": [
+        "FinanceReasoning",
+        "TAT-QA"
+      ]
+    },
+    "source_run": {
+      "type": "string"
+    },
+    "source_case_id": {
+      "type": "string"
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Item"
+            },
+            {
+              "properties": {
+                "type": {
+                  "const": "EA_01"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Item"
+            },
+            {
+              "properties": {
+                "type": {
+                  "const": "EA_02"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

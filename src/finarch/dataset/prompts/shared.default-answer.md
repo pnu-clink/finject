@@ -1,0 +1,1 @@
+Answer the supplied question using only its context. Return the supplied response schema. Write all generated response text in English.

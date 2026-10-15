@@ -1,0 +1,149 @@
+{
+  "$defs": {
+    "SourceDescriptor": {
+      "additionalProperties": false,
+      "properties": {
+        "side": {
+          "enum": [
+            "A",
+            "B"
+          ],
+          "title": "Side",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "information_access": {
+          "minLength": 1,
+          "title": "Information Access",
+          "type": "string"
+        },
+        "verification": {
+          "minLength": 1,
+          "title": "Verification",
+          "type": "string"
+        },
+        "attribution": {
+          "const": "direct",
+          "title": "Attribution",
+          "type": "string"
+        },
+        "intended_reliability": {
+          "const": "H",
+          "title": "Intended Reliability",
+          "type": "string"
+        }
+      },
+      "required": [
+        "side",
+        "source_id",
+        "role",
+        "information_access",
+        "verification",
+        "attribution",
+        "intended_reliability"
+      ],
+      "title": "SourceDescriptor",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "axis": {
+      "const": "IC_SOURCE",
+      "title": "Axis",
+      "type": "string"
+    },
+    "base_plan_ref": {
+      "minLength": 1,
+      "title": "Base Plan Ref",
+      "type": "string"
+    },
+    "base_plan_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Base Plan Sha256",
+      "type": "string"
+    },
+    "source_condition": {
+      "enum": [
+        "A_ONLY",
+        "B_ONLY"
+      ],
+      "title": "Source Condition",
+      "type": "string"
+    },
+    "claim_order": {
+      "items": {
+        "enum": [
+          "A",
+          "B"
+        ],
+        "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "title": "Claim Order",
+      "type": "array"
+    },
+    "sources": {
+      "items": {
+        "$ref": "#/$defs/SourceDescriptor"
+      },
+      "maxItems": 1,
+      "minItems": 1,
+      "title": "Sources",
+      "type": "array"
+    },
+    "realization_rules": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Realization Rules",
+      "type": "array"
+    },
+    "provenance": {
+      "const": "locally_authored_source_conditions_not_original_facts",
+      "title": "Provenance",
+      "type": "string"
+    },
+    "semantic_status": {
+      "const": "NOT_EVALUATED",
+      "title": "Semantic Status",
+      "type": "string"
+    },
+    "final_text_status": {
+      "const": "NOT_RUN",
+      "title": "Final Text Status",
+      "type": "string"
+    },
+    "model_calls": {
+      "const": 0,
+      "title": "Model Calls",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "axis",
+    "base_plan_ref",
+    "base_plan_sha256",
+    "source_condition",
+    "claim_order",
+    "sources",
+    "realization_rules",
+    "provenance",
+    "semantic_status",
+    "final_text_status",
+    "model_calls"
+  ],
+  "title": "SourcePlan",
+  "type": "object"
+}

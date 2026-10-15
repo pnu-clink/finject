@@ -1,0 +1,47 @@
+{
+  "evaluation": {
+    "dataset": {
+      "generated_path": "data/generated/20261003-003",
+      "count": 291,
+      "require_all_variants_pass": true,
+      "require_external_knowledge": true,
+      "require_generated": true
+    },
+    "schedule": {
+      "concurrency": 1
+    },
+    "models": [
+      {
+        "key": "haiku-4.5-batch",
+        "model": "claude-haiku-4-5-20251001",
+        "transport": "anthropic_batch",
+        "workspace_id": "wrkspc_01WERzonMgRrxHvcoc5FSSfW",
+        "key_variable": "CLAUDE_API_KEY",
+        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "reference_price_per_million": {
+          "input": 0.5,
+          "output": 2.5
+        },
+        "price_source": "https://platform.claude.com/docs/en/about-claude/pricing",
+        "thinking_budget": 1024,
+        "output_limits": {
+          "off": 8192,
+          "on": 8192
+        }
+      }
+    ],
+    "reasoning_modes": [
+      "off",
+      "on"
+    ],
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "definition_source_run": null,
+    "run_label": "tatqa-haiku",
+    "thinking_budget": 1024,
+    "max_output_tokens": 8192
+  },
+  "analysis": {
+    "enabled": false
+  }
+}

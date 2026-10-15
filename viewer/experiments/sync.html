@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PC ↔ A100 동기화 · FIN-ARCH</title><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/sync.css"><script type="module" src="/sync.mjs"></script></head>
+<body><header class="masthead"><div class="brand"><span class="brand-symbol">f.</span><div><p class="eyebrow">FIN-ARCH / SYNC</p><h1>PC ↔ A100 동기화</h1></div></div><div class="header-actions"><a class="read-only" href="/">실험 뷰어로 돌아가기</a><button id="refresh" class="on-dark">지금 읽기 ↻</button></div></header>
+<main class="sync-main"><p class="muted">PC의 코드·공개 입력을 A100에 전달하고, 서버의 상태·원응답을 PC에 수집합니다. 10초마다 저장된 동기화 기록을 읽습니다.</p>
+<div id="notice" role="status"></div><section id="summary" class="sync-cards" aria-label="동기화 요약"></section>
+<section class="sync-panel"><h2>동기화 방향과 기준</h2><div class="sync-flow"><div><strong>PC → A100</strong><p>공통 코드·설정·공개 입력·프롬프트·스키마</p><small>SHA-256 일치 확인 후 코드 버전 게시</small></div><span>⇄</span><div><strong>A100 → PC</strong><p>실행 상태·실제 전송 옵션·완료 원응답</p><small>새 파일 수집 → 해시 검사 → 원본 보존</small></div></div><p class="muted">정답·private 분류·Analysis는 PC에 보존합니다. 기존 동결 입력과 원응답이 다르면 덮어쓰지 않습니다. 동기화 성공은 실험 완료나 추론 옵션 검증을 뜻하지 않습니다.</p></section>
+<section class="sync-panel"><h2>실험별 입력과 수집 상태</h2><div class="sync-scroll"><table><thead><tr><th>실험</th><th>공개 입력</th><th>서버 실행 상태</th><th>수집 / 전체 요청</th><th>검사 파일</th><th>이번 새 파일</th><th>수집 확인</th></tr></thead><tbody id="runs"></tbody></table></div></section>
+<section class="sync-panel"><h2>코드 버전과 불일치</h2><dl id="details"></dl><pre id="mismatch"></pre></section><p id="updated" class="small muted"></p></main></body></html>

@@ -1,0 +1,10 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync('viewer/dataset/live.html','utf8'),script=html.split('<script>')[1].split('</script>')[0];new vm.Script(script);
+const ctx={};vm.createContext(ctx);vm.runInContext(script.slice(script.indexOf('// [VL04]'),script.indexOf('// [/VL04]')),ctx);
+const events=[{case:'a',call_id:'x',phase:'START',kind:'llm',timestamp:'1'},{case:'b',call_id:'x',phase:'START',kind:'python',timestamp:'1'},{case:'a',call_id:'x',phase:'END',status:'FAIL',timestamp:'2',elapsed_seconds:12},{case:'a',call_id:'p',phase:'END',kind:'python',status:'PASS',timestamp:'3',elapsed_seconds:2},{case:'b',call_id:'p',phase:'ARTIFACT',path:'audit/02-raw-response.json',timestamp:'4'}];
+const original=JSON.stringify(events),rows=ctx.normalizeEvents(events);
+assert.equal(rows[0].startClosed,true);assert.equal(rows[1].startClosed,false);assert.equal(rows[2].kind,'llm');assert.equal(JSON.stringify(events),original);
+assert.equal(ctx.filterEvents(rows,'fail','a',null).length,1);assert.equal(ctx.filterEvents(rows,'llm',null,null).length,3);assert.equal(ctx.filterEvents(rows,'all','a','3').length,1);
+assert.equal(ctx.sortedEvents(rows,'elapsed_seconds',1)[0].elapsed_seconds,2);assert.equal(ctx.sortedEvents(rows,'elapsed_seconds',-1)[0].elapsed_seconds,12);
+assert.match(ctx.causeText('GOLD_MISMATCH'),/정답 대조 실패/);assert.equal(ctx.stageName({stage:'human-review'}),'사람 검토 자료 준비');
+console.log('PASS live logs: original preservation, per-case span identity, failure/LLM filters, numeric sort, readable causes (5 checks)');

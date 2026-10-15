@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "case": {
+      "minLength": 1,
+      "title": "Case",
+      "type": "string"
+    },
+    "phase": {
+      "enum": [
+        "preparation",
+        "generation"
+      ],
+      "title": "Phase",
+      "type": "string"
+    },
+    "source_round": {
+      "minLength": 1,
+      "title": "Source Round",
+      "type": "string"
+    },
+    "failed_step": {
+      "minLength": 1,
+      "title": "Failed Step",
+      "type": "string"
+    },
+    "error_type": {
+      "minLength": 1,
+      "title": "Error Type",
+      "type": "string"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "evidence": {
+      "additionalProperties": true,
+      "title": "Evidence",
+      "type": "object"
+    },
+    "allowed_steps": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Allowed Steps",
+      "type": "array"
+    }
+  },
+  "required": [
+    "case",
+    "phase",
+    "source_round",
+    "failed_step",
+    "error_type",
+    "reason",
+    "evidence",
+    "allowed_steps"
+  ],
+  "title": "ExceptionRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:shared.01-06.02-04.exception-handler.request:v1"
+}

@@ -1,0 +1,49 @@
+{
+  "description": "TAT-QA and FinanceReasoning RQ export. Luna uses the sol-low Analysis run; the preceding Luna run is not an independent result.",
+  "runs": [
+    {
+      "label": "Luna",
+      "run": "20261003-exp-004-tatqa-luna-sol-low"
+    },
+    {
+      "label": "Haiku",
+      "run": "20261003-exp-005-tatqa-haiku"
+    },
+    {
+      "label": "Gemini 3.5 Flash Lite",
+      "run": "20261003-exp-008-tatqa-gemini-3-5-flash-lite"
+    },
+    {
+      "label": "Qwen3-8B",
+      "run": "20261003-exp-012-a100-tatqa-qwen3-8b"
+    },
+    {
+      "label": "Qwen3-14B",
+      "run": "20261003-exp-014-a100-tatqa-qwen3-14b"
+    },
+    {
+      "label": "Qwen3.8-27B",
+      "run": "20261003-exp-016-a100-tatqa-qwen3-8-27b"
+    },
+    {
+      "label": "Luna",
+      "run": "20261003-exp-009-concat-002-luna"
+    },
+    {
+      "label": "Haiku",
+      "run": "20261003-exp-010-concat-002-haiku"
+    },
+    {
+      "label": "Qwen3-8B",
+      "run": "20261003-exp-013-a100-financereasoning-qwen3-8b"
+    },
+    {
+      "label": "Qwen3-14B",
+      "run": "20261003-exp-015-a100-financereasoning-qwen3-14b"
+    },
+    {
+      "label": "Qwen3.8-27B",
+      "run": "20261003-exp-017-a100-financereasoning-qwen3-8-27b"
+    }
+  ]
+}

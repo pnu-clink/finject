@@ -1,0 +1,17 @@
+# PC owns source code, current configuration and public frozen run inputs.
+# A100 owns execution records. Sync never starts evaluation or analysis.
+[sync]
+host = "a100"
+remote_workspace = "/home/clink-wooix/workspace/fexperiment/fin-arch"
+interval_seconds = 60
+transfer_timeout_seconds = 900
+
+[runs."20261002-fin-o1-8b"]
+model_key = "fin-o1-8b"
+source_layout = "comparison_stage"
+remote_source = "/home/clink-wooix/workspace/fexperiment/finarch-a100-20260929-financereasoning-1080/comparisons/20261001-fin-o1-jackrong/fin-o1-8b"
+
+[runs."20261002-fin-o1-14b"]
+model_key = "fin-o1-14b"
+source_layout = "comparison_stage"
+remote_source = "/home/clink-wooix/workspace/fexperiment/finarch-a100-20260929-financereasoning-1080/comparisons/20261001-fin-o1-jackrong/fin-o1-14b"

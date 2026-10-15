@@ -1,0 +1,12 @@
+{
+  "migration_hashes": "PASS",
+  "type_selections": 9,
+  "role_loaders": 4,
+  "preparation_checks": {
+    "run": 10,
+    "passed": 10
+  },
+  "live_viewer_prompt_paths": "PASS",
+  "model_calls": 0,
+  "legacy_test_limitations": "Historical prompt tests have missing run fixtures and expectations that omit the existing shared explanation guidance."
+}

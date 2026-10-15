@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>FIN-ARCH · 실험 결과</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/i18n.css">
+  <script src="/i18n.js" defer></script>
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">결과 본문으로 이동</a>
+  <header class="masthead">
+    <div class="brand"><span class="brand-symbol" aria-hidden="true">f.</span><div><p class="eyebrow">FIN-ARCH / EXPERIMENTS</p><h1>실험 결과, 근거까지 살펴보기</h1></div></div>
+    <div class="header-actions"><nav class="viewer-links" aria-label="연결 화면"><a href="/?tab=sync">PC ↔ A100 동기화</a><a id="progress-dashboard-link" href="/?tab=progress">진행 대시보드 ↗</a><a href="http://127.0.0.1:8895/dashboard/01-overview/" title="기존 기준선 저장 자료의 관제형 화면">기준선 대시보드 ↗</a><a href="http://127.0.0.1:8895/dashboard/02-explorer/" title="기존 기준선 저장 자료의 문항 화면">문항 대시보드 ↗</a></nav><span class="read-only"><i aria-hidden="true"></i> 저장된 결과 열람</span><button id="html-export" class="on-dark">회차 HTML Export ↓</button><button id="show-shortcuts" type="button" class="on-dark" aria-haspopup="dialog" aria-controls="shortcut-dialog">단축키</button><button id="refresh" class="on-dark">새로 읽기 ↻</button></div>
+  </header>
+  <div id="connection-error" class="notice danger" hidden></div>
+  <div id="offline-banner" class="notice info offline-banner" hidden></div>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="실행 및 문항 선택">
+      <section class="run-picker"><p class="eyebrow">WORKSPACE</p><label for="run-select">실행 기록</label><select id="run-select"><option>실행 읽는 중…</option></select><div id="run-meta" class="small muted"></div></section>
+      <div class="sidebar-heading"><h2>문항 탐색</h2><span id="case-count" class="count-pill">—</span></div>
+      <label class="sr-only" for="search">문항 번호·질문 검색</label><input id="search" type="search" placeholder="문항 번호·질문 검색" autocomplete="off">
+      <div class="case-count-legend" aria-label="원본풀이 정답 비교 범례"><span class="small muted">원본풀이</span><span class="mismatch">불일치</span><span class="unevaluated">미평가</span><span id="case-pending-legend" class="pending" hidden>미수집</span></div>
+      <div id="case-list" class="case-list" aria-label="문항 목록" tabindex="0"></div>
+      <div class="sidebar-foot"><strong>원문 → 변형 → 조건 → 응답</strong><p>하나의 원문에서 여러 실험 조건이 파생됩니다. 요청 수와 원문 수를 구분해 읽어 주세요.</p><span>viewer-exp · v1</span></div>
+    </aside>
+    <main id="main">
+      <section class="page-intro"><div><p class="eyebrow" id="run-eyebrow">EXPERIMENT RECORD</p><h2 id="page-title">전체 결과</h2><p id="run-description" class="muted">저장된 실험 산출물을 연결하고 있습니다.</p></div><span id="run-status" class="badge">읽는 중</span></section>
+      <div id="warnings" role="status"></div>
+      <nav id="rounds" class="round-strip" aria-label="동일 100문항의 개선 차수" hidden></nav>
+      <nav id="stages" class="stage-tabs" aria-label="실험 단계와 비교 화면"></nav>
+      <p id="stage-flow" class="stage-flow"></p>
+      <nav id="tabs" class="tabs" aria-label="실험 결과 화면"></nav>
+      <section class="filter-panel" aria-label="결과 필터">
+        <div class="filter-fields">
+          <label>모델<select id="filter-model"></select></label>
+          <label>실험<select id="filter-experiment"><option value="">실험 전체</option><option value="1">1 · 원본 풀이</option><option value="2">2 · 변형 응답</option></select></label>
+          <label>유형<select id="filter-variant"></select></label>
+          <label>풀이 조건<select id="filter-prompt"><option value="">전체</option><option value="unguided">Unguided Solving</option><option value="guided">Criteria-Guided Solving</option></select></label>
+          <label>추론 설정<select id="filter-reasoning"><option value="">전체</option><option value="off">Reasoning OFF</option><option value="on">Reasoning ON</option></select></label>
+          <label>반환 상태<select id="filter-status"></select></label>
+        </div>
+        <div id="filter-extra" class="filter-extra" hidden></div>
+        <div id="active-filters" class="active-filters" aria-label="적용 중인 필터"></div>
+        <div class="filter-footer"><span id="filter-summary" class="small" aria-live="polite"></span><div><button id="clear-filters" class="text-button">필터 초기화</button><button id="export" class="text-button">표 내려받기 ↓</button></div></div>
+      </section>
+
+      <div id="content" tabindex="-1" aria-busy="true"><div class="empty">실제 결과를 읽고 있습니다…</div></div>
+      <footer class="page-footer"><span>형식 통과와 정답 여부를 구분합니다. 기록이 없는 평가는 미평가로 남깁니다.</span><span id="loaded-at"></span></footer>
+    </main>
+  </div>
+  <dialog id="shortcut-dialog" aria-labelledby="shortcut-title">
+    <div class="dialog-head"><div><p class="eyebrow">KEYBOARD SHORTCUTS</p><h2 id="shortcut-title">키보드 단축키</h2></div><button id="close-shortcuts" type="button" aria-label="단축키 안내 닫기" autofocus>닫기 ×</button></div>
+    <div class="shortcut-help">
+        <div class="shortcut-layout">
+          <div class="shortcut-keyboard" aria-label="숫자 키와 QWERTY 주요 단축키 배열">
+            <div class="shortcut-key-row shortcut-numbers">
+              <div class="shortcut-key shortcut-screen"><kbd>1</kbd><span>첫 탭</span></div><div class="shortcut-key shortcut-screen"><kbd>2</kbd><span>둘째 탭</span></div><div class="shortcut-key shortcut-screen"><kbd>3</kbd><span>셋째 탭</span></div><div class="shortcut-key shortcut-screen"><kbd>4</kbd><span>넷째 탭</span></div>
+            </div>
+            <div class="shortcut-key-row">
+              <div class="shortcut-key shortcut-problem"><kbd>Q</kbd><span>문항 이전</span></div><div class="shortcut-key shortcut-screen"><kbd>W</kbd><span>반 화면 위</span></div><div class="shortcut-key shortcut-problem"><kbd>E</kbd><span>문항 다음</span></div><div class="shortcut-key shortcut-unused"><kbd>R</kbd><span>—</span></div><div class="shortcut-key shortcut-unused"><kbd>T</kbd><span>—</span></div>
+            </div>
+            <div class="shortcut-key-row">
+              <div class="shortcut-key shortcut-type"><kbd>A</kbd><span>유형 이전</span></div><div class="shortcut-key shortcut-screen"><kbd>S</kbd><span>반 화면 아래</span></div><div class="shortcut-key shortcut-type"><kbd>D</kbd><span>유형 다음</span></div><div class="shortcut-key shortcut-unused"><kbd>F</kbd><span>—</span></div><div class="shortcut-key shortcut-unused"><kbd>G</kbd><span>—</span></div>
+            </div>
+            <div class="shortcut-key-row">
+              <div class="shortcut-key shortcut-condition"><kbd>Z</kbd><span>조건 이전</span></div><div class="shortcut-key shortcut-unused"><kbd>X</kbd><span>—</span></div><div class="shortcut-key shortcut-condition"><kbd>C</kbd><span>조건 다음</span></div><div class="shortcut-key shortcut-unused"><kbd>V</kbd><span>—</span></div><div class="shortcut-key shortcut-type"><kbd>B</kbd><span>유형 다음</span></div>
+            </div>
+            <div class="shortcut-key-row"><div class="shortcut-key shortcut-problem"><kbd>J</kbd><span>문항 다음</span></div><div class="shortcut-key shortcut-problem"><kbd>K</kbd><span>문항 이전</span></div></div>
+            <div class="shortcut-key-row shortcut-space-row"><div class="shortcut-key shortcut-condition shortcut-space"><kbd>Space</kbd><span>개별 버튼 선택</span></div></div>
+          </div>
+          <div class="shortcut-groups">
+            <div class="shortcut-group shortcut-problem"><strong>문항 이동</strong><p>Q / K 이전 · E / J 다음<br>현재 필터의 전체 목록에서 이동</p></div>
+            <div class="shortcut-group shortcut-type"><strong>유형 이동</strong><p>A 이전 · D 다음<br>B도 다음 유형 · 원본 ↔ EA-02</p></div>
+            <div class="shortcut-group shortcut-condition"><strong>조건 선택</strong><p>Z 이전 · C 다음<br>앞의 조합 4개: 이동 즉시 선택<br>뒤의 개별 버튼: Space / Enter로 선택<br>Tab / Shift+Tab으로도 초점 이동</p></div>
+            <div class="shortcut-group shortcut-screen"><strong>탭·스크롤 이동</strong><p>1–4 현재 단계의 탭을 왼쪽부터 선택<br>다른 단계로 이동하지 않으며 없는 번호는 동작하지 않습니다.<br>S 아래 · W 위 (화면 높이의 약 1/2)</p></div>
+          </div>
+        </div>
+        <p class="small muted">문항은 현재 필터에 해당하는 목록 안에서 이동합니다. 처음·마지막에서는 멈춥니다. 입력란 작성 중이나 팝업이 열려 있을 때는 이동 단축키가 작동하지 않습니다.</p>
+    </div>
+  </dialog>
+  <dialog id="file-dialog"><div class="dialog-head"><div><p class="eyebrow">SAVED ARTIFACT</p><h2 id="file-title">저장 기록</h2></div><button id="close-dialog" aria-label="저장 기록 닫기">닫기 ×</button></div><div id="file-body"></div></dialog>
+  <dialog id="export-dialog" aria-labelledby="export-title">
+    <div class="dialog-head"><div><p class="eyebrow">EXPERIMENT / HTML EXPORT</p><h2 id="export-title">회차를 단일 HTML로 저장</h2></div><button id="close-export" aria-label="HTML 내보내기 닫기">닫기 ×</button></div>
+    <label class="export-run-label" for="export-run">내보낼 실행 회차</label><select id="export-run"></select>
+    <p class="export-description">선택한 회차의 모든 문항·조건·모델 응답과 원기록, 보고서를 하나의 HTML 파일에 담습니다. 현재 필터 밖의 자료도 포함합니다.</p>
+    <div class="notice info">파일을 열면 서버 없이 여덟 화면과 필터를 사용할 수 있습니다. 분석자용 원문 정답도 포함하며, 자료는 내보낸 시점으로 고정됩니다.</div>
+    <p class="small muted">비용·실행 화면의 이벤트는 뷰어와 동일하게 최근 저장 100개까지 포함합니다. 실행 폴더 밖의 제작 기준본은 포함하지 않습니다.</p>
+    <div id="export-status" role="status" aria-live="polite"></div>
+    <div class="export-actions"><button id="download-html">HTML 파일 만들기 ↓</button></div>
+  </dialog>
+</body>
+</html>

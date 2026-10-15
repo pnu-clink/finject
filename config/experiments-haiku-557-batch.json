@@ -1,0 +1,75 @@
+{
+  "layout_version": 2,
+  "evaluation": {
+    "dataset": {
+      "source_run": "reports/run/20260917-003",
+      "input_path": "data/prepared/tatqa/full-20260917/input.json",
+      "count": 557,
+      "require_all_variants_pass": true,
+      "require_collected_results": true
+    },
+    "schedule": {
+      "concurrency": 1
+    },
+    "models": [
+      {
+        "key": "haiku-4.5-batch",
+        "model": "claude-haiku-4-5-20251001",
+        "transport": "anthropic_batch",
+        "workspace_id": "wrkspc_01WERzonMgRrxHvcoc5FSSfW",
+        "key_variable": "CLAUDE_API_KEY",
+        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "reference_price_per_million": {
+          "input": 0.5,
+          "output": 2.5
+        },
+        "price_source": "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+      }
+    ],
+    "reasoning_modes": [
+      "off",
+      "on"
+    ],
+    "thinking_budget": 2048,
+    "max_output_tokens": 8192,
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "run_label": "haiku",
+    "definition_source_run": "reports/experiments-run/20260927-exp-007-luna",
+    "response_contract": "FinancialAnswerV7"
+  },
+  "analysis": {
+    "enabled": true,
+    "backend": "codex",
+    "schedule": {
+      "concurrency": 4,
+      "timeout_seconds": 600
+    },
+    "backends": {
+      "codex": {
+        "model": "gpt-6-sol",
+        "reasoning_effort": "max",
+        "profile": {
+          "id": "sol6-max-cli",
+          "path": "/Volumes/EX400U/workspace/논문/fin-arch/config/codex-profiles.toml",
+          "sha256": "d848c329d7f7abf2f5f0ec7e93f153ec268602738d4e8b4dea5ea674a9533645",
+          "argv": [
+            "-m",
+            "gpt-6-sol",
+            "-c",
+            "model_reasoning_effort=max",
+            "--skip-git-repo-check"
+          ],
+          "model": "gpt-6-sol",
+          "effort": "max",
+          "config_overrides": {
+            "model_reasoning_effort": "max"
+          },
+          "provider": "codex"
+        }
+      }
+    },
+    "technical_retry_limit": 1,
+    "automatic_experiment_improvements": false
+  }
+}

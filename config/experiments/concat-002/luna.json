@@ -1,0 +1,68 @@
+{
+  "evaluation": {
+    "dataset": {
+      "generated_path": "data/generated/20261003-concat-002",
+      "count": 1260,
+      "require_all_variants_pass": true,
+      "require_external_knowledge": true,
+      "require_generated": true
+    },
+    "schedule": {},
+    "models": [
+      {
+        "key": "luna-api",
+        "model": "gpt-6-luna",
+        "transport": "openai_batch",
+        "key_variable": "OPENAI_API_KEY",
+        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "reasoning_efforts": {
+          "off": "none",
+          "on": "medium"
+        },
+        "output_limits": {
+          "off": 65536,
+          "on": 65536
+        },
+        "profiles": {
+          "off": {
+            "id": "luna6-none-api",
+            "path": "/Volumes/EX400U/workspace/논문/fin-arch/config/experiments/config.toml",
+            "sha256": "7a8dc3d005e3d0ef6e121a46f2bf56e7331abf895064b754ba5edef0100f2571",
+            "transport": "api",
+            "provider": "openai",
+            "model": "gpt-6-luna",
+            "effort": "none",
+            "max_output_tokens": 65536,
+            "total_token_budget": null,
+            "argv": [],
+            "config_overrides": {}
+          },
+          "on": {
+            "id": "luna6-medium-api",
+            "path": "/Volumes/EX400U/workspace/논문/fin-arch/config/experiments/config.toml",
+            "sha256": "7a8dc3d005e3d0ef6e121a46f2bf56e7331abf895064b754ba5edef0100f2571",
+            "transport": "api",
+            "provider": "openai",
+            "model": "gpt-6-luna",
+            "effort": "medium",
+            "max_output_tokens": 65536,
+            "total_token_budget": null,
+            "argv": [],
+            "config_overrides": {}
+          }
+        }
+      }
+    ],
+    "reasoning_modes": [
+      "off",
+      "on"
+    ],
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "definition_source_run": null,
+    "run_label": "concat-002-luna"
+  },
+  "analysis": {
+    "enabled": false
+  }
+}

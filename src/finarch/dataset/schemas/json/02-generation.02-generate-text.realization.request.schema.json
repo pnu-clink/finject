@@ -1,0 +1,171 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "RealizationSlot": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "before": {
+          "title": "Before",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "element_ids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Element Ids",
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "VALUE",
+            "SOURCE_A",
+            "SOURCE_B",
+            "RELATION",
+            "EA"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "instruction": {
+          "minLength": 1,
+          "title": "Instruction",
+          "type": "string"
+        },
+        "exact_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exact Text"
+        },
+        "required_prefix": {
+          "title": "Required Prefix",
+          "type": "string"
+        },
+        "allowed_numbers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Numbers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "before",
+        "text",
+        "element_ids",
+        "kind",
+        "instruction",
+        "exact_text",
+        "required_prefix",
+        "allowed_numbers"
+      ],
+      "title": "RealizationSlot",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Internal input projection; only the response schema is sent to the LLM.",
+  "properties": {
+    "context": {
+      "minLength": 1,
+      "title": "Context",
+      "type": "string"
+    },
+    "question": {
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "axis": {
+      "enum": [
+        "IC_VALUE",
+        "IC_SOURCE",
+        "IC_RELATION",
+        "EA"
+      ],
+      "title": "Axis",
+      "type": "string"
+    },
+    "python_code": {
+      "minLength": 1,
+      "title": "Python Code",
+      "type": "string"
+    },
+    "graph_structure": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "minItems": 1,
+      "title": "Graph Structure",
+      "type": "array"
+    },
+    "edit_slots": {
+      "items": {
+        "$ref": "#/$defs/RealizationSlot"
+      },
+      "minItems": 1,
+      "title": "Edit Slots",
+      "type": "array"
+    },
+    "instructions": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Instructions",
+      "type": "array"
+    },
+    "tagged_context": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Tagged Context"
+    }
+  },
+  "required": [
+    "context",
+    "question",
+    "axis",
+    "python_code",
+    "graph_structure",
+    "edit_slots",
+    "instructions",
+    "tagged_context"
+  ],
+  "title": "RealizationRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:02-generation.02-generate-text.realization.request:v1"
+}

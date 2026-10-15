@@ -1,0 +1,69 @@
+{
+  "$defs": {
+    "EvidenceCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "context",
+            "question"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "quote",
+        "reason"
+      ],
+      "title": "EvidenceCitation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "conclusion": {
+      "enum": [
+        "POT_ERROR",
+        "GOLD_ERROR",
+        "AMBIGUOUS",
+        "UNRESOLVED"
+      ],
+      "title": "Conclusion",
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceCitation"
+      },
+      "minItems": 1,
+      "title": "Evidence",
+      "type": "array"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "conclusion",
+    "evidence",
+    "reason"
+  ],
+  "title": "EvidenceResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.03-calculation.review-answer-evidence.response:v1"
+}

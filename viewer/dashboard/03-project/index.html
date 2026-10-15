@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>프로젝트 진행상황 · FIN ARCH</title>
+  <link rel="stylesheet" href="./project.css">
+  <script src="./project.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 이동</a>
+  <header class="topbar">
+    <a class="brand" href="/dashboard/03-project/"><span class="brand-mark">F·A</span><span><strong>FIN ARCH</strong><small>PROJECT CONTROL</small></span></a>
+    <nav aria-label="대시보드 화면"><a class="selected" aria-current="page" href="/dashboard/03-project/">프로젝트</a><a href="/dashboard/01-overview/">실험 숫자</a><a href="/dashboard/02-explorer/">문항 분석</a></nav>
+    <span class="local-pill">● 로컬 저장 기록</span>
+  </header>
+
+  <main id="main" class="console" aria-busy="true">
+    <div class="command-bar"><div><p class="eyebrow">PROJECT OPERATIONS / FIN ARCH</p><h1>프로젝트 현황</h1><p class="scope" id="scope-note">로컬 세션과 저장된 실행 기록을 읽고 있습니다.</p></div><div class="command-actions"><span id="updated-at">마지막 확인 —</span><button id="refresh" type="button">↻ 새로 읽기</button></div></div>
+    <div id="warnings" class="warnings" role="status" hidden></div>
+    <section id="summary-grid" class="summary-grid" aria-label="핵심 현황"><p>저장 기록을 확인하고 있습니다.</p></section>
+
+    <div class="workspace">
+      <aside class="structure panel" aria-labelledby="structure-title">
+        <div class="panel-head"><div><p class="section-code">01 / SESSION MAP</p><h2 id="structure-title">프로젝트 구조</h2></div><b id="structure-count">—</b></div>
+        <p class="structure-help">업무별 주요 세션을 모두 표시합니다. 세션을 누르면 최근 요청과 관련 미완료를 볼 수 있습니다.</p>
+        <div class="signal-legend"><span><i class="signal active"></i>작업 중</span><span><i class="signal blocked"></i>막힘 연결</span><span><i class="signal pending"></i>미완료 연결</span><span><i class="signal idle"></i>대기</span></div>
+        <div id="structure-list" class="structure-list"></div>
+        <div class="lineage-foot"><span id="lineage-summary">실제 생성 관계 확인 중</span><button type="button" id="lineage-open">부모·자식 보기 ↗</button></div>
+      </aside>
+
+      <div class="workspace-main">
+        <section id="stage-strip" class="stage-strip" aria-label="제작부터 연구까지 저장 상태"></section>
+        <div class="main-grid">
+          <section class="panel priority-panel" aria-labelledby="priority-title"><div class="panel-head"><div><p class="section-code">02 / ACTION QUEUE</p><h2 id="priority-title">지금 확인할 일</h2></div><button type="button" id="all-tasks">전체 <span id="task-count">—</span>건 ↗</button></div><div id="priority-list" class="compact-list"></div></section>
+          <section class="panel active-panel" aria-labelledby="active-title"><div class="panel-head"><div><p class="section-code">03 / LIVE SESSIONS</p><h2 id="active-title">현재 진행 중</h2></div><span id="active-count" class="count">—</span></div><div id="active-list" class="active-list"></div><p class="panel-note">작업 중은 Codex 대화 턴 상태입니다. 실행 성공이나 사용자 승인을 뜻하지 않습니다.</p></section>
+        </div>
+        <div class="main-grid secondary-grid">
+          <section class="panel runs-panel" aria-labelledby="runs-title"><div class="panel-head"><div><p class="section-code">04 / SAVED RUNS</p><h2 id="runs-title">실행별 단계</h2></div><span class="head-note">다른 입력 집단은 합산하지 않음</span></div><div id="run-list" class="run-list"></div></section>
+          <section class="panel areas-panel" aria-labelledby="areas-title"><div class="panel-head"><div><p class="section-code">05 / BY AREA</p><h2 id="areas-title">업무별 남은 일</h2></div></div><div id="area-list" class="area-list"></div></section>
+        </div>
+        <section class="service-strip" aria-label="조회 서버 상태"><strong>조회 서버</strong><div id="service-list"></div></section>
+      </div>
+    </div>
+    <footer class="footer">업무별 묶음은 화면 분류입니다. 실제 부모·자식은 Codex 생성 기록에서만 읽습니다. · <span id="source-age">1분마다 갱신</span></footer>
+  </main>
+
+  <dialog id="detail-dialog" class="detail-dialog" aria-labelledby="dialog-title"><div class="dialog-shell"><div class="dialog-head"><div><p id="dialog-kicker" class="section-code"></p><h2 id="dialog-title"></h2><p id="dialog-subtitle"></p></div><button type="button" id="close-detail" aria-label="상세 닫기">×</button></div><div id="dialog-body" class="dialog-body"></div></div></dialog>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "retryable": {
+      "title": "Retryable",
+      "type": "boolean"
+    },
+    "target_step": {
+      "minLength": 1,
+      "title": "Target Step",
+      "type": "string"
+    },
+    "diagnosis": {
+      "minLength": 1,
+      "title": "Diagnosis",
+      "type": "string"
+    },
+    "guidance": {
+      "minLength": 1,
+      "title": "Guidance",
+      "type": "string"
+    }
+  },
+  "required": [
+    "retryable",
+    "target_step",
+    "diagnosis",
+    "guidance"
+  ],
+  "title": "ExceptionResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:shared.01-06.02-04.exception-handler.response:v1"
+}

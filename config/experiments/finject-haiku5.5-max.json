@@ -1,0 +1,34 @@
+{
+  "evaluation": {
+    "dataset": {
+      "generated_path": "data/final/finject-20261007",
+      "count": 1354,
+      "require_all_variants_pass": true,
+      "require_external_knowledge": true,
+      "require_generated": true
+    },
+    "schedule": {"concurrency": 1},
+    "models": [
+      {
+        "key": "haiku-5.5-batch",
+        "model": "claude-haiku-5-5",
+        "transport": "anthropic_batch",
+        "workspace_id": "wrkspc_01WERzonMgRrxHvcoc5FSSfW",
+        "key_variable": "CLAUDE_API_KEY",
+        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "reference_price_per_million": {"input": 0.05, "output": 0.25},
+        "price_source": "https://platform.claude.com/docs/en/about-claude/pricing",
+        "prices_checked_on": "2026-10-09",
+        "reasoning_efforts": {"on": "max"},
+        "output_limits": {"on": 128000}
+      }
+    ],
+    "reasoning_modes": ["on"],
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "definition_source_run": null,
+    "run_label": "finject-haiku-5-5-max",
+    "max_output_tokens": 128000
+  },
+  "analysis": {"enabled": false}
+}

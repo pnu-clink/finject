@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "JsonValue": {}
+  },
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "minLength": 1,
+      "title": "Context",
+      "type": "string"
+    },
+    "question": {
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "original_program": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Original Program",
+      "type": "object"
+    },
+    "independent_program": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Independent Program",
+      "type": "object"
+    },
+    "original_result": {
+      "minLength": 1,
+      "title": "Original Result",
+      "type": "string"
+    },
+    "independent_result": {
+      "minLength": 1,
+      "title": "Independent Result",
+      "type": "string"
+    },
+    "gold": {
+      "minLength": 1,
+      "title": "Gold",
+      "type": "string"
+    }
+  },
+  "required": [
+    "context",
+    "question",
+    "original_program",
+    "independent_program",
+    "original_result",
+    "independent_result",
+    "gold"
+  ],
+  "title": "EvidenceRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.03-calculation.review-answer-evidence.request:v1"
+}

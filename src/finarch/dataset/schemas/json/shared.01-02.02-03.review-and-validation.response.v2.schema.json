@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "AuditEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "original_context",
+            "context",
+            "question"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "quote"
+      ],
+      "title": "AuditEvidence",
+      "type": "object"
+    },
+    "AuditFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion": {
+          "enum": [
+            "preservation",
+            "planned_change",
+            "scope",
+            "source_assignment",
+            "unplanned_content",
+            "readability",
+            "explicit_resolution",
+            "ea_consistency"
+          ],
+          "title": "Criterion",
+          "type": "string"
+        },
+        "judgment": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN",
+            "NOT_APPLICABLE"
+          ],
+          "title": "Judgment",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/AuditEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        }
+      },
+      "required": [
+        "criterion",
+        "judgment",
+        "reason",
+        "evidence"
+      ],
+      "title": "AuditFinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/AuditFinding"
+      },
+      "maxItems": 8,
+      "minItems": 8,
+      "title": "Findings",
+      "type": "array"
+    },
+    "observed_state": {
+      "enum": [
+        "CONFLICT",
+        "MISSING_TARGET_EVIDENCE",
+        "ANSWERABLE",
+        "RESOLVED",
+        "MIXED",
+        "UNKNOWN"
+      ],
+      "title": "Observed State",
+      "type": "string"
+    },
+    "state_reason": {
+      "minLength": 1,
+      "title": "State Reason",
+      "type": "string"
+    },
+    "state_evidence": {
+      "items": {
+        "$ref": "#/$defs/AuditEvidence"
+      },
+      "minItems": 1,
+      "title": "State Evidence",
+      "type": "array"
+    }
+  },
+  "required": [
+    "findings",
+    "observed_state",
+    "state_reason",
+    "state_evidence"
+  ],
+  "title": "LegacyAuditResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:shared.01-02.02-03.review-and-validation.response.v2:v2"
+}

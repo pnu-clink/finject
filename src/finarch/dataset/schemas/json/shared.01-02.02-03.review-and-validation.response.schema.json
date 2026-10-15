@@ -1,0 +1,58 @@
+{
+  "$defs": {
+    "CompactAuditFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion": {
+          "enum": [
+            "planned_change",
+            "unintended_change",
+            "readability"
+          ],
+          "title": "Criterion",
+          "type": "string"
+        },
+        "judgment": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ],
+          "title": "Judgment",
+          "type": "string"
+        },
+        "reason": {
+          "description": "Empty for PASS; a concrete English explanation for FAIL or UNKNOWN.",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "criterion",
+        "judgment",
+        "reason"
+      ],
+      "title": "CompactAuditFinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/CompactAuditFinding"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Findings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "findings"
+  ],
+  "title": "AuditResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:shared.01-02.02-03.review-and-validation.response:v4"
+}

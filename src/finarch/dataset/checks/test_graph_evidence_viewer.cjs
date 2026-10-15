@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const html=fs.readFileSync('viewer/dataset/index.html','utf8');for(const match of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new vm.Script(match[1].replace('__FINARCH_DATA__','{}'));
+const c={};vm.createContext(c);vm.runInContext(fs.readFileSync('viewer/dataset/prepare/answer/04-graph/evidence.js','utf8'),c);
+for(const t of ['IN_CONTEXT_DATA','EXTERNAL_RULE','EXTERNAL_DATA'])assert.equal(c.graphEvidenceType({evidence_type:t}),t);
+for(const t of [null,'','OTHER',[],{}])assert.equal(c.graphEvidenceType({evidence_type:t}),null);
+assert(c.externalGraphNode({id:'x',evidence_id:'table'},{edges:[]}));
+assert(!c.externalGraphNode({id:'x',kind:'constant'},{edges:[]}));
+assert(c.externalGraphNode({id:'x'},{edges:[{from:'x',evidence_type:'EXTERNAL_RULE'}]}));
+assert.equal(c.graphEvidenceEdges({nodes:[{id:'b',inputs:['a']}]}).length,1);
+console.log('PASS: script syntax, three evidence classes, invalid classes, external node detection, legacy missing classification');

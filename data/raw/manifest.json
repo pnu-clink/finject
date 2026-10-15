@@ -1,0 +1,57 @@
+{
+  "format": "fin-arch-raw-manifest-v1",
+  "purpose": "Project-owned source dataset copies before preparation; no record edits or synthetic additions.",
+  "files": [
+    {
+      "name": "finance-easy",
+      "file": "finance-easy.json",
+      "upstream_url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/easy.json",
+      "upstream_commit": "b0fe6455396f831955e4eb988472b4a563403bc5",
+      "sha256": "53890ee130f33759cf53cc71943248671e27e6035e75e4234373587784e56dd9",
+      "bytes": 4052714,
+      "record_count": 1000,
+      "imported_from": "/Volumes/EX400U/workspace/논문/fin-astra/data/000_raw/finance-easy.json",
+      "imported_on": "2026-09-07",
+      "verification": "byte-identical to existing local source and matches pinned catalog hash; no upstream network re-download in this task"
+    },
+    {
+      "name": "tatqa-dev",
+      "file": "tatqa-dev.json",
+      "upstream_url": "https://raw.githubusercontent.com/NExTplusplus/TAT-QA/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw/tatqa_dataset_dev.json",
+      "upstream_commit": "870accc41953dcde885aabeb963d94aabdc0fbc3",
+      "sha256": "8da095a819af6db3c14877c6df2d4d29960e41d1a63dd1fa853507bd2a616af5",
+      "bytes": 1637431,
+      "record_count": 278,
+      "imported_from": "/Volumes/EX400U/workspace/논문/fin-astra/data/000_raw/tatqa-dev.json",
+      "imported_on": "2026-09-07",
+      "verification": "byte-identical to existing local source and matches pinned catalog hash; no upstream network re-download in this task"
+    },
+    {
+      "name": "finance-medium",
+      "file": "finance-medium.json",
+      "upstream_url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/medium.json",
+      "upstream_commit": "b0fe6455396f831955e4eb988472b4a563403bc5",
+      "upstream_git_blob_sha1": "e6dc022e6794761686c39715cd8fe3dd35da0ece",
+      "sha256": "98098f9b54c0a8c6192b3f3f8b7afe514b0fef2b0972ff0fe63ff43202c20e22",
+      "bytes": 3610611,
+      "record_count": 1000,
+      "imported_from": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/medium.json",
+      "imported_on": "2026-09-07",
+      "verification": "Downloaded bytes match official GitHub contents API size and git blob hash at the pinned commit; JSON parsed without rewriting raw."
+    },
+    {
+      "name": "finance-hard",
+      "file": "finance-hard.json",
+      "upstream_url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/hard.json",
+      "upstream_commit": "b0fe6455396f831955e4eb988472b4a563403bc5",
+      "upstream_git_blob_sha1": "f6b2e6a1ceb8e88ace020a10652914d7c2bb306a",
+      "sha256": "ca8c055ef104176131da2e0f533897350cde3b93c4754575b09c7c7fbd046d9f",
+      "bytes": 874349,
+      "record_count": 238,
+      "imported_from": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/hard.json",
+      "imported_on": "2026-09-07",
+      "verification": "Downloaded bytes match official GitHub contents API size and git blob hash at the pinned commit; JSON parsed without rewriting raw."
+    }
+  ],
+  "update_policy": "Preserve these bytes. Store changed upstream versions separately with a new manifest; do not overwrite raw or previous prepared outputs."
+}

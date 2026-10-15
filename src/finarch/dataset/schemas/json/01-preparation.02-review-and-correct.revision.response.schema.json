@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "TextEdit": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "context",
+            "question"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "before": {
+          "title": "Before",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "start",
+        "end",
+        "before",
+        "text",
+        "reason"
+      ],
+      "title": "TextEdit",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "disposition": {
+      "enum": [
+        "REVISED",
+        "AMBIGUOUS",
+        "UNCHANGED"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "edits": {
+      "items": {
+        "$ref": "#/$defs/TextEdit"
+      },
+      "title": "Edits",
+      "type": "array"
+    },
+    "reason": {
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "disposition",
+    "edits",
+    "reason"
+  ],
+  "title": "RevisionResponse",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.02-review-and-correct.revision.response:v1"
+}

@@ -1,0 +1,35 @@
+# Annotation 관리자 로컬 검증 · 2026-10-01 입력
+
+[관리자 화면](http://127.0.0.1:8893/annotation/?date=20261001) · [입력과 보완 내역](../../annotation/20261001/README.md) · [파일별 실제 흐름](../../docs/01-dataset/90-operations/04-viewer.md).
+
+읽는 순서는 `validation.json` → `python-checks.log` → `browser-checks.json` → 화면 캡처입니다. 실제 입력 원본의 전후 해시, 형식 보완, 공통 평가 분모, 유형별 κ, 단축키·입력 보호·오류 표시의 확인 범위를 기록합니다. 없는 검증은 통과로 간주하지 않습니다.
+
+2026-10-03 화면 속도 변경은 [latency-20261003-report.json](latency-20261003-report.json) → [변경 전 브라우저 측정](latency-20261003-browser-before.json) → [변경 후 브라우저 측정](latency-20261003-browser-after.json) → [기능 확인](latency-20261003-browser-checks.json) → [렌더링 검사](latency-20261003-rendering-checks.log)·[한영 표시 검사](latency-20261003-i18n-checks.log) → [문서 검사](latency-20261003-documentation-checks.json) → [실제 화면](annotation-latency-20261003.png) 순서로 읽습니다. [변경 전 API 시간·원본 해시](latency-20261003-before.json), [실제 조회 자료](latency-20261003-view.json), [선택 문항 G02 자료](latency-20261003-g02.json)는 현재 1,080개 공통 평가 자료이며 이전 314개 공통 평가 기록과 구별합니다.
+
+속도 비교는 같은 실제 조회 자료를 읽기 전용 임시 서버에서 제공하고 6회 유형 이동의 함수 시간·두 프레임 경과 시간을 측정했습니다. 한국어·영어·번역 제외 조건을 비교합니다. [serve_annotation_latency.py](../../src/finarch/dataset/checks/serve_annotation_latency.py)는 저장 요청을 차단하고 현재 소스에 측정 표시만 삽입합니다. [test_annotation_rendering.cjs](../../src/finarch/dataset/checks/test_annotation_rendering.cjs)는 유형 이동의 목록 재생성 방지·문제 선택·필터를 초기화하는 V 동작을 확인합니다. 기능 검사와 실제 화면 확인은 저장 없이 수행하며 입력 원본·관리자 기록의 해시를 전후 대조합니다. 최초 서버 자료 읽기의 지연은 별도로 기록하며 이번 화면 수정으로 해결했다고 주장하지 않습니다. 모델 호출·실제 주석 저장은 없습니다.
+
+2026-10-02 첫 높이 축소 방식의 확인 순서는 [compact-layout-browser-checks.json](compact-layout-browser-checks.json) → [compact-layout-fixture-results.json](compact-layout-fixture-results.json) → [compact-layout-original-checks.json](compact-layout-original-checks.json) → [compact-layout-documentation-checks.json](compact-layout-documentation-checks.json) → [annotation-compact-layout.jpg](annotation-compact-layout.jpg)입니다. [compact-layout-before.json](compact-layout-before.json)은 변경 전 실제 화면 높이입니다. 7개 유형·유형/상태/G02 한 줄·120px 평가자 칸·30px 한 줄 주석과 오른쪽 수동 저장·전체 본문 펼치기·페이지와 내부 영역의 스크롤을 구별해 확인합니다. 브라우저가 실제 보고한 CSS 화면 크기를 기록하며 모든 크기·문항에서 표 내부 스크롤까지 없음을 주장하지 않습니다. 수동 저장·단축키·여러 줄 기존 주석 보존·저장 기록 펼치기·유형별 초안은 임시 두 문항에서 확인하며 실제 관리자 주석을 쓰지 않습니다. [compact-layout-fixture-setup.json](compact-layout-fixture-setup.json)은 임시 서버의 입력 해시와 변경 전 κ입니다. 이번 변경은 화면 배치이며 이전 42개 Python 검사 기록은 해당 시점의 결과로 유지합니다.
+
+검증용 입력은 Python의 임시 디렉터리에만 만들며 실제 날짜 폴더에 가짜 평가를 추가하지 않습니다. 모델 호출과 제작 데이터 재채점은 없습니다. 자동 기능 확인과 사용자 수용·의미 검증은 구별합니다.
+
+Source type 필터 추가의 현재 확인 범위는 `source-filter-checks.json`과 `source-filter-python.log`, `annotation-source-filter.jpg`입니다. 저장 원본 출처·해시와 같은 번호의 다른 출처를 대조하며 실제 종류별 문항 수, 필터 결합·단축키 이동·전체 κ 보존을 확인합니다.
+
+G02 전체 문장 연결의 확인 범위는 `g02-link-checks.json` → `g02-python-checks.log` → `g02-api-checks.json` → `g02-browser-checks.json` → `annotation-g02-links.jpg`와 `annotation-g02-full-context.jpg` 순서로 읽습니다. 유형별 실제 생성 차수, IC-SOURCE의 값·출처 삽입 합성, 같은 편집의 서로 다른 전체 본문 차단, 선택 문제만 조회하는 API, G02 새 탭·본문 자동 이동과 관리자 선택 유지의 실제 확인 여부를 구별해 기록합니다.
+
+전체 문서 연결 검사 결과는 `g02-documentation-checks.json`에 별도로 기록합니다. Annotation 기능 검사와 구별하며 다른 작업의 누락 문서도 검사 결과에 그대로 남깁니다.
+
+전체 문항 목록의 확인 범위는 `full-list-browser-checks.json`과 `annotation-full-list.jpg`입니다. 실제 화면의 전체 1,080문항, Source type·판정·검색 조건에 맞는 모든 항목, 목록 넘김 버튼 제거와 Q/E 이동을 확인합니다. 현재 문서 검사는 `full-list-documentation-checks.json`에 별도로 기록합니다.
+
+이전 관리자 팝업·전달용 HTML의 확인 기록은 `manager-review-python-checks.log` → `manager-review-browser-checks.json` → `manager-review-documentation-checks.json` → `annotation-manager-review.jpg`와 `annotation-manager-review-dialog.jpg` 순서로 보존합니다. 저장 버전 충돌·입력 변경·원본 보존·수신자 분리·전체 본문·HTML 삽입 문자열·ZIP을 로컬 검사했습니다. 브라우저에서 저장을 하는 검증은 임시 입력 두 문항만 사용하고, 실제 20261001 입력은 조회·화면 확인만 합니다. 검증용 다운로드·화면은 `manager-review-fixture-export.zip`과 `annotation-recipient-html-fixture.jpg`로 구별하며 실제 평가자에게 전달할 주석이 아닙니다. 서버 종료 후에도 전달용 HTML의 검색·종류 필터·Q/E가 작동하는지와 다운로드 파일의 실제 내용을 확인했습니다. 자동 검사와 사용자 수용은 구별합니다.
+
+`manager-review-download-checks.json`은 실제 다운로드된 ZIP·개별 HTML의 파일명·주석 분리·전체 본문·해시를 기록합니다. 브라우저 다운로드 이벤트는 시간 초과였으나 실제 다운로드 파일을 읽어 검증한 사실을 구별합니다. `manager-review-legacy-checks.json`은 실제 labels 입력의 7유형·G02 근거를 읽고 메모리 안의 검증용 요청만으로 평가자 이름·원본 주석·전체 본문을 확인한 기록입니다. 실제 관리자 주석은 생성하지 않습니다.
+
+이전 단일 유형 버튼 검증은 `type-filter-browser-checks.json`과 `annotation-type-filter.jpg`에 보존합니다. 현재 체크박스 방식과 관리자 하단 배치는 `multi-type-filter-browser-checks.json` → `multi-type-filter-documentation-checks.json` → `annotation-multi-type-filter.jpg` 순서로 확인합니다. IC-VALUE 두 유형·서로 떨어진 여러 유형·모두/없음 체크·문항 이동·새로고침·같은 탭 재접속 유지·체크한 유형 안의 A/D/B 이동·본문 하단 관리자 필터·왼쪽 목록 높이·직접 입력의 저장 대상·G02 대상·전체 κ 보존의 실제 확인 여부를 기록합니다. 화면 표시 변경이며 원본 평가와 관리자 주석을 저장하지 않습니다.
+
+현재 직접 입력 방식은 `inline-review-browser-checks.json` → `inline-review-fixture-results.json` → `inline-review-python-checks.log` → `inline-review-documentation-checks.json` → `annotation-inline-review.jpg` 순서로 읽습니다. 실제 화면의 입력창·팝업 제거·현재 유형 연결과 복수 체크박스를 확인하며, 저장·4구분·단축키·입력 보호·유형/문항별 초안 유지·수정·수신자 분리·새로고침 후 기록 유지는 임시 두 문항에서 확인합니다. `inline-review-fixture-setup.json`은 임시 서버·원본 해시·변경 전 κ이고 `inline-review-fixture-reviews.json`과 `inline-review-fixture-review-history.jsonl`은 검증용 저장·이력입니다. 실제 입력에서 검증용 주석을 저장하지 않습니다. 로컬 자동 검사와 사용자 수용은 구별합니다.
+
+`inline-review-original-checks.json`은 실제 입력 원본의 해시 보존과 현재 소스 해시를 기록합니다. `inline-review-server-checks.json`은 현재 서버의 프로젝트·주소·재시작 정보를, `inline-review-server.log`는 해당 서버의 실행 출력을 담습니다. 임시 서버는 저장 결과·이력을 기록한 뒤 종료했으며 임시 입력도 정리했습니다. 현재 관리자 화면은 기존 8893 서버에서 실제 날짜 폴더를 읽습니다.
+
+2026-10-02 사용자 후속 요청에 따른 현재 PC 전용 화면은 [readable-layout-browser-checks.json](readable-layout-browser-checks.json) → [readable-layout-original-checks.json](readable-layout-original-checks.json) → [readable-layout-documentation-checks.json](readable-layout-documentation-checks.json) → [annotation-readable-layout.jpg](annotation-readable-layout.jpg) 순서로 확인합니다. 글씨는 첫 압축 화면의 125%이며 비교 표의 평가자 합계 40%와 유형·본문 합계 60%, 유형명 다음 줄의 상태·주석/G02, 기본 두 줄 본문·주석을 실제 크기로 확인합니다. 문의·확인·수정 주석 저장 경로는 그대로이며 앞선 임시 자료 저장 검증을 보존합니다. 한 줄 입력창은 큰 글씨에 맞춰 34px입니다. 큰 화면에서 실제 test-0008의 모든 주석·7행 표시를 확인하며 모바일 검사는 진행하지 않으며 긴 펼친 내용의 내부 스크롤은 구별해 기록합니다. 실제 원본·κ·관리자 주석은 이 표시 변경으로 바꾸지 않습니다.
+
+2026-10-02 주석 입력 동선 변경은 [review-focus-browser-checks.json](review-focus-browser-checks.json) → [review-focus-python-checks.log](review-focus-python-checks.log) → [review-focus-fixture-results.json](review-focus-fixture-results.json) → [review-focus-original-checks.json](review-focus-original-checks.json) → [review-focus-documentation-checks.json](review-focus-documentation-checks.json) → [annotation-review-focus.jpg](annotation-review-focus.jpg) 순서로 확인합니다. 1 확인 버튼과 단축키를 제거하고, 2·3은 주석 없음이 기본이며 선택 시 저장 버튼으로 포커스를 보내 Enter로 바로 저장합니다. 4는 입력창으로 포커스를 보내며 수정 내용이 필수입니다. 두 빈 주석 문의와 내용이 있는 수정 요청의 저장·수신자별 HTML 내보내기·빈 수정 거절은 임시 두 문항에서 확인하며 실제 관리자 기록은 조회만 합니다. [review-focus-fixture-reviews.json](review-focus-fixture-reviews.json)과 [review-focus-fixture-history.jsonl](review-focus-fixture-history.jsonl)은 검증용 기록입니다. 이전 확인 기록은 보존하며 기록이 있을 때만 표시합니다. PC 배치·평가자 40%·글씨 125%는 유지합니다. 이번 저장 검사 16개는 현재 결과이며 이전 시점의 검사 기록과 구별합니다. 모델 호출과 실제 입력 재채점은 없습니다.

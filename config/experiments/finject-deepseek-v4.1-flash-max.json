@@ -1,0 +1,40 @@
+{
+  "evaluation": {
+    "dataset": {
+      "generated_path": "data/final/finject-20261007",
+      "count": 1354,
+      "require_all_variants_pass": true,
+      "require_external_knowledge": true,
+      "require_generated": true
+    },
+    "schedule": {
+      "concurrency": 20,
+      "fallback_group_size": 2,
+      "timeout_seconds": 1800,
+      "retry_delay_seconds": 60,
+      "max_rate_limit_attempts": 3
+    },
+    "models": [{
+      "key": "deepseek-v4.1-flash-orca",
+      "model": "deepseek/deepseek-v4.1-flash",
+      "transport": "orca_api",
+      "endpoint": "https://api.orcarouter.ai/v1/chat/completions",
+      "key_variable": "ORCA_API_KEY",
+      "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+      "reasoning_efforts": {"off": "none", "on": "max"},
+      "output_limits": {"off": 65536, "on": 65536},
+      "reference_price_per_million": {"input": 0.15, "output": 0.6, "cached_input": 0.003},
+      "peak_price_multiplier": 2,
+      "peak_pricing_utc": "Weekdays 01:00-04:00 and 06:00-10:00",
+      "price_source": "https://www.orcarouter.ai/models/deepseek/deepseek-v4.1-flash",
+      "prices_checked_on": "2026-10-09"
+    }],
+    "reasoning_modes": ["off", "on"],
+    "seed": 20260920,
+    "output_root": "reports/experiments-run",
+    "definition_source_run": null,
+    "run_label": "finject-deepseek-v4-1-flash-max",
+    "max_output_tokens": 65536
+  },
+  "analysis": {"enabled": false}
+}

@@ -1,0 +1,92 @@
+# Experiment configuration. Python resolves these profiles and freezes each run.
+# This is a project pipeline file, not the Codex application's personal config.
+version = 1
+
+[evaluation.schedule.dataset]
+generated_path = "data/generated/20261003-003"
+count = 291
+require_all_variants_pass = true
+require_external_knowledge = true
+
+[evaluation.run]
+transport = "batch"
+cache = "off"
+seed = 20260920
+run_label = "tatqa-luna"
+
+[evaluation.run.models.luna-api]
+off = "luna6-none-api"
+on = "luna6-medium-api"
+
+[analysis.schedule]
+concurrency = 100
+timeout_seconds = 1800
+
+[analysis.schedule.adaptive]
+enabled = true
+interval_seconds = 60
+cpu_threshold_percent = 60
+growth_percent = 10
+
+[analysis.run]
+backend = "codex" # Choose "codex" or "api" before freezing Analysis.
+technical_retry_limit = 1
+
+[analysis.run.models]
+codex = "luna6-max-cli"
+api = "sol61-low-api"
+
+[profiles.luna6-none-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "none"
+max_output_tokens = 65536
+
+[profiles.luna6-medium-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-luna"
+effort = "medium"
+max_output_tokens = 65536
+
+[profiles.sol6-max-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6-sol", "-c", "model_reasoning_effort=max", "--skip-git-repo-check"]
+
+[profiles.sol6-max-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6-sol"
+effort = "max"
+max_output_tokens = 65536
+
+[profiles.sol61-max-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6.1-sol", "-c", "model_reasoning_effort=max", "--skip-git-repo-check"]
+
+[profiles.sol61-max-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6.1-sol"
+effort = "max"
+max_output_tokens = 65536
+
+[profiles.sol61-low-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6.1-sol", "-c", "model_reasoning_effort=low", "--skip-git-repo-check"]
+
+[profiles.sol61-low-api]
+transport = "api"
+provider = "openai"
+model = "gpt-6.1-sol"
+effort = "low"
+max_output_tokens = 65536
+
+[profiles.luna6-max-cli]
+transport = "cli"
+provider = "codex"
+argv = ["-m", "gpt-6-luna", "-c", "model_reasoning_effort=max", "--skip-git-repo-check"]

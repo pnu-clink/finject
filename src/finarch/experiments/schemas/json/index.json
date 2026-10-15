@@ -1,0 +1,37 @@
+[
+  {
+    "schema_id": "01-evaluation.02-request.solver.response",
+    "file": "01-evaluation.02-request.solver.response.schema.json",
+    "title": "FinancialAnswerV7",
+    "sha256": "48f7ab8f25cac6c703a8c2413a7b4bcdcecb2ff63695ac13f6b255a932e2a0d1",
+    "role": "solver_response"
+  },
+  {
+    "schema_id": "02-analysis.02-comparison.interpretations",
+    "file": "02-analysis.02-comparison.interpretations.schema.json",
+    "title": "ResultsRelationshipInterpretationsV2",
+    "sha256": "900f7a6dabbf8d6c9e13b88970c6187cad388fd680d185c1d8d1fb1e14e678a8",
+    "role": "interpretations"
+  },
+  {
+    "schema_id": "02-analysis.02-comparison.response",
+    "file": "02-analysis.02-comparison.response.schema.json",
+    "title": "ResultsRelationshipCallV2",
+    "sha256": "00913e0d3c522c7e82345c81c4c4f7ac208248914341ffc6c3199cd8b1641b36",
+    "role": "comparison_response"
+  },
+  {
+    "schema_id": "02-analysis.03-research.findings.response",
+    "file": "02-analysis.03-research.findings.response.schema.json",
+    "title": "ResultsResearchFindingsV1",
+    "sha256": "ff8c169037325b8e1e40cd3fe5349fd114d558aa54083bbe52d0d9cb4f3613a1",
+    "role": "research_response"
+  },
+  {
+    "schema_id": "02-analysis.04-quadrant.findings.response",
+    "file": "02-analysis.04-quadrant.findings.response.schema.json",
+    "title": "ResearchFindingQuadrants",
+    "sha256": "13887f8b3d0a2df10f4eafb2ab6050f5b36f35ff8e646368687e2562b6299f39",
+    "role": "quadrant_response"
+  }
+]

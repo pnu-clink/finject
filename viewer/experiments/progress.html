@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FIN-ARCH · 진행 대시보드</title>
+  <link rel="stylesheet" href="/progress-dashboard.css">
+  <link rel="stylesheet" href="/i18n.css">
+  <script src="/i18n.js" defer></script>
+  <script type="module" src="/progress-dashboard.mjs"></script>
+</head>
+<body>
+  <header class="masthead"><div class="brand"><span class="symbol">f.</span><div><small>FIN-ARCH / LIVE OPERATIONS</small><strong>진행 대시보드</strong></div></div><a id="detail-link" href="/">실험 결과·근거 보기 ↗</a></header>
+  <main>
+    <div class="toolbar"><label>실행 선택<select id="run" aria-label="실행 선택"></select></label><label>분석 단계<select id="stage" aria-label="분석 단계"><option value="">현재 단계 자동 선택</option><option value="02_comparison">A02 · 문항별 관계 분석</option><option value="03_research">A03 · 연구 해석</option><option value="04_quadrant">A04 · 연구발견 그룹화</option><option value="05_outcomes">Python · 응답 분류</option></select></label><div class="refresh-controls"><span id="freshness" role="status">기록을 읽고 있습니다.</span><button id="auto" aria-pressed="true">자동 갱신 켜짐 · 5초</button><button id="refresh">새로 읽기 ↻</button></div></div>
+    <div id="read-error" class="notice danger" role="alert" hidden></div>
+    <section class="hero"><div><p class="eyebrow" id="run-label">SAVED EXECUTION RECORD</p><h1 id="title">분석 진행 상황</h1><p id="subtitle">저장된 호출·응답 기록을 연결하고 있습니다.</p></div><span id="status" class="status">읽는 중</span></section>
+    <p id="analysis-status" class="analysis-status"></p>
+    <section id="phase-strip" class="phase-strip" aria-label="전체 파이프라인 상태"></section>
+    <p id="stage-records" class="stage-records" aria-label="계획·완료·유효·실패 기록"></p>
+    <section id="counts" class="metrics" aria-label="분석 요청 건수"></section>
+    <section class="completion panel"><div class="completion-head"><strong id="completion-label">진행률 확인 중</strong><span id="count-equation">건수 집계 기준을 확인하고 있습니다.</span></div><div id="progress-bar" class="progress-bar" role="img" aria-label="작업 상태 비율"></div><div id="progress-legend" class="legend"></div></section>
+    <div id="warnings"></div>
+    <section id="timing-metrics" class="timing-metrics" aria-label="처리시간과 실행 환경"></section>
+    <section class="chart-grid">
+      <article class="panel chart-card wide"><div class="chart-head"><div><span class="eyebrow">LATENCY / PER REQUEST</span><h2>건당 처리시간</h2><p>가로: 응답 종료 시각 · 세로: 처리시간(분). 점을 가리키면 개별 기록이 보입니다.</p></div><div class="legend"><span><i class="dot completed"></i>검사 통과</span><span><i class="dot errors"></i>오류·시간 초과</span><span><i class="line average"></i>최근 20건 평균</span></div></div><div id="latency-chart" class="chart"></div><p id="latency-note" class="chart-note"></p></article>
+      <article class="panel chart-card operations-card"><div class="chart-head"><div><span class="eyebrow">CONCURRENCY / RUNNING</span><h2>동시 호출 수</h2><p>가로: 시각 · 세로: 동시 호출 건수</p></div><div class="legend"><span><i class="line running"></i>실제 실행 중</span><span><i class="line dashed"></i>호출 한도</span></div></div><div class="current-reading"><strong id="running-now">—</strong><span id="running-capacity">한도 확인 중</span></div><div id="running-meter" class="meter blue"></div><div class="meter-labels"><span>0건</span><span>호출 한도 대비 실행 수</span></div><div id="running-chart" class="chart"></div><p class="chart-note">파란 영역은 실제 실행 수, 갈색 점선은 저장된 호출 한도입니다. 호출의 시작·종료와 한도 변경 시점을 그대로 계단형으로 표시합니다.</p></article>
+      <article class="panel chart-card operations-card"><div class="chart-head"><div><span class="eyebrow">HOST CPU / SCALING</span><h2>CPU 사용률</h2><p>가로: 시각 · 세로: 전체 CPU 사용률(%)</p></div><div class="legend"><span><i class="line completed"></i>측정 평균</span><span><i class="line threshold"></i>증설 기준</span></div></div><div class="current-reading"><strong id="cpu-now">—</strong><span id="cpu-sampled">측정 확인 중</span></div><div id="cpu-meter" class="meter green"></div><div class="meter-labels"><span>0%</span><span id="cpu-threshold">증설 기준 확인 중</span><span>100%</span></div><div id="cpu-chart" class="chart"></div><p id="cpu-note" class="chart-note">CPU는 이 컴퓨터 전체 사용률입니다. 제공자의 처리 여유를 나타내지 않습니다.</p></article>
+      <article class="panel chart-card"><div class="chart-head"><div><span class="eyebrow">THROUGHPUT / COMPLETIONS</span><h2>시간에 따른 완료 건수</h2><p>가로: 시각 · 세로: 검사 통과 누적 건수</p></div></div><div id="completion-chart" class="chart"></div><p class="chart-note">시간 기록이 있는 분석 요청만 그립니다. 과거에 측정하지 않은 구간은 만들지 않습니다.</p></article>
+      <article class="panel chart-card"><div class="chart-head"><div><span class="eyebrow">LATEST RECORDS</span><h2>최근 종료한 요청</h2><p>응답 미확인과 완료를 구분합니다.</p></div></div><div id="recent" class="recent"></div></article>
+    </section>
+    <footer class="panel definitions"><h2>이 화면을 읽는 기준</h2><p><strong>전체 = 유효·검사 통과 + 실행 중 + 대기 + 호출 오류·응답 미확인</strong>입니다. 남은 건수는 전체에서 유효 건수를 뺀 값이며, 오류도 포함합니다. 저장 기록의 처리 완료는 유효와 실패를 모두 포함합니다. Python 준비 오류는 실패한 모델 요청으로 세지 않습니다. A04 계획이 없으면 건수를 미확정으로 표시합니다.</p><p>평균·중앙값·95백분위는 요청별 마지막 검사 통과 호출을 기준으로 계산합니다. 그 이전의 실패·재시도 시간과 진행 중인 호출은 평균에서 제외합니다. 호출 시간에는 CLI·네트워크·제공자 처리가 함께 포함됩니다.</p><p id="sources">실행 기록을 읽고 있습니다.</p></footer>
+  </main>
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+</body>
+</html>

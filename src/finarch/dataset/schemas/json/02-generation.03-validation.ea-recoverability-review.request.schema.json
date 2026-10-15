@@ -1,0 +1,23 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "question": {
+      "minLength": 1,
+      "title": "Question",
+      "type": "string"
+    },
+    "context": {
+      "minLength": 1,
+      "title": "Context",
+      "type": "string"
+    }
+  },
+  "required": [
+    "question",
+    "context"
+  ],
+  "title": "InverseRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:02-generation.03-validation.ea-recoverability-review.request:v1"
+}

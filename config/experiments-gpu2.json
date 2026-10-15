@@ -1,0 +1,59 @@
+{
+  "purpose": "FOUR_GPU_END_TO_END_THROUGHPUT_AND_RUNTIME",
+  "dataset_source_run": "reports/experiments-run/20260920-exp-002",
+  "definition_source_run": "reports/experiments-run/20260920-exp-006",
+  "originals": 1080,
+  "variants_per_original": 7,
+  "seed": 20260920,
+  "max_output_tokens": 8192,
+  "remote_thread_id": "01a0b375-4892-7aa1-bf6c-5ad8fe9b7811",
+  "remote_host": "a100",
+  "target_node": "gpu-2",
+  "gpu_count": 4,
+  "models": [
+    {"key": "qwen2.5-7b-instruct", "model": "Qwen/Qwen2.5-7B-Instruct", "role": "base", "reasoning_modes": ["off"]},
+    {"key": "qwen3-8b", "model": "Qwen/Qwen3-8B", "role": "base", "reasoning_modes": ["off", "on"]},
+    {"key": "qwen3-14b", "model": "Qwen/Qwen3-14B", "role": "base", "reasoning_modes": ["off", "on"]},
+    {"key": "qwen3.8-27b", "model": "Qwen/Qwen3.8-27B", "role": "base", "reasoning_modes": null},
+    {"key": "fin-r1", "model": "SUFE-AIFLM-Lab/Fin-R1", "role": "finance", "base_model": "Qwen/Qwen2.5-7B-Instruct", "reasoning_modes": null},
+    {"key": "fin-o1-8b", "model": "TheFinAI/Fin-o1-8B", "role": "finance", "base_model": "Qwen/Qwen3-8B", "reasoning_modes": null},
+    {"key": "dianjin-r1-7b", "model": "DianJin/DianJin-R1-7B", "role": "finance", "base_model": "Qwen/Qwen2.5-7B-Instruct", "reasoning_modes": null},
+    {"key": "fin-o1-14b", "model": "TheFinAI/Fin-o1-14B", "role": "finance", "base_model": "Qwen/Qwen3-14B", "reasoning_modes": null},
+    {"key": "qwen3.8-27b-finance-gguf", "model": "nico248000000000/Qwen3.8-27B-finance-GGUF", "role": "finance", "base_model": "Qwen/Qwen3.8-27B", "reasoning_modes": null}
+  ],
+  "model_status": "CANDIDATES_REQUIRE_REMOTE_REVISION_AND_CAPABILITY_VERIFICATION",
+  "cache_policy": {
+    "cross_request_prefix_cache": false,
+    "cross_run_response_reuse": false,
+    "verify_resolved_engine_config": true,
+    "verify_metrics_or_instrumentation": true,
+    "missing_counters": "UNKNOWN_NOT_ZERO",
+    "within_request_autoregressive_kv": "REQUIRED_INFERENCE_STATE_NOT_CROSS_REQUEST_REUSE",
+    "on_violation": "STOP_NEW_CALLS_AND_PRESERVE_EVIDENCE"
+  },
+  "tuning": {
+    "strategy": "STAGED_SWEEP_THEN_REPEAT_TOP_CANDIDATES",
+    "tensor_parallel_candidates": [1, 2, 4],
+    "replica_count": "4_DIVIDED_BY_TENSOR_PARALLEL_WHEN_FEASIBLE",
+    "client_concurrency_candidates": [8, 16, 32, 64, 128, 200, 256],
+    "max_num_seqs_candidates": [16, 32, 64, 128, 256],
+    "max_num_batched_tokens_candidates": [2048, 4096, 8192, 16384],
+    "gpu_memory_utilization_candidates": [0.85, 0.9, 0.92],
+    "sample_policy": "FIXED_LENGTH_STRATIFIED_REAL_REQUESTS_ALL_TYPES_AND_SUPPORTED_CONDITIONS",
+    "initial_sample_requests": 64,
+    "top_candidate_validation_requests": 256,
+    "top_candidate_repeats": 2,
+    "monitor_interval_seconds": 2,
+    "selection_metric": "COMPLETED_NONTRUNCATED_REQUESTS_PER_SECOND_WITH_ERRORS_REPORTED",
+    "answer_correctness_used_for_tuning": false,
+    "sampling_and_output_budget": "FREEZE_BEFORE_SWEEP_DO_NOT_TUNE_FOR_SPEED",
+    "full_cartesian_sweep": false
+  },
+  "billing": {
+    "external_paid_api_allowed": false,
+    "new_cloud_gpu_purchase_allowed": false,
+    "external_api_charge_usd": 0,
+    "gpu_monetary_cost": null,
+    "report_allocated_gpu_hours": true
+  }
+}

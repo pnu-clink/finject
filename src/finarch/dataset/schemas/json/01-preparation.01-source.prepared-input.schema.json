@@ -1,0 +1,595 @@
+{
+  "$defs": {
+    "AnswerMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "scale": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "null means no explicit source scale; not zero",
+          "title": "Scale"
+        },
+        "negative": {
+          "description": "Explicit minus sign on the reference, including signed zero",
+          "title": "Negative",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "scale",
+        "negative"
+      ],
+      "title": "AnswerMetadata",
+      "type": "object"
+    },
+    "Cell": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "source_pointer": {
+          "minLength": 1,
+          "title": "Source Pointer",
+          "type": "string"
+        },
+        "context_span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Context Span",
+          "type": "array"
+        },
+        "json_source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonSource"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "row": {
+          "minimum": 0,
+          "title": "Row",
+          "type": "integer"
+        },
+        "column": {
+          "minimum": 0,
+          "title": "Column",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "source_pointer",
+        "context_span",
+        "row",
+        "column"
+      ],
+      "title": "Cell",
+      "type": "object"
+    },
+    "ContextMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "offset_unit": {
+          "const": "Unicode code points",
+          "title": "Offset Unit",
+          "type": "string"
+        },
+        "interval": {
+          "const": "[start, end)",
+          "title": "Interval",
+          "type": "string"
+        },
+        "source_root": {
+          "minLength": 1,
+          "title": "Source Root",
+          "type": "string"
+        },
+        "segments": {
+          "items": {
+            "$ref": "#/$defs/Segment"
+          },
+          "title": "Segments",
+          "type": "array"
+        },
+        "number_status": {
+          "minLength": 1,
+          "title": "Number Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "offset_unit",
+        "interval",
+        "source_root",
+        "segments",
+        "number_status"
+      ],
+      "title": "ContextMapping",
+      "type": "object"
+    },
+    "FinanceProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        },
+        "commit": {
+          "minLength": 1,
+          "title": "Commit",
+          "type": "string"
+        },
+        "dataset": {
+          "enum": [
+            "FinanceReasoning-native",
+            "FinanceReasoning-embedded"
+          ],
+          "title": "Dataset",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "title": "Source Id",
+          "type": "string"
+        },
+        "level": {
+          "minLength": 1,
+          "title": "Level",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "sha256",
+        "url",
+        "commit",
+        "dataset",
+        "source_id",
+        "level"
+      ],
+      "title": "FinanceProvenance",
+      "type": "object"
+    },
+    "JsonSource": {
+      "additionalProperties": false,
+      "properties": {
+        "pointer": {
+          "description": "JSON Pointer inside the serialized raw context",
+          "title": "Pointer",
+          "type": "string"
+        },
+        "source_span": {
+          "description": "Literal token offsets in the unmodified raw context string",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Source Span",
+          "type": "array"
+        },
+        "raw_text": {
+          "title": "Raw Text",
+          "type": "string"
+        },
+        "value_type": {
+          "enum": [
+            "key",
+            "string",
+            "integer",
+            "number",
+            "boolean",
+            "null"
+          ],
+          "title": "Value Type",
+          "type": "string"
+        },
+        "decoded_span": {
+          "description": "Displayed fragment offsets within the decoded source token",
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Decoded Span",
+          "type": "array"
+        },
+        "markdown_escaped": {
+          "title": "Markdown Escaped",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pointer",
+        "source_span",
+        "raw_text",
+        "value_type",
+        "decoded_span",
+        "markdown_escaped"
+      ],
+      "title": "JsonSource",
+      "type": "object"
+    },
+    "NumberLocation": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "source_text_span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Source Text Span",
+          "type": "array"
+        },
+        "context_span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Context Span",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "source_text_span",
+        "context_span"
+      ],
+      "title": "NumberLocation",
+      "type": "object"
+    },
+    "PreparedSample": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "raw_id": {
+          "minLength": 1,
+          "title": "Raw Id",
+          "type": "string"
+        },
+        "context": {
+          "minLength": 1,
+          "title": "Context",
+          "type": "string"
+        },
+        "question": {
+          "minLength": 1,
+          "title": "Question",
+          "type": "string"
+        },
+        "source_content": {
+          "$ref": "#/$defs/SourceContent"
+        },
+        "context_mapping": {
+          "$ref": "#/$defs/ContextMapping"
+        },
+        "reference_answer": {
+          "minLength": 1,
+          "title": "Reference Answer",
+          "type": "string"
+        },
+        "reference_answer_type": {
+          "enum": [
+            "integer",
+            "float"
+          ],
+          "title": "Reference Answer Type",
+          "type": "string"
+        },
+        "reference_precision": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Reference Precision",
+          "type": "integer"
+        },
+        "answer_metadata": {
+          "$ref": "#/$defs/AnswerMetadata"
+        },
+        "provenance": {
+          "discriminator": {
+            "mapping": {
+              "FinanceReasoning-embedded": "#/$defs/FinanceProvenance",
+              "FinanceReasoning-native": "#/$defs/FinanceProvenance",
+              "TAT-QA": "#/$defs/TatqaProvenance"
+            },
+            "propertyName": "dataset"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/FinanceProvenance"
+            },
+            {
+              "$ref": "#/$defs/TatqaProvenance"
+            }
+          ],
+          "title": "Provenance"
+        }
+      },
+      "required": [
+        "id",
+        "raw_id",
+        "context",
+        "question",
+        "source_content",
+        "context_mapping",
+        "reference_answer",
+        "reference_answer_type",
+        "reference_precision",
+        "answer_metadata",
+        "provenance"
+      ],
+      "title": "PreparedSample",
+      "type": "object"
+    },
+    "Segment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "source_pointer": {
+          "minLength": 1,
+          "title": "Source Pointer",
+          "type": "string"
+        },
+        "context_span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Context Span",
+          "type": "array"
+        },
+        "json_source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonSource"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "numbers": {
+          "items": {
+            "$ref": "#/$defs/NumberLocation"
+          },
+          "title": "Numbers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "source_pointer",
+        "context_span",
+        "numbers"
+      ],
+      "title": "Segment",
+      "type": "object"
+    },
+    "SourceContent": {
+      "additionalProperties": false,
+      "properties": {
+        "paragraphs": {
+          "items": {
+            "$ref": "#/$defs/TextLocation"
+          },
+          "title": "Paragraphs",
+          "type": "array"
+        },
+        "tables": {
+          "items": {
+            "$ref": "#/$defs/Table"
+          },
+          "title": "Tables",
+          "type": "array"
+        }
+      },
+      "required": [
+        "paragraphs",
+        "tables"
+      ],
+      "title": "SourceContent",
+      "type": "object"
+    },
+    "Table": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "source_pointer": {
+          "minLength": 1,
+          "title": "Source Pointer",
+          "type": "string"
+        },
+        "rows": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "cells": {
+          "items": {
+            "$ref": "#/$defs/Cell"
+          },
+          "title": "Cells",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_pointer",
+        "rows",
+        "cells"
+      ],
+      "title": "Table",
+      "type": "object"
+    },
+    "TatqaProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "url": {
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        },
+        "commit": {
+          "minLength": 1,
+          "title": "Commit",
+          "type": "string"
+        },
+        "dataset": {
+          "const": "TAT-QA",
+          "title": "Dataset",
+          "type": "string"
+        },
+        "document_id": {
+          "minLength": 1,
+          "title": "Document Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "sha256",
+        "url",
+        "commit",
+        "dataset",
+        "document_id"
+      ],
+      "title": "TatqaProvenance",
+      "type": "object"
+    },
+    "TextLocation": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "source_pointer": {
+          "minLength": 1,
+          "title": "Source Pointer",
+          "type": "string"
+        },
+        "context_span": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Context Span",
+          "type": "array"
+        },
+        "json_source": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JsonSource"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "source_pointer",
+        "context_span"
+      ],
+      "title": "TextLocation",
+      "type": "object"
+    }
+  },
+  "items": {
+    "$ref": "#/$defs/PreparedSample"
+  },
+  "title": "PreparedInputsSchema",
+  "type": "array",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.01-source.prepared-input:v2"
+}

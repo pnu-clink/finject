@@ -1,0 +1,20 @@
+function textPreview(p,r){
+ const savedPreview=previewArtifact(r);if(!savedPreview)return;
+ const preview={...savedPreview,source_condition:savedPreview.source_condition??r.variant?.plan?.source_condition??r.condition};
+ if(preview.axis==='EA'){eaTextPreview(p,r,preview);return;}const isRelation=preview.axis==='IC_RELATION';
+ // [TP02] Shared text comparison immediately follows the A/B formula comparison.
+ p.append(el('h2','',preview.status==='GENERATED'?'실제 생성된 문장':'문장 편집 미리보기'),el('div','banner',preview.status==='GENERATED'?'01-generate-text · LLM 응답 스키마와 편집 범위 검사 후 원문에 적용했습니다. '+auditStatus(r)+'.':'계획의 편집 미리보기입니다. 실제 LLM 응답이나 검증 완료 본문이 아닙니다. 생성 실패 기록이 있다면 아래 출처에서 별도로 확인하세요.'));
+ p.append(el('p','',preview.source_base_label==='IC_VALUE_01_AFTER'?'검증된 IC-VALUE 뒤 본문을 유지하고, 뒤쪽 추가 주장(B)에만 출처를 붙였습니다.':preview.source_base_label==='IC_VALUE_01_BEFORE'?(preview.source_condition==='A_ONLY'?'검증된 IC-VALUE 앞 본문을 유지하고, 뒤쪽 원래 주장(A)에만 출처를 붙였습니다.':'검증된 IC-VALUE 앞 본문을 유지하고, 앞쪽 추가 주장(B)에만 출처를 붙였습니다.'):preview.perturb_position?`추가 B 문장을 대상 A 문장 ${preview.perturb_position==='before'?'앞':'뒤'}에 배치합니다. 문장 순서: ${preview.claim_order.join(' → ')}. 두 조건의 문구·수치·계산 결과는 같습니다.`:isRelation?'원래 금액과 질문을 유지하고, 두 수수료를 연결하는 관계 문장 하나를 가까이 추가합니다.':preview.source_condition==='A_ONLY'?'앞의 A 금액에만 출처를 붙이고, 뒤의 B 주장은 출처 없이 추가합니다.':preview.source_condition==='B_ONLY'?'앞의 A는 유지하고, 뒤에 추가할 B 주장에만 출처를 붙입니다.':'원래 A 주장을 유지하고 같은 항목에 대한 B 주장을 가까이 추가합니다.'));
+ const legend=el('div','legend');for(const [cls,label] of (isRelation?[['diff-add','초록 · IC-RELATION 추가 관계']]:[['diff-add','초록 · IC-VALUE 추가 주장'],['source-a-add','분홍 · A 출처'],['source-b-add','빨강 · B 출처']]))legend.append(el('mark',cls,label));p.append(legend);
+ const sourceFromValue=preview.axis==='IC_SOURCE'&&['IC_VALUE_01_BEFORE','IC_VALUE_01_AFTER'].includes(preview.source_base_label);
+ const cols=el('div','cols'),before=el('div','box'),after=el('div','box');before.append(el('h3','','원본 본문 · 실제 원문'),marked(r.sample.context,[],'before'));after.append(el('h3','',preview.status==='GENERATED'?'변경 후 전체 본문':isRelation?'이렇게 들어갈 예정입니다 · 추가 관계 구분':'이렇게 들어갈 예정입니다 · 값 주장과 출처 구분'),sourceFromValue?sourceComparisonText(r,preview):previewText(preview));realizationEvidence(after,r,preview.status==='GENERATED');cols.append(before,after);p.append(cols);previewSourceLinks(p,r,preview);
+ if(sourceFromValue){
+  const side=preview.source_condition==='A_ONLY'?'A':'B',binding=eventOf(r,realizationStage(r)+'/01-receive-input/04-source-binding.json');
+  p.append(el('p','small',side==='A'?'출처 연결 대상: 뒤쪽의 원래 값 주장(A). 앞쪽 IC-VALUE 추가 주장(B)은 그대로 유지합니다.':`출처 연결 대상: ${preview.source_base_label==='IC_VALUE_01_AFTER'?'뒤쪽':'앞쪽'} IC-VALUE 추가 주장(B). 원래 값 주장(A)은 그대로 유지합니다.`));
+  if(binding)p.append(el('p','small llm-path','초록 표시 근거: '+binding.generation_ref+' · 출처 표시 근거: '+realizationStage(r)));
+ }
+ for(const patch of preview.patches){const kind=patch.segments?.[0]?.kind,title=preview.status==='GENERATED'?({VALUE:'추가한 값 문장',SOURCE_A:'원래 값(A)에 붙인 출처 문구',SOURCE_B:'추가 값(B)에 붙인 출처 문구',RELATION:'추가한 관계 문장'}[kind]||'실제 추가 문장'):patch.purpose;const card=box(title,patch.text);p.append(card)}
+ p.append(box('질문 · 그대로 유지',preview.question),box(isRelation?'원본과 관계를 따랐을 때의 계산 결과':'각 주장을 따랐을 때의 계산 결과',`A: ${preview.conditional_answers.A.computed} / B: ${preview.conditional_answers.B.computed} — 별도 모델이 답한 결과가 아닙니다.`));
+ if(preview.pair_id)jsonBox(p,'앞·뒤 쌍 메타데이터 · 최종 데이터에 유지',{pair_id:preview.pair_id,perturb_position:preview.perturb_position,claim_order:preview.claim_order,target_sentence:preview.target_sentence,perturb_sentence:preview.perturb_sentence});
+ const next=el('ol');for(const step of (auditRecord(r)&&!auditRecord(r).stale&&auditRecord(r).report.status==='PASS'?['19번 사람 검토 · 제작 자료와 02-audit-meaning 판정']:(preview.next_steps||[]).filter(s=>!/18번|독립 답변/.test(s))))next.append(el('li','',step));p.append(el('h3','','다음에 진행할 작업'),next);jsonBox(p,'문장·Python 코드·그래프 연결',{target:preview.target,python:preview.python,graph_binding:preview.graph_binding,patches:preview.patches,relation_properties:r.variant?.plan?.relation?.properties});
+}

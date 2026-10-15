@@ -1,0 +1,47 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "case": {
+      "minLength": 1,
+      "title": "Case",
+      "type": "string"
+    },
+    "sample": {
+      "additionalProperties": true,
+      "title": "Sample",
+      "type": "object"
+    },
+    "program": {
+      "additionalProperties": true,
+      "title": "Program",
+      "type": "object"
+    },
+    "execution": {
+      "additionalProperties": true,
+      "title": "Execution",
+      "type": "object"
+    },
+    "graph": {
+      "additionalProperties": true,
+      "title": "Graph",
+      "type": "object"
+    },
+    "deterministic_checks": {
+      "additionalProperties": true,
+      "title": "Deterministic Checks",
+      "type": "object"
+    }
+  },
+  "required": [
+    "case",
+    "sample",
+    "program",
+    "execution",
+    "graph",
+    "deterministic_checks"
+  ],
+  "title": "VerificationRequest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:01-preparation.05-verification.semantic.request:v1"
+}
