@@ -1,206 +1,206 @@
-# 스키마 파일 안내
+# Skimma file directory
 
-스키마는 **어떤 항목을 어떤 자료형으로 담아야 하는지 정한 규격**입니다. 입력 데이터와 LLM 답변은 서로 다른 규격을 사용합니다.
+The scheme is **The specifications for what kind of data type to include**So, input data and LLM responses use different criteria.
 
-## 지금 확인할 파일
+## Now check the file.
 
-|용도|정의를 수정하는 파일|자동 생성된 JSON Schema|
+|Purpose|The file that changes the definition|Automatically generated JSON Schema|
 |---|---|---|
-|준비된 전체 입력|[prepared.py](prepared.py)|[01-preparation.01-source.prepared-input.schema.json](json/01-preparation.01-source.prepared-input.schema.json)|
-|POT에 보낼 입력|[llm.py](llm.py)|[01-preparation.03-calculation.pot.request.schema.json](json/01-preparation.03-calculation.pot.request.schema.json)|
-|POT 풀이 답변|[llm.py](llm.py)|[01-preparation.03-calculation.pot.response.schema.json](json/01-preparation.03-calculation.pot.response.schema.json)|
-|문장 수정 답변|[llm.py](llm.py)|[02-generation.02-generate-text.realization.response.schema.json](json/02-generation.02-generate-text.realization.response.schema.json)|
-|의도 감사 답변 초안|[llm.py](llm.py)|[shared.01-02.02-03.review-and-validation.response.schema.json](json/shared.01-02.02-03.review-and-validation.response.schema.json)|
+|Full input is ready.|[prepared.py](prepared.py)|[01-preparation.01-source.prepared-input.schema.json](json/01-preparation.01-source.prepared-input.schema.json)|
+|Enter to send to POT|[llm.py](llm.py)|[01-preparation.03-calculation.pot.request.schema.json](json/01-preparation.03-calculation.pot.request.schema.json)|
+|POT grass answer|[llm.py](llm.py)|[01-preparation.03-calculation.pot.response.schema.json](json/01-preparation.03-calculation.pot.response.schema.json)|
+|Reply to the question|[llm.py](llm.py)|[02-generation.02-generate-text.realization.response.schema.json](json/02-generation.02-generate-text.realization.response.schema.json)|
+|Intent thank you reply draft|[llm.py](llm.py)|[shared.01-02.02-03.review-and-validation.response.schema.json](json/shared.01-02.02-03.review-and-validation.response.schema.json)|
 
-`common.py`는 추가 필드와 자동 타입 변환을 금지합니다. `registry.py`는 이름·버전·상태를 관리하고 JSON Schema를 만듭니다. **[validation.py](validation.py)가 같은 정의를 읽어 실제 Python 검사를 수행합니다.** JSON 파일은 확인·전달용 자동 생성본이며 직접 수정하는 두 번째 원본이 아닙니다. [index.json](json/index.json)에 각 스키마의 버전·해시·준비 상태가 있습니다.
+`common.py`It prohibits additional fields and automatic type conversion. `registry.py`And then I manage the name, version, status and I create a JSON Schema. **[validation.py](validation.py)We read the same definition and run a real Python test.** JSON files are automatically generated copies for authentication and transmission, and not the second copy to be directly modified.](json/index.json)There's a version of each scheme, hash, and setup.
 
-## 스키마 안의 항목 읽는 법
+## How to Read Entries in a Schema
 
-스키마 파일에는 **형식을 설명하는 용어**와 **실제 데이터에 들어갈 항목**이 함께 보입니다. 예를 들어 `properties`는 항목들을 설명하는 자리이고, 그 안의 `facts`는 실제 POT 답변에 들어갈 항목입니다.
+The schema files are in the **A term for a form**and **Entries that enter the actual data**So this is going to be together. `properties`It's a place to describe items, and it's a space in it. `facts`is the item that enters the actual POT answer.
 
-|스키마 용어|뜻|이 프로젝트에서 읽는 방법|
+|The term "skimma"|What do you mean?|How to read from this project|
 |---|---|---|
-|`properties`|JSON 객체에 어떤 항목이 있는지 설명합니다.|POT 응답에는 `code`, `facts`, `grounding`이 정의돼 있습니다.|
-|`required`|반드시 들어가야 하는 항목 이름의 목록입니다.|목록에 있는 항목이 빠지면 거절합니다. `properties`에 있다는 것만으로 필수라는 뜻은 아닙니다.|
-|`type`|값의 자료형입니다.|`string`은 문자열, `integer`는 정수, `boolean`은 true/false, `object`는 이름과 값의 묶음, `array`는 목록입니다.|
-|`$defs`|여러 곳에서 사용할 하위 구조의 정의입니다.|`Fact`의 구성은 여기에 정의됩니다.|
-|`$ref`|다른 곳에 정의한 구조를 참조합니다.|`#/$defs/Fact`는 이 파일의 Fact 정의를 따르라는 뜻입니다.|
-|`additionalProperties`|미리 열거하지 않은 이름을 받을 수 있는지 정합니다.|`false`면 모르는 항목을 거절합니다. POT 응답 v2의 facts는 id를 가진 Fact 객체 목록이며, 각 객체는 정해진 필드만 받습니다.|
-|`enum` / `const`|허용된 값의 목록 / 하나의 고정값입니다.|정답 타입은 integer 또는 float입니다.|
-|`anyOf` / `oneOf`|나열된 형식 중 하나 이상 / 정확히 하나에 맞아야 합니다.|문자열 또는 null, 출처별 서로 다른 구조 등에 사용합니다.|
-|`minLength` / `minItems`|문자열 최소 길이 / 목록 최소 개수입니다.|빈 문자열이나 빈 목록을 허용하지 않는 항목을 표시합니다.|
-|`minimum` / `maximum`|숫자의 허용 범위입니다.|정밀도는 0부터 100까지입니다.|
-|`title` / `description`|이름과 설명입니다.|설명을 위한 정보이며, 그 문장 자체가 Python 실행 검사는 아닙니다.|
-|`$id` / `$schema`|이 스키마의 식별 이름 / JSON Schema 규격입니다.|실행 로그의 문제 ID와는 다른 값입니다.|
+|`properties`|It describes what items are in a JSON object.|The POT response is `code`, `facts`, `grounding`This is defined.|
+|`required`|This is a list of the items that you need to enter.|If an item is missing from the list, it's rejected. `properties`Just because it's there doesn't mean it's necessary.|
+|`type`|It's a data model of values.|`string`So, what is the sequence? `integer`is the integer, `boolean`It's true/false, `object`is a set of names and values, `array`It's a list.|
+|`$defs`|It's a definition of a sub-structure that can be used in many places.|`Fact`The composition of the is defined here.|
+|`$ref`|I'm referring to the structure defined elsewhere.|`#/$defs/Fact`This is the fact that the file is a fact.|
+|`additionalProperties`|It determines whether you can get a name that you haven't already mentioned.|`false`Reject unknowns. The facts in POT response v2 are lists of fact objects with id, and each object receives only a specified field.|
+|`enum` / `const`|This is a list of permissible values/one fixed value.|The correct answer type is an integer or float.|
+|`anyOf` / `oneOf`|It's got to be one or more of the formats listed.|It's a string or null, different structures by source, etc.|
+|`minLength` / `minItems`|Minimum string length/minimum list number.|It shows items that don't allow empty strings or empty lists.|
+|`minimum` / `maximum`|It's the allowed range of numbers.|The precision is 0through 100at most.|
+|`title` / `description`|It's a name and a description.|It's information for explanation, and the sentence itself is not a Python run test.|
+|`$id` / `$schema`|This is the JSON Schema identification name for the scheme.|It's a different value than the problem ID of the run log.|
 
-**값이 null인 것과 항목이 없는 것은 다릅니다.** 현재 `scale`, `negative`, Fact의 `unit`은 필수 항목입니다. `scale`과 `unit`은 값으로 null을 허용하지만 항목 자체를 생략할 수는 없습니다.
+**It's different from having a null value and not having an item.** Current `scale`, `negative`The fact. `unit`It's a necessary item. `scale`and `unit`The value of the null is allowed but the item itself cannot be omitted.
 
-## 준비 입력에 들어가는 내용
+## The contents of the ready input
 
-[입력 스키마](json/01-preparation.01-source.prepared-input.schema.json)는 **문제들의 목록**을 받습니다. 각 문제는 다음 항목을 모두 가집니다. 생성하는 쪽은 원천 데이터를 읽는 Python 코드입니다.
+[Push the button](json/01-preparation.01-source.prepared-input.schema.json) **List of problems**Each problem has all the following items, and the one that generates them is Python code that reads the source data.
 
-|항목|뜻|현재 형식·검사|
+|Item|What do you mean?|Current formatting and analysis|
 |---|---|---|
-|`id`|이 묶음 안에서 사용하는 문제 번호입니다.|빈 문자열 불가, 묶음 안에서 중복 불가.|
-|`raw_id`|원천 문제와 연결하는 번호입니다.|빈 문자열 불가, 묶음 안에서 중복 불가.|
-|`context`|원문 문단과 표를 읽을 수 있도록 이어 놓은 본문입니다.|비어 있지 않은 문자열.|
-|`question`|원문 질문 하나입니다.|비어 있지 않은 문자열.|
-|`source_content`|문단·표·칸의 구조를 담습니다.|문단은 paragraphs, 표는 tables, 표의 행은 rows, 칸은 cells에 있습니다.|
-|`context_mapping`|본문의 어느 부분이 원문의 어느 위치에서 왔는지 연결합니다.|각 구간의 문자열이 실제 context와 일치하는지도 Python으로 검사합니다.|
-|`reference_answer`|원천 정답을 숫자 문자열로 담습니다.|문자열로 보관해 소수 자릿수를 유지합니다.|
-|`reference_answer_type`|원천 정답의 정수·실수 구분입니다.|integer 또는 float.|
-|`reference_precision`|원천 정답의 소수 자릿수입니다.|0~100의 정수. 질문의 반올림 지시를 해석한 값은 아닙니다.|
-|`answer_metadata`|정답 배율과 부호를 담습니다.|scale과 negative가 필수입니다.|
-|`provenance`|원천 데이터셋·파일 버전·해시 등의 출처입니다.|FinanceReasoning은 source_id/level, TAT-QA는 document_id가 추가됩니다.|
+|`id`|It's the problem number we use in this set.|It's not a blank string, it's not replicated in a bundle.|
+|`raw_id`|It's the number that connects to the source problem.|It's not a blank string, it's not replicated in a bundle.|
+|`context`|It's a text that's linked so you can read the original text and the table.|It's not empty.|
+|`question`|It's a basic question.|It's not empty.|
+|`source_content`|It's a structure of the scales and scales.|The tables are in the cells, the tables are the rows, the spaces are in the rows.|
+|`context_mapping`|It connects which part of the text comes from which location of the text.|It checks in Python that each string in the block matches the actual context.|
+|`reference_answer`|So we're going to put the source answer in a numbered string.|It's stored in a string and kept the numerical digits.|
+|`reference_answer_type`|So this is the absolute-perfect division of the source equation.|An integer or float.|
+|`reference_precision`|So this is the prime of the source answer.|0~100It's not the interpretation of the inverse of the question.|
+|`answer_metadata`|It's a fair balance and an uncertainty.|The scale and the negative are essential.|
+|`provenance`|Sources of data set, file version, and hashing.|FinanceReasoning is source_id/level, TAT-QA is document_id.|
 
-`answer_metadata.scale`은 원천에 명시된 배율 문자열입니다. 배율 표기가 없으면 null로 통일합니다. `negative`는 정답에 명시적인 음수 부호가 있으면 true, 없으면 false입니다. 괄호만 보고 음수로 해석하지 않습니다.
+`answer_metadata.scale`Silver is a string of allowances specified in the source. If there's no allowance, it's null. `negative`If the answer is true, it's false if it's not true.
 
-### 원문 위치 정보
+### Primary location information
 
-|항목|뜻|
+|Item|What do you mean?|
 |---|---|
-|`context_span`|context에서 해당 문자열이 시작하고 끝나는 문자 위치입니다. 0부터 세며 시작은 포함하고 끝은 포함하지 않습니다.|
-|`source_pointer`|원천 레코드 안에서 문단이나 표 칸을 찾는 경로입니다.|
-|`row` / `column`|표 칸의 행·열 번호입니다. 0부터 셉니다.|
-|`segments`|문단 또는 칸별로 원문 위치와 본문 위치를 연결한 목록입니다.|
-|`numbers`|문자열에서 찾은 숫자 표기 후보들입니다. 금융적 의미까지 확인한 근거라는 뜻은 아닙니다.|
-|`source_text_span`|해당 문단·칸 문자열 안에서 숫자가 있는 위치입니다.|
-|`source_root`|원천 위치 경로의 기준을 설명합니다. 현재 값은 실행 기록의 raw-record.json 안 record를 가리킵니다. 준비 폴더에 문제별 파일이 다시 있다는 뜻은 아닙니다.|
+|`context_span`|It's the location of the text that starts and ends in context. 0Count from the beginning and not the end.|
+|`source_pointer`|It's a path to find the bars or tabs in the source record.|
+|`row` / `column`|It's the row number of the table space. 0is counted from the start.|
+|`segments`|It's a list of links between the position of the text and the position of a text, by step or by section.|
+|`numbers`|They're the number tags that you find in a string, which doesn't mean they're a validated financial basis.|
+|`source_text_span`|It's the location of the numbers in the string.|
+|`source_root`|It describes the source location path standard. The current value refers to the raw-record.json inside record of the runtime record. It doesn't mean that the problem-based files are back in the ready folder.|
 
-### JSON 본문을 표로 바꾼 입력 · v2
+### Enter the JSON text to the table
 
-문단·표 칸·segments에는 선택적인 json_source를 추가합니다. 기존 입력에는 없어도 됩니다. source_pointer가 /context일 때 실제 원천은 JSON을 담은 문자열이며, 그 내부 경로를 별도로 기록합니다.
+In paragraphs, tabs, and segments, you add an optional json_source, which may or may not be present in existing inputs. When the source_pointer is /context, the actual source is a string containing JSON, and it records its internal path separately.
 
-|항목|뜻|
+|Item|What do you mean?|
 |---|---|
-|json_source.pointer|원문 context 문자열 내부를 JSON으로 읽었을 때의 경로|
-|json_source.source_span / raw_text|변환 전 문자열에서 실제 JSON 토큰의 문자 구간과 원래 토큰 표기|
-|json_source.value_type|key / string / integer / number / boolean / null 구분|
-|json_source.decoded_span|그룹 제목·행 이름 등 표시한 부분이 디코딩된 원문 토큰에서 차지하는 구간|
-|json_source.markdown_escaped|표의 구분자·줄바꿈 이스케이프를 적용했는지 여부|
+|json_source.pointer|The path of the original context when you read the inside of a string in JSON.|
+|json_source.source_span / raw_text|The text frames of the actual JSON tokens in the pre-conversion string and the original token tag|
+|json_source.value_type|Key / string / integer / number / boolean / null|
+|json_source.decoded_span|The area where the group title, the name of the action, etc. is shown in the decoded elemental token|
+|json_source.markdown_escaped|Whether you've applied the table separator-switch-scape|
 
-context_span과 숫자 위치는 변환된 context의 위치입니다. JSON 입력 변환기는 raw 토큰의 위치·자료형·값을 함께 대조한 뒤 이 스키마 검사를 진행합니다. [실제 변환 흐름](../../../../docs/01-dataset/00-input/01-selection.md#json-본문-표-변환--in03j).
+The context_span and the numeric position are the positions of the converted context. The JSON input converter compares the location and the free value of the raw token together and then performs this schema test.](../../../../docs/01-dataset/00-input/01-selection.md#json-%EB%B3%B8%EB%AC%B8-%ED%91%9C-%EB%B3%80%ED%99%98--in03j).
 
-## POT에 보내는 내용과 돌아오는 내용
+## What you send to the POT and what you get back.
 
-POT은 원문과 질문에서 풀이 프로그램을 만드는 단계입니다. **보내는 입력과 받아야 할 답변을 각각 정의합니다.**
+POT is the stage of creating a grassroots program from the basics and questions. **It defines the input that you send and the response that you receive.**
 
-### 보내는 입력 — ProgramRequest
+### Send in the program request
 
-|항목|뜻|
+|Item|What do you mean?|
 |---|---|
-|`context`, `question`|원문 본문과 질문입니다.|
-|`reference.answer`|작성자가 참고할 수 있도록 허용한 원천 정답입니다.|
-|`reference.answer_type`, `reference.precision`|원천 정답의 타입과 소수 자릿수입니다.|
-|`provider_record`|작성자에게 허용한 비공개 원천 자료입니다. 원천마다 내용이 달라 JSON 객체의 내부 키를 고정하지 않습니다. 독립 답변 단계에는 보내지 않습니다.|
+|`context`, `question`|It's the original text and the question.|
+|`reference.answer`|It's the source code that the author allows you to refer to.|
+|`reference.answer_type`, `reference.precision`|So this is the type of the source and the prime numbers.|
+|`provider_record`|It's a non-public source that the author allows, and the content varies from source to source, and it doesn't fix the internal key of the JSON object, and it's not sent to the independent response stage.|
 
-### 받는 답변 — ProgramResponse
+### Answered by ProgramResponse
 
-|항목|뜻|필수 여부|
+|Item|What do you mean?|Whether it's necessary or not.|
 |---|---|---|
-|`code`|생성한 Python 풀이 코드입니다.|필수, 빈 문자열 불가.|
-|`facts`|풀이에 사용한 숫자와 원문 근거의 목록입니다.|필수, 최소 한 개. 각 항목은 아래 Fact 구조를 따릅니다.|
-|`grounding`|이 근거들이 풀이에 어떻게 사용되는지 설명한 문장입니다.|필수, 빈 문자열 불가.|
+|`code`|It's the Python root code that I created.|Necessary, empty stringed.|
+|`facts`|It's a list of numbers and base elements used in the array.|It's a minimum of one. Each item follows the Fact structure below.|
+|`grounding`|This is a sentence that describes how these data are used in the array.|Necessary, empty stringed.|
 
-**Fact 하나는 ‘어떤 원문 숫자를 가져다 썼는지’에 대한 기록입니다.** `facts`는 id가 있는 Fact 목록입니다. 예를 들어 id가 revenue인 항목이 매출 근거입니다. 응답 검사 후 실행할 때만 id로 찾는 사전으로 변환하며, 원응답 목록은 그대로 보존합니다. CLI가 동적 키 사전 스키마를 거절하여 응답 버전을 v2로 변경했습니다.
+**Fact one is a record of what source numbers the hammer brought in.** `facts`For example, an item that is a revenue is a sales base. It is converted to a search dictionary only after the response check is executed into an id, and the raw response list is kept intact. CLI rejected the dynamic key dictionary scheme and changed the response version to v2.
 
-|Fact 안의 항목|뜻|현재 형식|
+|The item in Fact|What do you mean?|The current format|
 |---|---|---|
-|`id`|코드에서 fact(id)로 찾는 근거 이름입니다.|빈 문자열·중복 불가.|
-|`span`|그 숫자가 context에 있는 시작·끝 위치입니다.|0 이상의 정수 두 개. 실제 원문과의 대응 검사는 후속 근거 검사입니다.|
-|`text`|원문에서 가져온 숫자 표기입니다.|비어 있지 않은 문자열.|
-|`value`|계산에서 사용할 수치 표현입니다.|비어 있지 않은 문자열. 값이 원문과 맞는지는 별도 검사입니다.|
-|`unit`|이 값의 단위를 기록하는 자리입니다.|비어 있지 않은 문자열 또는 null. 단위 의미를 스키마가 알아서 판단하지 않습니다.|
+|`id`|It's the name of the base that you're looking for in the code as fact.|The empty string cannot be duplicated.|
+|`span`|That's the beginning and end position in the context.|0 Two more integers. The correspondence test with the actual principle is the subsequent basis test.|
+|`text`|It's a numeric tag that's taken from the original.|It's not empty.|
+|`value`|It's a numerical expression that you use in calculations.|It's not a blank string. It's a test to see if the value matches the original.|
+|`unit`|This is the place where we record the unit of this value.|It's not a blank string or null. The scheme doesn't know the meaning of the unit.|
 
-`grounding`이 있다는 것은 설명이 제출됐다는 뜻입니다. 그 설명이 옳다는 판정은 아닙니다. `code`가 문자열로 제출돼 형식 검사를 통과했다고 해서 실행·정답 대조까지 통과한 것도 아닙니다.
+`grounding`This means that the explanation has been submitted, not the judgment that the explanations are correct. `code`So just because it's filed in a string and it's passed the format validation, it's not even passed the run-and-response contrast.
 
-## 다른 단계의 응답 내용
+## The response content of the other stages
 
-### 문장 수정 — RealizationResponse
+### This is the first time I've seen this.
 
-`patches`는 원문의 어느 부분을 어떤 문장으로 바꿀지 담은 목록이며 최소 하나가 필요합니다. 각 수정에는 다음 항목이 모두 필요합니다.
+`patches`This is a list of what parts of the article you want to change to what sentences, and you need at least one.
 
-|항목|뜻|
+|Item|What do you mean?|
 |---|---|
-|`start`, `end`|원본 context의 수정 시작·끝 위치입니다.|
-|`before`|바꾸기 전 문자열입니다. 삽입이면 빈 문자열일 수 있습니다.|
-|`text`|새로 넣을 문자열입니다. 삭제이면 빈 문자열일 수 있습니다.|
-|`element_ids`|이 수정이 표현하는 그래프 요소들의 번호입니다. 최소 하나가 필요합니다.|
+|`start`, `end`|It's the correction of the beginning and end position of the original context.|
+|`before`|It's a string before you change it.|
+|`text`|It's a new string to be inserted. If you delete it, it can be an empty string.|
+|`element_ids`|This is the number of elements in the graph that this correction represents.|
 
-Python은 시작이 끝보다 뒤인지 검사합니다. 실제 적용 단계에서는 범위·원문 일치·겹침·실제 변경 여부를 추가로 검사합니다.
+Python checks whether the beginning is behind the end, and in the actual application phase, it checks whether scope, element matches, overlaps, and changes actually.
 
-### 독립 답변 — Observation / AnswerResponse
+### The answer is to answer the question.
 
-입력은 `context`, `question` 두 항목뿐입니다. 원천 정답·풀이·제작 유형을 추가하면 입력 검사에서 거절합니다. 응답은 `text` 하나에 자연어 답변을 담습니다. 특정 라벨이나 정답 개수를 응답 형식으로 요구하지 않습니다.
+Input: `context`, `question` So if you add the source correct answer and the output type, you're going to reject it in the input test. `text` We're going to have a natural language answer to one, and we're not going to require a specific label or a set of correct answers in response format.
 
-### 미리 만들어 둔 초안
+### A pre-made drawing.
 
-아래 세 형식은 구조 초안입니다. 각 단계의 판단 규칙을 확정하기 전까지 실제 모델 호출에 사용하지 않도록 공통 호출 함수에서 막습니다.
+The three formats below are structural sketches that prevent the common call function from being used in actual model calls until the judging rules for each step are established.
 
-|초안|주요 내용|
+|The drawing.|The main content|
 |---|---|
-|`InverseResponse`|reviews 목록. 각 항목은 variable_id(대상 변수), state(복원 가능·불가·판단 불가), evidence(근거), proposed_path(제안 경로), reason(이유)입니다. 제안 경로 문자열이 있다고 검증된 실행 식이 되는 것은 아닙니다.|
-|`SourceResponse`|source_annotations 한 개. 지정된 주장에만 side(A 또는 B), text(출처 문구), reason(이유)을 담습니다. Python 호출부가 지정된 쪽과 응답의 side가 같은지 검사합니다. 원래 충돌값과 그래프는 Python이 유지합니다.|
-|`AuditResponse`|findings 목록. 각 항목은 criterion(검사 항목), judgment(통과·실패·판단 불가·해당 없음), reason(이유), evidence(근거)입니다. 이 judgment는 감사 의견이며 파이프라인 전체 실행 상태가 아닙니다.|
+|`InverseResponse`|Each item is variable_id, state, recoverable, undefinable, evidence, proposed, path, reason, etc. It's not a verified execution order that has a string of proposed paths.|
+|`SourceResponse`|One source_annotation. Only the specified arguments contain side  A or B, text  source phrase, reason  Y. The Python call section checks that the specified side is the same as the side of the response.|
+|`AuditResponse`|Each item is a criterion, a trial item, a judgment, a trial failure, a judgment not to be dismissed, a reason, evidence, or an audit opinion.|
 
-### 설명과 검사가 보장하는 범위
+### The scope of explanation and verification
 
-필드 이름·타입·필수 여부는 스키마에 정의돼 있습니다. 원천 정답 메타데이터의 일치, 중복 ID, 본문 위치 일치 등은 같은 Python 모듈의 추가 검사로 확인합니다. 이런 추가 검사 모두가 자동 생성 JSON Schema 안에 표현되는 것은 아니므로, **LLM이 JSON Schema에 맞춰 답했더라도 Python 검사를 생략하지 않습니다.**
+The field name, type, or requirement is defined in the schema. The matching of the source metadata, the duplicate ID, the matching of text location, etc. is verified by additional checks on the same Python module. **Even if the LLM answers to the JSON Schema, it doesn't skip the Python test.**
 
-## 스키마 검증 파일 — validation.py
+## The schema verification file is validation.py
 
-스키마 폴더 안의 **[validation.py](validation.py)**가 공통 검사 파일입니다. 입력 준비 코드, 단계 실행 코드, 모델 응답 처리 코드가 이 파일을 사용합니다.
+It's in the schema folder. **[validation.py](validation.py)**It's a common checking file, and input-ready code, step-run code, model response processing code uses this file.
 
-|함수|받는 것|하는 일과 결과|
+|Function|What you get.|What we do and what we get out of it.|
 |---|---|---|
-|`parse_json`|JSON 원문|JSON을 읽습니다. 같은 항목 이름이 두 번 나오거나 유효하지 않은 숫자가 있으면 거절합니다.|
-|`parse_json_object`|LLM의 JSON 응답 원문|위 검사에 더해 최상위가 객체인지 확인합니다.|
-|`validate`|스키마 이름과 읽어 둔 데이터|필수 항목·타입·추가 항목·정의된 Python 조건을 검사합니다. 통과하면 입력 그대로 반환하고, 실패하면 오류를 발생시킵니다.|
-|`check_json`|스키마 이름과 JSON 원문|검사 결과를 PASS/FAIL로 돌려줍니다. 실패하면 잘못된 항목 위치와 이유를 담습니다.|
-|명령행 실행|스키마 이름과 파일 경로|파일을 수정하지 않고 검사 결과를 출력합니다. 통과는 종료 코드 0, 실패는 1입니다.|
+|`parse_json`|JSON code|I read JSON, and the same item name comes up twice or if there's an invalid number, I reject it.|
+|`parse_json_object`|The JSON response to LLM|Add to the above test and see if the top is the object.|
+|`validate`|The name of the scheme and the data you read.|It checks the required entry, type, add entry, set Python conditions, and when it passes, it returns the input as it is, and fails, it causes an error.|
+|`check_json`|The name of the schema and the JSON font|It returns the test results to PASS/FAIL, and if it fails, it lists the wrong item position and the reason.|
+|Execute the command.|The name of the scheme and the file path.|The passing end code is the end code. 0Failure is a failure. 1.|
 
-### 실제 확인한 예
+### A real example.
 
-- 기존 첫 10건 입력 파일은 검사에 통과했습니다.
-- 그 입력을 메모리에서만 복사하고, 첫 문제의 `reference_precision` 값을 정수 0에서 문자열 `"0"`으로 바꾸면 거절됩니다. 오류 위치는 첫 문제의 reference_precision이며 이유는 정수가 아니라는 것입니다. 원본 파일은 변경하지 않았습니다.
-- 독립 답변의 `text`에 문자열 대신 숫자 42를 넣으면 거절됩니다. `text` 항목이 없거나 정의에 없는 항목을 추가해도 거절됩니다.
+- first existing 10The input file passed the test.
+- And then you copy that input only from memory, and then you get the first problem. `reference_precision` Calculate the value 0From string `"0"`The error location of the first problem is reference_precision and the reason is that it's not an integer.
+- The independent answer. `text`Instead of a string, a number. 42If you put in, you're rejected. `text` You're going to be denied even if you don't have an item or add an item that's not in the definition.
 
-검사기는 문자열 `"0"`을 숫자 0으로 자동 수정하지 않습니다. 원응답을 보존하고 잘못된 필드와 이유를 남기는 것이 원칙입니다.
+The checker is a string. `"0"`The number 0It's the principle to preserve the raw response and leave the wrong field and reason behind.
 
-## 언제 전달하고 검사하는가
+## When do we deliver and test?
 
-1. 호출 전에 역할에 맞는 응답 스키마를 가져옵니다. 없거나 비어 있거나 만들 수 없으면 FAIL을 기록하고 호출하지 않습니다. 등록하지 않은 새 역할도 검사를 우회하지 못합니다.
-2. 모델 입력을 검사합니다. 독립 답변 입력에는 context와 question 두 항목만 허용합니다.
-3. 모델을 호출할 때 프롬프트와 그 응답 스키마를 함께 전달합니다. 별도 요청 스키마를 모델에 보내는 요구는 없습니다. 기존 request 정의는 내부 입력에 허용하지 않은 필드가 섞이지 않도록 확인하는 용도입니다.
-4. 응답을 받으면 원문을 먼저 기록하고 JSON 문법·필드·타입을 Python으로 검사합니다.
-5. 통과한 응답만 다음 처리에 넘깁니다. 오류는 원응답·필드 위치와 함께 기록하고 자동 보정·재호출하지 않습니다.
+1. It brings in a response scheme that matches the role before the call. If it's not there, or it's empty, or it can't be created, then you don't record and call the FAIL.
+2. It checks the model input. It allows only two entries, context and question, to enter independent answers.
+3. When you call a model, it delivers the prompt and its response schema together. No request scheme is required to be sent to the model. The current request definition is to ensure that fields that are not allowed to enter are not mixed.
+4. When you get the answer, you write the source code first, and then you test the JSON syntax and field type in Python.
+5. The only response that passes is passed to the next procedure. The error is recorded with the raw response field position and not automatically corrected and recovered.
 
-호출 전후의 공통 함수는 [providers/structured.py](../providers/structured.py)입니다. CLI 연결 코드는 추가됐으나 내부 도구 차단 미검증으로 실제 모델 실행은 중단됩니다. 전달 방식은 native 또는 prompt를 명시해야 하며 실제 지원 여부는 통신 어댑터에서 확인해야 합니다. CLI 코드는 native 응답 스키마 인자를 사용합니다. 공통 함수는 요청 형식이 정해진 POT 작성과 독립 답변만 수용합니다. 문장화 요청의 입력 투영은 아직 미연결이고, 복원·출처·감사 응답의 세부 판단 계약은 초안이므로 이 공통 함수를 통한 실제 호출을 막습니다.
+The common function of the call pre-post is [providers/structured.py](../providers/structured.py)The CLI connection code is added, but the internal tool block scan stops the actual model execution. The delivery method must specify native or prompt, and the actual support must be verified in the communication adapter. The CLI code uses the native response schema element. The common function only accepts the POT writing and independent response that the request format has been specified. The input projection of the phrasing request is still unconnected, and the detailed judgment agreement for the recovery, source, and response is unconventional, so it prevents the actual call to this common function.
 
-`RunContext.invoke`는 여섯 LLM 역할의 응답 스키마를 **처리 함수 호출 전에** 확인·저장하고 `response_schema` 인자로 전달합니다. Python 처리 함수 목록은 따로 명시하므로 스키마 삭제나 역할 이름 오타가 무검사 호출로 바뀌지 않습니다. 스키마 인자를 받지 않는 과거 함수에 인자를 빼고 재호출하지 않습니다. 단계 처리 함수가 잘못된 답변을 PASS로 돌려줘도 필드 검사를 통과하지 못하면 FAIL로 중단합니다. 이는 응답 형식 검사이며 의미 검증 완료를 뜻하지 않습니다.
+`RunContext.invoke`The response scheme for the six LLM roles **Before calling the processing function** Check and talk. `response_schema` The Python processor functions list is separate, so it does not change to a schema deletion or a role name to an unscrew call. It does not re-record past functions that do not receive schema duplicates except for duplicates. If the step processing function returns the wrong answer to PASS, it stops as FAIL if it does not pass the field test. This is response format validation and does not mean that the verification is complete.
 
-### 호출 전후 코드 확인 결과
+### The code verification results after the call
 
-모델 통신은 `providers/structured.py`의 공통 경계에서 응답 스키마를 받은 `transport(...)`로 이어집니다. 이후 추가한 [CLI 코드](../providers/cli.py)의 `call()`도 이 경계를 사용하며 실제 프로세스 시작 전 내부 도구 차단 미검증 조건에서 중단합니다. 단계의 여섯 LLM 역할에도 같은 응답 정의를 적용합니다. 스키마 목록에서 이름이 사라져도 LLM 역할이라는 사실은 유지되도록 역할 목록을 분리했습니다.
+Model communication is `providers/structured.py`received a response scheme from the common boundaries of `transport(...)`And then I added the CLI code.](../providers/cli.py) `call()`We use this boundary to stop the actual process before it starts under the condition of internal tool blocking and checking. We apply the same response definition to the six LLM roles in the stages. We've separated the roles list so that even if the name disappears from the Schema list, the fact that it's an LLM role remains.
 
-- 스키마 누락·빈 정의·알 수 없는 역할·전달 방식 미지정은 호출 전에 실패 기록을 남깁니다.
-- 단계 기록은 `03-result/schema-check.json`, `result.json`, 문제의 `events.jsonl`에서 실패 원인을 연결합니다. 공통 전달 함수는 호출별 `03-result/schema-check.json`에 통신 시작 여부를 남깁니다.
-- 원응답이 있으면 먼저 보존하고 JSON 문법과 응답 필드·타입을 검사합니다. 오류를 자동 보정하거나 재호출하지 않습니다. 통신 자체가 실패해서 응답이 없으면 그 실패를 기록하며 검사 통과를 만들지 않습니다.
-- 로컬 대역으로 여섯 역할의 스키마 삭제 시 실행 함수 호출 0회, 스키마 사전 저장·전달, 잘못된 응답 보존·거절을 확인했습니다. 기존 입력·준비·제어 검사를 포함해 39개가 통과했습니다. 실제 모델 호출 결과는 아닙니다.
+- Schema failure, bin definition, unknown role, transmission mode mismatch leaves a record of failures before calling.
+- The step record is `03-result/schema-check.json`, `result.json`The problem is, `events.jsonl`In the same way, the common transmission function is called by the `03-result/schema-check.json`So let's leave the message on the left.
+- If there's a raw response, we save it first and check the JSON syntax and the response field input. It doesn't automatically correct or re-code the error, and if the communication itself fails and the response fails, it doesn't record the failure and make a check pass.
+- Delete the schema of six roles as a local variable while running the call function 0We've identified the routing, schema pre-storage, transmission, incorrect response retention, and cancellation, including the existing input, backup, and reverse checks. 39The items passed. It's not the actual model call result.
 
-초안 역할의 로컬 대역은 형식·흐름 검사에만 씁니다. 공통 전달 함수는 초안·입력 투영 미연결 역할의 실제 통신을 막습니다. 이후 CLI 연결을 추가할 때도 이 경계를 사용하고 내부에서 별도 호출을 만들면 스키마 전달·응답 검사를 함께 연결해야 합니다. CLI 내부의 숨은 요청까지 점검 완료했다는 뜻은 아닙니다.
+The local bandwidth of the draft role is used only for form-flow checks. The common transmission function blocks the actual communication of the draft-input injection unconnected role. Then, when you add the CLI connection, you have to use this boundary to make an internal star call, and you have to connect the schema transmission-response test together. That doesn't mean you've completed the check to the hidden request inside the CLI.
 
-## 입력 보존과 검증
+## Preservation and verification of input
 
-원문 문단·표·셀·숫자 위치, 원천 출처, 정답 값·타입·자릿수, 배율·음수 부호를 검사합니다. 원문 위치와 해당 문자열, 정답 정밀도·음수 플래그의 일치도 Python에서 검사합니다. 금융적 의미나 질문의 반올림 지시를 이 스키마가 추정하지 않습니다.
+It checks the location of the source code, the font, the cell, the source, the correct answer, the input, the digits, the alignment, the vowel symbols, and the corresponding position of the source, string, precision, and vowel flags in Python. It doesn't estimate the financial significance or the reverse direction of the question.
 
-기존 10·30·100건 입력과 해시는 다시 쓰지 않았습니다. 읽을 때 새 스키마를 적용합니다. 앞으로 새로 준비하는 묶음에는 스키마 이름·버전·해시가 manifest에 기록되며 일치하지 않는 버전은 거절합니다. 원천 파싱 사본은 보존 자료이며 별도 LLM 공통 입력으로 펼치지 않습니다.
+Existing 10·30·100The original input and hash are not rewritten. New schemas are applied when read. In the next set of new preparations, the schema name, version, hash is recorded in the manifest, and the incompatible version is rejected. The source pasting copy is a preservation material, and no LLM is used as a common input.
 
-POT의 code는 Python 소스 문자열입니다. 스키마에 사칙연산 제한을 넣지 않았습니다. 기존 제한 실행기 교체는 별도의 POT 실행 작업이며 이번에 교체 완료한 것이 아닙니다.
+POT's code is a Python source string. The schema doesn't have a default output limit. The existing limit runner substitute is a separate POT execution, and it's not finished replacing this time.
 
-## 사용
+## Use
 
-프로젝트 전용 환경 `.venv`에 Pydantic 2.13.5를 설치했고 pyproject.toml에 의존성을 명시했습니다.
+Project-specific environment `.venv`In Pydantic 2.13.5I installed it and specified dependency on pyproject.toml.
 
 ```sh
 PYTHONPATH=src .venv/bin/python -m finarch.dataset.schemas.registry --output src/finarch/dataset/schemas/json
@@ -208,42 +208,42 @@ PYTHONPATH=src .venv/bin/python -m finarch.dataset.schemas.validation --schema p
 PYTHONPATH=src .venv/bin/python -m unittest finarch.dataset.checks.test_schemas finarch.dataset.checks.test_preparation finarch.dataset.checks.test_pipeline -q
 ```
 
-방식 근거: [Pydantic JSON Schema 생성](https://docs.pydantic.dev/latest/concepts/json_schema/), [엄격한 타입 검사](https://docs.pydantic.dev/latest/concepts/strict_mode/). fin-astra는 읽기 전용으로 참고했고 기존 스키마 코드를 복사하지 않았습니다.
+The method base: [Pydantic JSON Schema generated](https://docs.pydantic.dev/latest/concepts/json_schema/)[Extremely good type testing](https://docs.pydantic.dev/latest/concepts/strict_mode/)Fin-astra is read-only and doesn't copy the existing schema code.
 
 
-## 출처 계획 스키마
+## Sources plan scheme
 
-`source_plan.py`가 원정의이며 `json/02-generation.01-perturbation.ic-source-plan.schema.json`은 그 정의를 내보낸 파일입니다. `SourcePlan.model_validate(..., strict=True)`로 검사합니다. LLM 응답 스키마가 아니라 13번의 로컬 제작 계획 형식입니다.
+`source_plan.py`is the original definition `json/02-generation.01-perturbation.ic-source-plan.schema.json`So this is the file that's going to get that definition. `SourcePlan.model_validate(..., strict=True)`It's not an LLM response scheme. 13It's a local production plan format.
 
-- `base_plan_ref`, `base_plan_sha256`: 고정한 A/B 값·계산 그래프의 기준 파일과 해시.
-- `sources`: A/B 각각의 출처 ID·역할·정보 접근·직접/간접 전달·검증 상태.
-- `intended_reliability`, `source_condition`: private 제작 조건이며 최종 본문에 그대로 노출하지 않습니다.
-- `claim_order`: 이번 family의 고정 A/B 순서.
-- `realization_rules`: 두 값 보존, 출처 귀속, 정정·추가 수익 오독 방지 등 문장화 조건.
-- `provenance`, `semantic_status`, `final_text_status`: 제작한 출처 조건임과 아직 의미/문장 검사가 끝나지 않았음을 명시.
+- `base_plan_ref`, `base_plan_sha256`: Fixed A/B values; hash with the reference file of the calculation graph.
+- `sources`A/B: A/B source ID, area, access to information, direct or indirect transmission, verification status.
+- `intended_reliability`, `source_condition`: private production conditions and not exposed to the final text.
+- `claim_order`: This family's fixed A/B sequence.
+- `realization_rules`: two value preservation, source inheritance, correction and additional income pollution prevention, etc.
+- `provenance`, `semantic_status`, `final_text_status`: specify that the source condition is made and that the meaning/subject test has not yet been completed.
 
-문장 생성용 `realization-input.json`에는 원문 위치와 인용, 해당 Python 코드 줄, 그래프 노드, A/B 값 및 출처를 함께 넣습니다. 별도 요청 스키마를 LLM에 주라는 의미가 아닙니다. 실제 문장 생성 응답은 기존 `dtt.realize.response`의 patches 형식이며, 호출과 응답 검증은 다음 단계의 미실행 작업입니다.
+For the creation of sentences `realization-input.json`In this case, the source code is the source code, the source, the source and the source code. `dtt.realize.response`Patches are formatted, and call and response verification is the next step in the wrong-way process.
 
-현재 source.plan은 A_ONLY/B_ONLY만 허용하고 sources는 정확히 한 개입니다. 반대쪽 출처는 누락시키며 낮은 신뢰도로 대체하지 않습니다. 이전 네 후보 파일은 이력입니다.
+The current source.plan only allows A_ONLY/B_ONLY, and the sources are exactly one, and the opposite source is dropped and not replaced with low reliability. The previous four candidate files are lead.
 
-## 16번 현재 연결
+## 16Bar current connection
 
-`llm.py::RealizationRequest`는 전송할 C/Q·Python 코드·DAG 구조·허용 편집 슬롯을 내부에서 검사합니다. 이 요청 스키마는 LLM에 보내지 않습니다. `RealizationResponse`의 `patches` 스키마는 전용 프롬프트와 함께 Codex CLI에 전달하고, 원응답 보존 후 동일 정의로 검증합니다. 원문 위치·ID·허용 숫자·EA 최소 삭제의 추가 검사는 `program/dtt_realize.py::check_response`가 담당합니다. 스키마 PASS는 의미 PASS가 아닙니다. 현재 실제 기록은 [16번 안내](../../../reports/run/first-10-pot-validated-v3/test-0001/05-text/STAGE16-README.md)를 따릅니다.
+`llm.py::RealizationRequest`The C/Q Python code to be transmitted checks the structure and permission editing slots from within. This request scheme is not sent to LLM. `RealizationResponse` `patches` The scheme delivers it to the Codex CLI with a dedicated prompt, and after preserving the raw response, it validates it with the same definition. `program/dtt_realize.py::check_response`The actual record is now in the form of a "Skyma PASS" and not "PASS".16I'll take you there.](../../../reports/run/first-10-pot-validated-v3/test-0001/05-text/STAGE16-README.md)And then we follow.
 
 
-## 17번 의미 검사 응답
+## 17The meaning of the test response
 
-`dtt.audit.response` v2는 `findings`의 8개 항목(보존·변경·범위·출처·계획 밖 표현·문법·정정/해소·EA 일관성)과 `observed_state`, 이유, 인용을 받습니다. 인용은 실제 원문/최종 본문/질문의 문자열이며 Python이 대조합니다. 항목 누락·중복·적용 범위 오류·거짓 인용은 통과시키지 않습니다. 의미 판정 불가와 형식 오류는 별도입니다.
+`dtt.audit.response` V2 is the `findings` 8The following items are included: conservation, change, limitation, source, non-planned expression, civil law, correction, resolution, EA consistency: `observed_state`Quotations are a string of actual original/last text/question, and Python is contrasted. Item misses, duplicates, range errors, false quotations don't pass through. Semantic assessment is impossible and form error is not.
 
-내부 `AuditRequest`는 원본·최종 C/Q, 변경 의도, 편집 목록, 역산 보류를 검사합니다. 별도 요청 스키마를 모델에 보내지는 않습니다. 과거 실행의 응답 정의는 당시 저장본을 유지합니다.
+Internal `AuditRequest`The original, updated C/Q, change intent, edit list, and back-up checks. No request schemes are sent to the model. The response definition of past executions keeps the backup at that time.
 
-## 단계별 스키마 JSON 파일 이름
+## Step by step schema JSON file name
 
-2026-09-15 적용. `src/finarch/dataset/schemas/json/`의 파일명은 **소속 단계.작업.요청 또는 응답.schema.json**으로 지정합니다. `index.json`은 등록 스키마 ID와 실제 파일명을 연결합니다. 내부 ID·버전·JSON 내용·해시는 이름 변경만으로 바꾸지 않습니다. 자동 내보내기도 `registry.py`의 `SCHEMA_FILES`를 사용합니다.
+2026-09-15 Apply. `src/finarch/dataset/schemas/json/`The file name **Subsidiary steps. Operations. Request or reply.schema.json**And then we're going to do that. `index.json`It connects the registry schema ID to the actual file name. The internal ID, version, JSON content, hashing doesn't change the name just by changing it. `registry.py` `SCHEMA_FILES`I use it.
 
-원본 검토와 생성문 검증은 같은 정의를 사용하므로 `shared.01-02.02-03.review-and-validation`으로 표시합니다. 각각 Preparation `02-review-and-correct`, Generation `03-validation`에서 사용합니다. `source.plan`은 별도 Python 로컬 계획 정의로 LLM 응답 등록부에는 포함하지 않습니다.
+So the original review and the generated version verification use the same definition. `shared.01-02.02-03.review-and-validation`It's going to be shown as Preparation. `02-review-and-correct`, Generation `03-validation`I use it. `source.plan`The Python Local Planning Definition does not include any of the LLM responses in the registry.
 
-| 내부 ID | JSON 파일명 |
+| I.D. on the inside. | JSON file name |
 |---|---|
 | `preparation.revise.request` | `01-preparation.02-review-and-correct.revision.request.schema.json` |
 | `preparation.revise.response` | `01-preparation.02-review-and-correct.revision.response.schema.json` |
@@ -259,31 +259,31 @@ PYTHONPATH=src .venv/bin/python -m unittest finarch.dataset.checks.test_schemas 
 | `dtt.audit.request` | `shared.01-02.02-03.review-and-validation.request.schema.json` |
 | `dtt.audit.response` | `shared.01-02.02-03.review-and-validation.response.schema.json` |
 | `dtt.audit.response.v2` | `shared.01-02.02-03.review-and-validation.response.v2.schema.json` |
-| `source.plan` (로컬 계획) | `02-generation.01-perturbation.ic-source-plan.schema.json` |
+| `source.plan` (local planning) | `02-generation.01-perturbation.ic-source-plan.schema.json` |
 
-읽는 순서: 이 대응표 → schemas/README.md → json/index.json → 해당 JSON → Python 원정의. Viewer의 현재 스키마 조회는 이 대응표와 같은 파일 경로를 표시하며 과거 호출에 저장된 스키마는 그대로 보존합니다.
+Reading order: This correspondence table → schemas/README.md → json/index.json → corresponding JSON → Python directory. The current schema table of the Viewer shows the file path similar to this correspondence table and preserves the schema stored in past calls.
 
-### 미사용 정의 제거 및 공용 사용 위치
+### Removal of misuse definition and location of public use
 
-현재 스키마 JSON과 자동 내보내기 등록부에서 역산 초안, 독립 답변 요청·응답, 미연결 출처 문구 초안 4개를 제거했습니다. 과거 실행에 저장된 스키마·응답은 변경하지 않습니다. 제거된 역할을 호출하면 응답 스키마 누락으로 호출 전에 차단됩니다.
+Currently, the draft of the draft of a reverse in the JSON and automatic export register, independent response request; response, and unresolved source phrase draft 4The schema response stored in past executions does not change. When you call the deleted role, the response is blocked before calling to the schema drop.
 
-공용 파일명은 `shared.01-02.02-03.review-and-validation.{request,response}.schema.json`입니다.
-- `01-02`: `01-preparation/02-review-and-correct`의 원본 검토·보정.
-- `02-03`: `02-generation/03-validation`의 생성문 검증.
-- `response.v2`는 과거 응답 검사에 사용하므로 유지하며 신규 호출용은 아닙니다.
+The public file name is `shared.01-02.02-03.review-and-validation.{request,response}.schema.json`.
+- `01-02`: `01-preparation/02-review-and-correct`The original review and correction.
+- `02-03`: `02-generation/03-validation`The proof of the generating gate.
+- `response.v2`It's not for regular calls, because it's used in past response checks.
 
-현재 JSON은 로컬 source plan을 포함해 15개입니다. 앞서 기록한 19개는 제거 전 수량입니다.
+JSON now includes a local source plan. 15It's a items. 19It's the amount of time before the items is removed.
 
-## Human-review 실패 해석
+## Human-review Failure to interpret
 
-`shared.01-07.02-05.failure-interpretation`과 `shared.01-07.02-05.display-translation`의 request/response JSON을 `json/`에서 확인합니다. 전자는 증거에 연결된 영어 의견, 후자는 표시용 번역이며 production verdict/feedback과 구별합니다.
+`shared.01-07.02-05.failure-interpretation`and `shared.01-07.02-05.display-translation`The request/response JSON is `json/`The first is the English opinion linked to the evidence, the latter is the sign translation and the production verdict/feedback.
 
-## QI05 품질 범위 sidecar
+## QI05 Quality range sidecar
 
-[quality_scope.py](quality_scope.py)는 오프라인 보고서 전용이며 LLM request/response registry와 분리합니다. 생성 시 `QualityReport.model_json_schema()`로 [실제 sidecar-schema.json](../../../../reports/run/20260916-quality-v1/sidecar-schema.json)을 내보냅니다. 버전·enum·필수 필드·SHA256 형식·중복 ID·분모를 검사하며, 실제 입력 해시는 adapter에서 재확인합니다. 독립 검토 NOT_REVIEWED는 선택한 근거에서 별도 검토 기록을 가져오지 않았다는 의미입니다.
+[quality_scope.py](quality_scope.py)It's dedicated to offline reporting and separated from the LLM request/response registry. `QualityReport.model_json_schema()`Lo [Real sidecar-schema.json](../../../../reports/run/20260916-quality-v1/sidecar-schema.json)It sends out the version enum.56 It checks the format-repeat ID-denominator, and the actual input is reconfirmed by the adapter. Independent review NOT_REVIEWED means that it didn't bring any review records from the selected base.
 
-QI06 `response_screen.py`는 저장용 `response-screen-v2` sidecar 계약입니다. 실제 export는 [review-v2/sidecar-schema.json](../../../../reports/run/20260916-review-v2/sidecar-schema.json), 보고서는 [response_screen.json](../../../../reports/run/20260916-review-v2/response_screen.json)입니다. LLM response schema와 별개입니다.
+QI06 `response_screen.py`is for storage `response-screen-v2` The actual export is [review-v2/sidecar-schema.json](../../../../reports/run/20260916-review-v2/sidecar-schema.json)The report is in response_screen.json.](../../../../reports/run/20260916-review-v2/response_screen.json)It's separate from the LLM response schema.
 
-QI02 `original_baseline.py`의 public allowlist는 [public-input-schema.json](../../../../reports/run/20260916-original-baseline-v1/public-input-schema.json), private 보고서 계약은 [sidecar-schema.json](../../../../reports/run/20260916-original-baseline-v1/sidecar-schema.json)으로 export됩니다. 실제 모델용 요청은 public Q/C만 포함하며 private 보고서가 아닙니다.
+QI02 `original_baseline.py`The public allowlist is a public-input-schema.json](../../../../reports/run/20260916-original-baseline-v1/public-input-schema.json)The private reporting contract is [sidecar-schema.json](../../../../reports/run/20260916-original-baseline-v1/sidecar-schema.json)The actual model request includes only public Q/C and not private reports.
 
-QI03 `source_pair_review.py`의 실제 저장 보고서 계약은 [source-pairs-v1/sidecar-schema.json](../../../../reports/run/20260916-source-pairs-v1/sidecar-schema.json)입니다. [pair_manifest.json](../../../../reports/run/20260916-source-pairs-v1/pair_manifest.json)의 정확 연결·제외 이유·양쪽 상태를 검증하며 LLM 응답 계약을 바꾸지 않습니다.
+QI03 `source_pair_review.py`The actual storage report contract is [source-pairs-v1/sidecar-schema.json](../../../../reports/run/20260916-source-pairs-v1/sidecar-schema.json)So this is [pair_manifest.json].](../../../../reports/run/20260916-source-pairs-v1/pair_manifest.json)Verify the accurate connection, the external reasoning, the external status and do not change the LLM response agreement.

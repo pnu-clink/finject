@@ -1,26 +1,26 @@
-# Analysis feature 사분면 맵
+# Analysis feature quadrant map
 
-## 읽는 순서
+## Reading order
 
-1. `RESEARCH-DIRECTION.md`: Luna·Haiku 전체 지도와 항목별 M01–M23 지도.
-2. `feature-map.json`: 각 항목의 조건별 표시 내용, 저장 해석·실제 인용·응답 ID.
-3. `source-snapshot.json`: 읽은 자료의 경로·해시·집계 작성 시각.
-4. `events.jsonl`: 자료 제작 기록. 원본 실험 이벤트를 대신하지 않습니다.
+1. `RESEARCH-DIRECTION.md`: Luna·Haiku full map and item by item M01–M23 The map.
+2. `feature-map.json`: Conditional display content for each item, save interpretation; actual citation; reply ID.
+3. `source-snapshot.json`: The path of the material read; the description; the time of writing the collection.
+4. `events.jsonl`The data creation record. It doesn't replace the original experimental event.
 
-## 뷰어와 그림
+## Viewer and painting
 
-[연구자료 단일 화면](../../../viewer/research/index.html)에서 **Analysis 사분면 맵**을 선택합니다. `figures/`의 SVG는 기존 뷰어에 삽입하기 위한 그림입니다. 결과 폴더에 별도 뷰어 HTML을 만들지 않습니다.
+[Research material on a single screen](../../../viewer/research/index.html)in **Analysis square map**Choose the one. `figures/`The SVG is an image to insert into the existing viewer, and it doesn't create any viewer HTML in the resulting folder.
 
-[독립 HTML 자료](../../../outputs/research/20260928-analysis-quadrant-map/analysis-quadrant-map.html)는 두 전체 지도와 23개 항목을 포함합니다. 항목 제목을 눌러 지도를 펼칩니다. 원응답의 내용은 인용 상자, 저장된 분석자의 해석은 일반 문단으로 구별합니다.
+[This is an independent HTML file.](../../../outputs/research/20260928-analysis-quadrant-map/analysis-quadrant-map.html)And the two whole maps are 23Includes the item item, and then you push the item title, and you roll out the map. The raw response is a quotation box, and the analyst's stored interpretation is a common paragraph.
 
-## 관찰 범위
+## The range of observation
 
-Luna `20260927-exp-007-luna`와 Haiku `20260927-exp-008-haiku`의 저장 Analysis를 시각화합니다. 네 조건은 독립 반복이 아닙니다. 정량 그림은 원래 전체 분모를 보존하며 수치/null 필드가 있는 형식 실패도 포함합니다. 형식 실패·미수집은 M04에서 별도로 읽고, 양쪽 형식 유효 대응쌍은 M13에서 읽습니다. null·CONFLICT·숫자 일치가 의미 정답을 뜻하지 않습니다.
+Luna `20260927-exp-007-luna`Come on, Haiku, what are you doing? `20260927-exp-008-haiku`The four conditions are not independent iterations. The set diagram preserves the original whole denominator and also includes the form failure with the numerical/null field.4In the separate reading, the two formats are equivalent pairs of M13In the null-conflict number matching does not mean a correct answer.
 
-M14–M20은 저장된 태그로 연결한 정확 인용 예시이며 발생률·분면 우세가 아닙니다. 사례 미선정은 현상 부재가 아닙니다. M21–M23은 미집계 또는 제안으로 남겼습니다. 논문 본문의 결과·결론, 실험·Analysis 구현과 원응답은 수정하지 않았습니다.
+M14–M20M2 is an accurate citation link to a stored tag and not an occurrence rate.1–M23The results of the paper text, the conclusion, the experimental implementation, the analysis and the raw response were not modified.
 
-## 제작과 확인
+## Production and verification
 
-이 README는 `src/finarch/documentation/templates/research/quadrant-map-readme.md`에서 생성합니다. 표시 자료 생성은 `src/finarch/documentation/research_quadrant_map.py`가 담당하며 Analysis 파이프라인을 실행하지 않습니다. 기존 집계의 비율 표시·정확 인용 연결만 수행합니다.
+This README is a `src/finarch/documentation/templates/research/quadrant-map-readme.md`The output of the data is the output of the `src/finarch/documentation/research_quadrant_map.py`It's not responsible for running the Analysis pipeline, it's only running the ratio of the existing set and the exact quote link.
 
-[확인 기록](../../../log/research-quadrant-map/20260928/README.md)에서 원자료 보존과 화면 검사를 구분해 읽습니다. 스타일은 기존 연구자료의 흰색·녹색과 system-ui 글꼴을 따릅니다.
+[Confirmation of the record](../../../log/research-quadrant-map/20260928/README.md)In this article, we're going to look at the difference between preserving raw materials and screen checking, and the style is based on the white, green, and system-ui fonts of the existing research materials.

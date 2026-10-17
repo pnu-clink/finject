@@ -39,58 +39,58 @@ SECONDARY = {
 }
 
 GROUPS = {
-    'G01': ('SQ1', '원본 수치 일치의 기준선',
-            '원본의 기록된 수치 일치는 풀이 조건에 따라 다르지만, 원본 성과와 변형 대응의 관계를 이 묶음만으로 판정할 수 없습니다.',
-            'F013·F049·F096의 원본 조건별 수치 일치와 전체 MATCH/MISMATCH/UNEVALUATED 기록을 대조합니다.',
-            '반환 숫자와 참조값의 일치에는 유보·형식 실패·설명 경로의 차이가 섞일 수 있습니다.',
-            'SQ1의 기준선일 뿐입니다. 원본 성과별 동일 조건 변형 대응을 직접 나눠 비교해야 H3 관계를 판단할 수 있습니다.'),
-    'G02': ('RQ2', '판단 기준 안내와 충돌 보고·답변 유보',
-            'Criteria-Guided Solving에서는 여러 충돌 변형에서 CONFLICT 표시와 null 답변이 더 자주 기록됐습니다.',
-            'F001·F005·F101 등의 동일 모델·변형·추론 설정 아래 Unguided/Criteria-Guided 대응 비교를 읽습니다.',
-            '기준 안내는 분류 요구와 출력 계약도 바꾸며, 일부 안내 조건에서도 숫자를 반환합니다.',
-            'CONFLICT는 모델의 표기입니다. 유보 증가를 충돌 식별의 정확도나 의미상 품질 향상으로 환산하지 않습니다.'),
-    'G03': ('RQ2', '추론 설정 차이는 편집 유형에 따라 달라짐',
-            'Reasoning OFF/ON의 응답 변화는 주장 추가·관계 변형·사실 삭제에서 같은 방향으로 나타나지 않았습니다.',
-            'F002·F006·F030·F141의 동일 문항·풀이 지시·변형 조건별 OFF/ON 대응을 읽습니다.',
-            '편집 유형과 남은 정보량이 다르고, 보고된 설명은 모델 내부 추론을 보여주지 않습니다.',
-            '설정 차이에 대한 관찰이며 독립 반복이나 인과 기제, 정답률 향상의 검증이 아닙니다.'),
-    'G04': ('RQ1', '상충 주장 위치와 후보 수치 전환',
-            '상충 수치 주장의 앞·뒤 배치에 따라 후보 수치 일치가 바뀐 사례와 대응쌍이 있지만 일률적인 위치 규칙은 없습니다.',
-            'F003·F100·F140·F180의 BEFORE/AFTER 대응과 그대로 유지된 응답·반례를 함께 읽습니다.',
-            '표와 문장의 위치, 주변 표현 및 선택된 계산 경로가 함께 달라질 수 있습니다.',
-            'A/B는 후보 수치 일치 코드입니다. 근거 선택, 의미 정답 또는 순수한 위치 인과효과로 단정하지 않습니다.'),
-    'G05': ('RQ1', '출처 표기와 연결 부모 대비 변화',
-            '뒤쪽 주장에 출처를 붙인 변형은 연결된 부모 응답과 다른 후보 일치를 보이지만 변화 방향은 혼합돼 있습니다.',
-            'F106·F170의 SOURCE_A/B와 각각 연결된 VALUE 부모의 대응 전이 및 반대 사례를 읽습니다.',
-            '출처 문구 자체, 주장 대상과 위치, 모델 응답 변동이 함께 작용할 수 있습니다.',
-            '출처 문구의 진위는 검증되지 않았고 모델의 일반적인 출처 선호나 인과효과는 식별되지 않습니다.'),
-    'G06': ('RQ1', '관계식 충돌의 서로 다른 처리 경로',
-            '관계 변형 응답에는 원래 표의 값 사용, 추가 관계 적용, 두 경로의 충돌 보고가 함께 나타났습니다.',
-            'F035·F078·F162·F178의 조건별 분류와 저장된 설명의 계산 경로를 함께 읽습니다.',
-            '표 안 관계의 적용 범위와 문구 해석이 다를 수 있으며 조건별 유보 패턴은 G02·G03과 겹칩니다.',
-            '후보값 일치·CONFLICT 표기는 관계식 해석이나 산술의 정당성에 대한 독립 판정이 아닙니다.'),
-    'G07': ('RQ1', '독립 사실 삭제 후 유보와 수치 경로',
-            '각 사실 삭제에서는 null이 늘었고, 남은 숫자 응답의 설명에는 복원·부분 계산·가정 등 서로 다른 경로가 기록됐습니다.',
-            'F004·F008·F171·F183의 EA_01/EA_02와 각각의 ORIGINAL 대응 및 수치 예외를 읽습니다.',
-            '남은 자료로 계산 가능한 경우와 부족한 경우가 섞이며 설명된 계산도 별도 검산이 필요합니다.',
-            '두 삭제는 원본에서 각각 출발한 별도 변형입니다. 숫자 일치를 복원 성공률이나 의미상 정답으로 세지 않습니다.'),
-    'G08': ('SQ3', '형식 유효·수치 일치·의미 판단의 경계',
-            '저장 응답의 형식 유효성과 후보 수치 일치는 설명·근거의 의미상 정합성을 보증하지 않습니다.',
-            'F071·F075의 형식 검사 분모, 후보 코드, 설명과 계산의 반례를 구분해 읽습니다.',
-            'OTHER는 단위·반올림·다른 계산 경로 때문일 수도 있으며, 후보 일치도 다른 설명 경로와 공존할 수 있습니다.',
-            '형식 실패와 사례별 정합성 문제를 전수 의미 오류율로 합치지 않습니다.'),
-    'G09': ('SQ3', '최종 답·분류·설명 속 수치의 불일치',
-            '최종 answer, 모델 분류, 설명 안의 조건부 숫자는 서로 다른 응답 요소로 읽어야 합니다.',
-            'F044·F083·F091의 null 설명 속 숫자, OTHER 답의 계산 경로, 관계 설명의 반례를 확인합니다.',
-            '설명 속 수치는 조건부 예시일 수 있고, 수치 차이는 산술·단위·표현 선택과 관련될 수 있습니다.',
-            '저장 사례를 근거로 한 문제 제기이며 전 응답의 정합성 판정이나 오류율은 아닙니다.'),
+    'G01': ('SQ1', 'The standard line of matching the original numbers.',
+            'The recorded numerical units of the original vary according to the root conditions, but the relationship between the original performance and the modification correspondence cannot be determined by this set alone.',
+            'F013·F049·F096The matching of the original condition figures by the original condition and the total MATCH/MISMATCH/UNEVALUATED record.',
+            'The match between the return numbers and the reference values can mix the differences in the ubo-form failure and the explanatory path.',
+            'It\'s just the baseline of SQ1, so you have to compare the same conditional variation correspondence directly to the original outcome and then you can determine the H3 relationship.'),
+    'G02': ('RQ2', 'Judgmental guidance and collision reporting.',
+            'Criteria-Guided Solving has recorded more frequent CONFLICT signatures and null responses in multiple conflict variations.',
+            'F001·F005·F101 Under the same model, variable, reference setting, you can read the Unguided/Criteria-Guided correspondence comparison.',
+            'It also changes the classification requirements and the output agreements that are not standard, and it returns the numbers in some guidelines.',
+            'CONFLICT is the model\'s trademark, and it doesn\'t translate the euphoric increase into accuracy of collision identification or meaningful quality improvement.'),
+    'G03': ('RQ2', 'The difference in the settings of the inference varies depending on the type of editing.',
+            'The response changes in Reasoning OFF/ON did not appear in the same direction in the claims add-on, correlational modification, deleted fact.',
+            'F002·F006·F030·F141I read the same case, the same floating instruction, the same OFF/ON correspondence per variable condition.',
+            'The type of editing and the amount of information left over, the reported explanations don\'t show the model\'s internal inference.',
+            'It\'s not an observation of setup differences, it\'s not a verification of independent repetition or a correctional rule or a correlational improvement.'),
+    'G04': ('RQ1', 'Opposition position and candidate number switching',
+            'There are cases and corresponding pairs where the match of the candidate numbers changes depending on the front and back placement of the counterpoint number argument, but there are no uniform position rules.',
+            'F003·F100·F140·F180Read along with the BEFORE/AFTER response and the remaining response-to-reverse.',
+            'The position of tables and sentences, the surrounding representations, and the chosen path of calculation can vary.',
+            'A/B is a candidate number matching code, not determined by base selection, meaning, or pure position interaction.'),
+    'G05': ('RQ1', 'Change in the source tag and parent-related',
+            'The variation that gives the back argument its source shows a connected parental response to other candidate equations, but the direction of change is mixed.',
+            'F106·F170Read the corresponding pre and counter instances of the parent VALUE linked to the SOURCE_A/B respectively.',
+            'The source phrase itself, the object and the location of the claim, the model response variables can work together.',
+            'The authenticity of the source statement has not been verified, nor has the model\'s general source preference or repercussions been identified.'),
+    'G06': ('RQ1', 'The different routes of handling of the collision',
+            'The relationship modification response came with the original use of the table values, the addition of a relationship application, and a two-way collision report.',
+            'F035·F078·F162·F178I read the conditional classification and the calculation path of the stored description together.',
+            'The scope of application of the table-to-table relationship and the interpretation of the sentence can vary, and the condition-by-condition ebo pattern is G02·G03And overlap with it.',
+            'Conflict signals are not independent judgments of the validity of relational interpretation or mathematics.'),
+    'G07': ('RQ1', 'After the fact of deleting the independent ubo and the numerical path',
+            'In each fact-delete, the nulls increased, and the description of the remaining number responses recorded different paths, such as recovery, partial computation, and retention.',
+            'F004·F008·F171·F183The EA_01/EA_02And read the ORIGINAL correspondence and numerical exceptions to each.',
+            'The remaining data is a mix of the available and the missing data, and the described data is not even verifiable.',
+            'The two deletions are distinct variations, each starting from the original, and the numerical unit is not calculated as the recovery success rate or the meaningful answer.'),
+    'G08': ('SQ3', 'Form valid; process consistency; boundaries of discretion',
+            'The formal validity of the storage response and the nominative number of the data do not guarantee the completeness in the descriptive sense.',
+            'F071·F075I read the format validation denominator, the candidate code, the description and the inverse of the calculation.',
+            'OTHER can be due to a unit, sub-lift, or other computational path, and candidate matches can coexist with other explanatory paths.',
+            'It doesn\'t combine the problem of form failure and case-by-case complexity with the problem of numerical significance error rate.'),
+    'G09': ('SQ3', 'Final answer: the dissonance of the numbers in the distribution.',
+            'The final answer, the model classification, the conditional numbers in the description, should be read as different response factors.',
+            'F044·F083·F091The null explanation of the numbers, the calculation path of the OTHER answer, the half-example of the relationship explanation.',
+            'The numbers in the description can be conditional examples, and the numerical differences can be related to the choice of numbers, groups, and representations.',
+            'It\'s a question based on a storage case, not a complexity judgment or error rate of my response.'),
 }
 
 EMPTY = {
-    'SQ2': ('직접 검토 없음', '제작 문항의 변형 타당성과 독립 검토자 간 일치도는 이 A03 발견 묶음에서 검토하지 않았습니다.'),
-    'SQ4': ('직접 검토 없음', '계산 구조의 변수·연산·깊이와 응답을 연결한 직접 발견이 없습니다.'),
-    'SQ5': ('직접 검토 없음', '원본 제작의 private 외부지식 분류는 있으나 모델의 지식 사용을 관찰·판정한 발견은 없습니다.'),
-    'SQ6': ('독립 반복 확인 전 보류', '이번 저장 응답은 동일 조건의 독립 반복을 확인하는 자료가 아닙니다.'),
+    'SQ2': ('No direct review', 'The conversion validity of the production clause and the consistency between independent reviewers is this A03 I didn\'t review it in the discovery cluster.'),
+    'SQ4': ('No direct review', 'There\'s no direct finding that links the variables, the correlations, the depths of the computational structure to the responses.'),
+    'SQ5': ('No direct review', 'There is no private external knowledge classification of the original, but no observational or conclusive finding of the use of the model\'s knowledge.'),
+    'SQ6': ('Pending independent repeated verification', 'This storage response is not a data that verifies the independent repetition of the same condition.'),
 }
 
 
@@ -120,14 +120,14 @@ def build(run: str) -> dict:
         raise ValueError('SECONDARY_DUPLICATES_PRIMARY')
     paper_path = PROJECT / PAPER
     paper_text = paper_path.read_text()
-    version = re.search(r'한글 논문 초안 v(\d+\.\d+)', '\n'.join(paper_text.splitlines()[:5]))
+    version = re.search('\ud55c\uae00 \ub17c\ubb38 \ucd08\uc548 v(\\d+\\.\\d+)', '\n'.join(paper_text.splitlines()[:5]))
     if not version:
         raise ValueError('PAPER_VERSION_NOT_FOUND')
     questions = {code: (title, text) for code, title, text in re.findall(
         r'^\|(SQ[1-6])\|([^|]+)\|([^|]+)\|', paper_text, re.MULTILINE)}
     questions.update((code, (title, text)) for code, title, text in [
-        ('RQ1', '근거 변경에 대한 반응', re.search(r'\*\*RQ1\. ([^\n*]+)\*\*', paper_text).group(1)),
-        ('RQ2', '풀이 조건과 원본 답변', re.search(r'\*\*RQ2\. ([^\n*]+)\*\*', paper_text).group(1)),
+        ('RQ1', 'Reaction to the change in the basis', re.search(r'\*\*RQ1\. ([^\n*]+)\*\*', paper_text).group(1)),
+        ('RQ2', 'Weed conditions and original answers', re.search(r'\*\*RQ2\. ([^\n*]+)\*\*', paper_text).group(1)),
     ])
     if set(questions) != set(ORDER):
         raise ValueError('PAPER_QUESTION_SET_CHANGED')
@@ -148,22 +148,22 @@ def build(run: str) -> dict:
               'groups': groups,
               'finding_review': [{'finding_id': item, 'primary_group': owner[item],
                                   'secondary_groups': list(SECONDARY.get(item, ())),
-                                  'note_ko': '원본 제목·주장·한계를 보존하고 주제별 읽기 위치를 지정했습니다.'}
+                                  'note_ko': 'I saved the original title, headline, boundary and assigned the subject-specific reading location.'}
                                  for item in sorted(findings)]}
     index = {'schema_version': 1, 'kind': 'editorial-index-of-saved-findings', 'run': run,
              'paper_version': version.group(1), 'paper': {'path': str(PAPER), 'sha256': sha(paper_path), 'sections': ['3.3', '3.4']},
              'saved_review': {'path': str(STAGE / 'rq-review.json'), 'sha256': None},
-             'notice_ko': f'저장된 {len(findings)}개 연구 발견을 {len(GROUPS)}개 주제에 한 번씩 묶고 논문 v{version.group(1)}의 RQ/SQ로 연결한 편집 색인입니다. 새 모델 호출·의미 판정·논문 결론이 아닙니다.',
+             'notice_ko': f'Saved {len(findings)}I\x27m going to tell you about the items research. {len(GROUPS)}And then we\x27ll just tie it to the items theme and then we\x27re going to do a paper on the items theme.{version.group(1)}It\x27s an editing color that\x27s connected to the RQ/SQ, not a new model call, semantic assessment, or discussion conclusion.',
              'questions': [], 'groups': groups}
     for code in ORDER:
         mapped = [group['id'] for group in groups if group['question_id'] == code]
-        status, scope = EMPTY.get(code, ('기존 관찰 연결 · 결론 미확정',
-                                         '저장된 발견의 주장·반례·한계를 연결했습니다. 대응 집계와 사례 이상의 의미 정답 판정은 수행하지 않았습니다.'))
+        status, scope = EMPTY.get(code, ('Existing observations linked \xb7 conclusions not established',
+                                         'Saved claims, counterexamples, and limitations are linked. No semantic-correctness assessment beyond the matched aggregates and cases was performed.'))
         if code == 'SQ1':
-            status, scope = ('기준선 연결 · 직접 관계 미검토', GROUPS['G01'][5])
+            status, scope = ('Baseline linked \xb7 direct relationship not reviewed', GROUPS['G01'][5])
         if code == 'SQ3':
-            status, scope = ('사례 연결 · 전수 판정 아님',
-                             '저장된 설명의 반례를 연결했습니다. 전수 의미 정합성 검사나 오류율 추정은 수행하지 않았습니다.')
+            status, scope = ('Cases linked \xb7 not an exhaustive assessment',
+                             'Counterexamples to saved explanations are linked. No exhaustive semantic-consistency check or error-rate estimate was performed.')
         index['questions'].append({'id': code, 'title_ko': questions[code][0],
                                    'question_ko': questions[code][1], 'status_ko': status,
                                    'scope_ko': scope, 'group_ids': mapped})
@@ -173,24 +173,24 @@ def build(run: str) -> dict:
     save('rq-review.json', review)
     index['saved_review']['sha256'] = sha(folder / 'rq-review.json')
     save('rq-sq-review.json', index)
-    lines = ['# 연구 발견 주제별 통합 및 RQ/SQ 연결', '',
-             '원본 F 183개를 한 주 그룹에 각각 연결했습니다. 보조 연결은 중복 계산하지 않습니다.',
-             '이 문서는 저장된 A03의 편집 색인이며 새 모델 판정이나 논문 결론이 아닙니다.', '']
+    lines = ['# Research findings topically integrated and RQ/SQ connecting', '',
+             'The original F. 183I connected the items to a weekly group, and the auxiliary connections don\'t count overtime.',
+             'This document is stored in A03It\'s not a new model judgment or paper conclusion.', '']
     for question in index['questions']:
         lines += [f"## {question['id']} · {question['title_ko']}", '', question['question_ko'], '',
-                  f"**범위:** {question['scope_ko']}", '']
+                  f"**Scope:** {question['scope_ko']}", '']
         for group in groups:
             if group['question_id'] != question['id']:
                 continue
-            lines += [f"### {group['id']} · {group['title_ko']} ({len(group['primary_finding_ids'])}개 F)", '',
-                      group['claim_ko'], '', '**근거:** ' + group['evidence_ko'], '',
-                      '**다른 설명:** ' + group['alternatives_ko'], '',
-                      '**해석 한계:** ' + group['boundary_ko'], '',
-                      '**원본 F:** ' + ', '.join(group['primary_finding_ids']), '']
+            lines += [f"### {group['id']} · {group['title_ko']} ({len(group['primary_finding_ids'])}items F)", '',
+                      group['claim_ko'], '', '**Based on:** ' + group['evidence_ko'], '',
+                      '**Alternatives:** ' + group['alternatives_ko'], '',
+                      '**The limits of interpretation:** ' + group['boundary_ko'], '',
+                      '**Original F:** ' + ', '.join(group['primary_finding_ids']), '']
     (folder / 'rq-review.md').write_text('\n'.join(lines) + '\n')
-    audit = ['# 원본 연구 발견 183개 대응표', '',
-             '모든 F의 주 그룹은 정확히 하나이며 보조 그룹은 교차 주제 안내입니다.', '',
-             '|원본|저장 제목|주 그룹|보조 그룹|', '|---|---|---|---|']
+    audit = ['♪ The original research findings 183The answering machine.', '',
+             'All the main groups of F are exactly one, and the subgroups are cross-topic guides.', '',
+             'The name of the group is the name of the team.', '|---|---|---|---|']
     for row in review['finding_review']:
         audit.append('|'+ '|'.join([row['finding_id'], findings[row['finding_id']]['display_ko']['title'].replace('|','/'),
                                   row['primary_group'], ', '.join(row['secondary_groups']) or '—'])+'|')

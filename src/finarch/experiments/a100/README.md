@@ -1,29 +1,29 @@
-# A100 실행 연결
+# A100 Run connection
 
-기존 Evaluation 산출물 형식으로 GPU 서버 결과를 회수하고, 기존 Analysis를 PC에서 실행합니다.
+It takes the results of the GPU server in the existing Evaluation output format and runs the existing Analysis on the PC.
 
-## 현행 PC ↔ A100 공통 파이프라인
+## The current PC is A1.00 Common pipeline.
 
-PC `src/finarch`가 코드 기준이며 A100 공통 경로는 `/home/clink-wooix/workspace/fexperiment/fin-arch`입니다. `releases/<코드 SHA-256>/`에 동일 코드·설정·실험 문서·뷰어를 저장하고 실제 해시가 일치하면 `current`를 연결합니다. 실행은 고정 release를 사용합니다. 기존 `finarch_financereasoning`은 과거 결과 회수용이며 새 worker 경로와 구별합니다.
+PC `src/finarch`So, go to the code standard and A1.00 The common path. `/home/clink-wooix/workspace/fexperiment/fin-arch`. `releases/<code SHA-256>/`If the same code, setup, experiment document viewer is stored and the actual hash matches, `current`The execution uses a fixed release. `finarch_financereasoning`It's a recapture of past results and distinguishes it from the new worker path.
 
-진입점은 양쪽 모두 `python -B -m finarch.experiments.pipeline`입니다. SSH 호스트 Python 3.8은 파일 검사 agent만 실행하며 실제 pipeline은 GPU Pod Python 3.11 이상을 사용합니다. `config/experiments/a100-sync.toml`의 runs 목록을 기준으로 서버도 `reports/experiments-run/<run_id>/00_input`, `01_evaluation`, `02_analysis` 구조를 사용합니다.
+The entrance points are on both sides. `python -B -m finarch.experiments.pipeline`So this is the SSH host Python. 3.8It runs only file scanning agents and the actual pipeline is the GPU Pod Python. 3.11 I use the ideal. `config/experiments/a100-sync.toml`The server is based on the list of runs `reports/experiments-run/<run_id>/00_input`, `01_evaluation`, `02_analysis` We use structure.
 
-|pipeline.py 명령|역할|
+|The command of pipeline.py|Role|
 |---|---|
-|`a100-sync --sync-action check`|PC/A100 코드·공개 입력·PC 중지 상태 해시 대조|
-|`a100-sync --sync-action push`|코드 release·공개 입력 변경분 전달·서버 검증|
-|`a100-sync --sync-action pull`|완료·오류 요청과 상태 수집·원응답 해시 검사|
-|`a100-sync --sync-action cycle`|확인 → 필요 변경분 전달 → 결과 수집|
-|`a100-sync --sync-action watch`|cycle 완료 후 기본 60초 대기하여 반복; 모델 호출 없음|
-|`a100-verify --run <run>`|실행 전 배포 코드·공개 입력 확인; 모델 호출 없음|
-|`a100-evaluation --run <run> --endpoint <local-url> --model-path <revision-snapshot> --authorization <승인 기록>`|공통 E03 worker; 이번 정리에서는 실행하지 않음|
+|`a100-sync --sync-action check`|PC/A100 Code: open input: PC shutdown state hash contrast|
+|`a100-sync --sync-action push`|Code release. Public input change time transmission. Server verification|
+|`a100-sync --sync-action pull`|Complete: request and state collection; raw response hashing|
+|`a100-sync --sync-action cycle`|Confirm → need change to transmit → collect results|
+|`a100-sync --sync-action watch`|After completing the cycle, the default 60Repeat second waiting; no model call|
+|`a100-verify --run <run>`|Check the pre-distributed code; public input; no model call|
+|`a100-evaluation --run <run> --endpoint <local-url> --model-path <revision-snapshot> --authorization`|Common E03 worker; in this order, it doesn't run|
 
-PC 예: `PYTHONPATH=src .venv/bin/python -B -m finarch.experiments.pipeline a100-sync --sync-action cycle`.
-GPU Pod는 `PYTHONPATH=<고정 release>/src`와 해당 release 작업 폴더를 사용합니다. GPU 서버 시작·소유권은 GPU 담당 세션 책임입니다. worker는 이미 준비된 서버의 모델 경로·별칭, 동결 옵션, cache 비사용·초기/종료 0 hit를 확인합니다. pause·미확인 전송은 자동 재요청하지 않습니다.
+PC Yes: `PYTHONPATH=src .venv/bin/python -B -m finarch.experiments.pipeline a100-sync --sync-action cycle`.
+The GPU Pod is a `PYTHONPATH=<Recent release>/src`The worker is responsible for the session of the GPU server. The worker has already prepared the server's model path, configuration options, cache non-use, start/finish. 0 Check the hit. Pause. Unconfirmed transmission does not automatically retrieve.
 
-공개 입력·프롬프트·스키마·E02 manifest·runtime은 PC → A100으로, 상태·완료 원응답은 A100 → PC로 동기화합니다. private·정답·Analysis는 PC에 남깁니다. 이미 동결한 입력과 기존 원응답은 다른 해시로 덮어쓰지 않습니다. 변경된 입력은 새 run을 사용합니다. 서버 E03 `remote-state.json`은 원자적으로 갱신됩니다. 신규 공통 worker 결과는 기존 PC E04 reporting·numeric_validation으로 연결하며 과거 비교 stage의 E04는 보존합니다. Analysis는 자동 시작하지 않습니다.
+Open input, prompt, schema, and E02 The manifest runtime is PC → A100So, the state-finished raw response is A1.00 → sync to PC. private. Correct. Analysis is left on PC. The input that has already been synchronized and the existing raw response are not overlaid with other hashes.3 `remote-state.json`The result of the new common worker is the existing PC E0.4 Linking to reporting·numeric_validation and E0 of the previous comparison stage4Analysis does not start automatically.
 
-읽는 순서: `log/experiments-a100-sync/README.md` → `status.json` → `events.jsonl` → 실행별 remote snapshot → 실험 E03 `sync-status.json`. 공통 viewer: http://127.0.0.1:8894/?tab=sync . 3분 이상 지난 기록은 최신 상태로 표시하지 않습니다. 중지는 로그 폴더에 `STOP` 파일을 만듭니다. 코드·입력 일치는 reasoning 내용의 유효성 검증과 별개입니다. 새 실제 모델 실행으로 이 경로 전체를 검증한 것은 아니며 모델 호출 없이 검사합니다.
+In order of reading: `log/experiments-a100-sync/README.md` → `status.json` → `events.jsonl` → Run by remote snapshot → experiment E03 `sync-status.json`Common viewer: http://127.0.0.1:8894/?tab=sync . 3The last record is not up to date. `STOP` It creates a file. The code-input system is separate from validity checks for reasoning content, which is not validated by a new real model execution, but checks the entire path without model calls.
 
 ```mermaid
 flowchart LR
@@ -31,147 +31,147 @@ flowchart LR
   S00["S00 · a100-sync"]
  end
  subgraph pc[sync.py + sync_protocol.py / PC Python]
-  S00 --> S01["S01 · 코드·공개 입력 SHA-256"] --> S02["S02 · 변경분 전달 / private 제외"]
+  S00 --> S01["S01 · Code-public input SHA-256"] --> S02["S02 · Change time transmission / private excluded"]
  end
  subgraph agent[sync_agent.py / SSH Python]
-  S02 --> S03["S03 · 서버 해시 검증 / release 게시"] --> S04["S04 · 완료 요청 목록·상태 snapshot"]
-  S01 --> S10["S10 · PC 중지·대기 상태 변경분 전달"] --> S04
+  S02 --> S03["S03 · Server hash verification / release posted"] --> S04["S04 · Complete the request list; state snapshot"]
+  S01 --> S10["S10 · PC shutdown and change of state transmission"] --> S04
  end
  subgraph worker[sync_gate.py + worker.py / GPU Pod]
-  S03 --> S05["S05 · 승인·pause·코드·입력·모델·cache 검사"] --> S06["S06 · LLM E03 / 원응답·옵션·상태"] --> S04
-  S10 -.->|실행 중 pause 확인| S05
+  S03 --> S05["S05 • Approval, pause, code, input, model, cache checks"] --> S06["S06 · LLM E03 / raw response · options · state"] --> S04
+  S10 -.->|Check pause while running| S05
  end
  subgraph collect[sync.py + live_collection.py / PC Python]
-  S04 --> S07["S07 · 완료 파일 수집·해시"] --> S08["S08 · 신규 E04 / 과거 E04 보존"] --> S09["S09 · 로그·템플릿 README·공통 viewer"]
+  S04 --> S07["S07 · Completed file collection and deletion"] --> S08["S08 · New E04 - Past E04 Preservation"] --> S09["S09 · Log template README common viewer"]
  end
- S01 --> F["실패: 원기록 보존 / 재호출 없음"]
+ S01 --> F["Failure: No record keeping or re-release"]
  S03 --> F
  S05 --> F
  S07 --> F
 ```
 
-상자는 입력·Python 처리·저장 결과이며 S06만 LLM 호출입니다. 동기화 명령은 S05–S06을 실행하지 않습니다.
+The box is the input·Python processing·reset result and S06The synchronization command is S05–S06It doesn't run.
 
-|파일|입력 → 역할 → 출력|
+|File|Input → Role → Output|
 |---|---|
-|sync_protocol.py|코드·공개 입력 → SHA-256·안전한 경로·불일치 구분|
-|sync.py|TOML·PC 상태 → 코드·입력·중지 상태 변경분 push/pull·watch → status·events·템플릿 README|
-|sync_agent.py|SSH 명령 → 서버 해시·release 게시·PC 중지 상태 반영·완료 요청 목록. 모델 호출 없음|
-|sync_gate.py|배포·run → 코드·공개 입력 불일치 차단|
-|worker.py|승인된 run·준비된 GPU endpoint → 공통 payload·E03 원응답·상태|
-|live_collection.py|공통 worker E03 → 기존 PC E04·문항 조회·viewer 갱신|
-|prepare.py|최신 취합본 → 557문항 선정·Luna 공개 입력 대조 → 독립 모델별 run|
-|prepare_1080.py|20260928-exp-001-luna의 동결 입력과 현행 프롬프트 → 1,080문항·모델별 34,560개 요청 생성·해시 확인 → GPU-2 전달 파일. 모델 호출 없음|
-|wire.py|공개 요청과 런타임 → Qwen 채팅·스키마·추론 조건 → 서버 요청|
-|token_preflight.py|동결 요청과 실제 토크나이저 → 입력 길이 검사 → token-preflight.json|
-|install_worker_hook.py|보존한 worker 원본 → gpu-2 전용 단일 실행 분기 → 해시 기록|
-|remote.py|공개 요청 → 8B·14B 순차 평가 → 원응답·전송상태·캐시·시간·회수 해시|
-|coordinate.py|원격 완료 상태 → PC 회수·해시 검사 → collect와 analyze 실행|
-|collect.py|회수 원응답 → 형식·수치 검사 → 기존 Evaluation 산출물|
-|import_completed.py|pipeline recover-a100 → 봉인 패키지·로컬 private 해시 연결·안내 템플릿 연결 → 기존 회수·E04·뷰어 등록. 모델 호출 없음|
-|recover_completed.py|완료된 원격 run → 원응답 SHA·압축·로컬 파일 해시 확인 → 원본 파일·회수 기록. 모델 호출 없음|
-|recover_stage.py|완료된 비교 stage → 동결 요청·원응답·취합본 해시 대조·로컬 회수 → 원본 자료·회수 README. 모델 호출 없음|
-|register_stage.py|회수한 완료 stage → 원본 입력·요청 해시 대조·기존 run 동결·E03 기록·E04 검사 → 날짜-모델 독립 실험 run과 viewer. 모델 호출 없음|
-|summarize_recovered.py|로컬 E04와 수신 시간·cache 지표 → 조건·유형·실패·시간 집계 → RESULTS.md와 비교 보고서. 모델 호출 없음|
-|analyze.py|검증된 결과와 private 분류 → 설정된 Codex 분석 → A01·A02·A03|
+|sync_protocol.py|Code: public input → SHA-256• Safe route and inconsistency|
+|sync.py|TOML; PC state → Code; input power; center state change time push/pull; watch → status; events; template README|
+|sync_agent.py|SSH commands → server hashes; release posts; PC shutdown reflects; complete request lists.|
+|sync_gate.py|Distribution run → code public input disorder blocked|
+|worker.py|Approved run; configured GPU endpoint → common payload·E03 Raw response · Status|
+|live_collection.py|Common worker E03 → The existing PC E04• Portrait of the viewer|
+|prepare.py|The latest copy 557Select the article Luna public input vs. independent model run|
+|prepare_1080.py|20260928-exp-001- The lunar flux input and current prompt 1,080Article: Model by model 34,560The items request is generated, the hash is verified, the GPU is2 Delivery file. No model call|
+|wire.py|Public requests and runtime → Qwen chat, schemes, promotional terms → server requests|
+|token_preflight.py|The request for synchronization and the actual tokenizer → input length checking → token-preflight.json|
+|install_worker_hook.py|The preserved worker original → gpu-2 Dedicated single run quarter → hash record|
+|remote.py|Public request 8B·14B The first time I saw the data, I was able to see the data.|
+|coordinate.py|Remote completed state → PC recovery; decryption check → collect and analyze run|
+|collect.py|Recovery raw response → Form-processing testing → existing Evaluation output|
+|import_completed.py|pipeline recover-a100 → Sealing package; local private hash connection; internal template connection → existing recovery; E04·View registration. No model calls|
+|recover_completed.py|Complete remote run → raw response SHA; compress; local file hash check → original file; recover record. No model call|
+|recover_stage.py|Completed comparison stage → Conclusion request; raw response · Copy hash contrast; Local recovery → Original data; Recovery README. No model call|
+|register_stage.py|Recovered completed stage → source input; request hash counterparts; presence run equals; E03 Recorded E04 Check → date-model independent experiment run with viewer.|
+|summarize_recovered.py|Local E04and receiving time; cache indicator → condition; pattern; failure; time estimate → report comparison with RESULTS.md.|
+|analyze.py|Verified results and private classification → set Codex analysis → A01·A02·A03|
 
-상세 흐름은 `src/finarch/experiments/templates/a100-readme-template.md`에서 모델별 README로 생성합니다.
-대상 실행은 `reports/experiments-run/20260928-a100-qwen3-8b`, `20260928-a100-qwen3-14b`입니다.
-오류·응답 미확인은 자동으로 다시 보내지 않습니다. 완료 상태는 분석의 실제 COMPLETE를 확인한 뒤 기록합니다.
+The detailed flow is `src/finarch/experiments/templates/a100-readme-template.md`It's generated by model to README.
+The target execution is `reports/experiments-run/20260928-a100-qwen3-8b`, `20260928-a100-qwen3-14b`.
+The error-response inaccuracy is not automatically returned. The completed state is recorded after verifying the actual COMPLETE of the analysis.
 
-공개 평가 입력에는 정답과 EXTERNAL_RULE 분류를 포함하지 않습니다. 분류는 원본 제작 검증 기준이며 변형 자체의 확인된 속성이 아닙니다.
-현재 실행의 입력 길이를 보존하려고 컨텍스트를 10,240에서 12,288로 조정한 내역은 각 run의 preparation-revisions와 events에 있습니다.
+The public evaluation input does not include the correct answer and the EXTERNAL_RULE classification. The classification is based on the original manufacturing verification and is not a verified attribute of the modification itself.
+To preserve the current input length of the run, we need to change the context. 10,240in 12,288The internal settings are in the preparation-revisions and events of each run.
 
-## 2026-09-28 회수 복구
+## 2026-09-28 Recovery is coming.
 
-GPU 응답은 두 모델 모두 17,824건 완료됐으나 전체 디렉터리 압축 중 변경 감지로 coordinator가 종료됐습니다. recovery-manifest와 transfer-manifest에 명시된 파일만 압축하고 기존 해시 검사 후 회수합니다. 두 모델 회수·검증 후 순차 분석합니다. 원격 평가 재호출은 없습니다.
+GPU response is both models. 17,824It's done, but the coordinator is off with the change in the entire directory compression, compressing only the files specified in the recovery-manifest and transfer-manifest, and then retrieving them after the existing hash check, and then sequentially analyzing the two models after the retrieval and verification, and no remote evaluation re-entry.
 
-읽는 순서: recovery-repair.json → coordinator.log → 각 run README와 Evaluation/Analysis 상태. 뷰어: http://127.0.0.1:8894/ 에서 모델별 run 선택.
+Reads in order: recovery-repair.json → coordinator.log → Each run README and Evaluation/Analysis state. Viewer: http://127.0.0.1:8894/ Run from model to model.
 
-## 2026-09-29 1,080문항 전달
+## 2026-09-29 1,080case delivery
 
-`prepare_1080.py`는 두 모델의 새 run에 현행 FinancialAnswerV7 프롬프트와 공개 입력을 동결합니다. 각 run의 README는 `src/finarch/experiments/templates/a100-1080-handoff-readme.md`에서 생성됩니다. private 정답·외부지식 분류는 로컬 run에 보존하며 A100 전달 목록에서 제외합니다. GPU-2 세션이 전송된 요청을 검증하고 실행합니다. 이전 `remote.py`의 실행 경로는 이번 요청에 그대로 적용하지 않습니다. `collect.py`는 동결 manifest의 실제 요청 수와 원격 완료 상태를 대조합니다.
+`prepare_1080.py`The current FinancialAnswerV7 prompt and public input are aligned on the new run of both models. `src/finarch/experiments/templates/a100-1080-handoff-readme.md`The private right-to-external classification is stored on the local run and the A100 And that's not included in the transfer list.2 The session verifies and executes the request that was sent. `remote.py`The execution path does not apply to this request exactly. `collect.py`The actual number of requests for the synchronization manifest is contrasted with the remote completion state.
 
-## 2026-09-30 결과 회수
+## 2026-09-30 Results are recovered
 
-`recover_completed.py`가 원응답·전송 payload·수신 상태·서버 설정을 회수하고 파일별 SHA-256을 확인합니다. 원격의 변경된 안내 문서와 상태는 `remote-evidence/`에 둡니다. `collect.py`는 실제 전송 payload와 동결 입력을 대조한 뒤 E04 검사를 실행합니다. `summarize_recovered.py`는 모델별 RESULTS.md와 `reports/run/20260930-a100-recovery/README.md`를 템플릿에서 생성합니다. 원격 JSON 스키마 통과와 로컬 추가 필드 계약 통과를 별도 집계합니다. LLM Analysis는 시작하지 않습니다.
+`recover_completed.py`Go raw response, transfer payload, status of service, recover server settings and file-by-file SHA-256Check the changed guidance document and the status of the remote. `remote-evidence/`Put it in. `collect.py`is the actual transfer payload and the input of the incoming current compared to the E04 I run the test. `summarize_recovered.py`The model-by-model RESULTS.md and `reports/run/20260930-a100-recovery/README.md`It generates from the template. It calculates remote JSON schematic passing and local additional field contract passing. LLM Analysis doesn't start.
 
-`collect.py`는 실제 원응답의 usage·finish_reason을 읽습니다. 원격 수신 메타데이터가 누락된 경우 원본을 유지하며 불일치를 기록합니다. `--repair-delivery-metadata`는 이전 로컬 판정을 별도 파일에 보존한 뒤 이 누락에 해당하는 판정만 정정합니다. 다른 결과 변경은 중단합니다. E04 보고서·문항별 조회 파일·숫자 비교 생성과 동결 해시 확인이 끝난 뒤에만 Evaluation 완료를 기록합니다.
+`collect.py`It reads the usage·finish_reason of the actual raw response. If the remote receiving metadata is missing, it keeps the original and records the inconsistency. `--repair-delivery-metadata`The previous local resolution is saved to a separate file and then only the resolution that corresponds to this missing point is fixed.4 Report: Problem-based review file: Figure comparison and synthesis only after the verification is complete.
 
 ```mermaid
 flowchart LR
  subgraph recover[recover_completed.py]
-  R[완료된 원격 원응답·전송 기록] --> H[원응답 SHA·압축·파일 해시 검증]
+  R[Completed remote raw response] --> H[raw response SHA compression file hash verification]
  end
  subgraph collect[collect.py]
-  H --> P[동결 요청과 실제 payload 대조] --> V[원응답 메타데이터·E04 계약 검사]
-  V --> E[보고서·문항 조회 파일·원본 숫자 비교]
-  E --> C[동결 해시 확인 후 Evaluation 완료 기록]
+  H --> P[Contrasting the request for a merger with the actual payload] --> V[raw response metadata E04 Contract validation]
+  V --> E[Report: problem-based view files: source code comparison]
+  E --> C[Evaluation completed record after the end of the check]
  end
  subgraph summarize[summarize_recovered.py]
-  C --> O[조건·유형·시간·실패 보고서]
+  C --> O[Conditions, type, time, failure report]
  end
- O --> W[실험 뷰어]
- H --> F[검사 실패 시 중단·원본 보존]
+ O --> W[The experimental viewer.]
+ H --> F[Failure of inspection time interruption]
  P --> F
 ```
 
-상자는 입력 → Python 처리 → 저장 결과 순서이며, 회수 처리에는 모델 호출이 없습니다. 동결 manifest에 포함된 README는 유지하고 결과 안내를 EVALUATION.md와 RESULTS.md에 저장합니다. vLLM Chat Completions의 응답 본문은 call_layout.response_text()에서 읽어 잘린 응답도 뷰어에서 표시합니다.
+The box is the input → Python processing → storage result sequence, and the recovery processing has no model call. README contained in the syntax manifest keeps the result guide in EVALUATION.md and RESULTS.md. The response text of vLLM Chat Completions read in call_layout.response_text() also displays the response cut in the viewer.
 
 ```mermaid
 flowchart LR
-  S[20260928-exp-001-luna 동결 입력] --> P[prepare_1080.py]
-  D[현행 프롬프트·V7 스키마] --> P
-  P --> R[모델별 새 run과 요청 manifest]
-  R --> H[해시 목록·A100 파일 전달]
-  H --> G[GPU-2 담당 실행·원응답 보존]
-  P --> F[검사 실패 시 준비 중단·기존 기록 보존]
+  S[20260928-exp-001- Luna's inbound.] --> P[prepare_1080.py]
+  D[The current Prompt V7 scheme] --> P
+  P --> R[New run and request manifest by model]
+  R --> H[List of hashes: A100 File transfer]
+  H --> G[GPU-2 Responsible execution: raw response conservation]
+  P --> F[Preparation stopped when the inspection failed. Presence records preserved.]
 ```
 
-상자는 입력 → Python 파일 준비 → 산출물 → 원격 실행 주체 순서입니다. 마지막 GPU 실행은 이 파일 준비 코드의 동작이 아닙니다.
+The box is the input → Python file preparation → output → remote run subject sequence. The last GPU execution is not the operation of this file preparation code.
 
-## 서버에서 준비된 완료 run 등록
+## Register the completed run prepared by the server
 
-`experiments/pipeline.py recover-a100`는 `import_completed.py`를 거쳐 완료된 서버 패키지를 등록합니다. 서버 봉인 압축과 전달 파일 해시, 로컬 원본 public/private 해시를 확인하며 기존 요청을 재생성하지 않습니다. private 자료는 같은 해시의 로컬 source run에서 연결합니다. 모델 버전의 점을 포함한 실행 ID는 원격 이름 그대로 보존합니다.
+`experiments/pipeline.py recover-a100` `import_completed.py`The server registers the completed server packages through the server sealing compression and forwarding file hash, verifying the local source public/private hash and not reproducing the existing request. Private data is connected to the local source run of the same hash. Running ID, including the model version point, is stored remotely as a noun.
 
-GPU 공개 패키지에 빠진 로컬 안내 템플릿은 `ensure_report_templates()`가 ordered-model/ordered-run 템플릿에서 연결합니다. 연결한 파일의 출처·해시는 imported-report-templates.json과 이벤트에 기록합니다. 원래 동결 manifest·프롬프트·스키마·원응답은 수정하지 않습니다. 등록 결과는 RESULTS.md → recovered-summary.json → recovery-receipt.json 순서로 읽으며 Analysis는 중지 상태로 남깁니다.
+The local guide template that's missing from the public GPU package is `ensure_report_templates()`The source and description of the linked file is recorded in imported-report-templates.json and the event. The original syntax manifest; prompt; schema; raw response is not corrected. The registration results are read in RESULTS.md → recovered-summary.json → recovery-receipt.json order, and the Analysis is left in standby mode.
 
-## 비교 stage 완료 자료 회수
+## Completed data recovery
 
-회수 폴더만으로는 실험 viewer가 읽는 run이 완성되지 않습니다. 최종 등록은 `pipeline.py register-a100-stage --run reports/experiments-run/YYYYMMDD-fin-o1-8b --source-stage <회수 stage> --source-run <동일 입력의 동결 run>`으로 진행합니다. 14B도 같은 방식으로 독립 run을 만듭니다. 날짜는 실제 원격 실행 날짜를 사용합니다.
+The only way to do this is to recover the folder and the run is not finished by the experiment viewer. `pipeline.py register-a100-stage --run reports/experiments-run/YYYYMMDD-fin-o1-8b --source-stage <accept stage> --source run <synchronous input of the synchronoun run>`And we're moving on. 14BAnd it makes an independent run in the same way. The dates use the actual remote run dates.
 
-두 run의 E04와 완료 상태가 확인되면 `pipeline.py report-a100-stages --run <기존 회수 그룹>`이 등록 로그를 E03 모델별 pipeline.log로 연결하고, 회수 로그를 source-stage/recovery.log에 보존합니다. 임시 그룹의 공유 해시·위치 이력은 8B E01의 registration-history로 옮기며, 기존 그룹은 남기지 않습니다. history README는 a100-stage-registration-history.md 템플릿에서 생성합니다.
+E0 of two runs.4And once the state of completion is confirmed, `pipeline.py report-a100-stages --run < existence recovery group>`This log is E03 It connects to the model-by-model pipeline.log, and then it stores the recovery log to the source-stage/recovery.log. 8B E01The history README is a100It's created in the -stage-registration-history.md template.
 
 ```mermaid
 flowchart LR
  subgraph entry[experiments/pipeline.py]
-  C["R20 · register-a100-stage / Python, 모델 호출 0건"]
+  C["R20 · register-a100-Stage / Python, call the model 0entries"]
  end
  subgraph registration[register_stage.py]
-  C --> H["R21 · source run·원격 manifest·원응답 파일 해시 확인"]
-  H --> D["R22 · 동일 입력·prompt·schema 대조 → config·00_input·E01·E02 동결"]
-  D --> S["R23 · E03 모델/source-stage로 원본 이동·등록 근거 저장"]
+  C --> H["R21 · source run; identity manifest; raw response file hash verification"]
+  H --> D["R22 · Same input; prompt; schema versus → config;00_input·E01·E02 Frozen"]
+  D --> S["R23 · E03 Move the source to model/source-stage; save the record base"]
  end
  subgraph collection[collect.py]
-  S --> P["R24 · 실제 전송 payload·서빙 모델 별칭·cache 증거 대조"]
-  P --> V["R25 · calls 시도 기록·기존 E04 형식·숫자 검사"]
+  S --> P["R24 · Actual transfer payload; service model nickname; cache evidence contrast"]
+  P --> V["R25 · Call attempts recording presence E04 Form and number test"]
  end
  subgraph reporting[summarize_recovered.py / run_documentation.py]
-  V --> O["R26 · 조건·유형·실패 보고서·단계 README·Analysis 중지 상태"]
+  V --> O["R26 · Conditions, default, failure report, stage README; Analysis is stopped"]
  end
-  O --> W["기존 공통 실험 viewer"]
-  O --> GH["R27 · 두 run 완료 확인 → E03 로그·E01 등록 이력 보존 → 임시 그룹 정리"]
- H --> F["실패: 중단·원기록 보존·재호출 없음"]
+  O --> W["Common experiment viewer"]
+  O --> GH["R27 · Two run complete check → E03 Log E01 Registering the conservation of energy → temporary grouping"]
+ H --> F["Failure: Stop, file storage, no release"]
  P --> F
 ```
 
-등록한 run은 기존과 동일한 `00_input`, `01_evaluation/01_preparation`, `02_request`, `03_execution`, `04_validation`, `02_analysis`를 사용합니다. 원격 원본은 E03 모델별 `source-stage/`에 보존하고 기존 calls와 E04 결과를 생성합니다. 서버 JSON 스키마 검사와 로컬 전체 응답 계약 검사는 별도 집계합니다. 캐시 사용량 누락은 0으로 채우지 않습니다. 최초 telemetry 표본의 cache 설정·명시적 0 hit 및 종료 snapshot을 사용하며 제공자 내부 처리 시간은 분리하지 않습니다.
+The run you've registered is the same as the original run. `00_input`, `01_evaluation/01_preparation`, `02_request`, `03_execution`, `04_validation`, `02_analysis`The remote source is E0.3 By model. `source-stage/`Save the existing calls and E04 The results are generated by the JSON server schematic test and the local total response contract test. 0The first telemetry sample cache setup. 0 The provider does not separate the processing time inside the hit and the shutdown snapshot.
 
-실험 결과와 회수 원본의 저장 위치는 `reports/experiments-run`입니다. `recover_stage.py`는 이 경로 밖의 새 회수를 거부합니다. `reports/run`에 잘못 저장된 회수 폴더는 `pipeline.py report-a100-stages --run <experiments-run 내 목적지> --relocate-from <기존 회수 폴더>`로 옮깁니다. 동일 파일시스템에서 폴더를 이동한 뒤 압축·원본 파일 전체 해시를 대조하고 템플릿 README·색인·relocation-receipt.json을 갱신합니다. 기존 원격 경로와 과거 로그는 원기록으로 보존합니다.
+The storage location of the test results and the recovered original `reports/experiments-run`. `recover_stage.py`refuses new recruits outside this route. `reports/run`The wrongly stored recovery folder is `pipeline.py report-a100-stages --run <experiments-run My own. The neck.The enemy.> --relocate-from the Presence Retrieval folder`It moves the folder from the same file system, then it compares the entire compression and source file map, and it updates the template README-color-relocation-receipt.json, which preserves the existing remote path and past logs as the original log.
 
-`pipeline.py report-a100-stages --run <회수 상위 폴더>`는 검증이 끝난 stage의 회수 기록을 읽고 `a100-stage-recovery-index.md` 템플릿에서 상위 README를 생성합니다. 이는 저장된 회수 기록의 안내 색인이며 추가 파일 전송이나 모델 호출이 없습니다.
+`pipeline.py report-a100-stages --run <span of text>`The check is done by reading the recovery record of the stage `a100-stage-recovery-index.md` It creates an upper README from the template, which is the guiding color of the saved recovery records, and there's no additional file transfer or model call.
 
-`pipeline.py recover-a100-stage --run <로컬 회수 폴더> --remote-root <원격 stage 절대 경로>`는 `recover_stage.py`를 호출합니다. `prepared.json`의 manifest·원본 해시, 완료 상태, 요청과 취합본의 trial ID 전체 범위, 모든 원응답의 delivery 해시를 확인합니다. 압축 회수 후 파일별 해시를 다시 확인하고 템플릿 `a100-stage-recovery.md`에서 README를 생성합니다. 원격 최상위 실행 기록과 control 기록은 `remote-evidence/`에 보존합니다. 이 명령은 원본 회수 전용이며 새 실험 run 등록·E04 재판정·Analysis를 실행하지 않습니다. README는 Codex 파일 뷰어로 확인합니다.
+`pipeline.py recover-a100-stage --run <local recovery folder> --remote-root <identical stage absolute path>` `recover_stage.py`Call it. `prepared.json`Check the full range of the manifest source hash, the completed state, the trial ID of the request and the copy, the delivery hash of all raw responses. `a100-stage-recovery.md`The remote top-level run record and control record are the same as the remote top-down run record. `remote-evidence/`This command is for the original recovery and the new experiment run register.4 ReadME is a Codex file viewer.
 
 ```mermaid
 flowchart LR
@@ -179,23 +179,23 @@ flowchart LR
   C["R10 · recover-a100-stage"]
  end
  subgraph stage[recover_stage.py]
-  C --> L["R11 · 로컬 회수 잠금·기존 압축 확인"]
-  L --> T["R13 · 압축 전달·안전한 경로 추출"]
-  T --> H["R14 · 파일별 해시 대조"]
-  H --> O["R15 · 회수 기록·템플릿 README·이벤트"]
-  O --> IX["R16 · report-a100-stages: 안내 재생성 진입"]
-  IX --> M{"R16.1 · relocate-from 지정?"}
-  M -->|지정| MV["R16.2 · experiments-run 이동·압축·전체 원본 해시 검사·이동 기록"]
-  MV --> RI["R16.3 · 취합·요청 해시 확인·README 재생성·기록"]
-  M -->|미지정| RI
+  C --> L["R11 · Locally recover lock and reserve compression check"]
+  L --> T["R13 · Compression transmission; safe route extraction"]
+  T --> H["R14 · File-by-file hash contrast"]
+  H --> O["R15 · Recovery records; template README event"]
+  O --> IX["R16 · report-a100- Stages: Guided regenerative entry"]
+  IX --> M{"R16.1 · relocate-from designated?"}
+  M -->|Specified| MV["R16.2 · experiments-run movement, compression, whole source hashing inspection, actuation recording"]
+  MV --> RI["R16.3 • Recruitment; Request for Request; Repeatability of the readme; record"]
+  M -->|Unknown.| RI
   RI --> W
  end
- subgraph pack[recover_completed.py REMOTE_PACK / 원격 Python]
-  L --> V["R12 · 완료 상태·동결 요청·취합·원응답 해시 확인·압축"] --> T
+ subgraph pack[I'm going to try to recover.]
+  L --> V["R12 · Completed state; requested closure; acquired; raw response hashing; compressed"] --> T
  end
- V --> F["검사 실패: 중단·원기록 유지"]
+ V --> F["Failure of inspection: Stop and keep records"]
  H --> F
- O --> W["Codex 파일 뷰어"]
+ O --> W["Codex file viewer"]
 ```
 
-상자는 담당 Python 파일과 처리 순서입니다. 이 회수 흐름의 모델 호출은 0건입니다. 실패 시 원격 모델 요청을 재전송하지 않습니다. 기존 완료 회수 기록이 있으면 압축과 파일 해시를 재확인하며 원격 압축을 중복하지 않습니다.
+The box is the Python file and the processing order. 0It doesn't re-transmit remote model requests when they fail, and if you have a complete recovery record, you don't revalidate the compression and file hash and override the remote compression.

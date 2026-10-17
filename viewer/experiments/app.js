@@ -35,9 +35,9 @@ const TAGS = { NUMERIC_MISMATCH: '원본 숫자 불일치', SIGN_ONLY_DIFFERENCE
 Object.assign(TAGS, { NUMERIC_MATCH: '원본 숫자 일치', SCHEMA_TYPE: '필드 타입 불일치', QUOTE_NOT_EXACT_SUBSTRING: '인용문 정확 일치 없음', ANSWER_NUMERIC_NOT_STRING: 'answer가 문자열 대신 숫자', EMPTY_EVIDENCE: '근거 배열이 비어 있음', SCHEMA_REQUIRED: '필수 필드 누락', ANSWER_NULL: 'answer가 null', JSON_PARSE_OR_TOP_LEVEL_TYPE: 'JSON 또는 최상위 타입 오류', SCHEMA_ADDITIONALPROPERTIES: '허용하지 않은 추가 필드', DECIMAL_PLACES_MISMATCH: '소수 자릿수 불일치', INVALID_FORMAT_BUT_EQUAL_NUMERIC_VALUE: '형식 실패 · 진단용 숫자값은 일치', INVALID_RESPONSE: '형식·일관성 검사 실패', QUESTION_METADATA_PRECISION_CONFLICT: '질문과 메타정보의 자릿수 충돌', SCHEMA_ANSWER_FORMAT: '답변 형식·일관성 불일치', MAGNITUDE_DIFFERENCE: '숫자 크기 불일치', DECLARED_ABSTENTION: '검사 통과한 유보 선언', RAW_STATUS_ABSTAINED: '원응답 status는 abstained', ABSTAINED_WITH_BOOLEAN_SIGN: '유보 선언에 boolean 부호 있음', ABSTAINED_WITH_NUMERIC_ANSWER: '유보 선언과 숫자 답변 동시 반환' });
 const METRICS = { numeric_matches: '원본풀이 정답 일치', numeric_mismatches: '원본풀이 정답 불일치', numeric_unevaluated: '원본 미평가', numeric_pending: '원본 미수집', numeric_answers_absent: '숫자 답 없음', declared_abstentions: '유보 선언', abstention_markers: '유보 표현', missing_quotes: '근거 문자열 불일치' };
 const FILTERS = ['model', 'experiment', 'variant', 'prompt', 'reasoning', 'status'];
-const fmt = value => value === null || value === undefined ? '미기록' : Number(value).toLocaleString('ko-KR');
+const fmt = value => value === null || value === undefined ? '미기록' : Number(value).toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US');
 const money = value => value === null || value === undefined ? '미기록' : `$${Number(value).toFixed(6)}`;
-const time = value => value ? new Date(value).toLocaleString('ko-KR', { hour12: false }) : '미기록';
+const time = value => value ? new Date(value).toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US', { hour12: false }) : '미기록';
 const label = value => STATUS[value] || value || '미기록';
 const promptKey = value => value === 'P0' ? 'unguided' : value === 'P1' ? 'guided' : value;
 const promptName = value => promptKey(value) === 'unguided' ? 'Unguided Solving' : promptKey(value) === 'guided' ? 'Criteria-Guided Solving' : value;
@@ -1230,7 +1230,7 @@ async function renderCase() {
     const elapsed = el('div', 'condition-time'); elapsed.id = `condition-time-${prompt}-${reasoning}`; control.setAttribute('aria-describedby', elapsed.id);
     if (!available) elapsed.append(el('span', '', '요청 없음'));
     else for (const model of models) {
-      const duration = model.timing_error ? '시간 읽기 오류' : model.elapsed_seconds == null ? model.status === 'NOT_PLANNED' ? '요청 없음' : '시간 미기록' : `${model.elapsed_seconds.toLocaleString('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}초`;
+      const duration = model.timing_error ? '시간 읽기 오류' : model.elapsed_seconds == null ? model.status === 'NOT_PLANNED' ? '요청 없음' : '시간 미기록' : `${model.elapsed_seconds.toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}초`;
       const line = el('span', '', `${models.length > 1 ? `${model.model} · ` : ''}${duration}`); line.title = `저장된 최종 시도 · ${label(model.status)}`; elapsed.append(line);
     }
     choice.append(control, elapsed); combinations.append(choice);
@@ -1500,7 +1500,7 @@ async function renderCosts() {
       const tail = rows.slice(-60);
       logText.textContent = [...(command && !tail.includes(command) ? [command] : []), ...tail].join('\n');
       logText.scrollTop = logText.scrollHeight;
-      logStatus.textContent = `pipeline.log · 읽은 시각 ${new Date().toLocaleTimeString('ko-KR')}`;
+      logStatus.textContent = `pipeline.log · 읽은 시각 ${new Date().toLocaleTimeString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US')}`;
     } catch (error) { logStatus.textContent = `로그 읽기: ${error.message}`; }
     if (!OFFLINE && logPanel.isConnected) setTimeout(refreshLog, 5000);
   };
@@ -1716,7 +1716,7 @@ function resultAnswerDelta(group) {
   const before = counts('left'), after = counts('right'), content = el('div', 'result-answer-deltas');
   content.append(resultValueMovement(group));
   for (const [key, label] of [['numeric', '숫자 답'], ['null', 'null 답']]) {
-    const difference = after[key] - before[key], rate = Math.abs(difference * 100 / denominator).toLocaleString('ko-KR', { maximumFractionDigits: 1 });
+    const difference = after[key] - before[key], rate = Math.abs(difference * 100 / denominator).toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US', { maximumFractionDigits: 1 });
     const line = el('div', 'result-answer-delta');
     line.append(el('span', 'result-delta-count', `${label} ${before[key]} → ${after[key]}`));
     line.append(el('strong', `result-delta ${difference > 0 ? 'up' : difference < 0 ? 'down' : 'flat'}`, difference > 0 ? `▲ +${difference}건 · +${rate}%p` : difference < 0 ? `▼ ${difference}건 · -${rate}%p` : '— 0건 · 0%p'));
@@ -2691,7 +2691,7 @@ closeOnBackdrop($('file-dialog'), closeFile);
 closeOnBackdrop($('export-dialog'), closeExport);
 closeOnBackdrop($('shortcut-dialog'), closeShortcuts);
 $('download-html').onclick = async () => {
-  const run = $('export-run').value, params = { ...(run === state.run ? state : { tab: 'overview' }), lang: globalThis.FinarchI18n?.language || 'ko' };
+  const run = $('export-run').value, params = { ...(run === state.run ? state : { tab: 'overview' }), lang: globalThis.FinarchI18n?.language || 'en' };
   const request = new AbortController(); exportController = request;
   $('download-html').disabled = true; $('export-run').disabled = true;
   $('export-status').replaceChildren(note('전체 문항·원기록을 압축하고 있습니다. 회차 크기에 따라 시간이 걸릴 수 있습니다.'));

@@ -6,61 +6,61 @@ import re
 from pathlib import Path
 
 REASONS = '''
-남은 Q/C의 정확한 합계·소계, 잔액 변동, 같은 값의 재기재, 전체를 빠짐없이 나눈 비중, 비율 또는 성장식 중 필요한 수량을 유일하게 정하는 관계가 확인되지 않았습니다. 다른 기간의 값, 무관한 수량, 반올림된 비율, 명시되지 않은 전체 범위로는 유일한 대체값을 정할 수 없습니다.
-남은 Q/C에 필요한 피연산자와 해당 합계·조정·정의 관계가 명시되어 있습니다. 이 계산으로 누락 수량이 유일하게 결정됩니다.
-나열된 구성 항목들이 이 표의 합계를 이룹니다. 소계를 중복하여 더하지 않습니다.
-기초 잔액에 중간 변동을 부호에 맞게 더하면 기말 잔액이 됩니다.
-행 이름에 적용할 회계 관계가 명시되어 있습니다.
-수정 금액 = 잠정 금액 + 측정기간 조정액입니다.
-질문과 공통형 손익계산서는 각 항목을 매출액 대비 비율로 나타냅니다. 매출액을 매출액으로 나누면 100%입니다.
-같은 기간의 분자와 분모가 남아 있으므로 명시된 주당 값 또는 매출총이익률의 정의로 누락 비율을 정할 수 있습니다. 이 표의 표시 정밀도로 반올림합니다.
-당기 금액 = 전기 금액 + 명시된 절대 변동액입니다.
-남은 Context는 표의 기준일에 이 주식에 $100을 투자했다고 명시합니다. 따라서 누락된 초기 지수값은 100입니다.
-같은 Context에 해당 기준일의 초기 투자금이 $100이라고 다시 명시되어 있습니다.
-명시된 장부금액에서 순실현가능가치를 빼면 해당 자산의 감액 손실이 유일하게 결정됩니다.
-전기 금액 = 당기 금액 - 명시된 절대 변동액입니다.
-기초·기말 잔액의 연속성을 적용하면 직전 3월 31일 잔액인 3,104,563이 후보입니다. 그러나 같은 기간의 부호 있는 변동과 표시된 기말 수량 2.978478을 사용하면 다른 기초 잔액이 나옵니다. 남은 Q/C의 수량이 충돌하므로 일관된 하나의 복원값을 정할 수 없습니다.
-2018년 기말 잔액과 2018년의 모든 부호 있는 변동이 남아 있어 기초 잔액을 정할 수 있습니다. 표기가 잘못된 2019년 기말 수량은 이 계산에 사용하지 않습니다.
-초기 순외국자산(NFA) 총액과 특정 외화에 노출된 자산·부채가 같은 전체 범위인지는 확인되지 않습니다. 이 외화 노출이 모든 외국 자산·부채라는 설명이 없으므로 삭제된 입력을 유일하게 복원할 수 없습니다.
-변동 열의 단위가 명시되지 않았습니다. -190을 베이시스포인트로 해석하려면 명시되지 않은 배율을 가정해야 하고, ROFE의 평균 투하자금 기준도 불명확합니다. 따라서 누락 비율을 유일하게 정할 수 없습니다.
-지급 현금에는 프리미엄과 이연 금융비용 효과가 포함됩니다. 두 날짜의 어음 잔액만으로는 다른 발행·상환 가능성을 배제할 완전한 원금 변동 내역을 알 수 없어, 삭제된 원금이나 이전 잔액을 유일하게 정할 수 없습니다.
-남은 Context에 해당 기간의 현금흐름과 전년 대비 절대 증가액 $794 million이 명시되어 있습니다. 두 값으로 누락된 인접 연도 현금흐름을 유일하게 복원할 수 있습니다.
-남은 설명에서 같은 연도의 부동산 매출과 구조화금융 매출을 총매출의 전체 구성 항목으로 제시합니다.
-남은 주택담보대출 조건에 수수료·추가 원금 상환을 제외한 완전 분할상환 및 고정 납입 일정이 명시되지 않았습니다. 이런 가정 없이 반올림된 월 납입액만으로 누락 원금이나 약정 이자율을 유일하게 정할 수 없습니다.
-기본 주당순이익(EPS)은 순이익을 가중평균 보통주 수로 나눈 값입니다. 같은 기간의 두 값이 모두 남아 있어, 표의 소수 둘째 자리 정밀도로 누락 주당 값을 계산할 수 있습니다.
-질문은 해당 부문이 정확히 이 다섯 회사로 구성된다고 명시합니다. 전체 시장점유율의 합은 100%이므로 나머지 네 비율로 누락 비율을 정할 수 있습니다.
-남은 Context는 자본구조가 부채와 자기자본으로 빠짐없이 구성된다고 설명합니다. 두 배분 비율의 합은 100%입니다.
-포트폴리오는 정확히 세 자산으로 구성됩니다. 전체 배분 비중의 합은 100%이고 다른 두 비중이 명시되어 있습니다.
-명시된 포트폴리오는 정확히 이 세 자산으로 구성됩니다. 이 배분 비중들은 포트폴리오 전체를 이루며 합계가 100%입니다.
-Context가 기록된 분기 양 끝점 사이의 선형 추세를 명시적으로 가정합니다. 누락된 중간 분기 값은 인접한 두 끝점 수익률의 중간값입니다.
-연 1회 이자를 지급하는 액면가 국채에서 1년 현물금리는 1년 액면금리와 같습니다. 이전 이자를 단기 현물금리로 할인한 뒤 액면가격 식을 풀면 누락 현물금리가 유일하게 결정됩니다. 표시된 백분율의 소수 둘째 자리로 반올림합니다.
-세전이익(EBT)에서 명시된 순금융손익을 빼면 EBIT가 713이지만, 개별 금융 항목을 빼면 714입니다. 표가 이 반올림 차이를 설명하지 않아 모든 남은 식이 지지하는 하나의 EBIT 표시값을 정할 수 없습니다.
-남은 설명에 Vornado를 포함한 각 계열의 초기 투자금과 날짜가 명시되어 있습니다.
-조정 EBITA를 매출액으로 나눈 값이 이 이익률의 정의입니다. 반올림 전 이익률은 유일하게 결정되며, 소수 첫째 자리로 약 4.7%입니다.
-조정 EBITA를 매출액으로 나눈 값이 이 이익률의 정의입니다. 반올림 전 이익률은 유일하게 결정되며, 소수 첫째 자리로 약 5.3%입니다.
-남은 설명에 이 성과 비교의 초기 투자금과 날짜가 다시 명시되어 있습니다.
-연간 조정 내역에서 2017년 12월 31일 잔액은 같은 계정의 2018년 1월 1일 기초 잔액입니다.
-예상 양의 수익에서 명시된 실제 음의 수익을 빼면 자산 수익의 부족분이 유일하게 결정됩니다.
-총 금융리스 지급의무에는 이자가 포함되어 있고, 각주 [a]에는 같은 보고일의 금융리스 원금 $2,061 million이 별도로 명시되어 있습니다.
-명시된 총 인수가격은 주식가치·현금·인수 부채·수수료의 합계입니다. 다른 세 항목을 빼면 주식가치를 복원할 수 있습니다.
-순매출채권에 명시된 충당금을 더하면 22,445이지만, 두 충당금 구성 항목의 합 222를 사용하면 22,446입니다. 남은 Q/C에는 서로 불일치하는 복원 경로가 있어 하나의 명확한 금액을 정할 수 없습니다.
-시장가격에서 행사가격을 빼면 상한을 적용하기 전 내재가치는 15입니다. Context는 내재가치에 상한이 있다고만 하고 상한값을 제시하지 않아 상한 적용 금액을 유일하게 추론할 수 없습니다.
-명시된 최종 지급액까지 나열된 원금 상환이 발행분 전체를 이룹니다. 합계를 구하면 누락 원금을 복원할 수 있습니다.
-바로 앞 문장에 같은 부채 금액과 날짜가 다시 명시되어 있습니다.
-Context는 연말 현금흐름이 5년 연속 발생한다고 설명하고 2~5년 차를 명시합니다. 따라서 첫 연간 현금흐름은 1년 차이며 그 금액은 남아 있습니다.
-같은 기간의 감소 항목이 설명되지 않은 이중 밑줄(__)로 남아 있습니다. 이를 0으로 정하는 값이나 정의가 없으며, 이 추가 미확정 변동 때문에 누락 기말 잔액을 유일하게 복원할 수 없습니다.
-Context는 계약을 3-2-1 금리 할인(buydown)으로 명명하고 2·3년 차 할인폭을 2%·1%로 제시합니다. 이 순서로 1년 차 할인폭은 3 퍼센트포인트임을 알 수 있습니다.
-Context에 5년 연속 연간 현금흐름과 2~5년 차 표시가 있어 첫 현금흐름의 시점은 1년 차로 유일하게 정해집니다.
-채권 가격은 주어진 연간 현물 할인율을 적용한 전체 4년 현금흐름의 현재가치 합계와 같습니다. 알려진 후속 현재가치를 빼고 1년 차 할인을 되돌리면 누락 현금흐름을 구할 수 있습니다.
-전체 4년 연간 내역에서 나머지 현금흐름이 2·3·4년 차로 명시되어 있으므로 첫 연간 현금흐름은 1년 차입니다.
-두 번째 조건부 수익률 행에 같은 양호한 경제 시나리오의 확률 70%가 다시 명시되어 있습니다.
-명시된 전체 누진 체계에서 다음 구간이 500,000 초과부터 시작하므로 첫 구간의 상한은 500,000입니다.
-전체 정수 달러 누진 구간에서 두 번째 구간이 $10,001부터 시작합니다. 따라서 첫 구간의 상한은 $10,000입니다.
-총액에서 다른 부문 잔액을 빼면 7,155이지만, 같은 행의 잔액 변동은 이전·기타 변동이 0일 때 5,424 + 1,758 = 7,182입니다. 남은 관계들이 충돌하여 누락 잔액을 유일하게 정할 수 없습니다.
-총충당금에서 미배분 충당금을 빼면 176이지만, 총매출채권에서 순매출채권과 같은 미배분 충당금을 빼면 177입니다. 표가 불일치하여 누락 개별 충당금을 유일하게 정할 수 없습니다.
-총매출채권에서 표시된 총충당금을 빼면 22,225이고, 표시된 충당금 구성 항목들을 빼면 22,224입니다. 합계들이 불일치하여 누락 순매출채권을 유일하게 복원할 수 없습니다.
-같은 계정의 변동 내역에 직전 회계연도 기말 잔액 8,217이 명시되어 있어 바로 다음 기초 잔액을 정할 수 있습니다. 이 경로는 별도의 이중 밑줄(__) 변동을 0으로 취급하지 않습니다.
-남은 각주는 Food Care의 과소계상이 Product Care $369.6 million과 미배분 자산 $3.3 million으로 상쇄되어 연결 자산에 영향이 없다고 명시합니다. 두 금액의 합이 누락 보정액입니다.
+The exact sum/ratio of the remaining Q/C, the residual fluctuations, the re-presence of the same value, the weight, ratio or growth rate of the whole without missing the relationship is not identified as the only determinant of the required quantity. The values of different periods, the irrelevant quantities, the reversed percentages, the unspecified total range cannot determine the only substitute value.
+The remaining Q/C is the ratio of the required fuel to the sum-to-ratio ratio, which is the only way to determine the amount of fuel that is missing.
+The composition items listed are the sum of these tables, not the subset.
+And if you add the middle fluctuations to the base residue to the symbol, it's the residual.
+It's a mathematical relationship that you're going to apply to the name of the row.
+The adjustment amount is the default amount plus the adjustment amount for the measurement period.
+The question and the common profit statement shows each item as a percentage of revenue. 100%.
+So the same period has the same denominator and the same period, so you can define the missing ratio as the specified share value or the net profit margin, and the display on this chart is exactly reversed.
+The amount of the draw is equal to the electrical amount plus the absolute variable.
+The remaining Context is on the reference date of the table.100So the initial index that you missed is the value of the 100.
+The initial investment amount for the same context is $1.100It's re-expressed as:
+If you subtract the net present value from the stated amount, the only determination is the net loss of the asset.
+Electrical amount = the amount of time - the absolute variable specified.
+So if we apply the continuity of the base-to-tool residue, 3month 31The rest of the work. 3,104,563This is the candidate. But the variable with the same period of time is the number of times the equation is shown. 2.978478So you use the other base residue, and the quantity of Q/C left is conflicting, so you can't get a consistent restoration.
+2018And the rest of the horse. 2018So we have all the unmarked variables left over for the year, so we can set the base residual. 2019The year-end numbers are not used in this calculation.
+It is not confirmed that the total amount of the net foreign assets (NFA) is the same as the total amount and the total amount in the total amount that the assets and debts exposed to foreign exchange are.
+The unit of the variable column is not specified.190To interpret it as base points, we have to assume an unspecified spread, and the average investment capital ratio of ROFE is unclear, so we can't just determine the default ratio.
+Payment cash includes premium and variable financial cost effects. Only the residual amounts of the two dates cannot know the full range of the variable amounts of the original money to exclude the possibility of other issues and repayments, nor can the deleted original or previous balance be determined solely.
+Context to the remaining cash flow over the period and absolute increase over the previous year794 The only way to recover the cash flow is to have the two values that are missing.
+In the rest of the description, we present real estate sales and restructuring finance sales for the same year as the total composition of sales.
+The remaining mortgage terms do not specify a full dividend rate and fixed rate of repayment except for the repayment of the commission and the surcharge of the principal. Without these assumptions, the only way to determine the default rate or the interest rate of the principal is by the amount of the monthly repayment that is reversed.
+EPS is the net profit divided by the average average average of the two shares, and we have both the same values for the same period, so we can calculate the missing share value with the second digit of the table.
+The question is that the sector is made up of exactly these five companies. 100%So we can get the missing rate to the remaining four percentages.
+The rest of the context explains that the capital structure is made up of debt and equity, and the sum of the two dividends is equal to the sum of two dividends. 100%.
+The portfolio is made up of exactly three assets. 100%And there are two other weightings.
+The portfolio is made up of exactly these three assets, and these allocation ratios make up the entire portfolio, and the sum of the assets is the sum of all the assets that are in the portfolio. 100%.
+Context explicitly assumes a linear trend between the two endpoints of the quarter that we recorded, and the missing middle quarter value is the middle of the yield of the two adjacent endpoints.
+I'm not sure. 1The amount of money paid to the debtor is in the national debt. 1The money is a pig. 1It's like a year's liquidity. Once you deduct the previous interest into short-term cash, and you solve the liquidity equation, you determine the only cash loss, and you reverse the percentage rate to the second place.
+If you take the net financial loss from the three-year EBT, then the EBIT is equal to the net financial gain from the three years EBT. 713But, apart from the individual financial items, 714So the chart doesn't explain this reversal, so you can't set a single EBIT indicator that supports all the remaining equations.
+The remaining description specifies the initial investment amount and date of each of the categories, including Vornado.
+The adjustment EBITA divided by the revenue is the definition of this rate of return. 4.7%.
+The adjustment EBITA divided by the revenue is the definition of this rate of return. 5.3%.
+The rest of the description re-states the initial investment amount and date of this comparison.
+In the annual adjustment intervals, 2017Shit. 12month 31The remaining amount is the same as the account. 2018Shit. 1month 1It's the base residue.
+The only thing that determines the shortfall in asset returns is the actual negative returns that are excluded from the expected amount of returns.
+The total of the financial loss payments includes interest, and each of the [a] accounts for the same amount of financial loss as $1.2,061 million is separately specified.
+The total acquisition rate stated is the sum of the stock price, the current, the individual debt and the interest rate. You can restore the stock price by taking the other three items out.
+Add the payout to the net debt. 22,445But the sum of the two components of the fee 222Use the 22,446The rest of the Q/Cs have a disjoint recovery path, so we can't set a single clear amount.
+If you subtract the event from the market price, then the intrinsic value of the event is the value of the asset before the limit is applied. 15So, the context is not the only way to infer the amount of the application of the value of the underlying, but it's the only way that we can infer the amount that the underlying value is.
+The refunds of the original money listed up to the final payment amount are the entire issue, and if you recover the sum, you can recover the missing amount.
+The same amount of debt and date are again listed in the next sentence.
+Context: The cash flow at the end of the year is 5And they explain that it happens in years. 2~5So the first year's cash flow is the 1The year car and the amount is left.
+Double bottom line where the decrease item for the same period is not explained__And then we're going to have to go back to the first. 0There's no set value or definition, and because of this additional vague variable, it's not the only way to recover the missing balance.
+Context is the contract. 3-2-1 And they call it buydown. 2·3I'm going to give you a discount. 2%·1%So, in this order, 1The discount rate for the car is... 3 And you can tell that's a percentage point.
+In the context. 5And the annual cash flow, year after year. 2~5There's a year car sign. The first cash flow is at the time. 1It's the only one that's fixed in a pig car.
+The bond price is the total applied to the given annual cash discount rate 4It's the sum of the current value of the year's cash flow minus the known subsequent current value. 1If you return the year car discount, you can get the cash flow back.
+All 4The remaining cash flows from the yearly internal market 2·3·4So the cash flow for the first year is the 1It's a pig car.
+The probability of the same favorable economic scenario on the second conditional yield line 70%And that's what we're saying.
+The next section of the entire system of deflections that we have specified is 500,000 So the first half of the first half starts from the beginning. 500,000.
+The second interval in the whole integer dollar slope is $10,001So the first interval is $10,000.
+So, if you subtract the remaining part of the total, 7,155But the residual variation of the same line is the same as the previous guitar variation. 0When I work. 5,424 + 1,758 = 7,182So the remaining relationships collide and you can't be the only one to determine the remaining balance.
+If you subtract the sub-minute fee from the gun bill, 176But if you subtract the sub-prime of the gross debt, like the gross debt of the gross 177You can't just set the individual payout that's missing, because the tolls are inconsistent.
+Subtracting the stated total allowance from gross receivables 22,225So, if you subtract the items in the fee structure that you're showing, 22,224It's not the only way to recover the net debt that's gone out of balance.
+The balance sheet of the same account is the balance sheet of that account. 8,217So this is just the way we can set the base residue right here.__(i.e. the change in the 0It's not treated as such.
+The remaining four months are the sub-series of Food Care's Product Care $369.6 million and assets under management3.3 It's a million, and it says it has no effect on the assets that are connected.
 '''.strip().splitlines()
 
 GLOSSARY = {

@@ -18,22 +18,21 @@ from finarch.paths import PROJECT
 
 HERE = Path(__file__).resolve().parent
 GROUPS = [
-    {'id': 'coordination', 'name': '총괄', 'description': '진행과 미해결 사항'},
-    {'id': 'dataset', 'name': '데이터셋 제작', 'description': '원천·Preparation·Generation·선정'},
-    {'id': 'evaluation', 'name': '대상 모델 평가', 'description': '입력·요청·풀이·형식 검사'},
-    {'id': 'analysis', 'name': '결과 분석', 'description': 'A01 취합·A02 비교·A03 해석'},
-    {'id': 'research', 'name': '연구·논문', 'description': '기존 연구·회의·원고'},
-    {'id': 'viewer', 'name': '화면·운영', 'description': '자료 뷰어와 서버'},
-    {'id': 'unclassified', 'name': '분류 확인', 'description': '새로 발견한 관련 세션'},
+    {'id': 'coordination', 'name': 'General', 'description': 'Progress and Unresolved'},
+    {'id': 'dataset', 'name': 'Creating a data set', 'description': 'The source: Preparation: Generation: Correction'},
+    {'id': 'evaluation', 'name': 'The target model evaluation', 'description': 'Input, request, and format validation'},
+    {'id': 'analysis', 'name': 'Analysis of the results', 'description': 'A01 A02 Comparison A03 Interpretation'},
+    {'id': 'research', 'name': 'Research and debate', 'description': 'The existing research and conference proposals'},
+    {'id': 'viewer', 'name': 'Screen-based operation', 'description': 'Data viewer and server'},
+    {'id': 'unclassified', 'name': 'Check the classification', 'description': 'A newly discovered session of relevance'},
 ]
 SESSION_MAP = json.loads((HERE / 'session-map.json').read_text())['sessions']
 RELEVANT_NAME = re.compile(
-    r'fin.?arch|finject|dataset|데이터셋|금융|논문|실험|분석|뷰어|viewer|'
-    r'서버|pipeline|파이프라인|프로젝트|회의록|robustness', re.I)
+    'fin.?arch|finject|dataset|\ub370\uc774\ud130\uc14b|\uae08\uc735|\ub17c\ubb38|\uc2e4\ud5d8|\ubd84\uc11d|\ubdf0\uc5b4|viewer|\uc11c\ubc84|pipeline|\ud30c\uc774\ud504\ub77c\uc778|\ud504\ub85c\uc81d\ud2b8|\ud68c\uc758\ub85d|robustness', re.I)
 RUN_NAMES = {
-    '20260928-exp-001-luna': 'Luna · 1,080 원문',
-    '20260927-exp-008-haiku': 'Haiku · 557 원문',
-    '20260927-exp-007-luna': 'Luna · 557 원문',
+    '20260928-exp-001-luna': 'Luna · 1,080 Source text',
+    '20260927-exp-008-haiku': 'Haiku · 557 Source text',
+    '20260927-exp-007-luna': 'Luna · 557 Source text',
     '20260928-a100-qwen3-8b': 'Qwen3 8B · A100',
     '20260928-a100-qwen3-14b': 'Qwen3 14B · A100',
 }
@@ -98,7 +97,7 @@ def _read_sessions(project, codex_home):
     state_path = codex_home / 'state_5.sqlite'
     history_path = codex_home / 'thread_history_1.sqlite'
     if not state_path.is_file() or not history_path.is_file():
-        return [], ['Codex 로컬 세션 기록을 찾지 못했습니다.'], None
+        return [], ['I couldn\'t find the Codex local session record.'], None
     state = sqlite3.connect(f'{state_path.as_uri()}?mode=ro', uri=True, timeout=0.2)
     history = sqlite3.connect(f'{history_path.as_uri()}?mode=ro', uri=True, timeout=0.2)
     state.row_factory = history.row_factory = sqlite3.Row
@@ -145,7 +144,7 @@ def _read_sessions(project, codex_home):
                 'createdAt': _timestamp(row['created_at_ms']),
                 'recentTasks': recent, 'lastReport': last_report,
                 'children': [], 'parentId': None,
-                'source': 'Codex 로컬 세션 기록',
+                'source': 'Codex Local session recording',
             })
         by_id = {session['id']: session for session in sessions}
         for edge in state.execute('SELECT parent_thread_id,child_thread_id,status '
@@ -161,7 +160,7 @@ def _read_sessions(project, codex_home):
             parent['children'].append({
                 'id': child['id'],
                 'name': _compact(child['name'] or child['agent_nickname'] or
-                                 child['agent_path'] or child['title'], 65) or '이름 없는 보조 세션',
+                                 child['agent_path'] or child['title'], 65) or 'An unnamed adjunct session.',
                 'role': child['agent_role'], 'edgeStatus': edge['status'],
                 'updatedAt': _timestamp(child['updated_at_ms']),
             })
@@ -170,7 +169,7 @@ def _read_sessions(project, codex_home):
         sessions.sort(key=lambda s: s['updatedAt'] or '', reverse=True)
         return sessions, [], _timestamp(state_path.stat().st_mtime_ns // 10**6)
     except (sqlite3.Error, ValueError, json.JSONDecodeError) as error:
-        return [], [f'Codex 세션 조회 실패: {type(error).__name__}'], None
+        return [], [f'The Codex session failed to visit: {type(error).__name__}'], None
     finally:
         history.close()
         state.close()
@@ -269,17 +268,17 @@ def _task_rows(project, runs):
         if run['status'] == 'complete':
             continue
         if run['status'] == 'blocked':
-            title = run['name'] + ' · Analysis 차단'
-            detail = '사유: ' + (run['reason'] or '상태 기록 확인 필요')
+            title = run['name'] + ' · Block the analysis'
+            detail = 'The reason: ' + (run['reason'] or 'I need to check the status file.')
         elif run['pauseReason'] == 'PAUSED_BY_USER':
-            title = run['name'] + ' · Analysis 사용자 중지'
-            detail = '일부 결과가 저장됐으며 재개 여부는 사용자 지시를 따릅니다.'
+            title = run['name'] + ' · Analysis user stop'
+            detail = 'Some of the results are saved and restarted, following user instructions.'
         elif run['status'] == 'pending':
-            title = run['name'] + ' · Analysis 완료 기록 없음'
-            detail = '풀이 수집 상태와 분석 시작 여부를 구분해 확인해야 합니다.'
+            title = run['name'] + ' · Analysis completed No record'
+            detail = 'We need to distinguish between the state of the grass collection and the start of the analysis.'
         else:
-            title = run['name'] + ' · 후속 상태 확인'
-            detail = '저장된 실행 상태를 확인해야 합니다.'
+            title = run['name'] + ' · Follow-up status check'
+            detail = 'You need to check the saved run.'
         tasks.append({
             'id': 'run-' + run['id'], 'title': title, 'detail': detail,
             'status': run['status'], 'group': 'analysis',
@@ -290,31 +289,31 @@ def _task_rows(project, runs):
     if meetings:
         meeting = meetings[-1]
         content = meeting.read_text()
-        section = content.split('## 다음에 할 일', 1)
+        section = content.split('## \ub2e4\uc74c\uc5d0 \ud560 \uc77c', 1)
         if len(section) == 2:
             section = section[1].split('\n## ', 1)[0]
             for number, line in enumerate(section.splitlines()):
-                if not line.startswith('|') or '상태: 할 일' not in line:
+                if not line.startswith('|') or '\uc0c1\ud0dc: \ud560 \uc77c' not in line:
                     continue
                 cells = _table_cells(line)
                 if len(cells) < 2:
                     continue
-                description = re.split(r'산출물:|기한:|\*\*상태:', cells[1])[0]
+                description = re.split('\uc0b0\ucd9c\ubb3c:|\uae30\ud55c:|\\*\\*\uc0c1\ud0dc:', cells[1])[0]
                 tasks.append({
                     'id': f'{meeting.parent.name}-task-{number}',
                     'title': _compact(description, 125),
                     'detail': _compact(cells[1], 215),
-                    'status': 'decision' if '확정' in cells[1] else 'open',
+                    'status': 'decision' if '\ud655\uc815' in cells[1] else 'open',
                     'group': 'research', 'relatedSessionId': MEETING_SESSION,
                     'sourceRef': 'latest-meeting',
                     'sourcePath': str(meeting.relative_to(project)),
                 })
     paper = project / 'paper/README.md'
-    if paper.is_file() and '분석 결과와 결론은 공란' in paper.read_text():
+    if paper.is_file() and '\ubd84\uc11d \uacb0\uacfc\uc640 \uacb0\ub860\uc740 \uacf5\ub780' in paper.read_text():
         tasks.append({
             'id': 'paper-results-conclusion',
-            'title': '논문 분석 결과·결론 근거 확정',
-            'detail': '현행 원고에서 두 절은 공란입니다. 해석과 주장을 확정한 뒤 작성해야 합니다.',
+            'title': 'The results of the paper analysis; the proof of the conclusion',
+            'detail': 'The two paragraphs in the current petition are absurd, and you have to write them down after you have confirmed the interpretation and the argument.',
             'status': 'pending', 'group': 'research',
             'relatedSessionId': PAPER_SESSION,
             'sourceRef': 'paper-index', 'sourcePath': 'paper/README.md',
@@ -333,11 +332,11 @@ def _dataset_snapshot(project):
         if not report.is_file():
             continue
         text = report.read_text()
-        original = re.search(r'원문\s+([\d,]+)문항', text)
-        approved = re.search(r'Preparation 승인\s+([\d,]+)문항', text)
+        original = re.search('\uc6d0\ubb38\\s+([\\d,]+)\ubb38\ud56d', text)
+        approved = re.search('Preparation \uc2b9\uc778\\s+([\\d,]+)\ubb38\ud56d', text)
         generation_section = text.split('## Generation', 1)
         generation = ([_table_cells(line) for line in generation_section[1].splitlines()
-                       if line.startswith('|3차|')] if len(generation_section) == 2 else [])
+                       if line.startswith('|3\ucc28|')] if len(generation_section) == 2 else [])
         gen_pass = gen_fail = None
         if generation:
             cells = generation[-1]
@@ -372,10 +371,10 @@ def _probe_service(item):
 
 def _services():
     items = [
-        {'id': 'dataset', 'name': '데이터셋', 'port': 8893, 'probe': '/api/health'},
-        {'id': 'experiments', 'name': '실험', 'port': 8894, 'probe': '/'},
-        {'id': 'dashboard', 'name': '대시보드', 'port': 8895, 'probe': '/api/health'},
-        {'id': 'research', 'name': '연구 자료', 'port': 8896, 'probe': '/api/health'},
+        {'id': 'dataset', 'name': 'The data set', 'port': 8893, 'probe': '/api/health'},
+        {'id': 'experiments', 'name': 'Experiment', 'port': 8894, 'probe': '/'},
+        {'id': 'dashboard', 'name': 'The dashboard.', 'port': 8895, 'probe': '/api/health'},
+        {'id': 'research', 'name': 'Research data', 'port': 8896, 'probe': '/api/health'},
     ]
     with ThreadPoolExecutor(max_workers=3) as pool:
         checked = list(pool.map(_probe_service, (item for item in items if item['id'] != 'dashboard')))
@@ -393,14 +392,14 @@ def load_project_data(project=PROJECT, codex_home=None):
     return {
         'generatedAt': datetime.now(timezone.utc).isoformat(),
         'sessionStoreUpdatedAt': session_updated,
-        'scope': '로컬 Codex 세션 + 이 프로젝트의 저장된 실행 기록',
+        'scope': 'Local Codex session + saved run record of this project',
         'groups': GROUPS, 'sessions': sessions, 'runs': runs,
         'tasks': tasks, 'dataset': _dataset_snapshot(project),
         'services': _services(), 'warnings': warnings,
         'notes': [
-            '업무 묶음은 대시보드 분류입니다. 실제 부모·자식은 Codex spawn 기록만 표시합니다.',
-            '세션의 응답 완료는 요청의 구현·검증·사용자 승인을 뜻하지 않습니다.',
-            '다른 호스트의 세션은 로컬 세션 목록에 없을 수 있습니다. 저장 run 상태는 별도로 표시합니다.',
+            'The task group is the parent-child classification, and the parent-spawn sequence actually only shows the Codex spawn record.',
+            'Completion of the session response does not imply implementation, verification, or user approval of the request.',
+            'The session of the other host may not be in the local session list. The save run state is displayed separately.',
         ],
     }
 

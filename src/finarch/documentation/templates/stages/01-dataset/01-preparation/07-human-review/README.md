@@ -1,49 +1,49 @@
-# P07 검토 자료 준비와 사람 판정
+# P07 Preparing the review data and judging the person
 
-[상위: Preparation](../README.md) · 후속: [Generation](../../02-generation/README.md)
+[Up: Preparation](../README.md) · Follow-up: [Generation](../../02-generation/README.md)
 
-이 단계의 `run()`은 사람이 읽을 결과를 모읍니다. 함수가 실행됐다고 사람이 승인한 것은 아닙니다. 별도 사용자 동작인 실패 해석·재검토와도 구별합니다.
+This is the stage. `run()`It collects the results that people read, not the ones that people approve of the function being executed, but it also distinguishes it from failure interpretation and re-evaluation, which is user behavior.
 
-## 요구사항과 실제 경계
+## Requirements and actual boundaries
 
-- 원문·보정본·POT·정답 대조·그래프·검증 결과를 같은 활성 차수에서 확인할 수 있어야 합니다.
-- 사람 판정은 검토자·시각·대상 자료 해시와 연결합니다. 자료가 바뀌면 과거 판정을 새 자료의 승인처럼 쓰지 않습니다.
-- Reject/Pending은 이유를 받습니다. Accept는 검토·자료 조건을 확인하되 이유를 필수로 강제하지 않는 후속 규칙이 있습니다.
-- 일반 수집 함수는 LLM 실패 해석을 자동 호출하지 않습니다. 실패 해석은 영어 분석과 표시용 한국어 번역을 별도 기록하는 사용자 동작입니다.
+- You need to be able to check the results of the original, the copy, the POT, the correct answer, the graph, the verification, on the active charts.
+- Human judgments are linked to the reviewers, the perception, the data hash, and when the data changes, they don't write past judgments as approval of new data.
+- Reject/Pending gets the reason. Accept verifies the review and release terms, but there are subsequent rules that don't necessarily enforce the reason.
+- The general collection function does not automatically call for LLM failure interpretation. Failure interpretation is a user behavior that records a single Korean translation for English analysis and mark-up.
 
-|스텝|처리|산출물|
+|Step by step|Processing|Outputs|
 |---|---|---|
 |P07.01|Python `pp01_collect_results`|`07-human-review/01-collect-review-package/01-result.json`|
-|P07.02|사람 / viewer|자료 읽기·필요 시 별도 실패 해석. 자동 실행 스텝 아님|
-|P07.03|Python `record_decision`|decision.json·history.jsonl·파일 해시|
+|P07.02|The person / viewer|Read the data, need no failure to interpret the time.|
+|P07.03|Python `record_decision`|decision.json·history.jsonl·file hash|
 
 ```mermaid
 flowchart LR
  subgraph P["p07_human_review.py · Python"]
-  A["P07.01 자동 결과 수집"]
+  A["P07.01 Automatically collecting results"]
  end
  subgraph V["viewer/dataset + src/finarch/dataset/viewer/server.py"]
-  A --> B["P07.02 사람이 자료 확인"]
+  A --> B["P07.02 People verify the data"]
  end
  subgraph G["shared/runtime/preparation_gate.py · Python"]
-  B --> C["P07.03 판정·해시 기록"]
-  D["case/run.json PASS"] --> E["snapshot 무결성 검사"] --> F["현재 Generation 진입 판단"]
+  B --> C["P07.03 Judgment and Declaration"]
+  D["case/run.json PASS"] --> E["Snapshot integrity test"] --> F["Currently, the Generation entry judgment"]
  end
 ```
 
-파일 상자는 실제 책임, 분홍 확장 노드는 없습니다. 사람 판정 경로와 자동 진입 판단 경로를 분리해 그렸습니다.
+The file box has no real responsibility, no pink extension nodes, separated the path of human judgment from the path of automatic entry judgment.
 
-## 요구·구현 차이: 검토가 필요한 부분
+## Requirements and differences in perception: Parts that need to be reviewed
 
-기존 설계는 사람 승인된 원문만 Generation에 넘긴다고 설명합니다. **현재 `preparation_gate.evaluate`는 case/run.json의 PASS와 snapshot을 기준으로 선정하며 사람 decision을 진입 조건으로 읽지 않습니다.** FAIL/ERROR는 rejected, 미완료는 pending, 파일 부적합은 invalid로 구분합니다. 전체 pending/invalid가 없을 때 배치를 준비 완료로 판정합니다.
+The current design explains that only human-approved prints are passed on to the Generation. **Current `preparation_gate.evaluate`Selects the PASS and snapshot of case/run.json and does not read the person's decision as an entry condition.** FAIL/ERROR is rejected, incomplete is pending, file incompleteness is invalid, and when there is no full pending/invalid, the assignment is determined to be ready-made.
 
-후속 기록에는 자동 검사 통과건을 실험에 포함하도록 한 지시가 있습니다. 이것만으로 제작의 사람 승인 경계 전체가 폐지됐다고 추정하지 않겠습니다. 현 동작과 요구의 적용 범위는 [OPEN-01](../../99-open-issues.md)에 기록하며 이번 작업에서 gate를 변경하지 않습니다.
+The subsequent records have instructions to include automatic testing passes into the experiment, which alone will not suggest that the entire human approval limit for the production has been removed.01](../../99-open-issues.md)I'm not going to change the gate in this task.
 
-근거: [p07_human_review.py](../../../../src/finarch/dataset/01-preparation/07-human-review/stage.py), [preparation_gate.py](../../../../src/finarch/dataset/90-operations/preparation_gate.py), [기존 사람 검토·실패 해석](../../../../archive/20260923-documentation-reorganization/docs/75-failure-interpretation.md).
+The basis: [p0]7_human_review.py](../../../../src/finarch/dataset/01-preparation/07-human-review/stage.py), [preparation_gate.py](../../../../src/finarch/dataset/90-operations/preparation_gate.py)[Existing person review; failure interpretation](../../../../archive/20260923-documentation-reorganization/docs/75-failure-interpretation.md).
 
-## 실제 run의 하위 폴더 순서
+## The order of the real run is the lower folder.
 
-채번 대조에 사용한 경로: `reports/run/20260917-003/01-preparation/test-0001/01-round/07-human-review`. 아래는 해당 실행에서 실제 확인한 폴더이며, 미실행 분기까지 모두 존재한다는 뜻은 아닙니다.
+The path used in the gravel counterpart: `reports/run/20260917-003/01-preparation/test-0001/01-round/07-human-review`The following is the actual verified folder in the execution, but that doesn't mean that all of them are in the wrong quarter.
 
 ```text
 07-human-review/

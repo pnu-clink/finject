@@ -1,14 +1,14 @@
 'use strict';
 
 (() => {
-  const promptName = value => ({ P0: 'Unguided Solving', P1: 'Criteria-Guided Solving' })[value] || value || '미기록';
-  const reasoningName = value => ({ off: 'Reasoning OFF', on: 'Reasoning ON' })[value] || value || '미기록';
+  const promptName = value => ({ P0: 'Unguided Solving', P1: 'Criteria-Guided Solving' })[value] || value || 'Not recorded';
+  const reasoningName = value => ({ off: 'Reasoning OFF', on: 'Reasoning ON' })[value] || value || 'Not recorded';
   const $ = id => document.getElementById(id);
-  const number = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 });
-  const duration = new Intl.NumberFormat('ko-KR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const variantNames = { ORIGINAL: '원문', IC_VALUE_01_BEFORE: '값 충돌 · 앞', IC_VALUE_01_AFTER: '값 충돌 · 뒤', IC_SOURCE_A_ONLY: '출처 A', IC_SOURCE_B_ONLY: '출처 B', IC_RELATION_01: '관계 충돌', EA_01: '근거 삭제 01', EA_02: '근거 삭제 02' };
-  const tagNames = { ANSWER_ABSENT_FROM_EQUATION_RHS_CANDIDATE: '답·계산식 불일치 후보', DECLARED_ABSTENTION_WITH_NON_NULL_ANSWER: '유보 선언 + 숫자', DECLARED_ABSTENTION_WITH_NON_NULL_SIGN: '유보 선언 + 부호', DECLARED_ABSTENTION_WITH_ZERO: '유보 선언 + 0', EMPTY_EVIDENCE: '빈 인용 배열', EVIDENCE_NOT_EXACT_SUBSTRING: '정확 인용 불일치', EXPLANATION_NO_COMMITMENT_CUE: '설명에 유보 표현', NON_NULL_ANSWER: 'null이 아닌 답', NULL_ANSWER: '숫자 없음 · null', NUMERIC_FIELD_PRESENT: '숫자 필드 관측', NUMERIC_FIELD_WITH_NO_COMMITMENT_CUE: '숫자 + 유보 표현', POSITIVE_ANSWER_WITH_SAME_NEGATIVE_NUMBER_CANDIDATE: '부호 불일치 후보', QUESTION_METADATA_PRECISION_CONFLICT: '질문·자릿수 지시 충돌', RAW_DECLARED_ABSTENTION: '원응답 유보 선언', SAVED_DECIMAL_PLACES_FAILURE: '저장된 자릿수 검사 실패' };
-  const statusNames = { VALID: '형식 통과', INVALID_RESPONSE: '형식 실패', MISSING: '미관측', NOT_RUN: '미실행' };
+  const number = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+  const duration = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const variantNames = { ORIGINAL: 'Source text', IC_VALUE_01_BEFORE: 'Value collision · front', IC_VALUE_01_AFTER: 'The value of the collapse', IC_SOURCE_A_ONLY: 'Sources A', IC_SOURCE_B_ONLY: 'Sources B', IC_RELATION_01: 'Relation conflict', EA_01: 'Delete the basis 01', EA_02: 'Delete the basis 02' };
+  const tagNames = { ANSWER_ABSENT_FROM_EQUATION_RHS_CANDIDATE: 'Answer: Calculation of the inconsistency candidate', DECLARED_ABSTENTION_WITH_NON_NULL_ANSWER: 'Youbo declaration + numbers', DECLARED_ABSTENTION_WITH_NON_NULL_SIGN: 'Youbo declaration + code', DECLARED_ABSTENTION_WITH_ZERO: 'Youbo declaration + 0', EMPTY_EVIDENCE: 'The empty quotation array', EVIDENCE_NOT_EXACT_SUBSTRING: 'Accurate citation inconsistency', EXPLANATION_NO_COMMITMENT_CUE: 'Youbo in the description', NON_NULL_ANSWER: 'The answer is not null.', NULL_ANSWER: 'No number', NUMERIC_FIELD_PRESENT: 'Number field observation', NUMERIC_FIELD_WITH_NO_COMMITMENT_CUE: 'Numbers + Ubo expressions', POSITIVE_ANSWER_WITH_SAME_NEGATIVE_NUMBER_CANDIDATE: 'The name of the candidate', QUESTION_METADATA_PRECISION_CONFLICT: 'Question: The number of instructions', RAW_DECLARED_ABSTENTION: 'Raw response to the UBO declaration', SAVED_DECIMAL_PLACES_FAILURE: 'The stored digit scan failed.' };
+  const statusNames = { VALID: 'Format valid', INVALID_RESPONSE: 'Format failed', MISSING: 'Unobserved', NOT_RUN: 'Not run' };
   const filterIds = { variant: 'variant-filter', prompt: 'prompt-filter', reasoning: 'reasoning-filter', status: 'status-filter', tag: 'tag-filter', case: 'case-filter' };
   const state = { data: null, rows: [], filtered: [], tableRows: [], byId: new Map(), filters: {}, sort: 'completed_at', direction: -1, axis: 'completion', pendingTrial: null, page: 0, pageSize: 25, focusId: null, hoverId: null, brushIds: null, points: [], drag: null, detailCache: new Map(), detailSequence: 0, loading: false };
   const canvas = $('scatter');
@@ -27,23 +27,23 @@
   };
   const numeric = value => typeof value === 'number' && Number.isFinite(value);
   const metric = (row, key) => numeric(row.metrics?.[key]) ? row.metrics[key] : null;
-  const format = value => numeric(value) ? number.format(value) : '미관측';
-  const variantLabel = row => variantNames[row.variant] || row.variant || '유형 미관측';
+  const format = value => numeric(value) ? number.format(value) : 'Unobserved';
+  const variantLabel = row => variantNames[row.variant] || row.variant || 'Type of mismatch';
   const observed = row => row.response_object_observed !== false && row.response !== null && typeof row.response === 'object' && !Array.isArray(row.response);
   const answerState = row => {
-    if (!observed(row)) return { text: '응답 미관측', kind: 'missing' };
-    if (!Object.prototype.hasOwnProperty.call(row.response, 'answer')) return { text: 'answer 필드 없음', kind: 'missing' };
-    if (row.response.answer === null) return { text: '숫자 없음 · null', kind: 'null' };
+    if (!observed(row)) return { text: 'The response is subtractive.', kind: 'missing' };
+    if (!Object.prototype.hasOwnProperty.call(row.response, 'answer')) return { text: 'No answer field', kind: 'missing' };
+    if (row.response.answer === null) return { text: 'No number', kind: 'null' };
     const signed = row.signed_numeric_field;
     return { text: signed !== null && signed !== undefined ? String(signed) : String(row.response.answer), kind: 'value' };
   };
-  const fieldText = value => value === null ? 'null' : value === undefined ? '필드 없음' : String(value);
+  const fieldText = value => value === null ? 'null' : value === undefined ? 'No field.' : String(value);
   const samePair = (a, b) => a.case === b.case && a.variant === b.variant && a.reasoning === b.reasoning;
   const candidates = row => (row.tags || []).filter(tag => tag.includes('CANDIDATE'));
   const completedAt = row => numeric(row.timing?.ended_epoch_ms) ? row.timing.ended_epoch_ms : null;
   const clockTime = (value, date = false) => {
-    if (!numeric(value)) return '미관측';
-    return new Date(value).toLocaleString('ko-KR', { ...(date ? { month: '2-digit', day: '2-digit' } : {}), hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZone: 'Asia/Seoul' });
+    if (!numeric(value)) return 'Unobserved';
+    return new Date(value).toLocaleString('en-US', { ...(date ? { month: '2-digit', day: '2-digit' } : {}), hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23', timeZone: 'Asia/Seoul' });
   };
   const plotDatum = row => {
     const elapsed = metric(row, 'elapsed_seconds');
@@ -70,13 +70,13 @@
     $('stat-failed').textContent = number.format(state.filtered.filter(row => row.saved_status === 'INVALID_RESPONSE').length);
     $('stat-null').textContent = number.format(state.filtered.filter(row => observed(row) && row.response.answer === null).length);
     const p50 = percentile(elapsed, .5), p95 = percentile(elapsed, .95);
-    $('stat-p50').textContent = p50 === null ? '미관측' : duration.format(p50);
-    $('stat-p95').textContent = p95 === null ? '미관측' : duration.format(p95);
-    for (const id of ['stat-p50', 'stat-p95']) $(id).title = `현재 필터에서 실제 응답 시간이 관측된 ${number.format(elapsed.length)}건 기준. (n−1)×q 위치의 선형보간 분위수. 영역 선택 전 범위.`;
+    $('stat-p50').textContent = p50 === null ? 'Unobserved' : duration.format(p50);
+    $('stat-p95').textContent = p95 === null ? 'Unobserved' : duration.format(p95);
+    for (const id of ['stat-p50', 'stat-p95']) $(id).title = `The actual response time in the current filter is observed as ${number.format(elapsed.length)}That\x27s the standard.1) xq is the linear-intercepted atmosphere of the position.`;
   }
 
   function setNotice(message, error = false) {
-    $('load-status').textContent = message || '저장 실행 조회 · 자동 후보는 검토 대상이며 의미 적절성은 미평가입니다.';
+    $('load-status').textContent = message || 'The automatic tracker is subject to review and the significance of appropriateness is underestimated.';
     $('load-status').parentElement.classList.toggle('is-error', error);
   }
 
@@ -147,14 +147,14 @@
   function renderScope() {
     const chips = $('filter-chips');
     chips.replaceChildren();
-    const labels = { variant: variantNames[state.filters.variant], prompt: state.filters.prompt ? promptName(state.filters.prompt) : '', reasoning: state.filters.reasoning ? reasoningName(state.filters.reasoning) : '', status: statusNames[state.filters.status], tag: tagNames[state.filters.tag], case: state.filters.case ? `검색: ${state.filters.case}` : '' };
+    const labels = { variant: variantNames[state.filters.variant], prompt: state.filters.prompt ? promptName(state.filters.prompt) : '', reasoning: state.filters.reasoning ? reasoningName(state.filters.reasoning) : '', status: statusNames[state.filters.status], tag: tagNames[state.filters.tag], case: state.filters.case ? `Searching: ${state.filters.case}` : '' };
     for (const [key, value] of Object.entries(state.filters)) if (value) chips.append(make('span', 'chip', labels[key] || value));
-    if (!chips.childElementCount) chips.append(make('span', 'chip', '전체 입력 · 전체 조건'));
-    if (state.brushIds !== null) chips.append(make('span', 'chip brush-chip', `영역 선택 ${number.format(state.tableRows.length)}개`));
-    $('scope-count').textContent = `필터 ${number.format(state.filtered.length)} / 전체 ${number.format(state.rows.length)}`;
+    if (!chips.childElementCount) chips.append(make('span', 'chip', 'Full input · Full condition'));
+    if (state.brushIds !== null) chips.append(make('span', 'chip brush-chip', `Area selection ${number.format(state.tableRows.length)}items`));
+    $('scope-count').textContent = `Filter ${number.format(state.filtered.length)} - Whole one. ${number.format(state.rows.length)}`;
     $('clear-brush').hidden = state.brushIds === null;
     const selectionCount = state.brushIds !== null ? state.tableRows.length : state.focusId && state.filtered.some(r => r.trial_id === state.focusId) ? 1 : 0;
-    $('selection-count').textContent = `선택 ${number.format(selectionCount)} / 관측 ${number.format(state.filtered.filter(observed).length)}`;
+    $('selection-count').textContent = `Select ${number.format(selectionCount)} - What? ${number.format(state.filtered.filter(observed).length)}`;
   }
 
   function updateView() {
@@ -184,25 +184,25 @@
       tr.classList.toggle('is-selected', row.trial_id === state.focusId);
       tr.setAttribute('aria-selected', String(row.trial_id === state.focusId));
       const caseCell = make('td');
-      const button = make('button', 'case-button', row.case || '문항 미관측');
+      const button = make('button', 'case-button', row.case || 'Article by subtraction');
       button.type = 'button';
-      button.setAttribute('aria-label', `${row.case} ${variantLabel(row)} ${promptName(row.prompt_condition)} ${reasoningName(row.reasoning)} 응답 보기`);
+      button.setAttribute('aria-label', `${row.case} ${variantLabel(row)} ${promptName(row.prompt_condition)} ${reasoningName(row.reasoning)} See the response.`);
       caseCell.append(button);
       const variant = make('td', '', variantLabel(row));
       const condition = make('td');
       condition.append(make('span', `condition-pill ${row.prompt_condition === 'P1' ? 'p1' : 'p0'}`, promptName(row.prompt_condition)), make('span', 'reasoning-label', reasoningName(row.reasoning)));
       const answer = answerState(row);
       const answerCell = make('td', answer.kind === 'value' ? 'numeric-value' : 'missing-value', answer.text);
-      answerCell.title = `원응답 answer: ${fieldText(row.response?.answer)} · negative: ${fieldText(row.response?.answer_meta?.negative)}`;
+      answerCell.title = `Raw response: ${fieldText(row.response?.answer)} · negative: ${fieldText(row.response?.answer_meta?.negative)}`;
       const status = make('td');
-      status.append(make('span', `status-label ${row.saved_status === 'INVALID_RESPONSE' ? 'invalid' : ''}`, statusNames[row.saved_status] || row.saved_status || '미관측'));
+      status.append(make('span', `status-label ${row.saved_status === 'INVALID_RESPONSE' ? 'invalid' : ''}`, statusNames[row.saved_status] || row.saved_status || 'Unobserved'));
       const tags = make('td');
       const candidateCount = candidates(row).length;
-      const label = make('span', 'tag-count', candidateCount ? `후보 ${candidateCount} · 태그 ${(row.tags || []).length}` : `태그 ${(row.tags || []).length}`);
+      const label = make('span', 'tag-count', candidateCount ? `Candidate ${candidateCount} · Tag ${(row.tags || []).length}` : `Tag ${(row.tags || []).length}`);
       label.title = (row.tags || []).map(tag => tagNames[tag] || tag).join('\n');
       tags.append(label);
       const completionCell = make('td', '', clockTime(completedAt(row)));
-      completionCell.title = `${clockTime(completedAt(row), true)} · 한국 시각`;
+      completionCell.title = `${clockTime(completedAt(row), true)} • View from South Korea`;
       tr.append(caseCell, variant, condition, completionCell, make('td', '', format(metric(row, 'elapsed_seconds'))), make('td', '', format(metric(row, 'output_tokens'))), answerCell, status, tags);
       tr.addEventListener('click', () => selectRow(row.trial_id));
       tr.addEventListener('mouseenter', () => { state.hoverId = row.trial_id; requestDraw(); });
@@ -211,7 +211,7 @@
     }
     body.append(fragment);
     const pages = Math.ceil(state.tableRows.length / state.pageSize);
-    $('page-label').textContent = pages ? `${state.page + 1} / ${pages} 페이지 · ${start + 1}–${Math.min(start + state.pageSize, state.tableRows.length)}` : '0 / 0 페이지';
+    $('page-label').textContent = pages ? `${state.page + 1} / ${pages} Page · ${start + 1}–${Math.min(start + state.pageSize, state.tableRows.length)}` : '0 / 0 Page two.';
     $('page-prev').disabled = state.page === 0;
     $('page-next').disabled = !pages || state.page >= pages - 1;
     for (const button of document.querySelectorAll('[data-sort]')) {
@@ -268,7 +268,7 @@
       ctx.fillStyle = plotTheme.muted; ctx.textAlign = i === 0 ? 'left' : i === xTicks ? 'right' : 'center';
       ctx.fillText(completionMode ? plottable.length ? clockTime(value, withDate) : '—' : number.format(value), x, bounds.bottom + 15);
     }
-    ctx.fillStyle = '#74899c'; ctx.textAlign = 'left'; ctx.fillText(completionMode ? '응답 시간(초)' : '출력 토큰', bounds.left, 7);
+    ctx.fillStyle = '#74899c'; ctx.textAlign = 'left'; ctx.fillText(completionMode ? 'Answer time' : 'Output tokens', bounds.left, 7);
     state.points = plottable.map(({ row, value }) => ({ row, x: bounds.left + (value.x - minX) / (maxX - minX) * (bounds.right - bounds.left), y: bounds.bottom - value.y / maxY * (bounds.bottom - bounds.top) }));
     for (const point of state.points) drawPoint(point, false);
     for (const point of state.points) if (point.row.trial_id === state.focusId || point.row.trial_id === state.hoverId) drawPoint(point, true);
@@ -279,10 +279,10 @@
       ctx.setLineDash([4, 3]); ctx.strokeRect(start.x, start.y, current.x - start.x, current.y - start.y); ctx.setLineDash([]);
     }
     $('plot-empty').hidden = plottable.length > 0;
-    $('axis-description').textContent = completionMode ? '가로: 완료 시각(한국 시각) · 세로: 응답 시간(초)' : '가로: 응답 시간(초) · 세로: 출력 토큰 · 점 크기 동일';
-    canvas.setAttribute('aria-label', `${$('axis-description').textContent}. 점 클릭 또는 영역 드래그로 선택할 수 있습니다. 키보드로는 아래 응답 표를 사용하십시오.`);
-    $('plot-empty').textContent = completionMode ? '완료 시각과 응답 시간이 있는 응답이 없습니다. 표 또는 다른 축을 확인하세요.' : '응답 시간과 출력 토큰이 있는 응답이 없습니다.';
-    $('plot-count').textContent = `표시 ${number.format(plottable.length)} · ${completionMode ? '완료 시각/응답 시간' : '시간/출력'} 미관측·무효 ${number.format(state.filtered.length - plottable.length)} (표 유지)`;
+    $('axis-description').textContent = completionMode ? 'Line: completed view (Korean view) · line: response time (seconds)' : 'The response time is equal to the output token.';
+    canvas.setAttribute('aria-label', `${$('axis-description').textContent}You can select either a dot click or a zone drag.`);
+    $('plot-empty').textContent = completionMode ? 'No response with a completed time and a response time. Check the table or other axis.' : 'There\x27s no response with a response time and output token.';
+    $('plot-count').textContent = `Showing ${number.format(plottable.length)} · ${completionMode ? 'Finished time/response time' : 'Time and effort.'} Misobservation and inactivity ${number.format(state.filtered.length - plottable.length)} (Sighs)`;
   }
 
   function drawPoint(point, highlighted) {
@@ -314,7 +314,7 @@
     tooltip.hidden = !point;
     if (point) {
       const row = point.row;
-      tooltip.textContent = `${row.case} · ${variantLabel(row)}\n${promptName(row.prompt_condition)} / ${reasoningName(row.reasoning)} · ${answerState(row).text}\n완료 ${clockTime(completedAt(row), true)}\n${format(metric(row, 'elapsed_seconds'))}초 · ${format(metric(row, 'output_tokens'))} 출력 토큰`;
+      tooltip.textContent = `${row.case} · ${variantLabel(row)}\n${promptName(row.prompt_condition)} / ${reasoningName(row.reasoning)} · ${answerState(row).text}\nComplete ${clockTime(completedAt(row), true)}\n${format(metric(row, 'elapsed_seconds'))}Seconds ${format(metric(row, 'output_tokens'))} Output tokens`;
       tooltip.style.left = `${Math.max(5, Math.min(pos.x + 13, plotWidth - 247))}px`;
       tooltip.style.top = `${Math.max(4, Math.min(pos.y + 12, plotHeight - 97))}px`;
     }
@@ -347,7 +347,7 @@
     detailController?.abort();
     $('detail-content').hidden = true;
     $('detail-empty').hidden = false;
-    $('detail-indicator').textContent = '선택 대기';
+    $('detail-indicator').textContent = 'Choose waiting';
   }
 
   function revealTrialFilters(row) {
@@ -367,8 +367,8 @@
     const top = make('div', 'pair-card-top');
     top.append(make('span', `condition-pill ${condition === 'P1' ? 'p1' : 'p0'}`, promptName(condition)));
     card.append(top);
-    if (!row) { card.append(make('p', 'pair-empty', '같은 문항·유형·추론 조건의 저장 요청이 없습니다. 원문은 Unguided Solving만 계획되었습니다.')); return card; }
-    const button = make('button', '', selected ? '선택됨' : '이 응답 선택');
+    if (!row) { card.append(make('p', 'pair-empty', 'There are no requests for the same case, type, reference conditions, only the source was planned for Unguided Solving.')); return card; }
+    const button = make('button', '', selected ? 'Selected' : 'This is the answer choice.');
     button.type = 'button'; button.disabled = selected;
     button.addEventListener('click', () => {
       for (const key of ['prompt', 'status', 'tag']) { state.filters[key] = ''; $(filterIds[key]).value = ''; }
@@ -377,34 +377,34 @@
     top.append(button);
     const answer = answerState(row);
     card.append(make('div', `pair-answer${answer.kind !== 'value' ? ' null-answer' : ''}`, answer.text));
-    card.append(make('p', 'pair-metadata', `${statusNames[row.saved_status] || row.saved_status || '미관측'} · 원응답 answer=${fieldText(row.response?.answer)} · negative=${fieldText(row.response?.answer_meta?.negative)} · scale=${fieldText(row.response?.answer_meta?.scale)}`));
-    card.append(make('p', 'pair-explanation', row.response?.explanation ?? '설명 미관측'));
+    card.append(make('p', 'pair-metadata', `${statusNames[row.saved_status] || row.saved_status || 'Unobserved'} · raw response answer=${fieldText(row.response?.answer)} · negative=${fieldText(row.response?.answer_meta?.negative)} · scale=${fieldText(row.response?.answer_meta?.scale)}`));
+    card.append(make('p', 'pair-explanation', row.response?.explanation ?? 'Explanation of the sub-observation'));
     const evidence = make('div', 'pair-evidence');
-    evidence.append(make('h4', '', 'EVIDENCE · 원응답 인용'));
+    evidence.append(make('h4', '', 'EVIDENCE · raw response quotes'));
     if (Array.isArray(row.response?.evidence)) {
-      if (!row.response.evidence.length) evidence.append(make('p', 'pair-empty', '빈 인용 배열 []'));
+      if (!row.response.evidence.length) evidence.append(make('p', 'pair-empty', 'The empty quotation array []'));
       for (const quote of row.response.evidence) evidence.append(make('blockquote', '', typeof quote === 'string' ? quote : JSON.stringify(quote)));
-    } else evidence.append(make('p', 'pair-empty', '인용 필드 미관측'));
+    } else evidence.append(make('p', 'pair-empty', 'Cited field subtraction'));
     card.append(evidence);
     return card;
   }
 
   function renderSources(data) {
     const links = $('source-links'); links.replaceChildren();
-    for (const [key, label] of [['raw_path', 'API 원응답 경로'], ['result_path', '저장 검사 결과 경로'], ['call_path', '요청·응답 묶음 경로']]) {
+    for (const [key, label] of [['raw_path', 'API raw response path'], ['result_path', 'The storage scan results trace'], ['call_path', 'Request-response path of the bundle']]) {
       const path = data[key];
       if (typeof path !== 'string' || !path) continue;
       const record = make('div', 'source-record');
       const top = make('div', 'source-record-top');
-      const copy = make('button', '', '경로 복사'); copy.type = 'button';
+      const copy = make('button', '', 'Copy the path.'); copy.type = 'button';
       copy.addEventListener('click', async () => {
-        try { await navigator.clipboard.writeText(path); copy.textContent = '복사됨'; }
-        catch { copy.textContent = '아래 경로를 선택해 복사'; }
+        try { await navigator.clipboard.writeText(path); copy.textContent = 'It is copied.'; }
+        catch { copy.textContent = 'Choose the path below and copy.'; }
       });
       top.append(make('span', '', label), copy);
       record.append(top, make('code', '', path)); links.append(record);
     }
-    if (!links.childElementCount) links.append(make('span', 'muted', '저장 경로 미관측'));
+    if (!links.childElementCount) links.append(make('span', 'muted', 'Save paths from the subway'));
   }
 
   async function renderDetail(row) {
@@ -413,27 +413,27 @@
     $('detail-empty').hidden = true; $('detail-content').hidden = false;
     $('detail-indicator').textContent = `${promptName(row.prompt_condition)} / ${reasoningName(row.reasoning)}`;
     $('selected-case').textContent = row.case;
-    $('selected-tags').replaceChildren(make('span', 'chip', variantLabel(row)), make('span', 'chip', row.schema_title || '형식 미관측'));
-    $('selected-metrics').textContent = `완료 ${clockTime(completedAt(row), true)} · 소요 ${format(metric(row, 'elapsed_seconds'))}초\n입력 ${format(metric(row, 'input_tokens'))} · 출력 ${format(metric(row, 'output_tokens'))} · 추론 ${format(metric(row, 'reasoning_tokens'))} 토큰 · 비용 추정 ${metric(row, 'cost_estimate_usd') === null ? '미관측' : '$' + metric(row, 'cost_estimate_usd').toFixed(6)}`;
-    $('question-text').textContent = row.question_preview || '질문 원문을 불러오고 있습니다.';
-    $('pair-scope').textContent = `${row.case} · ${variantLabel(row)} · ${reasoningName(row.reasoning)} / 상세 대조는 목록의 풀이 조건 필터와 관계없이 양쪽을 표시합니다.`;
+    $('selected-tags').replaceChildren(make('span', 'chip', variantLabel(row)), make('span', 'chip', row.schema_title || 'The form of the sub-observation'));
+    $('selected-metrics').textContent = `Complete ${clockTime(completedAt(row), true)} · Cost ${format(metric(row, 'elapsed_seconds'))}Seconds.\nInput ${format(metric(row, 'input_tokens'))} · Output ${format(metric(row, 'output_tokens'))} · Theories ${format(metric(row, 'reasoning_tokens'))} Token · Cost estimate ${metric(row, 'cost_estimate_usd') === null ? 'Unobserved' : '$' + metric(row, 'cost_estimate_usd').toFixed(6)}`;
+    $('question-text').textContent = row.question_preview || 'It\x27s bringing up the question.';
+    $('pair-scope').textContent = `${row.case} · ${variantLabel(row)} · ${reasoningName(row.reasoning)} / Detailed contrast shows both sides of the list, regardless of the root condition filter.`;
     const pairRows = state.rows.filter(other => samePair(row, other));
     $('pair-cards').replaceChildren(...['P0', 'P1'].map(condition => { const other = pairRows.find(r => r.prompt_condition === condition); return pairCard(other, condition, other?.trial_id === row.trial_id); }));
     $('observation-tags').replaceChildren(...(row.tags || []).map(tag => make('span', `observation-tag${tag.includes('CANDIDATE') ? ' candidate' : ''}`, tagNames[tag] || tag)));
-    const quoteLabel = row.saved_all_quotes_present === true ? '모두 존재' : row.saved_all_quotes_present === false ? '불일치 있음' : '검사 미관측';
-    $('saved-checks').textContent = `기존 인용 존재 검사: ${quoteLabel} · 의미 적절성: 미평가. 기존 수치 비교: ${row.saved_numeric_comparison ? row.saved_numeric_comparison.matches === true ? '참조 수치 일치' : row.saved_numeric_comparison.matches === false ? '참조 수치 불일치' : '판정 미관측' : '미평가'}.`;
-    $('response-json').textContent = row.response === undefined ? '응답 필드 미관측' : JSON.stringify(row.response, null, 2);
+    const quoteLabel = row.saved_all_quotes_present === true ? 'They all exist.' : row.saved_all_quotes_present === false ? 'There is a discrepancy.' : 'The inspection is under surveillance.';
+    $('saved-checks').textContent = `The existing citation exists: ${quoteLabel} · Meaning appropriateness: underestimated. ${row.saved_numeric_comparison ? row.saved_numeric_comparison.matches === true ? 'Reference number matching' : row.saved_numeric_comparison.matches === false ? 'Reference number inconsistency' : 'Judgmental subversion' : 'Not evaluated'}.`;
+    $('response-json').textContent = row.response === undefined ? 'Response field subtraction' : JSON.stringify(row.response, null, 2);
     $('context-details').open = false; $('context-text').textContent = '';
     renderSources(row);
     const apply = detail => {
       if (sequence !== state.detailSequence) return;
-      $('question-text').textContent = detail.question ?? row.question_preview ?? '질문 미관측';
-      $('context-text').textContent = typeof detail.context === 'string' ? detail.context : detail.context == null ? '본문 미관측' : JSON.stringify(detail.context, null, 2);
-      $('detail-load-status').textContent = '선택 요청에 실제 전달된 질문과 본문입니다.';
+      $('question-text').textContent = detail.question ?? row.question_preview ?? 'Question: Subconsciously';
+      $('context-text').textContent = typeof detail.context === 'string' ? detail.context : detail.context == null ? 'The following is a list of the countries of the European Union:' : JSON.stringify(detail.context, null, 2);
+      $('detail-load-status').textContent = 'It\x27s the actual questions and lessons that are delivered to the selection request.';
       renderSources({ ...row, ...detail });
     };
     if (state.detailCache.has(row.trial_id)) { apply(state.detailCache.get(row.trial_id)); return; }
-    $('detail-load-status').textContent = '저장된 요청 본문을 불러오고 있습니다…';
+    $('detail-load-status').textContent = 'I\x27m bringing back the saved request text...';
     detailController = new AbortController();
     try {
       const response = await fetch('/api/dashboard/response?trial_id=' + encodeURIComponent(row.trial_id), { signal: detailController.signal, cache: 'no-store' });
@@ -441,18 +441,18 @@
       const detail = await response.json();
       state.detailCache.set(row.trial_id, detail); apply(detail);
     } catch (error) {
-      if (error.name !== 'AbortError' && sequence === state.detailSequence) $('detail-load-status').textContent = `본문을 불러오지 못했습니다 (${error.message}). 응답을 다시 선택하거나 아래 저장 경로를 확인해 주세요.`;
+      if (error.name !== 'AbortError' && sequence === state.detailSequence) $('detail-load-status').textContent = `I didn\x27t get the article.${error.message}Please select the answer again or check the save path below.`;
     }
   }
 
   async function loadData(forceRefresh = false) {
     dataController?.abort(); dataController = new AbortController();
-    state.loading = true; $('main').setAttribute('aria-busy', 'true'); $('refresh').disabled = true; setNotice('실제 저장 응답을 불러오고 있습니다.');
+    state.loading = true; $('main').setAttribute('aria-busy', 'true'); $('refresh').disabled = true; setNotice('It\x27s bringing in real storage responses.');
     try {
       const response = await fetch('/api/dashboard/data' + (forceRefresh ? '?refresh=1' : ''), { signal: dataController.signal, cache: 'no-store' });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.json();
-      if (!Array.isArray(data.rows)) throw new Error('응답 목록(rows)이 없습니다');
+      if (!Array.isArray(data.rows)) throw new Error('There\x27s no answer list.');
       state.data = data; state.rows = data.rows; state.byId = new Map(data.rows.map(row => [row.trial_id, row])); state.detailCache.clear();
       if (/^\d{8}-exp-\d{3,}$/.test(data.run_id || '')) $('experiment-viewer-link').href = `http://127.0.0.1:8894/?run=${encodeURIComponent(data.run_id)}&tab=analysis`;
       fillOptions('variant-filter', [...new Set(data.rows.map(row => row.variant).filter(Boolean))].sort((a, b) => Object.keys(variantNames).indexOf(a) - Object.keys(variantNames).indexOf(b)), variantNames);
@@ -461,18 +461,18 @@
       for (const [key, id] of Object.entries(filterIds)) {
         const select = $(id);
         if (select.tagName === 'SELECT' && state.filters[key] && ![...select.options].some(option => option.value === state.filters[key])) {
-          const option = make('option', '', state.filters[key] + ' · 해당 값 없음'); option.value = state.filters[key]; select.append(option);
+          const option = make('option', '', state.filters[key] + ' · No value'); option.value = state.filters[key]; select.append(option);
         }
         select.value = state.filters[key];
       }
-      $('run-label').textContent = data.run_id || '실행 식별자 미관측';
+      $('run-label').textContent = data.run_id || 'Running ID is unobserved';
       const variantInputCount = new Set(data.rows.filter(row => row.variant && row.variant !== 'ORIGINAL').map(row => JSON.stringify([row.case, row.variant]))).size;
-      $('run-facts').textContent = `${typeof data.model === 'string' ? data.model : '모델 미관측'} · ${number.format(new Set(data.rows.map(row => row.case)).size)}원문 / ${number.format(variantInputCount)}변형`;
+      $('run-facts').textContent = `${typeof data.model === 'string' ? data.model : 'The model is under observation.'} · ${number.format(new Set(data.rows.map(row => row.case)).size)}- The original. ${number.format(variantInputCount)}Variant`;
       const completionTimes = data.rows.map(completedAt).filter(value => value !== null);
-      $('time-window').textContent = completionTimes.length ? `${clockTime(Math.min(...completionTimes), true)}–${clockTime(Math.max(...completionTimes))} KST` : '완료 시각 미관측';
-      $('dataset-label').textContent = `${number.format(new Set(data.rows.map(row => row.case)).size)}개 원문 · ${number.format(data.rows.length)}개 저장 응답 · 자동 의미 채점 없음`;
+      $('time-window').textContent = completionTimes.length ? `${clockTime(Math.min(...completionTimes), true)}–${clockTime(Math.max(...completionTimes))} KST` : 'Finished visual subtraction';
+      $('dataset-label').textContent = `${number.format(new Set(data.rows.map(row => row.case)).size)}originals · ${number.format(data.rows.length)}items save response · No automatic meaning stamp`;
       const date = data.generated_at ? new Date(data.generated_at) : null;
-      $('updated-at').textContent = date && !Number.isNaN(date.getTime()) ? `자료 생성 ${date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })} KST` : '자료 생성 시각 미관측';
+      $('updated-at').textContent = date && !Number.isNaN(date.getTime()) ? `Creating data ${date.toLocaleString('en-US', { timeZone: 'Asia/Seoul' })} KST` : 'Data creation visual subtraction';
       const requestedTrial = state.pendingTrial;
       state.pendingTrial = null;
       const requestedRow = state.byId.get(requestedTrial);
@@ -480,9 +480,9 @@
       updateView();
       if (requestedRow) selectRow(requestedRow.trial_id);
       else if (state.focusId && state.byId.has(state.focusId)) renderDetail(state.byId.get(state.focusId));
-      setNotice(requestedTrial && !requestedRow ? '연결된 실행에서 요청한 trial을 찾지 못했습니다. 현재 필터의 응답을 표시합니다.' : adjusted ? '연결된 응답을 표시하도록 충돌한 필터를 조정했습니다.' : data.rows.length ? '' : '연결된 실행에 표시할 저장 응답이 없습니다.');
+      setNotice(requestedTrial && !requestedRow ? 'I couldn\x27t find the requested trial in the connected run. It\x27s showing the response of the current filter.' : adjusted ? 'I adjusted the collision filter to show the connected response.' : data.rows.length ? '' : 'There\x27s no storage response to display on the connected execution.');
     } catch (error) {
-      if (error.name !== 'AbortError') setNotice(`자료를 불러오지 못했습니다 (${error.message}). 대시보드 서버 연결을 확인한 뒤 새로고침해 주세요.${state.rows.length ? ' 기존에 불러온 자료는 그대로 표시합니다.' : ' 임의 예시 데이터는 표시하지 않습니다.'}`, true);
+      if (error.name !== 'AbortError') setNotice(`I didn\x27t get the data.${error.message}Check the dashboard server connection and re-enact it.${state.rows.length ? ' The data we\x27ve collected is the same.' : ' It doesn\x27t show any sample data.'}`, true);
     } finally { state.loading = false; $('main').setAttribute('aria-busy', 'false'); $('refresh').disabled = false; }
   }
 

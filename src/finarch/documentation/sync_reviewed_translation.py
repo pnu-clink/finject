@@ -24,8 +24,8 @@ def normalize(sections):
                 n['data-'+n.name+'-number']=num
                 cap=n.find('figcaption' if n.name=='figure' else 'caption')
                 if cap:
-                    first=next((t for t in cap.find_all(string=True) if re.search(r'(?:Figure|Table|그림|표)\s*A?\d+',str(t))),None)
-                    if first:first.replace_with(re.sub(r'(?:Figure|Table|그림|표)\s*A?\d+',kind+' '+num,str(first),count=1))
+                    first=next((t for t in cap.find_all(string=True) if re.search('(?:Figure|Table|\uadf8\ub9bc|\ud45c)\\s*A?\\d+',str(t))),None)
+                    if first:first.replace_with(re.sub('(?:Figure|Table|\uadf8\ub9bc|\ud45c)\\s*A?\\d+',kind+' '+num,str(first),count=1))
                 for child in [n,*n.select('[id]')]:
                     if child.get('id'):targets[child['id']]=(kind,num)
                 for parent in n.parents:
@@ -41,8 +41,8 @@ def normalize(sections):
                 kind,num=targets[href]
                 # Replace full label even if an old number was split across nodes.
                 text=a.get_text(' ',strip=True)
-                if re.search(r'(?:Figure|Table|그림|표)\s*A?\d+',text):
-                    a.string=re.sub(r'(?:Figure|Table|그림|표)\s*A?\d+',kind+' '+num,text)
+                if re.search('(?:Figure|Table|\uadf8\ub9bc|\ud45c)\\s*A?\\d+',text):
+                    a.string=re.sub('(?:Figure|Table|\uadf8\ub9bc|\ud45c)\\s*A?\\d+',kind+' '+num,text)
             s[lang+'html']=str(b)
         print(lang,counts)
 
@@ -51,7 +51,7 @@ def main():
     repo=DraftRepository(); before=repo.source.read_text(); sections=json.loads(before)
     backup=repo.directory/'backup'/('bilingual-'+dt.datetime.now().strftime('%Y%m%d-%H%M%S'))
     backup.mkdir(parents=True)
-    for p in [repo.source,repo.markdown,repo.directory/'PAPER-EN.md',repo.directory/'draft 압축.md',*repo.previews]:shutil.copy2(p,backup/p.name)
+    for p in [repo.source,repo.markdown,repo.directory/'PAPER-EN.md',repo.directory/'Draft compression.md',*repo.previews]:shutil.copy2(p,backup/p.name)
     original=copy.deepcopy(sections)
     patches=json.loads(Path('tmp/pdfs/english-sync.json').read_text())
     for s in sections:
@@ -67,11 +67,11 @@ def main():
     for s in sections:
         if s['id']=='s4-2':
             b=BeautifulSoup(s['kohtml'],'html.parser');p=b.find_all('p')[7]
-            p.clear();p.append(BeautifulSoup('<strong>판정 범위.</strong> 미확정은 NASU와 구분한다. 이유·인용·검토 상태를 보존하고 원문 인용을 검증해 4.3절에서 집계한다(미확정 / 검토 불가: <a href="#table-s11-nasu-3">Appendix 4.2, Table A20</a>).','html.parser'))
+            p.clear();p.append(BeautifulSoup('<strong>The scope of judgment.</strong> The misstatement distinguishes it from the NASU. Preserves the state of reason, use, inspection, and verifies the original citation. 4.3Calculate from the section: <a href="#table-s11-nasu-3">Appendix 4.2, Table A20</a>).','html.parser'))
             s['kohtml']=str(b)
-        if s['id']=='s5-1':s['kohtml']=s['kohtml'].replace('별도 Figure A4의 Haiku','별도 <a href="#fig:arv-fav-full-cases">Figure A5</a>의 Haiku')
-        if s['id']=='s5':s['kohtml']=s['kohtml'].replace('<a href="#s11-pipeline-3">Appendix P.5</a>','<a href="#s11-pipeline-3">Appendix 4.1</a>; 분석 프롬프트: <a href="#prompts-analysis">Appendix P.5</a>')
-        if s['id']=='s3-3':s['kohtml']=s['kohtml'].replace('**문맥검사**','<strong>문맥 검사.</strong>')
+        if s['id']=='s5-1':s['kohtml']=s['kohtml'].replace('\ubcc4\ub3c4 Figure A4\uc758 Haiku','Separate <a href="#fig:arv-fav-full-cases">Figure A5</a>Haiku of')
+        if s['id']=='s5':s['kohtml']=s['kohtml'].replace('<a href="#s11-pipeline-3">Appendix P.5</a>','<a href="#s11-pipeline-3">Appendix 4.1</a>The analytical prompt: <a href="#prompts-analysis">Appendix P.5</a>')
+        if s['id']=='s3-3':s['kohtml']=s['kohtml'].replace('**\ubb38\ub9e5\uac80\uc0ac**','<strong>Context testing.</strong>')
     normalize(sections)
     # Keep all non-prose data and the conclusion unchanged.
     for old,new in zip(original,sections):
@@ -88,8 +88,8 @@ def main():
         for s in sections:
             text+=('### ' if s['level'] else '## ')+s[lang]+'\n\n'+repo.markdown_body(s[lang+'html'],previous)+'\n\n'
         updates[path]=text
-    cp=repo.directory/'draft 압축.md'
-    updates[cp]='# Draft 압축\n\n'+''.join(('### ' if s['level'] else '## ')+s['ko']+'\n\n'+repo.markdown_body(s['kohtml'],cp.read_text())+'\n\n' for s in sections if re.fullmatch(r's[1-5](?:-\d+)?',s['id']))
+    cp=repo.directory/'Draft compression.md'
+    updates[cp]='# Draft compression\n\n'+''.join(('### ' if s['level'] else '## ')+s['ko']+'\n\n'+repo.markdown_body(s['kohtml'],cp.read_text())+'\n\n' for s in sections if re.fullmatch(r's[1-5](?:-\d+)?',s['id']))
     prior_compressed=cp.read_text()
     if '## 6. Conclusion' in prior_compressed:
         updates[cp]+=prior_compressed[prior_compressed.index('## 6. Conclusion'):]

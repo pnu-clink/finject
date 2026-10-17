@@ -71,7 +71,7 @@ def run(input_path,exclude_path,config,all_inputs=False,hyperparameters=None):
     write(bundle/'selection-evidence.json',selection)
     write(bundle/'input-selection.json',{'cases':names,'input_path':str(inputs.path)})
     write(bundle/'delegation.json',{'scope':'Preparation approval after verified automatic checks; no final Generation human review.','source':'Explicit user confirmation in this task on 2026-09-10','original_audit_rounds':1,'failed_preparation':'Exclude with saved reason; do not treat as approved.'})
-    (bundle/'README.md').write_text(Path(__file__).with_name('new-batch-readme.md').read_text().replace('# 새 30건 실행',f'# 새 {len(names)}건 실행').replace('이전 10건과 원천 ID 및 Q/C가 겹치지 않는 30건입니다. 기존 100건 입력에서 원문만 선정하며 이전 코드·생성문·판정은 사용하지 않습니다. 문항 번호는 입력 묶음의 ID를 유지합니다.', '입력 선정 방식과 출처별 수는 selection-evidence.json을 따릅니다. 이전 코드·생성문·판정은 재사용하지 않으며 문항 번호는 입력 묶음 ID를 유지합니다.'))
+    (bundle/'README.md').write_text(Path(__file__).with_name('new-batch-readme.md').read_text().replace('# \uc0c8 30\uac74 \uc2e4\ud589',f'♪ The bird {len(names)}entries executed').replace('Previous 10The source ID and Q/C are not overlapping. 30That\'s the thing. 100The first entry selects only the source code, and the previous code and generic font formatting is not used. The case number keeps the input group ID.', 'The method of selecting input and the source numbers follow selection-evidence.json. The previous code, the life letter, the case number does not reuse and the input group ID remains.'))
     state={'run':bundle.name,'status':'RUNNING','phase':'PREPARATION','planned_cases':len(names),'processed_cases':0,'current_case':None};stop=threading.Event()
     def save():
         value={**state,'heartbeat_at':datetime.now().astimezone().isoformat()}

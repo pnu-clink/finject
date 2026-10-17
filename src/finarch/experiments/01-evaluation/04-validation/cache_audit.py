@@ -75,8 +75,8 @@ def build(root, reference):
     table = '\n'.join(f"|{mode}|{s['requests']:,}|{s['requests_with_cache_hits']:,}|{s['input_tokens']:,}|{s['cached_input_tokens']:,}|{s['cache_write_input_tokens']:,}|{s['requests_missing_cache_write_counter']:,}|{s['reasoning_output_tokens']:,}|"
                       for mode, s in sorted(counts.items()))
     template = (SOURCE / 'experiments/templates/cache-audit-readme-template.md').read_text()
-    correction_note = ('2026-09-20 정정: 이전 보고서는 Anthropic의 필드명 `cache_creation_input_tokens`를 Codex에도 잘못 적용해 쓰기 항목이 없다고 표시했습니다. '
-                       '실제 Codex 필드명으로 다시 집계했습니다. 이전 보고서와 정정 내역은 `cache-review/superseded/`, `cache-review/correction.json`에 보존합니다.'
+    correction_note = ('2026-09-20 Correction: Previous report by Anthropic Field Name `cache_creation_input_tokens`And I pointed out that there\'s no wrong way to use the Codex. '
+                       'And we\'ve been re-compiled to the actual Codex field name. `cache-review/superseded/`, `cache-review/correction.json`It\'s preserved.'
                        if (root / 'cache-review/correction.json').exists() else '')
     write_text(root / 'CACHE-AUDIT.md', template.format(run_id=root.name, reference_run=reference.name,
                usage_table=table, requests=len(current), cost=f"{alternative['estimated_usd']:.2f}",

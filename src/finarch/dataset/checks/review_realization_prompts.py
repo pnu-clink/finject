@@ -9,22 +9,22 @@ from finarch.shared.providers.cli import prepare_instruction
 from finarch.dataset.schemas.registry import describe
 from finarch.dataset.schemas.validation import validate
 
-README = '''# {title} · 호출 전 확인
+README = '''# {title} · Verify before calling
 
-상태: PREVIEW_ONLY. 실제 모델 호출 0회. 기존 본문·요청·판정 변경 없음.
+State: PREVIEW_ONLY. Call the actual model 0Chapter: No change in the existing text, appeal or judgment.
 
-읽는 순서:
-1. `summary.json`: 유형 파일·해시 및 확인한 조건 목록.
-2. `prompt-previews/`: 현재 지침과 저장된 문제 입력을 결합한 전송 **예정** 전문, 응답 스키마.
-3. `checks.log`: 로컬 선택·CLI 경계·기존 편집·뷰어 검사 기록.
+In order of reading:
+1. `summary.json`: Type file; description and verified condition list.
+2. `prompt-previews/`: Current instructions and stored problem inputs combined with transmission **The scheduled** Professional, responsive scheme.
+3. `checks.log`: Local selection; CLI boundary; presence editing; viewer inspection record.
 
-뷰어: http://127.0.0.1:8893/?run={run}&case={case}&tab=dtt
-유형 선택 → 5번 → `{button}`에서 현재 지침을 읽습니다.
-사용한 프롬프트·입력 팝업은 기존 수정문이나 판정의 과거 기록입니다.
-현재 파일을 수정하면 현재 지침 팝업은 바뀌지만 이 미리보기 사본의 해시는 그대로입니다.
+Viewer: http://127.0.0.1:8893/?run={run}&case={case}&tab=dtt
+Select the type 5The next day `{button}`I'm reading the current instructions.
+The prompt input popup you used is the past record of the existing correction or judgment.
+If you edit the current file, the current instruction pop-up changes, but the same as in this preview copy.
 
-형식과 연결 검사만 수행했습니다. 새 지침의 실제 생성 품질·비용·시간은 미평가입니다.
-모델·추론 설정·자동 재시도·원문 편집 범위는 이번 변경으로 바꾸지 않았습니다.
+We've only done a formatting and linking test, and the actual production quality and cost time of the new guidelines are underestimated.
+The model, the reference setting, the auto-review, the source editing range hasn't changed with this change.
 '''
 
 
@@ -57,8 +57,8 @@ def main():
                'role':args.role, 'types':[selector(axis) for axis in files]}
     (args.output/'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2)+'\n')
     (args.output/'README.md').write_text(README.format(run=args.case.parent.name, case=args.case.name,
-        title='17번 유형별 검증 지침' if audit else '16번 유형별 문장 생성 지침',
-        button='현재 유형 검증 지침 보기 · 미호출' if audit else '현재 유형 지침 보기 · 미호출'))
+        title='17\ubc88 \uc720\ud615\ubcc4 \uac80\uc99d \uc9c0\uce68' if audit else '16\ubc88 \uc720\ud615\ubcc4 \ubb38\uc7a5 \uc0dd\uc131 \uc9c0\uce68',
+        button='\ud604\uc7ac \uc720\ud615 \uac80\uc99d \uc9c0\uce68 \ubcf4\uae30 · \ubbf8\ud638\ucd9c' if audit else '\ud604\uc7ac \uc720\ud615 \uc9c0\uce68 \ubcf4\uae30 · \ubbf8\ud638\ucd9c'))
     print(json.dumps({'status':'PREVIEW_ONLY', 'conditions':len(rows), 'types':len(files), 'model_calls':0}))
 
 

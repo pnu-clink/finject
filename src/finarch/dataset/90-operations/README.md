@@ -1,15 +1,15 @@
-# 제작 공통 운영
+# Production common operation
 
-[문서의 단계·요구·실행 흐름](../../../../docs/01-dataset/90-operations/README.md) · [전체 소스 구조](../../../../docs/01-dataset/90-operations/05-source-layout.md)
+[Step of the letter: yoga; action flow](../../../../docs/01-dataset/90-operations/README.md) · [A whole source structure](../../../../docs/01-dataset/90-operations/05-source-layout.md)
 
-이 폴더는 위 문서 단계의 실행 코드를 소유합니다. 결과의 물리 경로는 기존 run 계약을 따릅니다.
+This folder owns the execution code for the documented stage. Output paths follow the existing run contract.
 
-|파일|역할|
+|File|Role|
 |---|---|
 |[adaptive_schedule.py](adaptive_schedule.py)|Coordinate case submission independently of case completion.|
 |[audit_ea_migration.py](audit_ea_migration.py)|Read-only bounded audit of interrupted migration local ZIP records.|
 |[execution_timing.py](execution_timing.py)|Local-time lifecycle records with monotonic elapsed time and replayable argv.|
-|[failed_recheck.py](failed_recheck.py)|단계 내부 처리·검사|
+|[failed_recheck.py](failed_recheck.py)|Stage internal processing and inspection|
 |[failure_analysis.py](failure_analysis.py)|Confirmed, immutable failure-analysis jobs dispatched by existing schedulers.|
 |[feedback_records.py](feedback_records.py)|Immutable retry feedback and verifiable references; no model calls.|
 |[finish_ea_migration.py](finish_ea_migration.py)|Bounded, journaled recovery of the interrupted EA label migration.|

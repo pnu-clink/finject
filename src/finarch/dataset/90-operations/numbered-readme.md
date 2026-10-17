@@ -1,11 +1,11 @@
-# 실행 순서와 실제 산출물
+# Running sequence and actual output
 
-{case_name} · 아래 링크는 이 실행에서 실제 저장된 파일입니다.
+{case_name} · The link below is the actual file saved in this run.
 
-폴더 번호는 처리 순서입니다. LLM 호출은 입력 수신 → 요청 준비 → 호출 → 원응답 수신 → 응답 검사 → 결과 적용 순서로 읽습니다. `request`는 실제 전송 요청, `raw-response`는 모델 원응답, `handler-response`는 Python 처리 봉투, `result`는 검사·적용 결과입니다. 원응답과 처리 결과를 구별합니다.
+The folder number is in the order of processing. LLM calls read in the order they are entered received → request prepared → call → raw response received → response checked → results applied. `request`The actual transmission request, `raw-response`The model is raw response, `handler-response`The Python processing envelope, `result`It's a test-to-use result, which distinguishes between raw response and processing results.
 
-4번은 네 가지 변경 계획, 5번은 문장 생성 이후 의미 검사입니다. 앞·뒤 쌍의 뒤쪽 배치는 이번 실행에서 생성한 동일 문장을 사용하며 별도 LLM 호출이 아닙니다. 사람 판정 및 동결·실험은 실제 수행될 때만 결과가 생깁니다.
+4And then there are four changes. 5The bar is a meaning test after the phrase is created. The backward arrangement of the front and back pairs uses the same phrase as the one created in this execution, and it's not a separate LLM call. Human judgment and inference and experimentation only results when it's actually performed.
 
-결과 폴더와 로그 폴더의 문항·단계·하위 처리 경로가 같습니다. 전체 시간순 기록은 실행 로그의 `default.log`입니다. 상세 시간순은 로그의 `sequence`로 확인합니다.
+The resulting folder and the log folder have the same case, step, sub-processing path. `default.log`The detailed timeline is the log of the `sequence`I'll check it out.
 
 {sections}

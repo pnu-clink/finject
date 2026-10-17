@@ -15,7 +15,7 @@ r.files[realized+'/04-final-observation.json'].context='new';ok(()=>assert.equal
 r.audit.stage='audit-v2';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.audit.stage='audit-v1';
 r.audit.report.status='FAIL';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.audit.report.status='PASS';
 r.variant.plan.target='B';ok(()=>assert.equal(ctx.answerRecord(r).stale,true));r.variant.plan.target='A';
-report.status='FAIL';report.response=null;ok(()=>assert.match(ctx.answerStatus(r),/실패/));
+report.status='FAIL';report.response=null;ok(()=>assert.match(ctx.answerStatus(r),/\uc2e4\ud328/));
 report.status='RECEIVED';report.response={text:'observed answer'};
 r.files[stage+'/behavior-review.json']={response:{text:'other answer'},observation_sha256:'same'};ok(()=>assert.equal(ctx.answerRecord(r).review,null));
 r.files[stage+'/behavior-review.json'].response=report.response;ok(()=>assert.ok(ctx.answerRecord(r).review));

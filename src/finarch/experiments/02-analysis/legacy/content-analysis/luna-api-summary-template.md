@@ -1,40 +1,40 @@
-# {run_id} — 캐시를 끈 Luna API 재실행
+# {run_id} The Luna API is back up.
 
-**{requests:,}요청·{attempts:,}시도 수집 완료. 캐시 읽기 0·쓰기 0. 사용량 기반 비용 ${cost}.** 실제 청구서를 대조한 금액은 아닙니다. 원기록 검증은 {status}입니다.
+**{requests:,}Requested{attempts:,}Try to collect completed. 0· Writing 0Cost based on usage. ${cost}.** It's not the amount that compares the actual bill. {status}.
 
-원문 100개·변형 700개는 exp-004와 같고 프롬프트·V4 응답 스키마·요청 순서도 유지했습니다. 달라진 것은 구독 CLI에서 유료 API로의 전환, 명시적 캐시 해제, 고정 동시 처리 {concurrency}개입니다. exp-005는 CLI 사전 검사 차단 이력으로 보존합니다. 입력·조건별 해시와 전환 승인은 [api-transition.json](api-transition.json)에 있습니다.
+Source text 100· variants 700exp-004And we've kept the order of the prompt response schemes, the request sequences, the changes are the switch from subscriber CLI to paid API, explicit caching, fixed synchronization. {concurrency}It's a items.005The CLI pre-check blocks are stored as a power.](api-transition.json)is the location.
 
-호출 기록 구간은 {first_call}부터 {last_response}까지입니다. 첫 off/on 각 1요청을 확인한 뒤 최대 200개씩 처리했습니다. 제공자 비동기 Batch가 아닌 Python 병렬 처리이며 Batch 할인은 적용하지 않았습니다. 첫 두 요청도 전체 {requests:,}건에 포함됩니다.
+The call recording interface is {first_call}through {last_response}The first off/on angle is up. 1After verifying the request, the maximum 200The first two requests were complete, and the first two requestions were not batch-based. {requests:,}It's included in the list.
 
-## 실행·캐시·비용
+## Running, caching, costing
 
-형식 통과 {valid:,}건, 형식 실패 {failed:,}건입니다. 원 API 응답과 저장된 사용량을 모두 대조했습니다. 반환된 모델과 캐시 모드, 요청의 explicit/no-breakpoint 설정을 함께 확인했습니다. 응답 설정에 보관 기간 `ttl=30m`이 나타나더라도 그것만으로 캐시를 썼다는 뜻은 아닙니다. 실제 반환된 읽기·쓰기 토큰을 기준으로 검증했습니다.
+Format valid {valid:,}That's a failure of form. {failed:,}It's the original API response and the stored usage, both of which were compared. The returned model and the cache mode, together with the explicit/no-breakpoint settings of the request, were checked. `ttl=30m`Even if this appears, it doesn't mean that you just used the cache, but you verified it based on the actual read-write tokens returned.
 
 {usage_table}
 
-reasoning은 전체 출력의 일부입니다. 중복 합산하지 않습니다. 실제 청구액은 미확인이고 사용량×일반 API 단가의 추정치를 기록합니다. 세부 원기록은 [검증 README](api-verification/README.md), 전체 조건별 집계는 [REPORT.md](REPORT.md)에 있습니다.
+The reasoning is part of the total output. It doesn't add up. The actual charge is uncertain and it records an estimate of the usage times the average API shortfall.](api-verification/README.md)So, the whole condition-by-condition statistic is [REPORT.md](REPORT.md)is the location.
 
-## 원본 100문항의 숫자 비교
+## Original 100The number of comparisons in the case
 
 {baseline_table}
 
-숫자 일치는 부호를 복원한 answer와 저장된 원문 정답의 직접 일치입니다. 각 조건의 분모는 항상 100개입니다. 형식 실패와 유보를 빼고 분모를 줄이지 않습니다. 이 비율만으로 계산 과정·정답의 의미까지 검증했다고 해석하지 않습니다.
+The numerical unit is the direct match of the answer that restored the symbol and the original reference answer that was stored. 100It's a items. It doesn't reduce the denominator except for the form failure and the eub, and it doesn't mean that this ratio alone has validated the process and the meaning of the answer.
 
-## 형식 실패의 원인
+## The Causes of Form Failure
 
-- {abstention_failures}건: `status=abstained`인데 answer와 negative가 null이 아닙니다. status·숫자·부호의 조합 규칙을 위반했습니다. 이 중 숫자 0을 채운 응답은 {zero_placeholders}건이며, 전부 같은 0 채우기 오류는 아닙니다.
-- {precision_failures}건: 전달한 `decimal_places`와 숫자 문자열의 소수 자릿수가 다릅니다. 계산값이 맞는 응답과 실제 숫자 불일치를 따로 봐야 합니다.
+- {abstention_failures}entries: `status=abstained`But the answer and the negative are not null. 0The answer is: {zero_placeholders}They're all the same. 0 It's not a filling error.
+- {precision_failures}The one that got me. `decimal_places`And the numerical sequence is different in the numerical order, so we have to look at the correct answer and the actual numerical inconsistency separately.
 
-V4 JSON Schema는 각 필드의 타입을 제한하지만 status에 따른 필드 조합과 요청별 소수 자릿수는 추가 Python 검사로 확인합니다. 따라서 JSON으로 정상 수신했어도 형식 실패가 될 수 있습니다. 원래 입력과 점수는 바꾸지 않았습니다. 전수 실패 상세는 [ANALYSIS.md](ANALYSIS.md)와 [실패 목록](analysis/luna-api-failures.md), 실제 근거를 대조한 사례는 [CASE-STUDIES.md](CASE-STUDIES.md)를 읽으세요.
+The V4 JSON Schema limits the type of each field, but it determines the number of digits per field combination and request by status as an additional Python test. So even if you received JSON normally, it could be a formatting failure. The original input and score didn't change.](ANALYSIS.md)And [List of failures](analysis/luna-api-failures.md)And the case against the actual evidence is [CASE-STUDIES.md](CASE-STUDIES.md)Read it.
 
-## 같은 문장이 캐시 사용의 증거인가
+## Is the same sentence evidence of using cache?
 
-동일 Q/C·동일 P0 또는 P1을 가진 off/on 응답을 한 쌍으로 비교했습니다. 원문은 100쌍, 변형은 700×2프롬프트=1,400쌍입니다. 각 쌍을 구성하는 두 API 응답의 캐시 읽기·쓰기는 모두 0입니다.
+We compared the off/on response to a pair of the same Q/C-day P0 or P1. 100Pairs, variations, and 700×2- What?1,400The caching of the two API responses that make up each pair is both reading and writing 0.
 
 {pair_table}
 
-캐시 미사용 기록에서도 응답이 완전히 같은 쌍이 있습니다. **문장 또는 응답 JSON의 동일성만으로 캐시 사용 여부를 판정할 수 없습니다.** test-0006의 새 결과와 동일 응답 사례는 [검증 자료](api-verification/README.md)에 있습니다.
+And even in the Cashier misrepresentation, the response is exactly the same. **You can't tell if you're using a cache by the same text or response JSON.** test-0006The same response case as the new results of [verification data](api-verification/README.md)is the location.
 
-## 해석 범위
+## The scope of interpretation
 
-캐시를 끈 API 안에서 off/on을 비교할 수 있습니다. exp-004 CLI와의 차이에는 기본 지시문·전송 구조 변경도 포함되므로 캐시 제거 하나만의 효과라고 주장하지 않습니다. 실험 2의 유보 선언 빈도는 관찰값이며 유보의 적절성에 대한 최종 채점은 아직 미평가입니다. 루브릭 작업은 재개하지 않았습니다.
+You can compare off/on in the cache-tapping API.004 The difference with CLI includes basic instructional and transmission structure changes, so it doesn't claim to be a single effect of caching. 2The frequency of the Ubo declaration is an observation value, and the ultimate liability for the appropriateness of the UBO is still underestimated.

@@ -12,6 +12,6 @@ Logs mirror round/case/stage under log/run/{run-id}; default.log merges the enti
 
 In the viewer, open the result report after the three round counters. It compares completed validator snapshots by case and variant, with failure reasons, resolved failures, guidance changes, and upstream exclusions. Pending rounds are not counted as successful.
 
-## 시간·호출량
+## Time and output
 
-`timing.json`은 실행 명령과 시작·종료·총 소요 시간, 각 차수 `timing.json`은 차수 시간입니다. 종료 후 `timing-report.json`과 `TIMING-README.md`가 생성됩니다. 뷰어의 시간·LLM 사용량 버튼에서 전체·차수·구간별 차트를 확인합니다. CLI 마지막 END/SUMMARY 및 `log/cli.log`에서도 확인할 수 있습니다.
+`timing.json`The execution command and start; completion; total time, each variable `timing.json`It's the time of the variable. `timing-report.json`and `TIMING-README.md`The time, LLM usage button on the viewer will check the full, numeric, and intersectional chart. `log/cli.log`You can also see it in the

@@ -120,15 +120,9 @@ def create(case_dir, base_label='IC_VALUE_01'):
                 ctx.save_text(path+'/context-preview.txt', preview['preview_context'])
                 ctx.save(path+'/06-generation-input.json', handoff)
                 ctx.save(path+'/realization-response-schema.json', read(root+'/realization-response-schema.json'))
-                ctx.save_text(path+'/README.md', f'''# IC-VALUE · 대상 문장 {'앞' if pos == 'before' else '뒤'}
+                ctx.save_text(path+'/README.md', f'''# IC-VALUE {'before' if pos == 'before' else 'after'}
 
-읽는 순서: plan.json → text-preview-v2.json → context-preview.txt → realization-input.json → realization-response-schema.json.
-동일 B 문장을 대상 A 문장의 {pos}에 삽입한 사본입니다. 원문·질문·모든 원래 수치와 A/B 계산 결과를 보존합니다. 그래프는 {ref}를 참조하므로 두 조건에서 같습니다.
-pair_id={pair_id}, perturb_position={pos}, claim_order={preview['claim_order']}를 저장합니다. A/B는 원래/추가 주장을 뜻하며 앞/뒤에 따라 이름을 바꾸지 않습니다. 최종 데이터에도 이 메타데이터를 전달할 계약이고, 모델 풀이용 context/question에는 넣지 않습니다.
-
-공통 viewer에서 이 실행 → {case.name} → IC-VALUE · {'앞' if pos == 'before' else '뒤'} → 5 문장과 답변을 선택합니다. 초록색 B 문장의 위치가 바뀌며, 4번 계산 그래프는 같은 A/B 결과를 보여줍니다. 8 전체 기록에서 모든 파일을 확인합니다.
-원본 IC-VALUE_01 자료와 IC-SOURCE·IC-RELATION·EA는 보존합니다. 문장은 검토용 초안이며 LLM 호출·최종 의미 검사·모델 선호 실험은 미실행입니다. 실제 호출 때 준비된 프롬프트와 응답 스키마를 전달하고 반환 응답을 검사하는 연결은 16번입니다.
-이 안내는 저장 함수의 템플릿에서 생성합니다. events.jsonl에 VP02 시작·산출물·종료, value-position-pair에 원본 해시·쌍 검사·실패 및 이전 후보 목록을 보관합니다. 자동 재시도는 없습니다.
+The following is the text-preview-v2.json → context-preview.txt → realisation-input.json → realization-response-schema.json. {pos}It\x27s a copy of the original, the original, and the original, all the original numbers and the A/B calculations. {ref}So we\x27re going to see that in both conditions.{pair_id}, perturb_position={pos}, claim_order={preview['claim_order']}A/B stands for the original/continuous argument, and it doesn\x27t change the name back and forth. It\x27s an agreement to pass this metadata on to the final data, and it\x27s not put in the context/question for model-wide use. {case.name} → IC-VALUE · {'before' if pos == 'before' else 'after'} → 5 You pick the sentence and answer it. 4The bar graph shows the same A/B results. 8 Check all the files in the full record.1 The data and IC-SOURCE, IC-RELATION EA are preserved. The phrases are draft for review and the LLM call, the ultimate meaning check, the model preference test is a misspelling. 16This is the output of the stored function template.2 It keeps the original hash, pair check, fail and previous candidate lists on start, output, complement, value-position-pair. There is no automatic re-schedule.
 ''')
                 variants.append({'label': label, 'axis': 'IC_VALUE', **metadata, 'status': 'NOT_EVALUATED',
                                  'calculation_status': 'PASS', 'plan': plan, 'reason': 'Before/after placement copies; final text and meaning not evaluated'})

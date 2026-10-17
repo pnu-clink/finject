@@ -1,13 +1,13 @@
-# Viewer 디렉터리 분리 확인
+# Viewer directory separation check
 
-이 문서는 `src/finarch/dataset/viewer/workspace-validation-readme-template.md`에서 생성했습니다.
+This document is `src/finarch/dataset/viewer/workspace-validation-readme-template.md`It's generated from.
 
-1. [폴더별 역할·실행 순서](../../viewer/README.md)
-2. [HTTP 조회 확인 로그](validation.json)
-3. [실제 데이터셋 화면](http://127.0.0.1:8893/dataset/?run=20260917-003&case=test-0001)
+1. [Role-by-folder sequence of actions](../../viewer/README.md)
+2. [http verification log](validation.json)
+3. [Real data set screen](http://127.0.0.1:8893/dataset/?run=20260917-003&case=test-0001)
 
-기존 HTML·실행 파일을 `viewer/dataset`으로 이동했고, 기존 실험 모듈은 `viewer/experiments`로 분리했습니다. 빌드 출력·서버 템플릿·실행 스크립트·관련 검사 파일의 경로를 바꿨습니다. Python 코드는 src 아래에 유지했습니다.
+The existing HTML-action file `viewer/dataset`And then we moved to the existing experimental modules. `viewer/experiments`So we've changed the path of the build output, the server template, the execution script, the test file, and we've kept the Python code under src.
 
-확인: Python 26개 통과, 메뉴 9개 검사 통과. 실제 브라우저에서 003의 717문항 목록과 test-0001 계산 그래프를 확인했으며 콘솔 오류가 없었습니다. 기본 주소·dataset 주소·로그 2개·실험 JS 두 주소는 HTTP 200입니다.
+I'm going to go with Python. 26Pass the items, the menu. 9Pass the items scan. 003 717The list of cases and the test-0001 I checked the calculation graph and there was no error on the console. 2items: Experiment JS Two addresses are HTTP 200.
 
-기존 `test_live_logs.cjs`는 로그 LLM 필터 예상 3건/실제 2건 불일치로 실패했습니다. 이동한 live.html의 내용은 변경하지 않았고, 이 검사는 파일 경로만 수정했습니다. 산술 뷰어 검사에서 빠진 임시 테스트 디렉터리 생성 한 줄은 보완했습니다. 모델 호출이나 실제 판정 저장은 하지 않았습니다.
+Existing `test_live_logs.cjs`The log LLM filter is expected 3entries / actual 2It failed because of inconsistencies. The contents of the live.html were not changed, and this test corrected only the file path, and it supplemented the line that generated the temporary test directory that was missing from the Mathematical Viewer test, but neither the model call nor the actual judgement log.

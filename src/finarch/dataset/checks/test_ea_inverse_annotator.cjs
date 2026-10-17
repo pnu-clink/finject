@@ -4,7 +4,7 @@ const {create,shortcut}=require('../../../../viewer/dataset/ea-inverse-annotatio
 const data=JSON.parse(fs.readFileSync(process.argv[2],'utf8')),s=create(data);
 assert.equal(data.n,1354);assert.equal(data.items,2708);assert.equal(data.cases[0].id,'id-0001');assert.equal(data.cases.at(-1).id,'id-1354');
 assert.throws(()=>s.decide('accept'));s.start('__QA__');s.jump('id-0956');s.kind(1);assert.equal(s.type,'EA_02');assert.equal(s.key(),'id-0956:EA_02');s.move(1);assert.equal(s.key(),'id-0957:EA_02');s.move(-1);s.kind(-1);assert.equal(s.key(),'id-0956:EA_01');
-s.decide('reject');s.comment('Q/C 확인 필요');const saved=s.exported();s.decide('accept');assert.equal(s.labels.get(s.key()).comment,'');assert.throws(()=>s.comment('not allowed'));s.back();assert.equal(s.labels.get(s.key()).comment,'Q/C 확인 필요');
+s.decide('reject');s.comment('Q/C \ud655\uc778 \ud544\uc694');const saved=s.exported();s.decide('accept');assert.equal(s.labels.get(s.key()).comment,'');assert.throws(()=>s.comment('not allowed'));s.back();assert.equal(s.labels.get(s.key()).comment,'Q/C \ud655\uc778 \ud544\uc694');
 s.kind(1);assert.equal(s.labels.has(s.key()),false);s.decide('pending');const output=s.exported();assert.equal(output.counts.checked,2);assert.equal(output.counts.unreviewed,2706);assert.equal(output.counts.pending,1);
 const resumed=create(data);resumed.imported(output);assert.equal(resumed.key(),s.key());assert.deepEqual(resumed.exported().labels,output.labels);assert.equal(resumed.annotator,'__QA__');
 const before=JSON.stringify(resumed.exported().labels);for(const mutate of [v=>v.snapshot_sha256='bad',v=>v.labels.push(v.labels[0]),v=>v.labels[0].type='IC',v=>v.labels[0].content_sha256='bad',v=>v.labels[0].decision='VALID',v=>v.labels[0].updated_at='bad',v=>{v.labels[0].decision='accept';v.labels[0].comment='bad';}]){const v=structuredClone(output);mutate(v);assert.throws(()=>resumed.imported(v));assert.equal(JSON.stringify(resumed.exported().labels),before);}
@@ -35,7 +35,7 @@ if(process.argv[3]){
  const roundTrip=create(embedded);roundTrip.imported(draft);assert.deepEqual(roundTrip.exported().labels,draft.labels);assert.deepEqual(roundTrip.counts(),draft.counts);assert.deepEqual(roundTrip.exported().position,draft.position);
  assert.equal((html.match(/data-id="id-\d{4}"/g)||[]).length,1354);
  const link=html.match(/<a\b[^>]*\bid="html-download"[^>]*>/)[0];assert.ok(link.includes('hidden'));assert.ok(!/\bhref=/.test(link));
- assert.ok(draft.labels.some(v=>v.comment.includes('</script>')&&v.comment.includes('검증')));
+ assert.ok(draft.labels.some(v=>v.comment.includes('</script>')&&v.comment.includes('\uac80\uc99d')));
  assert.ok(!/<(?:script|link|iframe|img)\b[^>]*(?:src|href)\s*=/i.test(html));
  console.log('PASS: actual exported HTML preserves all1354 cases, annotation name/labels/comments/position, Unicode and script-like text, clean download link, and no external assets');
 }

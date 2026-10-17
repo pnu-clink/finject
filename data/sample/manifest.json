@@ -1,0 +1,30 @@
+{
+  "format": "finject-reviewer-source-sample-v1",
+  "source_catalog": "../../config/source-catalog.json",
+  "selection_seed": "reviewer-sample-v1",
+  "source_records": [
+    {
+      "sample_file": "finance-easy.json",
+      "upstream_file": "data/raw/finance-easy.json",
+      "upstream_sha256": "53890ee130f33759cf53cc71943248671e27e6035e75e4234373587784e56dd9",
+      "record_index": 470,
+      "selected_question_id": null,
+      "raw_id_at_selection": "finance-test-470",
+      "record_value_sha256": "8814ed4d5b2d88558e2bae968aa12533056821e15a73b73d85f15bd166af4848",
+      "sample_file_sha256": "17d8fd370cc46780477d129e014f93cb008d3931ae71828b927ddf12232b4e25"
+    },
+    {
+      "sample_file": "tatqa-dev.json",
+      "upstream_file": "data/raw/tatqa-dev.json",
+      "upstream_sha256": "8da095a819af6db3c14877c6df2d4d29960e41d1a63dd1fa853507bd2a616af5",
+      "record_index": 213,
+      "selected_question_id": "f329027f-e65a-402c-908e-21f0a0d25fe0",
+      "raw_id_at_selection": "tatqa-f329027f-e65a-402c-908e-21f0a0d25fe0",
+      "record_value_sha256": "c2fef58da726625c8c73034f757f66c4363e67f99a2300d7dcd69c5b68afe3c6",
+      "sample_file_sha256": "7dd21e9b05837b13bb6594ac02ceebe4030223b0dcc657ae65f3b892b3251e38"
+    }
+  ],
+  "model_calls": 0,
+  "record_values_changed": false,
+  "note": "Each file contains one complete source record. A TAT-QA source record may contain several questions; the documented command selects one eligible question per source."
+}

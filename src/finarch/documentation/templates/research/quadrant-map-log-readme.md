@@ -1,36 +1,36 @@
-# 사분면 자료 제작 확인 기록
+# The four-page documentation, the production verification, the recording.
 
-기존 집계와 해석을 읽어 도표·매핑 자료를 만들었습니다. 실험·분석 모델 호출은 없습니다. 이 README는 documentation/templates/research/quadrant-map-log-readme.md에서 생성합니다.
+I read the existing statistics and interpretations, and I created the charting and mapping data -- no experimental and analytical model calls -- and this README is generated from documentation/templates/research/quadrant-map-log-readme.md.
 
-## 읽는 순서
+## Reading order
 
-1. `build-verification.json`: 항목·그림·정확 인용 수, 읽은 원자료·논문·뷰어 코드의 보존 여부.
-2. `browser-verification.json`: 도표 경계, 오류, 모바일 너비, 통합 뷰어의 그림 해석, 독립 HTML의 오프라인 표시 확인.
-3. `overview-luna.png`, `overview-haiku.png`: 전체 지도 화면 확인.
-4. `m01-luna.png`, `m14-luna.png`: 정량 지도와 정성 사례 지도의 표시 확인.
-5. `research-viewer.png`, `mobile.png`: 단일 연구 뷰어와 모바일 표시 확인.
-6. `before-runs.json`: 자료 목록 변경 전 사본.
+1. `build-verification.json`: Entries; images; exact citations; read source material; commentary; viewer code or preservation.
+2. `browser-verification.json`: Chart boundaries, errors, mobile width, image interpretation of integrated viewers, check offline display of independent HTML.
+3. `overview-luna.png`, `overview-haiku.png`: Check the full map screen.
+4. `m01-luna.png`, `m14-luna.png`: Check the display of the pure map and the pure case map.
+5. `research-viewer.png`, `mobile.png`: Single study viewer and mobile display verification.
+6. `before-runs.json`: Copy before the list changes.
 
-원자료는 `reports/experiments-run`에 그대로 두고, 설명 자료는 `reports/run/20260928-analysis-quadrant-map`에 저장합니다. `viewer/research/index.html`의 자료 선택에서 **Analysis 사분면 맵**을 엽니다.
+The raw materials are `reports/experiments-run`Put it in the same way, the explanatory data is `reports/run/20260928-analysis-quadrant-map`I'm going to save it. `viewer/research/index.html`In the selection of data, **Analysis square map**It opens up.
 
-브라우저 검사는 로컬 파일과 네트워크 요청을 로컬 파일로 대체한 기존 뷰어를 사용합니다. 실제 localhost 서버 상태나 사용자의 직접 확인을 대신하지 않습니다. 독립 HTML에 48개 그림이 모두 내장되어 JavaScript 없이 표시되는지를 별도로 확인합니다.
+The browser checker uses a traditional viewer that replaces local files and network requests with local files, and it doesn't replace the actual localhost server status or user authentication. 48I'm going to check that all the items pictures are embedded and that they're displayed separately without JavaScript.
 
-## 자료 생성 흐름
+## The data generation flow
 
 ```mermaid
 flowchart LR
- subgraph saved["기존 Analysis 산출물 · 읽기 전용"]
+ subgraph saved["Current Analysis output · read only"]
  A["QM01 comparisons · responses · interpretations"]
  end
- subgraph author["documentation/research_quadrant_map.py · 로컬 문서 처리"]
- B["QM02 해시·대응·정확 인용 확인"] --> C["QM03 23개 항목에 표시 내용 연결"]
- C --> D["QM04 독립 HTML · 그림 · Markdown · 매핑 JSON · 템플릿 README"]
+ subgraph author["Documentation/research_quadrant_map.py · Local document processing"]
+ B["QM02 Hats: reply: accurate citation verification"] --> C["QM03 23Link the content shown to the items item"]
+ C --> D["QM04 It is a free HTML file format."]
  end
  A --> B
- D --> V["QM05 기존 viewer/research 단일 화면에서 읽기"]
- D --> Q["QM06 로컬 렌더링·오프라인·파일 보존 확인"]
- B -->|불일치| F["생성 중단 · 원자료 유지"]
- Q -->|표시 오류| R["그림·설명 자료만 보정 후 다시 확인"]
+ D --> V["QM05 Read from the existing viewer/research single screen"]
+ D --> Q["QM06 Local rendering, offline file preservation verification"]
+ B -->|Mismatch| F["Production cease and reset"]
+ Q -->|Error in display| R["Just the picture and description data."]
 ```
 
-새 LLM 처리나 Evaluation/Analysis 실행은 없습니다. 상자는 파일 책임을 나타내며 별도 색상·분홍 확장 노드는 없습니다.
+There's no new LLM processing or Evaluation/Analysis running, the box represents file responsibility, and no color and color extension nodes.

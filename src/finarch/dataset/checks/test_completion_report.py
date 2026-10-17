@@ -78,7 +78,7 @@ class CompletionReportTests(unittest.TestCase):
                     self.assertEqual((b/'README.md').read_text().count('<!-- completion-report:start -->'),1)
                 self.assertEqual(completed['status'],'COMPLETED')
                 self.assertTrue((b/'completion-report.json').exists())
-                self.assertIn('미실행|—|—|—|—',(b/'RESULTS.md').read_text())
+                self.assertIn('\ubbf8\uc2e4\ud589|—|—|—|—',(b/'RESULTS.md').read_text())
 
     def test_explicit_three_preparation_rounds(self):
         with tempfile.TemporaryDirectory() as folder:

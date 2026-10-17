@@ -20,7 +20,7 @@
       "transport": "orca_api",
       "endpoint": "https://api.orcarouter.ai/v1/chat/completions",
       "key_variable": "ORCA_API_KEY",
-      "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+      "key_file": ".env",
       "reasoning_efforts": {"off": "none", "on": "max"},
       "output_limits": {"off": 65536, "on": 65536},
       "reference_price_per_million": {"input": 0.15, "output": 0.6, "cached_input": 0.003},

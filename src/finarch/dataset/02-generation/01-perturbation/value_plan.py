@@ -71,7 +71,7 @@ def create(case_dir, fact_id, value, label='IC_VALUE_01'):
                   'note':'Only calculation branch B was checked. A is preserved. Text generation and semantic auditing follow; bypass review is deferred.'}
             ctx.save(base+'/plan.json',plan)
             ctx.save(base+'/04-check-target/03-result.json',{'status':'PASS','reason':'CALCULATION_PLAN_VERIFIED_ONLY','data':plan['checks']})
-            ctx.save_text(base+'/README.md','# 값 충돌 계획 · 12번\n\n원본 A를 보존하고 한 값의 B 대안을 같은 Python 코드와 그래프로 계산했습니다. plan.json은 A/B 값과 계산 그래프·최종 자릿수 적용 답·검사 결과입니다. branch-program.json은 B 계산만을 위한 임시 근거 연결이며 실제 완성 본문이 아닙니다. python-execution.json은 격리 Python 실행·중간값입니다. 원문 span은 A에만 적용합니다. 최종 문장·의미 판정은 아직 수행하지 않았으며 11번은 사용자 결정으로 생략했습니다. 원응답은 없습니다(LLM 호출 0회). 문제의 events.jsonl에서 시작·종료·경과 시간을 확인합니다. 중앙 뷰어 4번에서 후보를 선택합니다.\n')
+            ctx.save_text(base+'/README.md','# The value collision plan 12\n\nWe saved the original A and calculated it in Python code and graphs, like the B alternative of one value. plan.json is A/B values and the calculation graph. 11The bar was omitted by the user\'s decision. 0In the events.jsonl of the problem, check the start, finish, time and time. 4You pick a candidate from the bar.\n')
             variant={'label':label,'axis':'IC_VALUE','status':'NOT_EVALUATED','calculation_status':'PASS','plan':plan,'reason':'Calculation plan checked; final text and conflict semantics not evaluated'}
             index=case/'04-perturbation/05-list-candidates/03-result.json';index.parent.mkdir(parents=True,exist_ok=True);existing=json.loads(index.read_text()) if index.exists() else []
             if any(v['label']==label for v in existing):raise ValueError('DUPLICATE_VARIANT')

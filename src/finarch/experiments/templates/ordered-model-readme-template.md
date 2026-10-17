@@ -1,10 +1,10 @@
-# {model} · E04 응답 형식 검사
+# {model}: E04 response-format validation
 
-호출 방식 `{transport}` · 계획 {planned}회 · 형식 통과 {valid}회.
+Transport: `{transport}` · planned requests: {planned} · format-valid responses: {valid}.
 
-1. [요청 manifest](../../02_request/{model}/manifest.jsonl): 실제 prompt·schema·Q/C·precision·실험 조건.
-2. [LLM 실행 기록](../../03_execution/{model}/): Batch 전송·원응답·문항별 요청/응답 묶음.
-3. [결과 목록](results.jsonl) · [형식 검사 집계](summary.json).
-4. [Analysis](../../../02_analysis/README.md): 정답 숫자 비교·내용 검토·조건 비교.
+1. [Request manifest](../../02_request/{model}/manifest.jsonl): exact prompt, schema, Q/C, precision, and experiment conditions.
+2. [Execution records](../../03_execution/{model}/): Batch delivery, raw responses, and per-request exchanges.
+3. [Result rows](results.jsonl) · [Format-validation summary](summary.json).
+4. [Analysis](../../../02_analysis/README.md): saved-response review and condition comparisons.
 
-형식 검사 결과에는 원본 정답 비교를 넣지 않습니다. 정답 참조는 Analysis에서 사용합니다. 원응답과 시도별 기록을 보존하며 미실행·실패·미평가를 구분합니다.
+Format checks and original-reference numeric comparisons have separate records. Preserve raw responses and every attempt; distinguish not run, failed, and unevaluated states.

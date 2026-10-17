@@ -102,7 +102,7 @@ def run(bundle, maximum_rounds=None, resume=False):
             if candidate.is_dir() and not (candidate/'02-result.json').exists():
                 target=archive/'feedback'/candidate.name;target.parent.mkdir(parents=True,exist_ok=True);candidate.rename(target)
         write(archive/'resume.json',{'round':first_round,'completed_variants_reused':True,'incomplete_variants_archived':True,'final_response_may_be_absent_for_cancelled_calls':True})
-        (archive/'README.md').write_text('중단 당시 미완료 유형과 시간 기록입니다. 완료된 유형은 원래 차수에서 유지하고, 미완료 유형만 새 호출로 재시도했습니다. 취소된 호출은 최종 응답이 없을 수 있습니다.\n')
+        (archive/'README.md').write_text('The unfinished type and time record at the time of the interruption. The completed type is kept in the original array, and only the unfinished one is reset to a new call. The canceled call may not have a final response.\n')
     with measure(generation,'generation'):
         if resume_feedback is not None:
             feedback(bundle,resume_feedback,read(resume_feedback/'final-validator.json')['failures'],config)

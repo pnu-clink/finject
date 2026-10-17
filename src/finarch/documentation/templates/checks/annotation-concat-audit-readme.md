@@ -1,27 +1,27 @@
-# Concat · Annotation 판정 누락 조사
+# Concat · Annotation Judgment of the failure of the investigation
 
-기존 1,080문항의 CodeTAT-QA 80문항은 모두 JSON 본문입니다. 전체 CodeTAT-QA 288문항을 재생성한 결과, 7유형 전체 PASS는 260문항입니다. 기존 80문항 중 78문항이 다시 통과했고 2문항(test-0803·test-1457)은 제외됐습니다. 새로 통과한 문항은 182개입니다.
+Existing 1,080CodeTAT-QA in the case 80The cases are all JSON text. 288And the result of this is that we've re-created the case. 7Type the entire PASS is 260It's a case. 80In a case. 78The case passed again. 2The first is the test.0803·test-1457The newly passed clause is: 182items.
 
 `1,080 - 80 + 260 = 1,260`
 
-260문항의 판정 없음은 Import 함수가 데이터를 버린 결과가 아닙니다. 변환 과정에서 재생성된 78문항의 이전 판정 546개를 제외했고, 나머지 182문항은 원본 annotation에 없었습니다. 김진수·정유미 양쪽 모두 변환본 7,000판정/1,000문항이 실제 Import 함수에 그대로 적용됩니다. 제외 판정은 원본 JSON과 `excluded-*.json`에 보존돼 있습니다. 이 조사에서는 이전 판정을 새 데이터에 이식하거나 현재 브라우저 저장값을 수정하지 않았습니다.
+260The absence of a case case is not the result of the import function dropping the data. 78Previous judgment of the case 546Except for the items, the rest of us. 182The case was not in the original annotation. 7,000The verdict.1,000The case is applied to the actual import function. `excluded-*.json`In this survey, we didn't transfer the previous settings to new data or modify the current browser storage.
 
-## 읽는 순서
+## Reading order
 
-1. `validation.json`: 전후 수량·78/182/2 문항 ID·평가자별 대조 결과·입력 해시.
-2. `case-accounting.json`: 1,260문항 각각의 출처·기존 평가 여부·원본/변환본 판정 수(두 평가자).
-3. `terminal.log`: 실행 검사의 요약.
+1. `validation.json`: after-load78/182/2 Article ID: Results of the evaluator's comparison with the other evaluator.
+2. `case-accounting.json`: 1,260The number of sources, existential assessments, original/transformative assessments of each article (two assessors).
+3. `terminal.log`: Summary of the run test.
 
-공통 dataset viewer에서 `20261003-concat-001`을 선택하면 실제 새 문항을 확인할 수 있습니다. 이 기록은 파일 대조 및 Node VM에서 실제 Import 함수를 실행한 검사입니다. 첨부 화면의 녹색 표시가 어느 브라우저 임시 기록에서 나온 것인지는 이 파일 조사로 확정하지 않습니다. LLM 호출·새 생성·판정 변경은 없습니다.
+From the common dataset viewer `20261003-concat-001`Selecting this will allow you to verify the actual new case. This record is a check that executed the actual Import function from the file counter and Node VM. This file check does not confirm whether the green mark on the attached screen comes from which browser temporary record. There are no changes in LLM call, new creation, and judgment.
 
-## 예시
+## For example.
 
-|문항|기존 평가 대상|원본 판정/평가자|변환본 판정/평가자|이유|
+|Case|The current assessment|Original judge/assessor|Transform copy reviewer/reviewer|Reason|
 |---|---|---:|---:|---|
-|test-0085|아니오|0|0|새로 통과한 문항|
-|test-0092|아니오|0|0|새로 통과한 문항|
-|test-0100|아니오|0|0|새로 통과한 문항|
-|test-0088|예|7|0|재생성되어 변환에서 제외|
-|test-0105|예|7|0|재생성되어 변환에서 제외|
+|test-0085|No, you can't.|0|0|Newly passed case|
+|test-0092|No, you can't.|0|0|Newly passed case|
+|test-0100|No, you can't.|0|0|Newly passed case|
+|test-0088|Yes|7|0|Except for the conversion.|
+|test-0105|Yes|7|0|Except for the conversion.|
 
-기존 판정은 이전 버전의 검토 이력으로 제공하고, 새 본문에 대한 판정과 구분하는 것이 적합합니다. 기존 판정을 새 본문에 적용하려면 그 기준을 먼저 정해야 합니다.
+It's a good idea to give the existing judgments a review of the previous version and to differentiate them from the judgments on the new text.

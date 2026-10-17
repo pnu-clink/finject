@@ -56,8 +56,8 @@ class AuditPromptChecks(unittest.TestCase):
                 request=request_for(label)
                 response={'findings':[{'criterion':c,'judgment':'PASS','reason':''} for c in AUDIT_CRITERIA]}
                 # Synthetic judgments check aggregation, not these real texts' quality.
-                if label=='EA_01':response['findings'][2].update(judgment='FAIL',reason='로컬 응답 형식 검사 예시')
-                if label=='EA_02':response['findings'][2].update(judgment='UNKNOWN',reason='로컬 보류 예시')
+                if label=='EA_01':response['findings'][2].update(judgment='FAIL',reason='\ub85c\uceec \uc751\ub2f5 \ud615\uc2dd \uac80\uc0ac \uc608\uc2dc')
+                if label=='EA_02':response['findings'][2].update(judgment='UNKNOWN',reason='\ub85c\uceec \ubcf4\ub958 \uc608\uc2dc')
                 saved={};sent=[]
                 def run(argv, stdin, work, timeout, audit):
                     sent.append(stdin)

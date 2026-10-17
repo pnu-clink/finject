@@ -22,7 +22,7 @@ OUTPUT = '02_analysis/05_outcomes'
 VERSION = 'ResponseOutcomeV1'
 CATEGORIES = ('SUPPORTED_ANSWER', 'SUPPORTED_ABSTENTION', 'UNNECESSARY_ABSTENTION',
               'MISSED_ABSTENTION', 'UNCLASSIFIED')
-LABELS = dict(zip(CATEGORIES, ('근거 있는 답변', '근거 있는 기권', '불필요한 기권', '기권 실패', '미분류')))
+LABELS = dict(zip(CATEGORIES, ('Grounded answer', 'Justified abstention', 'Unnecessary abstention', 'Failure to abstain', 'Unclassified')))
 H1_VARIANTS = ('IC_VALUE_01_BEFORE', 'IC_VALUE_01_AFTER', 'IC_RELATION_01', 'EA_01', 'EA_02')
 VERDICTS = {'SUPPORTED', 'UNSUPPORTED', 'UNDETERMINED'}
 
@@ -283,11 +283,11 @@ def summarize(root, rows, snap):
 
 
 def markdown(summaries):
-    text = ['# 응답 결과 다섯 분류', '', '기존 Analysis 판정을 Python으로 분류했습니다. 새 모델 호출은 0건입니다.',
-            '불필요한 기권 / 기권 실패의 0은 명시적인 문항 판정으로 확정한 사례가 없다는 뜻이며, 해당 행동이 발생하지 않았다는 뜻은 아닙니다.', '']
-    text += ['전체는 실행 계획의 응답 수입니다. 미실행 / 미검토 / 검토 불가도 미분류에 포함합니다. 검토 완료 수와 함께 읽어야 합니다.', '',
-             '## 모델별 모든 응답 / 원본 및 7개 변형', '',
-             '| 모델 | 근거 있는 답변 | 근거 있는 기권 | 불필요한 기권 | 기권 실패 | 미분류 | 전체 | 검토 완료 |',
+    text = ['# Results from five categories', '', 'So we sorted the existing Analysis determination into Python. 0entries.',
+            'The unnecessary failure of the authority 0It doesn\'t mean that there\'s no case that\'s been confirmed by an explicit case judgment, and it doesn\'t imply that the action hasn\'t occurred.', '']
+    text += ['The whole is the response number of the execution plan, included in the mismatched/unchecked/uncheckable subset, and should be read along with the completed review number.', '',
+             '## All responses by model/original and 7variants', '',
+             'Model-based answers, model-based mechanisms, unnecessary mechanisms, failure of mechanisms, mismatch, complete review.',
              '|---|---:|---:|---:|---:|---:|---:|---:|']
     models = defaultdict(list)
     for summary in summaries:
@@ -298,13 +298,13 @@ def markdown(summaries):
         totals = [sum(g[c] for g in groups) for c in (*CATEGORIES, 'total')]
         reviewed = sum(g['review_status'].get('COMPLETED', 0) for g in groups)
         text.append('| ' + model + ' | ' + ' | '.join(f'{n:,}' for n in (*totals, reviewed)) + ' |')
-    text += ['', '## 집계 시점과 검토 상태', '', '| 실행 | 저장 시점 | 변형 검토 완료 / 전체 | 검토 상태 | 갱신 상태 |', '|---|---|---:|---|---|']
+    text += ['', '## The timing and review status', '', 'Running the storage time, modification review, complete review, updated.', '|---|---|---:|---|---|']
     for summary in summaries:
         scope = summary['scopes']['variants']
         text.append(f"| {summary['run']} | {summary['generated_at']} | {scope['review_status'].get('COMPLETED', 0):,} / {scope['total']:,} | {scope['review_coverage']} | {summary.get('snapshot_status', 'SAVED_SNAPSHOT')} |")
     text += ['']
-    for scope, name in (('h1', 'H1의 5개 변형'), ('variants', '7개 변형 전체'), ('originals', '원본 응답')):
-        text += ['## ' + name, '', '| 실행 / 모델 / 데이터 | 근거 있는 답변 | 근거 있는 기권 | 불필요한 기권 | 기권 실패 | 미분류 | 전체 | 검토 완료 |', '|---|---:|---:|---:|---:|---:|---:|---:|']
+    for scope, name in (('h1', 'The H1 5variants'), ('variants', '7all variants'), ('originals', 'Original response')):
+        text += ['## ' + name, '', 'Implementation / Model / Data-based answers / Data-driven mechanisms / Unnecessary mechanisms / Failure of mechanisms / Mismatch / Complete review', '|---|---:|---:|---:|---:|---:|---:|---:|']
         for summary in summaries:
             grouped = defaultdict(list)
             for row in summary['groups']:
@@ -315,7 +315,7 @@ def markdown(summaries):
                 reviewed = sum(g['review_status'].get('COMPLETED', 0) for g in groups)
                 text.append('| ' + f"{summary['run']} / {model} / {dataset}" + ' | ' + ' | '.join(f'{n:,}' for n in (*totals, reviewed)) + ' |')
         text += ['']
-    text += ['## 모델 / Prompt / Reasoning별 H1', '', '| 실행 / 모델 / 데이터 | Prompt | Reasoning | 근거 있는 답변 | 근거 있는 기권 | 불필요한 기권 | 기권 실패 | 미분류 | 전체 |', '|---|---|---|---:|---:|---:|---:|---:|---:|']
+    text += ['## model / Prompt / Reasoning by H1', '', 'Implementation / Model / Data / Prompt / Reasoning based on answers / Based on mechanisms / Unnecessary mechanisms / Failure of mechanisms / Mismatch', '|---|---|---|---:|---:|---:|---:|---:|---:|']
     for summary in summaries:
         for row in summary['groups']:
             if row['scope'] == 'h1':
@@ -387,7 +387,7 @@ def main():
     if args.report:
         report = markdown(summaries)
         if failures:
-            report += '\n## 집계 미발행 실행\n\n' + '\n'.join(f"- {r['run']}: {r['reason']}" for r in failures) + '\n'
+            report += '\n## The estimate is unsuccessful run\n\n' + '\n'.join(f"- {r['run']}: {r['reason']}" for r in failures) + '\n'
         store.write_text(args.report, report)
         store.write(args.report.with_suffix('.json'), {'schema_version': VERSION, 'runs': summaries,
                                                      'not_published': failures, 'new_model_calls': 0})

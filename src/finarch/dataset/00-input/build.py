@@ -48,8 +48,8 @@ def source_counts(total: int) -> dict[str, int]:
 
 def prepare(catalog_path: Path, output: Path, per_source: int | None = None,
             seed: str = "finarch", *, total: int | None = None, source_quotas: dict | None = None) -> dict:
-    # [DP03] docs/02-architecture.md#DP03 — 개수 검증 후 새 출력 폴더와 시작 기록을 만듭니다.
-    # [I00] docs/02-architecture.md#I00 — 준비 전체를 가리키던 기존 요약 번호입니다. 상세는 DP03–DP12입니다.
+    # [DP03] docs/02-architecture.md#DP03 After the check of the number of bits, we create a new output folder and start records.
+    # [I00] docs/02-architecture.md#I00 The current summarized number that was all about the preparation of the pump.3–DP12.
     catalog_path, output = Path(catalog_path), Path(output)
     if source_quotas is not None:
         if total is not None or per_source is not None:raise ValueError("CHOOSE_SOURCE_QUOTAS_OR_COUNTS")
@@ -69,14 +69,14 @@ def prepare(catalog_path: Path, output: Path, per_source: int | None = None,
         "total": total, "seed": seed})
     try:
         result = _prepare(catalog_path, output, per_source, seed, progress, total, source_quotas)
-        # [DP11] docs/02-architecture.md#DP11 — manifest 해시를 담은 완료 PASS를 마지막에 저장합니다.
+        # [DP11] docs/02-architecture.md#DP11 Save the completed PASS at the end of the hash containing the  manifest.
         progress.update(stage="complete", source=None, record_index=None, question_id=None)
         write_json(output / "preparation-result.json", {
             "format": "fin-arch-preparation-attempt-v1", "status": "PASS", **result,
             "manifest_sha256": sha256((output / "selection-manifest.json").read_bytes()),
             "counts": dict(progress["counts"]), "exclusions": progress["exclusions"]})
         return result
-    # [DP12] docs/02-architecture.md#DP12 — 진행 위치·집계·제외 이유를 FAIL로 저장하고 원래 오류를 전달합니다.
+    # [DP12] docs/02-architecture.md#DP12 It saves the progress position, the system, the external reason to FAIL and transmits the original error.
     except Exception as error:
         failure = {"format": "fin-arch-preparation-attempt-v1", "status": "FAIL",
                    "model_calls": 0, "error_type": type(error).__name__, "reason": str(error),
@@ -90,7 +90,7 @@ def prepare(catalog_path: Path, output: Path, per_source: int | None = None,
 
 def _prepare(catalog_path: Path, output: Path, per_source: int | None, seed: str,
              progress: dict, total: int | None, source_quotas=None) -> dict:
-    # [DP04] docs/02-architecture.md#DP04 — 출처 목록·할당량을 확인하고 출처별 원천 해시를 검사합니다.
+    # [DP04] docs/02-architecture.md#DP04 I check the list of sources and allowances and check the source chart.
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
     names = [spec["name"] for spec in catalog["sources"]]
     if len(names) != len(set(names)):
@@ -116,7 +116,7 @@ def _prepare(catalog_path: Path, output: Path, per_source: int | None, seed: str
                       "url": spec["url"], "commit": spec["commit"]}
         source_summaries.append({**provenance, "path": str(source_path.resolve())})
         pool = []
-        # [DP05] docs/02-architecture.md#DP05 — 질문별 후보를 추출하고 검토 수·제외 이유를 보존합니다.
+        # [DP05] docs/02-architecture.md#DP05 So we extract the candidates by question and then we save the reason for the review.
         for record_index, record in enumerate(load_raw(content)):
             progress.update(stage="extract", record_index=record_index, question_id=None)
             questions = [None] if spec["adapter"] == "finance" else record["questions"]
@@ -142,7 +142,7 @@ def _prepare(catalog_path: Path, output: Path, per_source: int | None, seed: str
                 pool.append((sample, {"source": spec["name"], "record_index": record_index,
                                       "record": record, "question_id": question["uid"] if question else None}))
         progress.update(stage="select", record_index=None, question_id=None)
-        # [DP08] docs/02-architecture.md#DP08 — seed 순위를 정하고 출처 안에서 동일 본문을 한 번만 선택합니다.
+        # [DP08] docs/02-architecture.md#DP08 You sort the seed sequence and you just pick the same text once in the source.
         pool.sort(key=lambda pair: sha256((seed + ":" + pair[0]["raw_id"]).encode()))
         group, seen = [], set()
         for pair in pool:
@@ -156,7 +156,7 @@ def _prepare(catalog_path: Path, output: Path, per_source: int | None, seed: str
         counts[spec["name"] + ":eligible_unique_contexts"] = len(group)
         requested = quotas[spec["name"]]
         counts[spec["name"] + ":requested"] = requested
-        # [DP09] docs/02-architecture.md#DP09 — 후보 부족은 오류, 충분하면 해당 출처 할당량만 선택합니다.
+        # [DP09] docs/02-architecture.md#DP09 The lack of candidates is a mistake, and if enough is enough, they just choose the source allocation.
         if len(group) < requested:
             raise ValueError("INSUFFICIENT_ELIGIBLE_INPUTS: " + spec["name"])
         selected.extend(group[:requested])
@@ -168,7 +168,7 @@ def _prepare(catalog_path: Path, output: Path, per_source: int | None, seed: str
     samples = [{"id": f"test-{i:04d}", **pair[0]} for i, pair in enumerate(selected, 1)]
     providers = {pair[0]["raw_id"]: pair[1] for pair in selected}
     progress.update(stage="write_bundle", source=None, record_index=None, question_id=None)
-    # [DP10] docs/02-architecture.md#DP10 — 준비 스키마 검사 후 input·provider-records·manifest를 저장합니다.
+    # [DP10] docs/02-architecture.md#DP10 After checking the ready-made scheme, you save the input-provider-records manifest.
     validate("01-preparation.01-source.prepared-input", samples)
     write_json(output / "input.json", samples)
     write_json(output / "provider-records.json", providers)

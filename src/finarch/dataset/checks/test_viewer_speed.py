@@ -108,7 +108,7 @@ class ViewerSpeedTests(unittest.TestCase):
                 thread.join()
 
     def test_encoder_preserves_decoded_values(self):
-        for value in [{'text': '한글 😀'}, {'integer': 2**100}, {'number': float('inf')}, {'x': -0.0}, {'1': 'str', 1: 'number'}]:
+        for value in [{'text': '\ud55c\uae00 😀'}, {'integer': 2**100}, {'number': float('inf')}, {'x': -0.0}, {'1': 'str', 1: 'number'}]:
             self.assertEqual(json.loads(encode(value)), json.loads(json.dumps(value)))
 
 

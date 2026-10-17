@@ -15,8 +15,8 @@ FEATURE = 'IC_VALUE_01_BEFORE'
 CHOICES = ('A', 'B', 'OTHER', 'NULL', 'FORMAT_OR_EXECUTION_FAILED')
 EA_CHOICES = ('ORIGINAL_VALUE', 'OTHER', 'NULL', 'FORMAT_OR_EXECUTION_FAILED')
 FEATURES = (
-    {'key': FEATURE, 'label': '01 · IC-value 앞', 'choices': CHOICES},
-    {'key': 'IC_VALUE_01_AFTER', 'label': '02 · IC-value 뒤', 'choices': CHOICES},
+    {'key': FEATURE, 'label': '01 · IC-value ahead', 'choices': CHOICES},
+    {'key': 'IC_VALUE_01_AFTER', 'label': '02 · After the IC-value', 'choices': CHOICES},
     {'key': 'IC_SOURCE_A_ONLY', 'label': '03 · IC-source A', 'choices': CHOICES},
     {'key': 'IC_SOURCE_B_ONLY', 'label': '04 · IC-source B', 'choices': CHOICES},
     {'key': 'IC_RELATION_01', 'label': '05 · IC-relation', 'choices': CHOICES},
@@ -298,7 +298,7 @@ def render_fragment(snapshot):
 def render_page(snapshot, viewer=False):
     fragment = render_fragment(snapshot)
     layout = 'html{background:#fffdf9}body{margin:0;padding:0}' if viewer else 'html{background:#eee8df}body{margin:0;padding:12px}@media(max-width:620px){body{padding:6px}}'
-    return '<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<meta name="color-scheme" content="light">\n<title>7조건 사분면 · 두 화면 비교</title>\n<style>' + layout + '</style>\n</head>\n<body>\n' + fragment + '\n</body>\n</html>\n'
+    return '<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<meta name="color-scheme" content="light">\n<title>7Condition quadratic · two screen comparisons</title>\n<style>' + layout + '</style>\n</head>\n<body>\n' + fragment + '\n</body>\n</html>\n'
 
 
 def main():

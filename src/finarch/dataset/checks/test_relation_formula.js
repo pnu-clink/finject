@@ -18,5 +18,5 @@ const graph={output:'out',nodes:[{id:'a',kind:'constant',value:'20',inputs:[]},{
 assert.equal(ctx.graphFormula(graph,{numeric:true}).map(t=>t.text).join(''),'(20 / (5 / 2))');
 graph.nodes[0].value='-2';graph.nodes[4].operator='**';graph.nodes[4].inputs=['a','c'];
 assert.equal(ctx.graphFormula(graph,{numeric:true}).map(t=>t.text).join(''),'((-2) ** 2)');
-graph.nodes[4].inputs=['out','c'];assert.throws(()=>ctx.graphFormula(graph),/연결/);
+graph.nodes[4].inputs=['out','c'];assert.throws(()=>ctx.graphFormula(graph),/\uc5f0\uacb0/);
 console.log(JSON.stringify({checks:'stored branches, relation highlighting, parentheses, negative base, cycle rejection',review},null,2));

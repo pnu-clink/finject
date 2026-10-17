@@ -26,6 +26,5 @@ targets:
         CFBundleLocalizations: [en]
         CFBundleDisplayName: FInject Servers
         LSUIElement: true
-        FinArchProjectRoot: "$(SRCROOT)/../.."
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true

@@ -9,8 +9,8 @@ const r={axis:'EA',label:'EA_01',stage,sample:{context:'original',question:'Q'},
 a['05-text/EA_01/latest-audit.json']={stage:audit};a[audit+'/03-result.json']={status:'PASS',stage16_ref:stage,plan_sha256:'same'};
 a[audit+'/01-input.json']={original_context:'original',context:'changed',question:'Q'};
 a[stage+'/04-final-observation.json']={context:'changed',question:'Q'};a[stage+'/03-result/metadata.json']={plan_sha256:'same'};
-assert.equal(ctx.auditRecord(r).stale,false);assert.match(ctx.auditStatus(r),/이번 범위 통과/);
-a[stage+'/04-final-observation.json'].context='new text';assert.equal(ctx.auditRecord(r).stale,true);assert.match(ctx.auditStatus(r),/재검사 필요/);
+assert.equal(ctx.auditRecord(r).stale,false);assert.match(ctx.auditStatus(r),/\uc774\ubc88 \ubc94\uc704 \ud1b5\uacfc/);
+a[stage+'/04-final-observation.json'].context='new text';assert.equal(ctx.auditRecord(r).stale,true);assert.match(ctx.auditStatus(r),/\uc7ac\uac80\uc0ac \ud544\uc694/);
 a[stage+'/04-final-observation.json'].context='changed';a[stage+'/03-result/metadata.json'].plan_sha256='new plan';assert.equal(ctx.auditRecord(r).stale,true);
 a[stage+'/03-result/metadata.json'].plan_sha256='same';r.variant={plan:{target:'A'}};
 a[audit+'/plan-binding.json']={plan_snapshot:{target:'A'}};assert.equal(ctx.auditRecord(r).stale,false);
@@ -27,7 +27,7 @@ class Node {
 ctx.el=(tag,cls,value)=>new Node(tag,cls,value);
 ctx.box=(title,value)=>new Node('div','',title+': '+value);
 ctx.jsonBox=()=>{};
-ctx.currentAuditPromptButton=()=>new Node('button','','현재 유형 검증 지침 보기 · 미호출');
+ctx.currentAuditPromptButton=()=>new Node('button','','\ud604\uc7ac \uc720\ud615 \uac80\uc99d \uc9c0\uce68 \ubcf4\uae30 · \ubbf8\ud638\ucd9c');
 ctx.llmCallRecords=()=>[];
 ctx.auditFailureItems=()=>[];ctx.appendFailureEvidence=()=>{};
 a['05-text/EA_01/latest-audit.json'].stage=audit;
@@ -36,13 +36,13 @@ const report=a[audit+'/03-result.json'];
 Object.assign(report,{audit_version:3,model:'gpt-5.6-luna',effort:'none',findings:[
  {criterion:'planned_change',judgment:'PASS',reason:''},
  {criterion:'unintended_change',judgment:'PASS',reason:''},
- {criterion:'readability',judgment:'UNKNOWN',reason:'지칭 대상 불확실'}],status:'NOT_EVALUATED'});
+ {criterion:'readability',judgment:'UNKNOWN',reason:'\uc9c0\uce6d \ub300\uc0c1 \ubd88\ud655\uc2e4'}],status:'NOT_EVALUATED'});
 let panel=new Node('div');ctx.semanticAuditPanel(panel,r);
-assert.match(panel.textContent,/세 가지 의미 판단/);assert.match(panel.textContent,/추론: none/);
-assert.match(panel.textContent,/허용하지 않은 의미 변화 없음/);assert.match(panel.textContent,/지칭 대상 불확실/);
-assert.doesNotMatch(panel.textContent,/관찰 설명|실제 문장에서 관찰한 상태|undefined/);
+assert.match(panel.textContent,/\uc138 \uac00\uc9c0 \uc758\ubbf8 \ud310\ub2e8/);assert.match(panel.textContent,/\ucd94\ub860: none/);
+assert.match(panel.textContent,/\ud5c8\uc6a9\ud558\uc9c0 \uc54a\uc740 \uc758\ubbf8 \ubcc0\ud654 \uc5c6\uc74c/);assert.match(panel.textContent,/\uc9c0\uce6d \ub300\uc0c1 \ubd88\ud655\uc2e4/);
+assert.doesNotMatch(panel.textContent,/\uad00\ucc30 \uc124\uba85|\uc2e4\uc81c \ubb38\uc7a5\uc5d0\uc11c \uad00\ucc30\ud55c \uc0c1\ud0dc|undefined/);
 delete report.audit_version;report.observed_state='CONFLICT';report.state_reason='historical';
 panel=new Node('div');ctx.semanticAuditPanel(panel,r);
-assert.match(panel.textContent,/이전 8항목/);assert.match(panel.textContent,/historical/);
+assert.match(panel.textContent,/\uc774\uc804 8\ud56d\ubaa9/);assert.match(panel.textContent,/historical/);
 assert.ok(panel.children[0].children.some(n=>n.tag==='details'));
 console.log('viewer audit: compact/legacy rendering, none model, no synthetic state PASS');

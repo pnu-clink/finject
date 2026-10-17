@@ -1,27 +1,27 @@
-# 문항 입력 구성·전체 결과 필터 복귀
+# Set the input of the case. Returns the result of the entire filter.
 
-## 읽는 순서
+## Reading order
 
-1. [전체 결과](http://127.0.0.1:8894/?run=20260923-exp-007&tab=overview)에서 원본 숫자 일치 → 진단 사유 선택 → **01 전체 결과** 순서로 확인합니다. 전체 3,000요청·100원문으로 돌아옵니다.
-2. [문항 비교](http://127.0.0.1:8894/?run=20260923-exp-007&tab=case&case=test-0006)에서 **prompt → JSON schema → 추가 입력·요청 설정 → Q/C**를 읽습니다. prompt/schema는 기본 접힘, Q/C는 기본 펼침입니다.
-3. [확인 기록](checks.json)에서 진단 선택·해제 두 경로와 실제 요청 내용 대조 결과를 봅니다.
-4. [운영 문서](../../docs/02-experiments/README.md)에서 요구사항·파일 책임·실제 흐름을 봅니다.
+1. [The overall result is](http://127.0.0.1:8894/?run=20260923-exp-007&tab=overview)In the original number matching → diagnosis private selection → **01 Overview** I'll check it in order. 3,000Requested100So we're going back to the basics.
+2. [Compare the problems](http://127.0.0.1:8894/?run=20260923-exp-007&tab=case&case=test-0006)in **prompt → JSON schema → Added input; request setting → Q/C**The prompt/schema is the basic folding, the Q/C is the basic unfolding.
+3. [Confirmation of the record](checks.json)I see the results of the diagnostic selection and resolution of the two pathways and the actual request content contrast.
+4. [Document from the beginning](../../docs/02-experiments/README.md)I see the requirements, file responsibilities, actual flow.
 
-## 파일 역할
+## File responsibilities
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[app.js](../../viewer/experiments/app.js)|전체 결과 복귀 시 필터 초기화, 입력 구성, 영역별 접힘 상태 저장|
-|[styles.css](../../viewer/experiments/styles.css)|입력 구분선·제목·Q/C 라벨|
-|[checks.json](checks.json)|실제 브라우저의 이동·입력 대조·접힘 확인|
-|[tests.log](tests.log)|기존 저장 자료·HTML 내보내기 회귀 검사 결과|
-|[tests-sandbox.log](tests-sandbox.log)|첫 실행에서 HTTP 검사 2개가 localhost 권한 제한으로 막힌 기록. 허용된 재실행 결과는 tests.log에 보존|
-|[documentation-refresh.log](documentation-refresh.log) / [documentation-validate.log](documentation-validate.log)|중앙 템플릿 생성·문서 연결·보관 원본 해시 검사|
+|[app.js](../../viewer/experiments/app.js)|Full result return time filter initialization, input configuration, folding state by region|
+|[styles.css](../../viewer/experiments/styles.css)|Type the input line, the subject, the Q/C label.|
+|[checks.json](checks.json)|Check the movement, input, counter-clocking of the actual browser|
+|[tests.log](tests.log)|The data storage and HTML output return checks|
+|[tests-sandbox.log](tests-sandbox.log)|HTTP checks on the first run 2The items is blocked by localhost permission restrictions.|
+|[documentation-refresh.log](documentation-refresh.log) / [documentation-validate.log](documentation-validate.log)|Central template creation, text connection, and the custodian's original hashing.|
 
-**진단 선택 해제**는 진단 사유만 해제합니다. 숫자 일치 등 상위 조건까지 모두 해제하려면 **01 전체 결과** 또는 **필터 초기화**를 사용합니다. 전체 결과에서 직접 필터를 고르는 기능은 유지합니다.
+**Clear diagnostics**To remove all conditions up to the top, such as the number matching, **01 Overview** Or **Reset filters**It keeps the function of selecting a filter directly from the entire result.
 
-추가 입력의 `answer_format`과 요청의 모델·추론·토큰·캐시 정책·식별 정보를 Q/C 위에 구분합니다. 영문 prompt/schema/Q/C는 저장된 그대로 표시합니다. 분석자 정답은 모델에 보내지 않은 정보로 구분합니다. 사용자가 접거나 펼치면 다음 갱신에도 그 상태를 유지하며, 근거 선택은 Q/C를 펼쳐 강조합니다.
+Additional input `answer_format`And the model of the request, the promotion, the token, the caching policy, the specification information is separated above Q/C. The English prompt/schema/Q/C is displayed as stored. The analyst's correct answer is separated from the information that was not sent to the model. When the user folds or unfolds it, it stays that way for the next update, and the base selection highlights the Q/C unfolded.
 
-실험 입력·원응답을 수정하거나 모델을 호출하지 않았습니다. 에이전트의 확인은 사용자 검토 완료를 뜻하지 않습니다. 이후 생성하는 HTML Export에도 같은 화면 코드가 들어가며 기존 사본을 덮어쓰지 않습니다.
+The experimental input didn't modify the raw response or call the model. Verification of the agent doesn't mean that the user review is complete. The HTML Export generated afterwards also enters the same screen code and doesn't overwrite the existing copy.
 
-이 README는 `src/finarch/documentation/templates/viewer-experiments-input-and-filters.md`에서 `python3 src/finarch/documentation/manage.py refresh`로 생성합니다.
+This README is a `src/finarch/documentation/templates/viewer-experiments-input-and-filters.md`in `python3 src/finarch/documentation/manage.py refresh`So we're going to generate a

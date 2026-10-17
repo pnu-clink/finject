@@ -16,7 +16,7 @@ const parent=path.resolve(process.argv[2]||'reports/run/first-10-pot-validated-v
 const cases=fs.readdirSync(parent).filter(name=>/^test-\d+$/.test(name));
 for(const name of cases){let run=load(path.join(parent,name));const seen=new Set();
  while(run){assert(!seen.has(run.path),'cyclic source reference');seen.add(run.path);
-  const inventory=viewer.logInventory(run),starts=inventory.events.filter(e=>viewer.logLlmBoundary(e)==='LLM 실행 시작');
+  const inventory=viewer.logInventory(run),starts=inventory.events.filter(e=>viewer.logLlmBoundary(e)==='LLM \uc2e4\ud589 \uc2dc\uc791');
   assert.equal(starts.length,inventory.calls.length,'process events and CLI files differ');
   assert.equal(inventory.damaged.length,0,'damaged journal');
   for(const call of inventory.calls)assert.equal(Array.from({length:7},(_,n)=>n).filter(n=>viewer.logScope(call,n)).length,1,'unmapped or double-mapped call');

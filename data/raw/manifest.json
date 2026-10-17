@@ -10,7 +10,7 @@
       "sha256": "53890ee130f33759cf53cc71943248671e27e6035e75e4234373587784e56dd9",
       "bytes": 4052714,
       "record_count": 1000,
-      "imported_from": "/Volumes/EX400U/workspace/논문/fin-astra/data/000_raw/finance-easy.json",
+      "imported_from": "fin-astra/data/000_raw/finance-easy.json",
       "imported_on": "2026-09-07",
       "verification": "byte-identical to existing local source and matches pinned catalog hash; no upstream network re-download in this task"
     },
@@ -22,7 +22,7 @@
       "sha256": "8da095a819af6db3c14877c6df2d4d29960e41d1a63dd1fa853507bd2a616af5",
       "bytes": 1637431,
       "record_count": 278,
-      "imported_from": "/Volumes/EX400U/workspace/논문/fin-astra/data/000_raw/tatqa-dev.json",
+      "imported_from": "fin-astra/data/000_raw/tatqa-dev.json",
       "imported_on": "2026-09-07",
       "verification": "byte-identical to existing local source and matches pinned catalog hash; no upstream network re-download in this task"
     },

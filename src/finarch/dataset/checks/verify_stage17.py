@@ -30,7 +30,7 @@ def verify(case):
             ctx.save(stage+'/plan-binding.json',{'plan_sha256':binding['plan_sha256'],
                 'plan_snapshot':binding['plan_snapshot'],
                 'basis':'Current plan hash equals the saved Stage16 and audit plan hashes; no model call.'})
-        results.append({'label':label,'status':report['status'],'observed_state':report.get('observed_state','v3 세 가지 판단'),
+        results.append({'label':label,'status':report['status'],'observed_state':report.get('observed_state','v3 \uc138 \uac00\uc9c0 \ud310\ub2e8'),
                         'audit_ref':stage,'stage16_ref':binding['stage16_ref'],
                         'observation_sha256':binding['observation_sha256'],
                         'checks':binding['checks']+['saved_response_schema_match','versioned_response_replay']})
@@ -60,29 +60,29 @@ def verify(case):
              'general_auditor_accuracy':'NOT_EVALUATED; development cases were reused after fixes'}
     ctx.save('05-text/stage17-verification.json',summary)
     rows='\n'.join(f"|{r['label']}|{r['status']}|{r['observed_state']}|[{r['audit_ref'].split('/')[-1]}]({r['audit_ref'][6:]}/README.md)|" for r in results)
-    ctx.save_text('05-text/STAGE17-README.md',f'''# 17번 완성 문장 의미 검사 — 첫 문항
+    ctx.save_text('05-text/STAGE17-README.md',f'''# 17\ubc88 \uc644\uc131 \ubb38\uc7a5 \uc758\ubbf8 \uac80\uc0ac — \uccab \ubb38\ud56d
 
-이번 범위: **{summary['status']}**. 원본 1개와 생성 본문 7개의 최신 판정입니다. 역산·우회·EA 답 비유일성, 18번 독립 답변, 사람 승인은 미실행입니다.
+\uc774\ubc88 \ubc94\uc704: **{summary['status']}**. \uc6d0\ubcf8 1\uac1c\uc640 \uc0dd\uc131 \ubcf8\ubb38 7\uac1c\uc758 \ucd5c\uc2e0 \ud310\uc815\uc785\ub2c8\ub2e4. \uc5ed\uc0b0·\uc6b0\ud68c·EA \ub2f5 \ube44\uc720\uc77c\uc131, 18\ubc88 \ub3c5\ub9bd \ub2f5\ubcc0, \uc0ac\ub78c \uc2b9\uc778\uc740 \ubbf8\uc2e4\ud589\uc785\ub2c8\ub2e4.
 
-|대상|최신 판정|관찰한 상태|실행 기록|
+|\ub300\uc0c1|\ucd5c\uc2e0 \ud310\uc815|\uad00\ucc30\ud55c \uc0c1\ud0dc|\uc2e4\ud589 \uae30\ub85d|
 |---|---|---|---|
 {rows}
 
-실제 Luna/low 호출은 총 **{len(calls)}회**입니다. 최초 10회, 문제를 보완한 뒤 4회, 기간 검사 사례 재확인 1회입니다. 실제 본문 감사 10회와 개발용 오류 사례 감사 5회이며 고유 본문 수와 호출 횟수를 구분합니다. 토큰 사용량은 `stage17-verification.json`의 `actual_usage`, 비용은 확인되지 않아 미확인입니다.
+\uc2e4\uc81c Luna/low \ud638\ucd9c\uc740 \ucd1d **{len(calls)}\ud68c**\uc785\ub2c8\ub2e4. \ucd5c\ucd08 10\ud68c, \ubb38\uc81c\ub97c \ubcf4\uc644\ud55c \ub4a4 4\ud68c, \uae30\uac04 \uac80\uc0ac \uc0ac\ub840 \uc7ac\ud655\uc778 1\ud68c\uc785\ub2c8\ub2e4. \uc2e4\uc81c \ubcf8\ubb38 \uac10\uc0ac 10\ud68c\uc640 \uac1c\ubc1c\uc6a9 \uc624\ub958 \uc0ac\ub840 \uac10\uc0ac 5\ud68c\uc774\uba70 \uace0\uc720 \ubcf8\ubb38 \uc218\uc640 \ud638\ucd9c \ud69f\uc218\ub97c \uad6c\ubd84\ud569\ub2c8\ub2e4. \ud1a0\ud070 \uc0ac\uc6a9\ub7c9\uc740 `stage17-verification.json`\uc758 `actual_usage`, \ube44\uc6a9\uc740 \ud655\uc778\ub418\uc9c0 \uc54a\uc544 \ubbf8\ud655\uc778\uc785\ub2c8\ub2e4.
 
-첫 시도에서 인용문 변형·적용 항목 오류, EA 허용 삭제 범위 오해, 출처 배정 오류 미탐지가 나왔습니다. 허용 편집 범위와 값별 출처 배정을 명시하고 해당 사례를 재확인했습니다. 기간 오류 예시는 편집 로그도 변형된 본문과 일치시켜 다시 검사했습니다. 이전 원응답과 실패 기록은 삭제하지 않았습니다. 이 개발 사례를 반복 확인한 결과를 일반 정확도로 보고하지 않습니다.
+\uccab \uc2dc\ub3c4\uc5d0\uc11c \uc778\uc6a9\ubb38 \ubcc0\ud615·\uc801\uc6a9 \ud56d\ubaa9 \uc624\ub958, EA \ud5c8\uc6a9 \uc0ad\uc81c \ubc94\uc704 \uc624\ud574, \ucd9c\ucc98 \ubc30\uc815 \uc624\ub958 \ubbf8\ud0d0\uc9c0\uac00 \ub098\uc654\uc2b5\ub2c8\ub2e4. \ud5c8\uc6a9 \ud3b8\uc9d1 \ubc94\uc704\uc640 \uac12\ubcc4 \ucd9c\ucc98 \ubc30\uc815\uc744 \uba85\uc2dc\ud558\uace0 \ud574\ub2f9 \uc0ac\ub840\ub97c \uc7ac\ud655\uc778\ud588\uc2b5\ub2c8\ub2e4. \uae30\uac04 \uc624\ub958 \uc608\uc2dc\ub294 \ud3b8\uc9d1 \ub85c\uadf8\ub3c4 \ubcc0\ud615\ub41c \ubcf8\ubb38\uacfc \uc77c\uce58\uc2dc\ucf1c \ub2e4\uc2dc \uac80\uc0ac\ud588\uc2b5\ub2c8\ub2e4. \uc774\uc804 \uc6d0\uc751\ub2f5\uacfc \uc2e4\ud328 \uae30\ub85d\uc740 \uc0ad\uc81c\ud558\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \uc774 \uac1c\ubc1c \uc0ac\ub840\ub97c \ubc18\ubcf5 \ud655\uc778\ud55c \uacb0\uacfc\ub97c \uc77c\ubc18 \uc815\ud655\ub3c4\ub85c \ubcf4\uace0\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.
 
-읽는 순서:
-1. `stage17-verification.json`: 최신 판정, 모든 시도, 사용량, 보류 범위.
-2. 유형별 `latest-audit.json` → 해당 `audits/v*/README.md`: 실제 요청·스키마·원응답·판정·인용.
-3. `stage17-v1/review.json`, `stage17-v2/review.json`, `stage17-v3/review.json`: 최초 결과와 보완 흐름.
-4. `stage17-local-checks.json`: 로컬 검사 결과. 오류 사례는 `stage17-v*/counterexamples/`이며 데이터 후보가 아닙니다.
+\uc77d\ub294 \uc21c\uc11c:
+1. `stage17-verification.json`: \ucd5c\uc2e0 \ud310\uc815, \ubaa8\ub4e0 \uc2dc\ub3c4, \uc0ac\uc6a9\ub7c9, \ubcf4\ub958 \ubc94\uc704.
+2. \uc720\ud615\ubcc4 `latest-audit.json` → \ud574\ub2f9 `audits/v*/README.md`: \uc2e4\uc81c \uc694\uccad·\uc2a4\ud0a4\ub9c8·\uc6d0\uc751\ub2f5·\ud310\uc815·\uc778\uc6a9.
+3. `stage17-v1/review.json`, `stage17-v2/review.json`, `stage17-v3/review.json`: \ucd5c\ucd08 \uacb0\uacfc\uc640 \ubcf4\uc644 \ud750\ub984.
+4. `stage17-local-checks.json`: \ub85c\uceec \uac80\uc0ac \uacb0\uacfc. \uc624\ub958 \uc0ac\ub840\ub294 `stage17-v*/counterexamples/`\uc774\uba70 \ub370\uc774\ud130 \ud6c4\ubcf4\uac00 \uc544\ub2d9\ub2c8\ub2e4.
 
-`plan-binding.json`은 현재 계획 해시와 감사 당시 계획 해시를 다시 대조한 Python 기록입니다. 본문·질문·계획이 달라지면 뷰어는 예전 PASS를 현재 판정으로 표시하지 않습니다. 문제 루트 `events.jsonl`에 파일·호출 로그가 있습니다.
+`plan-binding.json`\uc740 \ud604\uc7ac \uacc4\ud68d \ud574\uc2dc\uc640 \uac10\uc0ac \ub2f9\uc2dc \uacc4\ud68d \ud574\uc2dc\ub97c \ub2e4\uc2dc \ub300\uc870\ud55c Python \uae30\ub85d\uc785\ub2c8\ub2e4. \ubcf8\ubb38·\uc9c8\ubb38·\uacc4\ud68d\uc774 \ub2ec\ub77c\uc9c0\uba74 \ubdf0\uc5b4\ub294 \uc608\uc804 PASS\ub97c \ud604\uc7ac \ud310\uc815\uc73c\ub85c \ud45c\uc2dc\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \ubb38\uc81c \ub8e8\ud2b8 `events.jsonl`\uc5d0 \ud30c\uc77c·\ud638\ucd9c \ub85c\uadf8\uac00 \uc788\uc2b5\ub2c8\ub2e4.
 
-뷰어: 실행 `first-10-pot-validated-v3` → `test-0001` → 유형 선택 → **5 문장과 답변** 하단의 **17번 완성 문장 의미 검사**. 항목별 이유와 실제 본문 인용을 확인하고, 아래 LLM 디버그에서 당시 프롬프트·응답 스키마·원응답을 확인합니다. `stage17-ui-review.json`에 실제 화면 확인 기록을 남깁니다.
+\ubdf0\uc5b4: \uc2e4\ud589 `first-10-pot-validated-v3` → `test-0001` → \uc720\ud615 \uc120\ud0dd → **5 \ubb38\uc7a5\uacfc \ub2f5\ubcc0** \ud558\ub2e8\uc758 **17\ubc88 \uc644\uc131 \ubb38\uc7a5 \uc758\ubbf8 \uac80\uc0ac**. \ud56d\ubaa9\ubcc4 \uc774\uc720\uc640 \uc2e4\uc81c \ubcf8\ubb38 \uc778\uc6a9\uc744 \ud655\uc778\ud558\uace0, \uc544\ub798 LLM \ub514\ubc84\uadf8\uc5d0\uc11c \ub2f9\uc2dc \ud504\ub86c\ud504\ud2b8·\uc751\ub2f5 \uc2a4\ud0a4\ub9c8·\uc6d0\uc751\ub2f5\uc744 \ud655\uc778\ud569\ub2c8\ub2e4. `stage17-ui-review.json`\uc5d0 \uc2e4\uc81c \ud654\uba74 \ud655\uc778 \uae30\ub85d\uc744 \ub0a8\uae41\ub2c8\ub2e4.
 
-통과는 범위를 제한한 단일 모델의 제작 검사 결과입니다. IC-SOURCE의 출처 선호에 의한 RESOLVED는 따로 기록하며, EA의 MISSING_TARGET_EVIDENCE는 선택 수치가 없다는 뜻입니다. 전체 복원 불가나 논문 타당성, 사람 승인으로 확대하지 않습니다.
+\ud1b5\uacfc\ub294 \ubc94\uc704\ub97c \uc81c\ud55c\ud55c \ub2e8\uc77c \ubaa8\ub378\uc758 \uc81c\uc791 \uac80\uc0ac \uacb0\uacfc\uc785\ub2c8\ub2e4. IC-SOURCE\uc758 \ucd9c\ucc98 \uc120\ud638\uc5d0 \uc758\ud55c RESOLVED\ub294 \ub530\ub85c \uae30\ub85d\ud558\uba70, EA\uc758 MISSING_TARGET_EVIDENCE\ub294 \uc120\ud0dd \uc218\uce58\uac00 \uc5c6\ub2e4\ub294 \ub73b\uc785\ub2c8\ub2e4. \uc804\uccb4 \ubcf5\uc6d0 \ubd88\uac00\ub098 \ub17c\ubb38 \ud0c0\ub2f9\uc131, \uc0ac\ub78c \uc2b9\uc778\uc73c\ub85c \ud655\ub300\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.
 ''')
     print(json.dumps({k:v for k,v in summary.items() if k not in ('attempt_history','current_results')},ensure_ascii=False))
     return summary

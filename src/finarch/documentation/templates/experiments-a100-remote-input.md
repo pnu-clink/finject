@@ -1,12 +1,12 @@
-# $run_id — A100 공개 실험 입력
+# $run_id — A100 Public experiment input
 
-이 폴더는 PC에서 해시 검증 후 동기화한 공개 입력 패키지입니다. 이 파일 전달만으로 모델 실행을 시작하지 않습니다.
+This folder is a public input package that's synced from the PC after hashing verification, and it doesn't start running the model by just passing the file.
 
-- 공통 코드 버전: `$code_release`
-- 공개 입력 묶음 SHA-256: `$input_digest`
-- 실제 입력 목록·파일별 해시: `sync-input.json`
-- PC 실행 제어의 수신 사본: `pc-state.json`
+- Common code version: `$code_release`
+- Open input set SHA-256: `$input_digest`
+- The actual input list. `sync-input.json`
+- Receiving copy of PC run control: `pc-state.json`
 
-읽는 순서: `config.json` → `00_input/public.jsonl` → `01_evaluation/02_request/`의 프롬프트·스키마·모델별 manifest → E01 `a100-runtime.json` → 실행 후 E03 모델 폴더의 `runtime-provenance.json`, `remote-state.json`, `remote-results/`.
+In order of reading: `config.json` → `00_input/public.jsonl` → `01_evaluation/02_request/`The Prompt schema model manifest → E01 `a100-runtime.json` → After running E03 The model folder. `runtime-provenance.json`, `remote-state.json`, `remote-results/`.
 
-private 정답·외부지식 분류와 Analysis는 PC에 보존합니다. 로컬 E04 형식·수치 검사와 실험 viewer 반영은 PC의 공통 동기화 pipeline이 담당합니다. 기존 동결 입력과 원응답의 다른 해시는 덮어쓰지 않습니다.
+private right answer: External recognition classification and analysis is stored on the PC.4 Form-testing and experiment viewer reflection are responsible for a common synchronization pipeline of PCs, not overlapping other maps of existing synchronous input and raw response.

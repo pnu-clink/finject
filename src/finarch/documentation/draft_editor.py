@@ -86,7 +86,7 @@ class DraftRepository:
             heading = ('### ' if section['level'] else '## ') + section['ko']
             match = re.search(r'(?m)^' + re.escape(heading) + r'\s*$', markdown[offset:])
             if not match:
-                raise ValueError('한글 원문의 절 제목이 Draft와 다릅니다: ' + section['ko'])
+                raise ValueError('The title of the Hanseatic text is different from the draft: ' + section['ko'])
             start = offset + match.start()
             positions.append((section['id'], start, offset + match.end()))
             offset += match.end()
@@ -149,11 +149,11 @@ class DraftRepository:
             if original is None:
                 raise KeyError(sid)
             if payload.get('revision') != revision(original):
-                raise EditConflict('다른 수정이 먼저 반영되었습니다. 현재 내용을 복사한 뒤 최신 원문을 다시 불러와 주세요.')
+                raise EditConflict('The other corrections were reflected first, so please copy the current content and bring back the latest version.')
             title = payload.get('title', '').strip()
             raw_html = payload.get('html')
             if not title or len(title) > 250 or any(c in title for c in '\n<>') or not isinstance(raw_html, str):
-                raise ValueError('절 제목과 본문을 확인해 주세요.')
+                raise ValueError('Please check the title and the title.')
             cleaned = clean_html(raw_html)
             if title == original['ko'] and cleaned == original['kohtml']:
                 return {**self.section(sid), 'saved_at': dt.datetime.now().astimezone().isoformat(), 'changed': False}
@@ -172,11 +172,11 @@ class DraftRepository:
             for path in self.previews:
                 before[path] = path.read_text()
                 if len(EMBEDDED.findall(before[path])) != 1:
-                    raise ValueError('Draft HTML의 원문 위치를 확인할 수 없습니다.')
+                    raise ValueError('I can\'t find the source code in the draft HTML.')
                 updates[path] = EMBEDDED.sub(lambda m: m[1] + embedded + m[3], before[path], count=1)
             for path, content in before.items():
                 if path.read_text() != content:
-                    raise EditConflict('저장 중 원문이 변경되었습니다. 최신 내용을 불러와 다시 저장해 주세요.')
+                    raise EditConflict('The source code has changed while you were saving. Please call the latest content and save it again.')
             backup = self.directory / 'backup/editor'
             backup.mkdir(parents=True, exist_ok=True)
             stamp = dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
@@ -217,7 +217,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if not self.allowed_host():
-            return self.reply(403, {'error': '로컬 주소만 사용할 수 있습니다.'})
+            return self.reply(403, {'error': 'You can only use your local address.'})
         path = unquote(urlsplit(self.path).path)
         try:
             if path in ['/', '/editor']:
@@ -261,32 +261,32 @@ class Handler(BaseHTTPRequestHandler):
                     frame_style = '<style>html{scroll-behavior:auto}body{font-size:16px}body>header,aside,.intro-panel,.footer,.old-copy,.section-top>.status{display:none!important}.layout{display:block!important;max-width:none!important;padding:20px!important}.layout>main{max-width:none!important}.paper-section{padding:24px!important;scroll-margin-top:16px;max-width:900px;margin:0 auto 18px}.new-copy.proposed>p{color:inherit!important}.section-top h2{font-size:24px!important}.paper-section.subsection .section-top h2{font-size:21px!important}</style>'
                     content = content.replace('</head>', frame_style + '</head>')
                 return self.reply(200, content.replace('</body>', script + '</body>'), 'text/html; charset=utf-8')
-            return self.reply(404, {'error': '페이지를 찾지 못했습니다.'})
+            return self.reply(404, {'error': 'I couldn\'t find the page.'})
         except KeyError:
-            return self.reply(404, {'error': '절을 찾지 못했습니다.'})
+            return self.reply(404, {'error': 'I couldn\'t find a clue.'})
         except Exception as error:
             return self.reply(500, {'error': str(error)})
 
     def do_POST(self):
         if not self.allowed_host():
-            return self.reply(403, {'error': '로컬 주소만 사용할 수 있습니다.'})
+            return self.reply(403, {'error': 'You can only use your local address.'})
         origin = self.headers.get('Origin', '')
         if origin and origin != 'http://' + self.headers.get('Host', ''):
-            return self.reply(403, {'error': '편집기 화면에서 저장해 주세요.'})
+            return self.reply(403, {'error': 'Save it on the editor screen.'})
         path = unquote(urlsplit(self.path).path)
         comparison_paths = ['/api/draft-compare/decision', '/api/draft-compare/apply']
         if not path.startswith('/api/section/') and path not in comparison_paths:
-            return self.reply(404, {'error': '저장 경로를 찾지 못했습니다.'})
+            return self.reply(404, {'error': 'I couldn\'t find a storage path.'})
         from finarch.documentation.draft_compare_review import ComparisonConflict, apply_decisions, save_decision
         try:
             size = int(self.headers.get('Content-Length', 0))
             if not 0 < size <= 20 * 1024 * 1024:
-                return self.reply(413, {'error': '본문 크기를 확인해 주세요.'})
+                return self.reply(413, {'error': 'Please check the size of the text.'})
             if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
-                return self.reply(415, {'error': 'JSON 저장 요청이 필요합니다.'})
+                return self.reply(415, {'error': 'You need a JSON storage request.'})
             payload = json.loads(self.rfile.read(size))
             if not isinstance(payload, dict):
-                raise ValueError('저장 요청의 내용을 확인해 주세요.')
+                raise ValueError('Please check the contents of the storage request.')
             if path == '/api/draft-compare/decision':
                 return self.reply(200, save_decision(REPOSITORY, payload))
             if path == '/api/draft-compare/apply':

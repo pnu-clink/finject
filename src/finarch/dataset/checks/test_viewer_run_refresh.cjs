@@ -26,7 +26,7 @@ const context={DATA:{live:true,batch:{name:'old'},runs:[{path:'old'}]},rows:[],s
  assert.equal(context.DATA.runs.length,0);assert.equal(context.DATA.batch,undefined);
  assert.equal(get('detail').textContent,'');assert.equal(get('batch-info').textContent,'');
  assert.equal(get('round-select').hidden,true);assert.equal(get('batch-select').options.length,0);
- assert(get('batch-status').textContent.includes('실행 기록이 아직 없습니다'));
+ assert(get('batch-status').textContent.includes('\uc2e4\ud589 \uae30\ub85d\uc774 \uc544\uc9c1 \uc5c6\uc2b5\ub2c8\ub2e4'));
  assert.deepEqual(requests,['/api/runs']);
  // A newly created directory appears on the very next poll, without a reload.
  names=['restored'];await timer();assert.equal(get('batch-select').value,'restored');

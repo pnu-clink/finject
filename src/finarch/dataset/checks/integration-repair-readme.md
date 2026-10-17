@@ -1,18 +1,18 @@
-# Generation 검사 코드 정비
+# Generation check code repair
 
-이번 변경은 검사 입력·기대값·호출 방식의 수정입니다. 실제 생성·판정 로직, 원문, 과거 실행 결과는 변경하지 않았습니다. API 호출은 0회입니다.
+This is a modification of the check input, time value, and output method. The actual generating and judgment logic, the source code, and past execution results have not changed. 0calls.
 
-|항목|변경 및 확인|
+|Item|Changes and verification|
 |---|---|
-|EA 기본 동작|현재 필수 수식 역산 검사는 옛 optional 검사 설정과 별개로 기록되는지 확인합니다.|
-|EA 복원 판정|기존 식·삭제 편집·남은 Q/C 근거 연결이 갖춰진 검사 입력으로 복원 가능 판정과 근거를 확인합니다.|
-|EA 미평가|근거 연결이 없으면 NOT_EVALUATED와 이유를 기록하고, 기존 PASS/FAIL과 이유를 유지하는지 확인합니다.|
-|IC-RELATION|임시 폴더를 먼저 만들고 과거 run 없이 검사 입력을 구성합니다. Python·그래프·정답 대조 후 최종 답이 같으면 후보 등록을 막는지 확인합니다.|
-|IC-SOURCE|import_module로 모듈을 불러온 뒤 patch.object를 사용합니다. 폴더 이름은 유지합니다.|
-|추가 검사 입력 보정|사용하지 않는 fact를 제거하고, private 기록 변경에 따른 전체 입력 해시 변화와 실제 역산 결과·근거 불변을 구분합니다.|
+|EA default operation|The current mandatory digestive regression test is to make sure that it's recorded separately from the old optional test setting.|
+|EA's restoration judgment|The existing Q/C proof-of-concept input verifies the recoverable judgment and the proof.|
+|EA is underestimating|If there's no valid connection, record NOT_EVALUATED and why, and check to see if it's keeping up with the existing PASS/FAIL and why.|
+|IC-RELATION|First, we create a temporary folder and we set up a check entry without any previous run, and then we check if the final answer is the same after the Python graph-correct contrast, and we check if it blocks the candidate registration.|
+|IC-SOURCE|So you call the module to import_module, and then you use patch.object, and you keep the folder name.|
+|Additional check-in correction|Remove unused fact, and differentiate the total input hash change from the actual inverse result and near-invariance following a private record change.|
 
-결과: **{count}개 통과**, 실행 시간 {seconds}초. 이는 로컬 검사 결과이며 FinanceReasoning 실제 API 실행이나 전체 생성 성공률이 아닙니다.
+The result: **{count}passed**Running time. {seconds}Second, this is a local test, and FinanceReasoning is not the actual API execution or overall production success rate.
 
-읽는 순서: 이 문서 → integration-repair-checks.json → integration-repair.log. 공통 viewer에서 이 run의 ‘후속 통합검사’를 펼치면 현재 결과를 확인할 수 있습니다. legacy-integration.log는 수정 전 오류 기록으로 보존합니다.
+In order of reading: this document → integration-repair-checks.json → integration- repair.log. In the common viewer, you can open the back-end integration check box for this run to see the current results. legacy-integration.log keeps the error record before the correction.
 
-책임: `checks/test_ea_recovery.py`, `test_generation_python_gates.py`는 EA와 SOURCE 판정·근거를 확인합니다. `test_relation_plan.py`는 임시 입력과 후보 등록 차단을, `test_source_from_value.py`는 VALUE에서 SOURCE로 출처 문구만 추가되는지 확인합니다. 모두 Python 검사이며 실제 LLM 호출은 하지 않습니다.
+Responsibility: `checks/test_ea_recovery.py`, `test_generation_python_gates.py`The EA and the SOURCE judge check the operation. `test_relation_plan.py`The temporary input and the candidate registration scale, `test_source_from_value.py`Just check that the source phrase is added to the source from VALUE. Both are Python checks and do not actually call LLM.

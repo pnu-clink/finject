@@ -114,7 +114,7 @@ def describe(schema_id):
             "sha256": hashlib.sha256(canonical(schema)).hexdigest(), "schema": schema}
 
 
-# [SC01] docs/02-architecture.md#SC01 — 고정 LLM 역할 목록을 기준으로 누락·빈 응답 정의를 호출 전에 거절합니다.
+# [SC01] docs/02-architecture.md#SC01 The default response definition is rejected before calling based on the list of fixed LLM roles.
 @traced("python")
 def require_llm_schema(role, direction="response"):
     """Resolve a concrete object schema before any LLM handler/transport runs."""

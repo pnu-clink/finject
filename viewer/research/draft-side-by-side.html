@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FInject / Draft v2 원본과 압축 비교</title>
+<title>Compressing comparison with the original FInject / Draft v2</title>
 <style>
 :root{color-scheme:light;--ink:#202a36;--muted:#6a7684;--line:#dbe2ea;--blue:#1556c0;--green:#21715a}*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden}button,select,input,a{touch-action:manipulation}a{color:var(--blue);text-underline-offset:3px}button,select{font:inherit;border:1px solid #cbd5e1;border-radius:6px;background:white;padding:7px 11px}button{cursor:pointer}button:disabled,select:disabled{opacity:.5;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #97b7e9;outline-offset:3px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:16px 24px;border-bottom:1px solid var(--line);background:white}.brand{font-size:19px;font-weight:750}.brand small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:3px}.tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.select-group{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}select{max-width:340px;color:var(--ink)}.sync{display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;white-space:nowrap}.sync input{accent-color:var(--blue);width:16px;height:16px}.tools>a{font-size:13px;white-space:nowrap}.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1px;background:#ccd6e2;min-height:0;flex:1}.pane{display:flex;flex-direction:column;min-height:0;min-width:0;background:#f5f6f8}.pane-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 24px;background:#fafdff;border-bottom:1px solid var(--line);border-top:3px solid #7f94b1}.pane.compressed .pane-heading{background:#f5fbf8;border-top-color:#4a967f}.pane-heading h1{font-size:17px;line-height:1.4;margin:0;font-weight:750}.pane-heading small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.pane-heading a{font-size:12px;white-space:nowrap;text-decoration:none}.pane.compressed .pane-heading a{color:var(--green)}iframe{display:block;border:0;width:100%;flex:1;min-height:0;background:#f5f6f8}.statusbar{flex:none;background:white;border-top:1px solid var(--line);font-size:12px;display:flex;justify-content:space-between;gap:12px;padding:7px 24px;color:var(--muted)}.statusbar.error{color:#b42318}[hidden]{display:none!important}@media(max-width:1000px){.toolbar{padding:12px 16px;gap:12px}.tools{gap:10px}.pane-heading{padding:10px 16px}.pane-heading h1{font-size:15px}.tools select{max-width:250px}.statusbar{padding:7px 16px}.brand{font-size:17px}}@media(max-width:650px){.toolbar{padding:10px}.brand small,.pane-heading small,.statusbar>span:last-child{display:none}.tools{gap:7px;width:100%}.tools select{max-width:200px;padding:6px}.select-group>span{display:none}.pane-heading{padding:8px}.pane-heading h1{font-size:13px}.pane-heading a{font-size:11px}.sync{font-size:12px}.tools>a{font-size:12px}.statusbar{padding:6px 10px}.panes{overflow-x:auto;grid-template-columns:minmax(300px,1fr) minmax(300px,1fr)}}
 </style>
@@ -12,12 +12,12 @@ table td[data-cell-align="right"] { text-align: right !important; }
 </style>
 </head>
 <body>
-<header class="toolbar"><div class="brand">원본 / 압축 원고 비교<small>두 원고의 섹션 시작 위치를 맞춰 나란히 비교합니다.</small></div><div class="tools"><label class="select-group"><span>같은 단원으로 이동</span><select id="section" aria-label="비교할 단원" disabled><option>원고 불러오는 중</option></select></label><label class="sync"><input id="sync" type="checkbox" checked>스크롤 함께 이동</label><button id="refresh" type="button">새로고침</button><a id="paragraph-link" href="/draft-compare">문단별 비교 ↗</a></div></header>
+<header class="toolbar"><div class="brand">Comparison of the original and the compressed file<small>So we compare the two sections in a row to the starting position.</small></div><div class="tools"><label class="select-group"><span>Move to the same unit.</span><select id="section" aria-label="Comparing units" disabled><option>I'm calling the plaintiffs.</option></select></label><label class="sync"><input id="sync" type="checkbox" checked>Scroll along.</label><button id="refresh" type="button">Refresh</button><a id="paragraph-link" href="/draft-compare">The comparison of the two</a></div></header>
 <main class="panes">
- <section class="pane"><div class="pane-heading"><div><h1>FInject · Revision Draft v2</h1><small>현재 원본 / 한국어</small></div><a id="original-alone" href="/draft#s1" target="_blank" rel="noopener">따로 열기 ↗</a></div><iframe id="original" title="FInject Revision Draft 원본"></iframe></section>
- <section class="pane compressed"><div class="pane-heading"><div><h1>Draft 압축 v2</h1><small id="compressed-scope">draft 압축.md / 작업한 단원만 수록</small></div><a id="compressed-alone" href="/draft-compressed#s1" target="_blank" rel="noopener">따로 열기 ↗</a></div><iframe id="compressed" title="Draft 압축 원고"></iframe></section>
+ <section class="pane"><div class="pane-heading"><div><h1>FInject · Revision Draft v2</h1><small>Currently translated from Korean</small></div><a id="original-alone" href="/draft#s1" target="_blank" rel="noopener">Open it up.</a></div><iframe id="original" title="FInject Revision Draft originals"></iframe></section>
+ <section class="pane compressed"><div class="pane-heading"><div><h1>Draft compression v2</h1><small id="compressed-scope">Draft compression.md / only working units counted</small></div><a id="compressed-alone" href="/draft-compressed#s1" target="_blank" rel="noopener">Open it up.</a></div><iframe id="compressed" title="Draft compression file"></iframe></section>
 </main>
-<footer id="statusbar" class="statusbar"><span id="status" role="status" aria-live="polite">원고를 불러오는 중입니다.</span><span>원고 내용은 변경하지 않는 읽기 화면입니다.</span></footer>
+<footer id="statusbar" class="statusbar"><span id="status" role="status" aria-live="polite">I'm bringing in the case.</span><span>The text of the manuscript is a read screen that does not change.</span></footer>
 <script>
 'use strict';
 const $=selector=>document.querySelector(selector);
@@ -54,19 +54,19 @@ function goTo(id,remember=true){
  for(const frame of Object.values(frames)){const node=frame.contentDocument.getElementById(id);frame.contentWindow.scrollTo({top:node.getBoundingClientRect().top+frame.contentWindow.scrollY-16,behavior:'instant'});}
  $('#section').value=id;updateLinks(id);
  if(remember)history.replaceState(null,'','/draft-side-by-side?section='+encodeURIComponent(id));
- setStatus('섹션별 시작 위치를 맞췄습니다. 짧은 쪽의 섹션 끝에는 여백을 둡니다.');
+ setStatus('I\x27ve adjusted the starting position for each section, and I\x27ve left a blank at the end of the short section.');
 }
 function follow(role){
  if(!ready.original||!ready.compressed||role!==leader||performance.now()<pauseUntil||scrollScheduled)return;
  scrollScheduled=true;requestAnimationFrame(()=>{
   scrollScheduled=false;const other=role==='original'?'compressed':'original';const paired=offsets(),from=paired[role],to=paired[other];const y=frames[role].contentWindow.scrollY+16;
   if(!from.length||y<from[0].y-20)return;
-  if(y>from[from.length-1].y+20){setStatus('이 위치에 대응하는 압축 원고는 아직 등록되지 않았습니다.');return;}
+  if(y>from[from.length-1].y+20){setStatus('Compression files corresponding to this location have not yet been registered.');return;}
   let index=0;while(index<from.length-2&&from[index+1].y<=y)index++;
   const a=from[index],b=from[Math.min(index+1,from.length-1)];
   selected=a.section;$('#section').value=selected;updateLinks(selected);
   if(!$('#sync').checked)return;
-  setStatus('스크롤 중에도 양쪽 섹션의 시작 위치를 나란히 유지합니다.');
+  setStatus('It keeps the starting position of both sections in a row even during the scroll.');
   const ratio=Math.max(0,Math.min(1,(y-a.y)/Math.max(1,b.y-a.y)));
   const target=to[index].y+ratio*(to[Math.min(index+1,to.length-1)].y-to[index].y)-16;
   frames[other].contentWindow.scrollTo({top:target,behavior:'instant'});
@@ -74,23 +74,23 @@ function follow(role){
 }
 function connect(role){
  const frame=frames[role],doc=frame.contentDocument;
- if(!doc.querySelector('.paper-section')){ready[role]=false;setStatus((role==='original'?'원본':'압축')+' 원고를 불러오지 못했습니다. 새로고침해 주세요.',true);return;}
+ if(!doc.querySelector('.paper-section')){ready[role]=false;setStatus((role==='original'?'Original':'Compressed')+' I didn\x27t get the file. Please refresh it.',true);return;}
  ready[role]=true;
  for(const event of ['wheel','touchstart','pointerdown','keydown'])doc.addEventListener(event,()=>{leader=role;},{passive:true,capture:true});
  frame.contentWindow.addEventListener('scroll',()=>follow(role),{passive:true});
  if(!ready.original||!ready.compressed)return;
  common=[...frames.compressed.contentDocument.querySelectorAll('.paper-section')].map(node=>({id:node.id,title:node.querySelector('h2').textContent})).filter(item=>frames.original.contentDocument.getElementById(item.id));
- if(!common.length){setStatus('두 원고에서 대응하는 단원을 찾지 못했습니다.',true);return;}
+ if(!common.length){setStatus('I couldn\x27t find a single match in both of these applications.',true);return;}
  $('#section').replaceChildren(...common.map(item=>{const option=document.createElement('option');option.value=item.id;option.textContent=item.title;return option;}));$('#section').disabled=false;
- const chapters=common.filter(item=>!item.id.includes('-')).map(item=>item.title.match(/^\d+/)?.[0]).filter(Boolean);$('#compressed-scope').textContent='draft 압축.md / '+chapters.join(' / ')+'장 수록';
+ const chapters=common.filter(item=>!item.id.includes('-')).map(item=>item.title.match(/^\d+/)?.[0]).filter(Boolean);$('#compressed-scope').textContent='Draft compression.md / '+chapters.join(' / ')+'included in section';
  alignSections();
  goTo(selected,false);
 }
 $('#section').addEventListener('change',event=>goTo(event.target.value));
-$('#sync').addEventListener('change',()=>{if($('#sync').checked){follow(leader);setStatus('스크롤 중에도 양쪽 섹션의 시작 위치를 나란히 유지합니다.');}else setStatus('스크롤 연결을 껐습니다. 양쪽 원고를 따로 읽을 수 있습니다.');});
+$('#sync').addEventListener('change',()=>{if($('#sync').checked){follow(leader);setStatus('It keeps the starting position of both sections in a row even during the scroll.');}else setStatus('You can scroll through the link, and you can read both textbooks separately.');});
 let resizeScheduled=false;
 window.addEventListener('resize',()=>{if(!ready.original||!ready.compressed||resizeScheduled)return;resizeScheduled=true;requestAnimationFrame(()=>{resizeScheduled=false;const source=frames[leader].contentDocument.getElementById(selected);const within=-source.getBoundingClientRect().top;alignSections();pauseUntil=performance.now()+300;for(const frame of Object.values(frames)){const node=frame.contentDocument.getElementById(selected);frame.contentWindow.scrollTo({top:node.getBoundingClientRect().top+frame.contentWindow.scrollY+within,behavior:'instant'});}});});
-$('#refresh').addEventListener('click',()=>{for(const role of Object.keys(frames)){ready[role]=false;frames[role].contentWindow.location.reload();}setStatus('두 원고의 최신 내용을 불러오는 중입니다.');});
+$('#refresh').addEventListener('click',()=>{for(const role of Object.keys(frames)){ready[role]=false;frames[role].contentWindow.location.reload();}setStatus('I\x27m bringing you the latest content from both of these petitions.');});
 for(const [role,frame] of Object.entries(frames))frame.addEventListener('load',()=>connect(role));
 frames.original.src='/draft?embed=1#'+encodeURIComponent(selected);frames.compressed.src='/draft-compressed?embed=1#'+encodeURIComponent(selected);
 </script>

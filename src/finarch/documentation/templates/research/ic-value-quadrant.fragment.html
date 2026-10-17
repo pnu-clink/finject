@@ -120,28 +120,28 @@
     @media print{#ic-value-quadrant{padding:0;max-width:none}#ic-value-quadrant .q-workspace{grid-template-columns:minmax(0,1fr)}#ic-value-quadrant .q-quadrant{break-inside:avoid}#ic-value-quadrant *{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
   </style>
   <header class="q-header">
-    <div><p class="q-eyebrow">FIN-ARCH / EXPERIMENTS · 데이터셋별 비교</p><h1>7조건 사분면 · 모델 비교</h1><p class="q-subtitle">가로: Unguided → Criteria-Guided · 세로: Reasoning OFF → ON</p></div>
-    <div class="q-view-controls" role="group" aria-label="동시에 표시할 화면 수"><button class="q-button cursor-interaction" type="button" data-view-count="1" aria-pressed="false">1화면</button><button class="q-button cursor-interaction" type="button" data-view-count="2" aria-pressed="true">2화면 비교</button></div>
+    <div><p class="q-eyebrow">FIN-ARCH / EXPERIMENTS · Comparison by data set</p><h1>7Condition quadratic · model comparison</h1><p class="q-subtitle">The following is the list of the categories of the categories:</p></div>
+    <div class="q-view-controls" role="group" aria-label="The number of screens to display at the same time"><button class="q-button cursor-interaction" type="button" data-view-count="1" aria-pressed="false">1The screen.</button><button class="q-button cursor-interaction" type="button" data-view-count="2" aria-pressed="true">2Screen comparison</button></div>
   </header>
-  <p class="q-assumption"><strong>비교 기준</strong> 각 모델의 Unguided / Reasoning OFF · 이 조건이 가장 좋지 않다는 해석 가정 · ▲·▼는 실제 증감</p>
+  <p class="q-assumption"><strong>Comparison of the two</strong> Unguided / Reasoning OFF of each model · interpretation assumption that this condition is not the best · ▲·▼ is the actual increase</p>
   <div class="q-workspace" id="ic-value-screens"></div>
-  <div class="q-scale" aria-label="증감 및 배경 농도 범례"><span class="q-scale-item"><strong class="q-up">▲ 증가</strong><strong class="q-down">▼ 감소</strong></span><span class="q-scale-item">증가 배경</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-1" aria-hidden="true"></i>10%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-2" aria-hidden="true"></i>20%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-3" aria-hidden="true"></i>30%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-4" aria-hidden="true"></i>40%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-5" aria-hidden="true"></i>50%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-6" aria-hidden="true"></i>60%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-7" aria-hidden="true"></i>70%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-8" aria-hidden="true"></i>80%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-9" aria-hidden="true"></i>90%</span></div>
-  <p class="q-explainer">증가 비중 10%p마다 농도 한 단계 · 화살표 색 = 모델 · 숫자 일치·null·증감만으로 정답 개선을 확정하지 않습니다.</p>
+  <div class="q-scale" aria-label="Increased and background concentration"><span class="q-scale-item"><strong class="q-up">▲ Increase</strong><strong class="q-down">▼ decrease</strong></span><span class="q-scale-item">Background increase</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-1" aria-hidden="true"></i>10%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-2" aria-hidden="true"></i>20%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-3" aria-hidden="true"></i>30%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-4" aria-hidden="true"></i>40%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-5" aria-hidden="true"></i>50%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-6" aria-hidden="true"></i>60%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-7" aria-hidden="true"></i>70%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-8" aria-hidden="true"></i>80%</span><span class="q-scale-item"><i class="q-scale-swatch q-gain-9" aria-hidden="true"></i>90%</span></div>
+  <p class="q-explainer">Increased density 10%The concentration per p is one step. The arrow color = model. The number matches.</p>
   <template id="ic-value-screen-template">
     <section class="q-pane">
       <header class="q-pane-head"><span class="q-screen-label"></span><h2 class="q-feature-title"></h2></header>
-      <div class="q-scope"><div class="q-datasets" role="group" aria-label="데이터셋 선택"></div><label class="q-cohort-field" hidden>입력 묶음<select aria-label="동일 입력 문항 묶음"></select></label></div>
-      <div class="q-feature-tabs" role="tablist" aria-label="7조건 선택"></div>
+      <div class="q-scope"><div class="q-datasets" role="group" aria-label="Select the data set"></div><label class="q-cohort-field" hidden>The input bundle<select aria-label="Same input case set"></select></label></div>
+      <div class="q-feature-tabs" role="tablist" aria-label="7Conditions selected"></div>
       <div class="q-feature-content" role="tabpanel">
         <p class="q-dataset-meta"></p><p class="q-notice" hidden></p>
-        <div class="q-toolbar"><div class="q-models" role="group" aria-label="사분면에 표시할 모델"></div></div>
-        <div class="q-quadrants" aria-label="네 조건 사분면"></div><div class="q-sr-only q-status" role="status" aria-live="polite"></div>
-        <section class="q-comparison"><div class="q-comparison-head"><div><h3>모델별 사분면 비교</h3><p class="q-subtitle">체크한 모델을 각 분면에서 비교 · 위에서 선택한 모델은 테두리로 강조</p></div></div><div class="q-comparison-models" role="group" aria-label="함께 비교할 모델"></div><div class="q-quadrants q-multi-quadrants" aria-label="선택 모델의 네 조건 사분면"></div><div class="q-choice-legend" role="group" aria-label="응답 기호 범례"></div><p class="q-explainer q-denominator"></p><div class="q-sr-only q-comparison-status" role="status" aria-live="polite"></div></section>
-        <details class="q-source"><summary class="cursor-interaction">사용 자료 · 숫자를 읽는 기준</summary><div class="q-source-content"></div></details>
+        <div class="q-toolbar"><div class="q-models" role="group" aria-label="The model to be displayed on the quadrant"></div></div>
+        <div class="q-quadrants" aria-label="Four-condition quadrants"></div><div class="q-sr-only q-status" role="status" aria-live="polite"></div>
+        <section class="q-comparison"><div class="q-comparison-head"><div><h3>Models are divided by the comparison</h3><p class="q-subtitle">Compare the checked model from each segment; the model chosen above emphasize the thesis</p></div></div><div class="q-comparison-models" role="group" aria-label="A model to compare with"></div><div class="q-quadrants q-multi-quadrants" aria-label="So the four-condition quadratic of the selection model."></div><div class="q-choice-legend" role="group" aria-label="The response code order"></div><p class="q-explainer q-denominator"></p><div class="q-sr-only q-comparison-status" role="status" aria-live="polite"></div></section>
+        <details class="q-source"><summary class="cursor-interaction">Use data · Baseline for reading numbers</summary><div class="q-source-content"></div></details>
       </div>
     </section>
   </template>
-  <noscript><p class="q-error">차트를 표시하려면 JavaScript를 켜 주세요. 데이터는 이 HTML 안에 포함되어 있습니다.</p></noscript>
+  <noscript><p class="q-error">To show the chart, please turn on JavaScript. The data is contained in this HTML.</p></noscript>
   <script type="application/json" id="ic-value-quadrant-data">__SNAPSHOT_JSON__</script>
   <script>
   (() => {
@@ -180,7 +180,7 @@
       pane.id=`ic-value-screen-${index+1}`;pane.dataset.screen=String(index+1);
       pane.querySelector('.q-choice-legend').id=`${pane.id}-choice-legend`;
       pane.querySelector('.q-multi-quadrants').setAttribute('aria-describedby',`${pane.id}-choice-legend`);
-      pane.querySelector('.q-screen-label').textContent=`화면 ${index+1}`;
+      pane.querySelector('.q-screen-label').textContent=`The screen. ${index+1}`;
       const content=pane.querySelector('.q-feature-content');content.id=`${pane.id}-content`;
       const title=pane.querySelector('.q-feature-title');title.id=`${pane.id}-title`;pane.setAttribute('aria-labelledby',title.id);
       root.querySelector('#ic-value-screens').append(pane);
@@ -188,35 +188,35 @@
       const featureInfo=()=>cohort.features[feature.key];
       const modelCells=model=>model.features[feature.key].cells;
       function choiceLabel(key){
-        if(key==='A')return '원래 후보 A와 일치';
-        if(key==='B')return '추가 후보 B와 일치';
-        if(key==='ORIGINAL_VALUE')return '원본 답과 숫자 일치';
-        if(key==='OTHER')return feature.key.startsWith('EA_')?'원본 답과 다른 숫자':'두 후보와 다른 숫자';
-        return key==='NULL'?'null 답':'형식·실행 실패';
+        if(key==='A')return 'It matches the original candidate A.';
+        if(key==='B')return 'Compare with the additional candidate B.';
+        if(key==='ORIGINAL_VALUE')return 'The original answer matches the numbers.';
+        if(key==='OTHER')return feature.key.startsWith('EA_')?'The original answer and the other numbers.':'Number differs from both candidates';
+        return key==='NULL'?'Null answer':'Format / execution failed';
       }
       function choiceName(key){const node=el('span','q-row-name');node.append(el('span','q-choice-code',choiceCodes[key]),el('span','',choiceLabel(key)));return node;}
       function diff(model,condition,key){const cells=modelCells(model),base=cells['unguided/off'],current=cells[condition];return {count:current.counts[key]-base.counts[key],pp:100*(current.counts[key]/current.total-base.counts[key]/base.total)};}
       function changeNode(model,condition,key,compact=false){
         const delta=diff(model,condition.key,key),block=el('div','q-change');
-        if(condition.direction==='base'){block.append(el('small','q-zero','기준'));return block;}
+        if(condition.direction==='base'){block.append(el('small','q-zero','The standard.'));return block;}
         const top=el('div','q-change-top');if(delta.count>0)top.append(arrow(condition.direction,delta.pp,model));
         const dir=delta.count>0?'▲':delta.count<0?'▼':'–',tone=delta.count>0?'q-up':delta.count<0?'q-down':'q-zero';
         top.append(el('strong',tone,`${dir}${sign(delta.count)}${compact?Math.abs(delta.count):fmt(Math.abs(delta.count))}`));
         block.append(top,el('small','',`${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}${compact?'':'%p'}`));
-        block.setAttribute('aria-label',`${choiceLabel(key)}: 기준 대비 ${delta.count>0?'증가':delta.count<0?'감소':'변화 없음'} ${fmt(Math.abs(delta.count))}건, ${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}퍼센트포인트`);return block;
+        block.setAttribute('aria-label',`${choiceLabel(key)}By the standards: ${delta.count>0?'Increase':delta.count<0?'Decrease':'No change.'} ${fmt(Math.abs(delta.count))}entries, ${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}Percentage points`);return block;
       }
       function renderQuadrants(modelKey){
         const model=cohort.models.find(item=>item.key===modelKey)||cohort.models[0],out=pane.querySelector('.q-feature-content>.q-quadrants');out.replaceChildren();
         for(const key of ['unguided/on','guided/on','unguided/off','guided/off']){
           const condition=conditions.find(item=>item.key===key),cell=modelCells(model)[key],card=el('article',`q-quadrant${key==='unguided/off'?' q-baseline':''}`);
           card.dataset.condition=key;card.dataset.model=model.key;card.dataset.feature=feature.key;card.setAttribute('aria-label',`${feature.label} · ${model.label} · ${condition.prompt} · ${condition.reasoning}`);
-          const head=el('div','q-card-head'),heading=el('div');heading.append(el('h3','',condition.prompt),el('p','q-reasoning',condition.reasoning));head.append(heading,el('span','q-condition-marker',condition.direction==='base'?'비교 기준':condition.direction==='diagonal'?'두 설정 변경':condition.direction==='up'?'추론만 변경':'풀이 기준 제시'));
-          const columns=el('div','q-card-columns');columns.append(el('span','','응답 형태'),el('span','','현재'),el('span','','기준 대비'));card.append(head,columns);
+          const head=el('div','q-card-head'),heading=el('div');heading.append(el('h3','',condition.prompt),el('p','q-reasoning',condition.reasoning));head.append(heading,el('span','q-condition-marker',condition.direction==='base'?'Comparison of the two':condition.direction==='diagonal'?'Changed two settings':condition.direction==='up'?'Just change the speculation.':'Grass is the standard'));
+          const columns=el('div','q-card-columns');columns.append(el('span','','The response form'),el('span','','Current'),el('span','','By the standards.'));card.append(head,columns);
           for(const choice of feature.choices){const delta=diff(model,key,choice),row=el('div',`q-row${delta.count>0?' q-gain-'+band(delta.pp):''}`),current=el('div','q-current');row.dataset.choice=choice;current.append(el('strong','',`${fmt(cell.counts[choice])}/${fmt(cell.total)}`),el('small','',`${percent(cell.counts[choice],cell.total)}%`));row.append(choiceName(choice),current,changeNode(model,condition,choice));card.append(row);}
           out.append(card);
         }
         pane.querySelectorAll('button[data-model]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.model===model.key)));
-        pane.querySelector('.q-status').textContent=`화면 ${index+1}: ${dataset.label}, ${feature.label}, ${featureInfo().case_count}문항, ${model.label}. 기준은 같은 모델의 Unguided Solving, Reasoning OFF입니다.`;
+        pane.querySelector('.q-status').textContent=`The screen. ${index+1}: ${dataset.label}, ${feature.label}, ${featureInfo().case_count}The case, ${model.label}The standard is Unguided Solving, Reasoning OFF of the same model.`;
         pane.dataset.model=model.key;return model.key;
       }
       function renderComparison(){
@@ -224,14 +224,14 @@
         const legend=pane.querySelector('.q-choice-legend');legend.replaceChildren();for(const choice of feature.choices){const item=el('span','q-choice-legend-item');item.dataset.choice=choice;item.append(el('span','q-choice-code',choiceCodes[choice]),el('span','',choiceLabel(choice)));legend.append(item);}
         out.classList.toggle('q-no-models',!models.length);
         pane.querySelectorAll('.q-model-check').forEach(label=>{const input=label.querySelector('input');input.checked=comparisonModels.includes(input.value);label.classList.toggle('q-focused-model',input.value===selectedModel&&input.checked);});
-        pane.querySelector('.q-comparison-status').textContent=`화면 ${index+1}: ${models.length}개 비교 모델 선택. ${models.map(model=>model.label).join(', ')}`;
-        pane.querySelector('.q-denominator').textContent=`각 모델·조건 ${fmt(featureInfo().case_count)}건 · 출력 잘림·형식·실행 실패 포함`;
-        if(!models.length){out.append(el('p','q-comparison-empty','비교할 모델을 체크해 주세요.'));return;}
+        pane.querySelector('.q-comparison-status').textContent=`The screen. ${index+1}: ${models.length}Select the items comparison model. ${models.map(model=>model.label).join(', ')}`;
+        pane.querySelector('.q-denominator').textContent=`Each model: conditions ${fmt(featureInfo().case_count)}Including output cuts, forming and execution failures`;
+        if(!models.length){out.append(el('p','q-comparison-empty','Check the model to compare.'));return;}
         for(const key of ['unguided/on','guided/on','unguided/off','guided/off']){
           const condition=conditions.find(item=>item.key===key),card=el('article',`q-quadrant q-multi-card${key==='unguided/off'?' q-baseline':''}`);
           card.dataset.condition=key;card.dataset.feature=feature.key;card.dataset.modelCount=String(models.length);card.setAttribute('aria-label',`${feature.label} · ${condition.prompt} · ${condition.reasoning} · ${models.map(model=>model.label).join(', ')}`);
           card.style.setProperty('--comparison-columns',`24px repeat(${models.length},minmax(0,1fr))`);
-          const head=el('div','q-card-head'),heading=el('div');heading.append(el('h3','',condition.prompt),el('p','q-reasoning',condition.reasoning));head.append(heading,el('span','q-condition-marker',condition.direction==='base'?'비교 기준':condition.direction==='diagonal'?'두 설정 변경':condition.direction==='up'?'추론만 변경':'풀이 기준 제시'));card.append(head);
+          const head=el('div','q-card-head'),heading=el('div');heading.append(el('h3','',condition.prompt),el('p','q-reasoning',condition.reasoning));head.append(heading,el('span','q-condition-marker',condition.direction==='base'?'Comparison of the two':condition.direction==='diagonal'?'Changed two settings':condition.direction==='up'?'Just change the speculation.':'Grass is the standard'));card.append(head);
           const columns=el('div','q-multi-columns');columns.append(el('span','q-multi-choice'));
           for(const model of models){const label=el('div',`q-multi-model${model.key===selectedModel?' q-focused-model':''}`);label.dataset.model=model.key;label.append(modelLabel(model));if(!cohort.protocols_equal)label.append(el('span','q-protocol-tag',model.protocol_label));columns.append(label);}card.append(columns);
           for(const choice of feature.choices){
@@ -239,9 +239,9 @@
             for(const model of models){
               const cell=modelCells(model)[key],delta=diff(model,key,choice),value=cell.counts[choice],box=el('div',`q-multi-value${model.key===selectedModel?' q-focused-model':''}${delta.count>0?' q-gain-'+band(delta.pp):''}`);
               box.dataset.model=model.key;box.dataset.condition=key;box.dataset.choice=choice;box.dataset.feature=feature.key;
-              box.setAttribute('aria-label',`${model.label} · ${choiceLabel(choice)} · ${fmt(value)}/${fmt(cell.total)}건 · ${percent(value,cell.total)}% · 증감 ${sign(delta.count)}${fmt(Math.abs(delta.count))}건 · ${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}%p`);
+              box.setAttribute('aria-label',`${model.label} · ${choiceLabel(choice)} · ${fmt(value)}/${fmt(cell.total)}entries · ${percent(value,cell.total)}% · increase ${sign(delta.count)}${fmt(Math.abs(delta.count))}entries · ${sign(delta.pp)}${Math.abs(delta.pp).toFixed(1)}%p`);
               const content=el('div','q-multi-content'),current=el('div','q-multi-current');current.append(el('strong','',String(value)),el('span','q-multi-extra',`/${fmt(cell.total)} · ${percent(value,cell.total)}%`));
-              let change;if(condition.direction==='base'){change=el('div','q-change');change.append(el('span','q-zero q-baseline-label','기준'),el('strong','q-zero q-baseline-number','–0'));}else{change=changeNode(model,condition,choice,true);change.querySelector('small').textContent+= '%p';}
+              let change;if(condition.direction==='base'){change=el('div','q-change');change.append(el('span','q-zero q-baseline-label','The standard.'),el('strong','q-zero q-baseline-number','–0'));}else{change=changeNode(model,condition,choice,true);change.querySelector('small').textContent+= '%p';}
               content.append(current,change);box.append(content);row.append(box);
             }
             card.append(row);
@@ -251,14 +251,14 @@
       }
       function renderSources(){
         const container=pane.querySelector('.q-source-content');container.replaceChildren();const info=featureInfo();
-        container.append(el('strong','',`${dataset.label} · ${feature.label} · ${fmt(info.case_count)}문항 · 제작 run ${cohort.source_run.split('/').pop()}`),el('code','',cohort.provenance_path),el('p','',`입력 해시 ${cohort.input_sha256.slice(0,12)} · 문항 ${info.case_ids_sha256.slice(0,12)} · 비교 기준 ${info.candidate_sha256.slice(0,12)}`));
+        container.append(el('strong','',`${dataset.label} · ${feature.label} · ${fmt(info.case_count)}Article · Production run ${cohort.source_run.split('/').pop()}`),el('code','',cohort.provenance_path),el('p','',`Please enter. ${cohort.input_sha256.slice(0,12)} • Article ${info.case_ids_sha256.slice(0,12)} · Comparative criteria ${info.candidate_sha256.slice(0,12)}`));
         for(const model of cohort.models){
-          const row=el('div');row.append(el('strong','',`${model.label} · ${model.model_id} · 프롬프트 ${model.protocol_label}`),el('div','',model.run),el('code','',model.source.path));const absent=conditions.filter(condition=>modelCells(model)[condition.key].parsed_response_absent>0).map(condition=>`${condition.prompt} / ${condition.reasoning}: ${modelCells(model)[condition.key].parsed_response_absent}건`);
-          if(absent.length)row.append(el('p','',`파싱된 응답 본문 없음(실패 합계에 포함): ${absent.join(' · ')}`));row.append(el('p','',`실행 설정: ${JSON.stringify(model.settings)}`));if(model.evaluation_source!==model.run)row.append(el('p','',`평가 원자료: ${model.evaluation_source}`));if(model.previous_runs.length)row.append(el('p','',`같은 설정의 이전 실행(중복 합산하지 않음): ${model.previous_runs.join(', ')}`));container.append(row);
+          const row=el('div');row.append(el('strong','',`${model.label} · ${model.model_id} · Prompt ${model.protocol_label}`),el('div','',model.run),el('code','',model.source.path));const absent=conditions.filter(condition=>modelCells(model)[condition.key].parsed_response_absent>0).map(condition=>`${condition.prompt} / ${condition.reasoning}: ${modelCells(model)[condition.key].parsed_response_absent}entries`);
+          if(absent.length)row.append(el('p','',`No text of the response that has been parsed (included in the failure sum): ${absent.join(' · ')}`));row.append(el('p','',`Set the run: ${JSON.stringify(model.settings)}`));if(model.evaluation_source!==model.run)row.append(el('p','',`The raw materials for the evaluation: ${model.evaluation_source}`));if(model.previous_runs.length)row.append(el('p','',`The previous run of the same setup (does not add duplicate): ${model.previous_runs.join(', ')}`));container.append(row);
         }
-        for(const pending of cohort.pending_models)container.append(el('p','',`${pending.label}: 저장 집계 없음 · ${pending.run} · ${pending.reason}`));
-        container.append(el('p','',`대상: ${feature.key}. 같은 공개 입력·문항·7조건의 비교 기준을 가진 실행만 묶습니다. 같은 설정의 재실행은 가장 최근 저장 집계를 사용합니다.`),el('p','',feature.key.startsWith('EA_')?'EA에는 추가 숫자 후보 B가 없습니다. 원본 답과의 숫자 일치·다른 숫자·null·실패를 그대로 표시합니다.':'A/B는 저장된 원래·추가 후보와의 숫자 일치입니다. 두 후보와 다른 숫자는 OTHER입니다.'),el('p','','프롬프트 v1/v2는 저장 파일의 해시 차이입니다. 실행 설정이 다르면 모델 자체의 효과만으로 해석할 수 없습니다.'),el('p','','분모는 계획된 전체 문항입니다. 출력 잘림·형식·실행 실패를 빼지 않습니다. 후보 일치나 null은 의미 정답 판정이 아닙니다. 증감은 전체 분포의 차이이며 개별 문항 이동 건수가 아닙니다.'),el('p','','배경 농도는 10~90%의 9단계입니다. 비중 증가가 0%p 초과–10%p 이하면 농도 10%, 10%p 초과–20%p 이하면 20%이며 80%p 초과부터 최대 90%입니다. 실패 증가는 개선으로 해석하지 않습니다.'),el('p','',`Python으로 저장 집계를 읽은 시점: ${new Date(data.generated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}. 새 결과는 다시 생성해야 반영됩니다. 모델 호출·재채점 없음. 전체 실행 목록은 run-inventory.json에 있습니다.`));
-        if(data.viewer)container.lastElementChild.textContent=`Python으로 저장 집계를 읽은 시점: ${new Date(data.generated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}. 새 결과는 뷰어의 새로 읽기로 반영합니다. 모델 호출·재채점 없음. 전체 실행 목록과 제외 사유는 화면 아래 수집 범위에서 확인합니다.`;
+        for(const pending of cohort.pending_models)container.append(el('p','',`${pending.label}: No storage of the statistics ${pending.run} · ${pending.reason}`));
+        container.append(el('p','',`Subjects: ${feature.key}. . . . the same public input;7We only bind the executions with the comparison criteria of the conditions, and the repeats of the same setup use the most recent storage estimates.`),el('p','',feature.key.startsWith('EA_')?'EA doesn\x27t have an additional number candidate B. It shows the number matching the original answer, the other number, the null, the failure.':'A/B is the number matching the original and additional candidate that was stored.'),el('p','','Prompts v1/v2 are the hash differences in the storage file, and if the execution settings are different, you can\x27t interpret the effect of the model itself.'),el('p','','The denominator is the entire case that is planned, not excluding output cuts, formatting, and execution failures. The candidate match or null is not a meaningful answer judgment. The augmentation is the difference in the total distribution, and not the individual case move.'),el('p','','The background concentration is 10~90% 9It\x27s a step. 0%p is the overlay10%P is the concentration. 10%, 10%p is the overlay20%So p is equal to p. 20%And the 80%p from the top to the top 90%And that\x27s not to say that an increase in failure is an improvement.'),el('p','',`The moment I read the Python storage statistics: ${new Date(data.generated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}.New results should be generated again. No model call and inventory points. The full runlist is in run-inventory.json.`));
+        if(data.viewer)container.lastElementChild.textContent=`The moment I read the Python storage statistics: ${new Date(data.generated_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})}The new results reflect the new readings of the viewer. No model call and reservation points. The entire runlist and exclusion lists are verified in the collection range below the screen.`;
       }
       function restore(state={}){
         feature=data.features.find(item=>item.key===state.feature)||data.features[index];dataset=data.datasets.find(item=>item.key===state.selectedDataset)||data.datasets[0];cohort=dataset.cohorts.find(item=>item.key===state.selectedCohort)||dataset.cohorts[0];
@@ -267,14 +267,14 @@
         pane.dataset.feature=feature.key;pane.dataset.dataset=dataset.key;pane.dataset.cohort=cohort.key;title.textContent=feature.label;
         pane.querySelectorAll('button[data-dataset]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.dataset===dataset.key)));
         pane.querySelectorAll('button[data-feature]').forEach(button=>{const active=button.dataset.feature===feature.key;button.setAttribute('aria-selected',String(active));if(active)content.setAttribute('aria-labelledby',button.id);});
-        const selector=pane.querySelector('select');selector.replaceChildren();for(const item of dataset.cohorts){const option=el('option','',`${fmt(item.features[feature.key].case_count)}문항 · ${item.models.length}모델`);option.value=item.key;selector.append(option);}selector.value=cohort.key;pane.querySelector('.q-cohort-field').hidden=dataset.cohorts.length<2;
-        pane.querySelector('.q-dataset-meta').textContent=`${dataset.label} · 동일 입력 ${fmt(featureInfo().case_count)}문항 · 비교 ${cohort.models.length}모델 · 제작 ${cohort.source_run.split('/').pop()}`;
-        const notice=pane.querySelector('.q-notice');notice.hidden=cohort.protocols_equal;notice.textContent=cohort.protocols_equal?'':`프롬프트 차이: ${cohort.models.map(model=>`${model.label} ${model.protocol_label}`).join(' · ')}`;
+        const selector=pane.querySelector('select');selector.replaceChildren();for(const item of dataset.cohorts){const option=el('option','',`${fmt(item.features[feature.key].case_count)}Article by: ${item.models.length}Model`);option.value=item.key;selector.append(option);}selector.value=cohort.key;pane.querySelector('.q-cohort-field').hidden=dataset.cohorts.length<2;
+        pane.querySelector('.q-dataset-meta').textContent=`${dataset.label} · Same input ${fmt(featureInfo().case_count)}Articles · comparison ${cohort.models.length}Models and manufacturing ${cohort.source_run.split('/').pop()}`;
+        const notice=pane.querySelector('.q-notice');notice.hidden=cohort.protocols_equal;notice.textContent=cohort.protocols_equal?'':`The difference in speed: ${cohort.models.map(model=>`${model.label} ${model.protocol_label}`).join(' · ')}`;
         const controls=pane.querySelector('.q-models'),comparisonControls=pane.querySelector('.q-comparison-models');controls.replaceChildren();comparisonControls.replaceChildren();const ordered=[...cohort.models,...cohort.pending_models.map(model=>({...model,pending:true}))].sort((a,b)=>a.order-b.order||a.label.localeCompare(b.label));
         for(const model of ordered){
           const button=el('button','q-button q-model-button cursor-interaction');button.type='button';
           const label=el('label',`q-model-check cursor-interaction${model.pending?' q-pending-model':''}`),input=el('input');input.type='checkbox';input.value=model.key;input.dataset.comparisonModel=model.key;
-          if(model.pending){button.textContent=`${model.label} · 집계 없음`;button.disabled=true;input.disabled=true;label.append(input,el('span','',`${model.label} · 집계 없음`));}
+          if(model.pending){button.textContent=`${model.label} · No statistics`;button.disabled=true;input.disabled=true;label.append(input,el('span','',`${model.label} · No statistics`));}
           else{
             button.dataset.model=model.key;button.setAttribute('aria-pressed','false');button.append(modelLabel(model));button.addEventListener('click',()=>{selectedModel=renderQuadrants(model.key);if(!comparisonModels.includes(model.key))comparisonModels.push(model.key);renderComparison();persist();});
             input.checked=comparisonModels.includes(model.key);label.append(input,modelLabel(model));input.addEventListener('change',()=>{comparisonModels=cohort.models.filter(item=>item.key===model.key?input.checked:comparisonModels.includes(item.key)).map(item=>item.key);if(comparisonModels.length&&!comparisonModels.includes(selectedModel))selectedModel=renderQuadrants(comparisonModels[0]);renderComparison();persist();});
@@ -297,13 +297,13 @@
     }
     try{
       data=JSON.parse(root.querySelector('#ic-value-quadrant-data').textContent);
-      if(data.schema_version!==3||data.features?.length!==7||!data.datasets?.length)throw new Error('7조건의 저장 집계가 없습니다. 생성된 HTML을 열어 주세요.');
-      for(const dataset of data.datasets)for(const cohort of dataset.cohorts)for(const model of cohort.models)for(const feature of data.features)for(const condition of conditions){const cell=model.features?.[feature.key]?.cells[condition.key],total=cohort.features?.[feature.key]?.case_count;if(!cell||!Number.isInteger(total)||total<=0||cell.total!==total||feature.choices.some(choice=>!Number.isInteger(cell.counts[choice])||cell.counts[choice]<0)||Object.keys(cell.counts).some(choice=>!feature.choices.includes(choice))||Object.values(cell.counts).reduce((sum,value)=>sum+value,0)!==total)throw new Error('조건별 분모 또는 집계 합계가 일치하지 않습니다.');}
+      if(data.schema_version!==3||data.features?.length!==7||!data.datasets?.length)throw new Error('7There\x27s no statistics of conditions. Please open the generated HTML.');
+      for(const dataset of data.datasets)for(const cohort of dataset.cohorts)for(const model of cohort.models)for(const feature of data.features)for(const condition of conditions){const cell=model.features?.[feature.key]?.cells[condition.key],total=cohort.features?.[feature.key]?.case_count;if(!cell||!Number.isInteger(total)||total<=0||cell.total!==total||feature.choices.some(choice=>!Number.isInteger(cell.counts[choice])||cell.counts[choice]<0)||Object.keys(cell.counts).some(choice=>!feature.choices.includes(choice))||Object.values(cell.counts).reduce((sum,value)=>sum+value,0)!==total)throw new Error('The condition-by-condition denominator or the sum of the sets does not match.');}
       for(let index=0;index<2;index++)screens.push(createScreen(index));
       root.querySelectorAll('button[data-view-count]').forEach(button=>button.addEventListener('click',()=>{setViewCount(Number(button.dataset.viewCount));persist();}));
       let saved=window.openai?.widgetState?.modelContent;if(!saved)try{saved=JSON.parse(localStorage.getItem('finarch-quadrant-screens-v3'))||JSON.parse(localStorage.getItem('finarch-quadrant-datasets-v2'));}catch{}restoreAll(saved);
       window.addEventListener('openai:set_globals',event=>{const saved=event.detail?.globals?.widgetState?.modelContent;if(saved)restoreAll(saved);});
-    }catch(error){const message=el('p','q-error',`표시 중단: ${error.message}`);message.setAttribute('role','alert');root.querySelector('#ic-value-screens').replaceChildren(message);}
+    }catch(error){const message=el('p','q-error',`Stop the display: ${error.message}`);message.setAttribute('role','alert');root.querySelector('#ic-value-screens').replaceChildren(message);}
   })();
   </script>
 </div>

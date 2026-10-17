@@ -20,7 +20,7 @@ class ContentChecks(unittest.TestCase):
                 self.assertEqual(str(value)[c:d], number["text"])
 
     def test_finance_unicode_repeated_numbers(self):
-        record = {"context": "😀 매출 1,200.5, 비용 1,200.5. 비율 20%."}
+        record = {"context": "😀 \ub9e4\ucd9c 1,200.5, \ube44\uc6a9 1,200.5. \ube44\uc728 20%."}
         result = assemble(record, "finance")
         self.assertEqual(result["context"], record["context"])
         self.assertEqual(result["source_content"]["tables"], [])
@@ -28,10 +28,10 @@ class ContentChecks(unittest.TestCase):
         self.check_locations(record, result)
 
     def test_table_duplicate_values_and_paragraph_original_index(self):
-        record = {"table": {"table": [["", "2019", "2018"], ["😀 비용", "80", "80"]]},
-                  "paragraphs": [{"order": 2, "text": "두번째 80"}, {"order": 1, "text": "첫번째 80"}]}
+        record = {"table": {"table": [["", "2019", "2018"], ["😀 \ube44\uc6a9", "80", "80"]]},
+                  "paragraphs": [{"order": 2, "text": "\ub450\ubc88\uc9f8 80"}, {"order": 1, "text": "\uccab\ubc88\uc9f8 80"}]}
         result = assemble(record, "tatqa")
-        self.assertEqual(result["context"], " | 2019 | 2018\n😀 비용 | 80 | 80\n\n첫번째 80\n두번째 80")
+        self.assertEqual(result["context"], " | 2019 | 2018\n😀 \ube44\uc6a9 | 80 | 80\n\n\uccab\ubc88\uc9f8 80\n\ub450\ubc88\uc9f8 80")
         self.assertEqual(result["source_content"]["paragraphs"][0]["source_pointer"], "/paragraphs/1/text")
         self.check_locations(record, result)
 

@@ -27,7 +27,7 @@ const graph=report.samples.find(s=>s.id==='while').graph,view=ctx.controlGraphDi
 assert.equal(graph.control_flow.guards.length,4);
 assert(!view.nodes.some(n=>['==','and','path_guard','not'].includes(n.operator)));
 assert.deepEqual(Array.from(view.nodes.filter(n=>n.control_title).map(n=>n.label)),
- ['1회차 계속','2회차 계속','3회차 계속','4번째 조건에서 종료']);
+ ['1\ud68c\ucc28 \uacc4\uc18d','2\ud68c\ucc28 \uacc4\uc18d','3\ud68c\ucc28 \uacc4\uc18d','4\ubc88\uc9f8 \uc870\uac74\uc5d0\uc11c \uc885\ub8cc']);
 const zeros=view.nodes.filter(n=>n.kind==='constant'&&n.value_type==='int'&&n.value==='0');
 assert.equal(zeros.length,1);
 assert.deepEqual(Array.from(ctx.graphSourceLines(zeros[0])),[4,5]);
@@ -35,7 +35,7 @@ assert.equal(view.control_edges.length,4);
 const byId=new Map(view.nodes.map(node=>[node.id,node]));
 assert.deepEqual(Array.from(view.control_edges.map(edge=>byId.get(edge.to).code_line)),[6,6,6,9]);
 assert.deepEqual(Array.from(view.control_edges.map(edge=>ctx.graphControlLinkLabel(edge))),
- ['1회차 계속 → 선택된 계산','2회차 계속 → 선택된 계산','3회차 계속 → 선택된 계산','반복 종료 → 다음 계산']);
+ ['1\ud68c\ucc28 \uacc4\uc18d → \uc120\ud0dd\ub41c \uacc4\uc0b0','2\ud68c\ucc28 \uacc4\uc18d → \uc120\ud0dd\ub41c \uacc4\uc0b0','3\ud68c\ucc28 \uacc4\uc18d → \uc120\ud0dd\ub41c \uacc4\uc0b0','\ubc18\ubcf5 \uc885\ub8cc → \ub2e4\uc74c \uacc4\uc0b0']);
 // User-authored equality operations must remain visible.
 const equality={nodes:[{id:'a',kind:'constant',inputs:[]},{id:'b',kind:'operation',operator:'==',inputs:['a','a']}],
  edges:[{from:'a',to:'b',input_index:0},{from:'a',to:'b',input_index:1}],output:'b',variables:{answer:'b'},

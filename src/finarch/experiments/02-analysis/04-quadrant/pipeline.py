@@ -102,7 +102,7 @@ def run(root):
     current = store.read(root / 'state.json')
     current['analysis'] = {**current.get('analysis', {}), 'status': 'COMPLETE', 'stage': 'A04', 'postprocessing': completed}
     store.write(root / 'state.json', current)
-    results.render(root, 'analysis', source=root.name, status='A01·A02·A03·A04 완료')
+    results.render(root, 'analysis', source=root.name, status='A01·A02·A03·A04 Complete')
     store.event(root, 'ANALYSIS_POSTPROCESSING_COMPLETED', stage='A04', **state['counts'])
     timing.refresh(root, force=True)
     return completed

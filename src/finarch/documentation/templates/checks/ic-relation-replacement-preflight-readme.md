@@ -1,39 +1,39 @@
-# IC-RELATION 교체 · concat · 평가 HTML 사전 점검
+# IC-RELATION replacement · concat · evaluation HTML preview checking
 
-기존 코드를 변경하거나 LLM을 호출하지 않고 현재 취합본과 export 코드를 점검했습니다. **교체는 가능하지만 유형 선택 실행만으로 취합·export까지 자동 완료되지는 않습니다.** 아래 후속 처리는 임시 relation scheduler에 포함할 계획이며 아직 구현·실행하지 않았습니다.
+We didn't change the existing code or call the LLM, we checked the current copy and export code. **The substitution is possible, but the type selection execution alone does not automatically complete until the addition and export.** The following follow-up is planned to be included in the temporary relation scheduler and has not yet been implemented.
 
-## 대상과 현재 개수
+## Objects and current numbers
 
-|대상|현재 상태|
+|Target|Current state of play|
 |---|---|
-|`20261003-001-CodeTAT-QA-0917-002`|288문항: Preparation PASS 279, FAIL 9|
-|CodeTAT-QA의 7유형 전체 PASS|260문항|
-|IC-RELATION 외 6유형 전체 PASS|265문항|
-|`20261003-concat-001`의 7유형 전체 PASS|1,260문항: 다른 출처 1,000 + CodeTAT-QA 260|
+|`20261003-001-CodeTAT-QA-0917-002`|288The following is the list of the countries of the European Union. 279, FAIL 9|
+|CodeTAT-QA is a 7Type of full pass|260Case|
+|Except for the IC-RELATION. 6Type of full pass|265Case|
+|`20261003-concat-001` 7Type of full pass|1,260Article: Other sources 1,000 + CodeTAT-QA 260|
 
-다른 6유형을 유지하면 새 관계 검증 결과에 따라 concat 통과 문항은 감소할 수도 있으며 최대 1,265문항입니다. 추가 통과 가능 문항은 `test-0256`, `test-0803`, `test-0883`, `test-0889`, `test-1455`입니다. 이는 성공 예측이 아니라 현재 다른 6유형 판정으로 계산한 상한입니다.
+Another. 6If you keep the type, the concat pass cases can decrease and maximize the value of the new relationship. 1,265And the next passing case is `test-0256`, `test-0803`, `test-0883`, `test-0889`, `test-1455`It's not a prediction of success, it's a prediction that's different now. 6It's a limit calculated by type judgment.
 
-## 발견한 연결 문제와 처리 계획
+## We found a connection issue and a processing plan.
 
-|확인한 현재 동작|임시 scheduler에서 필요한 후속 처리|
+|Current operation as verified|The follow-up process required by the temporary scheduler|
 |---|---|
-|유형 선택 실행은 `selected-summary.json`을 쓰지만 최종 `summary.json.latest`, 차수 `progress.json`, `result-report.json`, `results/`를 갱신하지 않습니다.|새 관계 결과만 최종 인덱스에 반영하고 기존 리포트·취합 프로그램을 호출합니다. 다른 6유형의 결과·경로는 유지합니다.|
-|선택 실행은 검증 FAIL 시 사람 검토 자료 저장 단계 전에 종료합니다. 최종 리포트는 실패건에도 사람 검토 자료를 요구합니다.|기존 `05-human-review.stage.run`을 통해 PASS·FAIL 모두 자료를 저장합니다. 이는 승인 처리가 아닙니다.|
-|concat은 모든 `*-round`의 문항 폴더를 복제하지만 집계는 1~3차만 만듭니다. 완료 보고서도 Generation 1~3차만 읽습니다.|새 재생성 차수의 진행·최종 인덱스·표시 집계를 일치시킵니다. 기존 1~3차 기록을 새 실행으로 위장하지 않습니다.|
-|concat 프로그램은 기존 출력 폴더를 거부하며 출처별 8개 배열·전체 기록을 교체합니다.|별도 작업 폴더에서 전체 결과를 구성·검사한 뒤 기존 concat을 백업하고 반영합니다. 기존 concat의 변경되지 않은 사람 판정을 보존합니다.|
-|새 HTML은 내용 해시로 배포 ID를 새로 만들고 Import는 배포 ID 일치를 요구합니다.|기존 HTML·평가 JSON을 보존합니다. 이관이 필요할 때 기존·새 내용을 비교하여 변경되지 않은 유형만 이전 평가를 유지하고 바뀐 관계는 재검토 대상으로 구분합니다. ID만 바꿔 판정을 무조건 옮기지 않습니다.|
+|Select the type to run. `selected-summary.json`I'm using the final `summary.json.latest`You're not going to be able to do that. `progress.json`, `result-report.json`, `results/`It doesn't update.|It reflects only the results of the new relationship in the final index and calls the existing report-fusion program. 6The result type and the environment maintain.|
+|Selection execution ends before the verification fails the person review data storage stage. The final report requires the person review material even if it fails.|Existing `05-human-review.stage.run`Pass and fail both store data. This is not an approval process.|
+|Concat is all `*-round`I'm going to copy the case folder, but the statistics are 1~3And the report is complete, Generation. 1~3I read the car.|It matches the progress and the latest index and index of the new regenerative variables. 1~3round records are not presented as new execution.|
+|The concat program rejects the existing output folder and separates the source 8Replace the items-order and the whole record.|In the separate work folder, you'll configure and analyze the entire result, then back up and reflect the existing concat, and preserve the unchanged one's judgment of the existing concate.|
+|The new HTML is a content hash that makes the distribution ID new, and the Import requires the distribution ID unit.|It preserves the existing HTML-assessment JSON, and when it's needed, it compares the existing and new content to the unchanged type, and maintains the previous evaluation, and the relationship between the changes is reassessed, and it doesn't necessarily transfer the ID.|
 
-임시 caller의 재시도는 기존 Generation의 `run_round`와 피드백 처리를 이용하여 이전 문항별 결과를 전달해야 합니다. 선택 CLI를 새 차수에 재호출하는 것만으로 이전 실패 피드백까지 전달된다고 간주하지 않습니다. 구형 관계 배치 계획은 현행 배치 버전 검사에 의해 새로 작성됩니다.
+The re-interpretation of the temporary caller is the same as the previous generation `run_round`Using the feedback procedure, you need to pass on the previous case-by-case results. Simply re-coding the selected CLI to a new graph does not consider it to be passed on to the previous failed feedback. The spherical relationship placement plan is rewritten by the current placement version check.
 
-## 반드시 유지할 export 기준
+## We must maintain export standards.
 
-Preparation PASS이고 최신 7유형이 모두 자동 PASS이며 원본·어느 유형에도 명시적 사람 Reject가 없는 문항만 평가 HTML에 포함합니다. Accept는 요구하지 않습니다. 새 관계가 FAIL이면 이전 관계 PASS로 대체하지 않습니다. 전체 결과의 실패·미실행 기록은 보존하며, 7유형 선정본은 새 판정으로 다시 계산합니다. 다른 출처와 변경하지 않은 6유형은 그대로 유지합니다.
+Preparation PASS and the latest 7All types are automatic PASS, and the original. In any type, only phrases without an explicit person Reject are included in the evaluation HTML. Accept is not required. If a new relationship fails, it will not replace the previous relationship with PASS. 7The type sort is then re-calculated to a new sentence. 6The type stays the same.
 
-## 읽는 순서와 검증 범위
+## The order of reading and the scope of verification
 
-1. [validation.json](validation.json): 원천 3개 run의 취합 파일 해시·개수, 9개 로컬 점검과 확인한 연결 문제.
-2. [terminal.log](terminal.log): 점검 결과 및 기존 평가 HTML export 회귀 검사 5개 PASS.
-3. [현재 CodeTAT-QA 데이터 화면](http://127.0.0.1:8893/?run=20261003-001-CodeTAT-QA-0917-002).
-4. [현재 concat 데이터 화면](http://127.0.0.1:8893/?run=20261003-concat-001).
+1. [validation.json](validation.json)The source: 3The hash of the items run, the hash of the file, 9A connection issue with a items local check.
+2. [terminal.log](terminal.log): Check results and existing evaluation of HTML export return checks 5PASS.
+3. [currently CodeTAT-QA data screen](http://127.0.0.1:8893/?run=20261003-001-CodeTAT-QA-0917-002).
+4. [current concat data screen](http://127.0.0.1:8893/?run=20261003-concat-001).
 
-실제 취합본의 해시·ID 정렬을 확인했습니다. 임시 fixture에서는 새 관계 FAIL의 이전 PASS 대체, 다른 6유형 유지, 서로 다른 차수의 7 PASS 선정, 한 유형 Reject의 전체 제외, 진행 인덱스 누락, 실패 검토 자료 누락과 기존 concat 출력 거부를 재현했습니다. **새 LLM 생성, 실제 concat 교체, 새 최종 HTML의 브라우저·Import 확인은 아직 수행하지 않았습니다.** 기존 dataset·annotation·HTML은 변경하지 않았습니다.
+I've verified the hash-ID alignment of the actual copy. 6Keep the type, different variables 7 PASS selection, the complete exclusion of one type of Reject, the missing progress index, the missing failed review data and the existing concat output rejection were reproduced. **The creation of a new LLM, the actual concat replacement, the browser import verification of the new final HTML has not yet been performed.** The existing dataset, annotation, HTML, has not changed.

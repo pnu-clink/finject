@@ -1,22 +1,22 @@
-# 01 · 종합 현황 대시보드
+# 01 · Comprehensive situation board
 
-사용자 표시에는 **Unguided Solving / Criteria-Guided Solving**, **Reasoning OFF / Reasoning ON**만 사용합니다. 내부 조건 값은 필터·원기록 연결에 유지합니다.
+The user's mark is **Unguided Solving / Criteria-Guided Solving**, **Reasoning OFF / Reasoning ON**I'm just using the internal condition value to keep the filter and the element log connected.
 
-[상위 안내](../README.md) · [다음: 문항 분석](../02-explorer/README.md)
+[High-level guide](../README.md) · [Next: Analysis of the case](../02-explorer/README.md)
 
-트래픽 관제 화면처럼 핵심 수치와 여러 차트·표를 데스크톱 한 화면에 모읍니다. 필터로 유형·프롬프트·추론 조건을 선택하면 실제 응답 분포와 요약 수치가 함께 바뀝니다. 중앙 산점도는 **응답 하나**를 한 점으로 나타내며 가로축은 저장된 완료 시각, 세로축은 실제 응답 시간입니다. 점 또는 영역을 선택하면 연결된 응답표에서 확인하고 문항 분석으로 이동할 수 있습니다.
+You're going to collect key figures and multiple chart tabs on a single screen, like a traffic control screen. If you filter the type, prompt, reference conditions, you're going through the actual response distribution and the summary numbers. **One answer.**The cross-section is the actual response time, and the cross-sections are the actual response times, and the intersections are stored in the completed view.
 
-주변 패널은 분당 완료량, 응답 상태, 유형·조건별 비교를 보여줍니다. 완료량은 실제 완료 시각으로 집계하며 응답 시간 합계를 전체 실행 시간으로 쓰지 않습니다. 길게 읽을 설명은 도움말·상세로 확인합니다. 실시간 수집 화면이 아니라 저장된 실험 기록을 조회하는 화면입니다.
+The surrounding panel shows a comparison of completion per minute, response status, type/condition. Completion is calculated in real-time completion time, and the response time is not written in total run time. Long-reading descriptions are verified as help/rate, not as a real-time collection screen, but as a screen viewing stored experimental records.
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[index.html](index.html)|짧은 도구 모음·주요 지표·응답 분포·여러 비교 패널·연결표|
-|[공통 스타일](../common.css)|두 화면이 공유하는 종합 현황 기준의 헤더·메뉴·색·폰트·필터·지표·패널|
-|[overview.css](overview.css)|종합 현황 고유의 차트와 패널 격자 배치|
-|[overview.js](overview.js)|실제 완료 시각·수치 집계·필터·차트·표 선택 연결|
+|[index.html](index.html)|Short toolkit, search index, response distribution, several comparison panels, linking tables|
+|[Common style](../common.css)|The header menu, font color, filter, mark, panel, and the overall situation that the two screens share|
+|[overview.css](overview.css)|The complex situation is the unique chart and panel array arrangement|
+|[overview.js](overview.js)|The actual completion of the visual-processing calculation, filter, chart, chart selection connection|
 
-비율에는 해당 분모를 표시합니다. 자동 탐지 후보를 확정 의미 오류로 부르지 않으며, 원문 참조 숫자 일치는 원문 응답만을 분모로 사용합니다. 형식 실패 응답도 전체 관찰에 남깁니다. A100은 저장 시점의 다른 집단이며 Luna 수치와 합산하지 않습니다. 신규 개선 실행의 요청 시도와 성공 응답은 기존 3,000응답과 따로 표시합니다.
+The ratio shows the denominator. The automatic detection candidate is not called a validation meaning error, and the source items reference number is only used as the denominator of the source items response. The form failure response also leaves the entire observation.00The data is not merged with the Luna numbers, but with a different set of storage points. 3,000And then you're going to see the answer.
 
-[화면 열기](http://127.0.0.1:8895/dashboard/01-overview/) · [같은 실행의 실험 뷰어](http://127.0.0.1:8894/?run=20260920-exp-006&tab=analysis) · [구현 상세](../../../docs/02-experiments/README.md)
+[Figure opens](http://127.0.0.1:8895/dashboard/01-overview/) · [Experimental Viewer of such an execution](http://127.0.0.1:8894/?run=20260920-exp-006&tab=analysis) · [Details of the description](../../../docs/02-experiments/README.md)
 
-이 README는 `dashboard-overview.md` 템플릿으로 생성합니다.
+This README is a `dashboard-overview.md` It's a template.

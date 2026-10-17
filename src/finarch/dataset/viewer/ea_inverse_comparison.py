@@ -102,4 +102,7 @@ def render(project, comparison_id=None):
     for marker, filename in (('__STYLE__', 'ea-inverse-comparison.css'),
                              ('__UI__', 'ea-inverse-comparison.js')):
         html = html.replace(marker, (folder/filename).read_text())
+    html = html.replace('__FINARCH_LOCALE_CSS__', (project/'viewer/shared/i18n.css').read_text())
+    locale = (project/'viewer/shared/i18n.js').read_text().replace('</script', '<\\/script')
+    html = html.replace('__FINARCH_LOCALE_JS__', locale)
     return html.replace('__PACKAGE__', inline_json(package)).encode('utf-8')

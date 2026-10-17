@@ -77,43 +77,43 @@ def metric(rows: list[dict]) -> dict:
 
 def render_review(name: str, result: dict, observations: list[dict], linked: dict) -> str:
     count = result['case_count']
-    lines = [f'# exp-001-luna-{name} · 원천 유형별 검토', '',
-             f'원본 {count}문항, 저장 응답 {result["response_count"]}건을 같은 완료 run에서 재집계했습니다. '
-             '별도 실험·새 모델 호출·의미 정답 재판정이 아닙니다.', '',
-             f'원천 ID 접두사 `{result["source_id_prefix"]}`를 사용했습니다. '
-             f'상위 데이터셋 표기는 `{", ".join(result["dataset_labels"])}`입니다. '
-             '이 이름은 FinanceReasoning 선별 집합 안의 원천 계보이며 독립 벤치마크 점수가 아닙니다.', '',
-             '## 문항 구성과 검사', '',
-             f'- 난도: {", ".join(f"{k} {v}" for k, v in result["levels"].items())}',
-             f'- 원본 제작의 외부지식 사용 표기: 사용 {result["original_external_knowledge"]["true"]}건, '
-             f'미사용 {result["original_external_knowledge"]["false"]}건. 이는 제작 과정의 private 기록이며 모델 답변의 지식 사용 여부가 아닙니다.',
-             f'- 응답 형식 상태: {", ".join(f"{k} {v}" for k, v in result["response_status"].items())}. '
-             '형식 유효는 의미 정답을 뜻하지 않습니다.', '',
-             '## SQ1 · 원본 기록 숫자 일치', '',
-             '|풀이 지시|추론 설정|MATCH|MISMATCH|미평가|', '|---|---|---:|---:|---:|']
+    lines = [f'# exp-001-luna-{name} • Reviewing the types of sources', '',
+             f'Original {count}case, save the reply {result["response_count"]}I re-ordered the building from the same completed run. '
+             'It\'s not a star experiment, a new model call, a purposeful answer judgement.', '',
+             f'Source ID prefixed with `{result["source_id_prefix"]}I used `. '
+             f'The top dataset is marked `{", ".join(result["dataset_labels"])}`. '
+             'This is the source code in the FinanceReasoning selection set, not the independent benchmark score.', '',
+             '## Sentencing and testing', '',
+             f'- Difficulty: {", ".join(f"{k} {v}" for k, v in result["levels"].items())}',
+             f'- External knowledge of the original use label: use {result["original_external_knowledge"]["true"]}entries, '
+             f'Unused {result["original_external_knowledge"]["false"]}This is a private record of the production process, not whether or not the model answers are used.',
+             f'- Response format: {", ".join(f"{k} {v}" for k, v in result["response_status"].items())}. '
+             'Form valid does not mean meaningful.', '',
+             'The original record number matches the', '',
+             'The following is the list of the most commonly used methods for calculating the value of a given data set.', '|---|---|---:|---:|---:|']
     for prompt, reasoning in CONDITIONS:
         m = result['conditions']['ORIGINAL'][f'{prompt}/{reasoning}']['original_result']
         lines.append(f'|{"Unguided Solving" if prompt == "unguided" else "Criteria-Guided Solving"}|Reasoning {reasoning.upper()}|{m.get("MATCH", 0)}|{m.get("MISMATCH", 0)}|{m.get("UNEVALUATED", 0)}|')
-    lines += ['', 'MATCH는 저장된 참조 숫자와의 일치입니다. 설명의 타당성·문항 의미 정답의 판정은 아닙니다.', '',
-              '## RQ1 · 변형별 수치 응답과 유보', '',
-              '각 칸의 분모는 해당 유형의 원본 문항 수입니다. `숫자 / null / 형식 미통과` 순서입니다.', '',
-              '|변형|Unguided Solving · Reasoning ON|Criteria-Guided Solving · Reasoning ON|', '|---|---:|---:|']
+    lines += ['', 'MATCH is a match to the reference numbers stored, not a validity of the explanation, a question meaning of the correct answer.', '',
+              '## RQ1 · Transformational response and feedback', '',
+              'The denominator of each can is the number of original cases of the type. `Numbers / null / formatting and` in this order.', '',
+              'Reasoning on solving the problemCriteria-Guided Solving', '|---|---:|---:|']
     for variant in VARIANTS[1:]:
         cells = []
         for prompt in ('unguided', 'guided'):
             m = result['conditions'][variant][f'{prompt}/on']
             cells.append(f'{m["numeric_answer"]} / {m["null_answer"]} / {count-m["valid"]}')
         lines.append(f'|{variant}|{cells[0]}|{cells[1]}|')
-    lines += ['', '## RQ2 · 지시와 추론 설정', '',
-              '위 표는 동일 문항·변형의 풀이 지시 차이를 보여 줍니다. 아래 표는 원본의 OFF/ON도 포함합니다. '
-              '네 설정은 독립 반복이 아니므로 설정 변경의 인과효과로 읽지 않습니다.', '',
-              '|설정|원본 수치 응답|원본 null|원본 형식 미통과|', '|---|---:|---:|---:|']
+    lines += ['', '## RQ2', '',
+              'The table above shows the difference in the direction of the root of the same case-variable, and the table below includes the OFF/ON of the original. '
+              'The four settings are not independent iterations, so they don\'t read as the impact of the setup change.', '',
+              'The number of responses to the number of responsed responses to null and void responses', '|---|---:|---:|---:|']
     for prompt, reasoning in CONDITIONS:
         m = result['conditions']['ORIGINAL'][f'{prompt}/{reasoning}']
         lines.append(f'|{condition_name(prompt, reasoning)}|{m["numeric_answer"]}|{m["null_answer"]}|{count-m["valid"]}|')
-    lines += ['', '### 모든 변형·설정의 응답 상태', '',
-              '각 칸은 `숫자 / null / 형식 미통과`이며 분모는 매번 이 유형의 원본 문항 수입니다.', '',
-              '|변형|Unguided · OFF|Unguided · ON|Criteria-Guided · OFF|Criteria-Guided · ON|',
+    lines += ['', '### all variations and configurations are in response status', '',
+              'Each can is `Numbers / null / formatting and`And the denominator is the number of original cases of this type every time.', '',
+              'The following is a list of the most commonly used methods of measuring the quality of a product:',
               '|---|---:|---:|---:|---:|']
     for variant in VARIANTS:
         cells = []
@@ -121,16 +121,16 @@ def render_review(name: str, result: dict, observations: list[dict], linked: dic
             m = result['conditions'][variant][f'{prompt}/{reasoning}']
             cells.append(f'{m["numeric_answer"]} / {m["null_answer"]} / {count-m["valid"]}')
         lines.append('|'+ '|'.join([variant, *cells]) + '|')
-    lines += ['', '## 문항별 관찰과 전체 A03의 연결', '',
-              f'A02 저장 관찰 {len(observations)}개가 이 유형의 문항에 속합니다. 분류별 수는 '
-              + ', '.join(f'{k} {v}' for k, v in result['a02_categories'].items()) + '입니다.',
-              '기존 A03 주제의 연결 관찰 ID가 이 유형에 속하는 횟수는 다음과 같습니다. '
-              '한 관찰이 여러 주제에 연결될 수 있고, 그룹의 전체 주장 자체를 이 유형에 대해 다시 검증한 수는 아닙니다.', '',
-              '|RQ/SQ|전체 A03 주제|이 유형에 속한 연결 관찰 ID|', '|---|---|---:|']
+    lines += ['', '## The case-by-case observation and the whole A03The connection', '',
+              f'A02 Storage observation {len(observations)}items belong to this type of case. '
+              + ', '.join(f'{k} {v}' for k, v in result['a02_categories'].items()) + '.',
+              'The existing A03 The number of times a subject\'s connection observation ID belongs to this type is as follows: '
+              'One observation can be linked to multiple topics, and it\'s not possible to reconfirm the entire group\'s claim itself about this type.', '',
+              'RQ/SQ is a 0.3 Subject ID of this type belongs to the link observation ID of the', '|---|---|---:|']
     for group, info in linked.items():
         lines.append(f'|{info["question_id"]}|{group} · {info["title_ko"]}|{info["observation_count"]}|')
-    lines += ['', '### A02 관찰 원문 예시', '',
-              '각 분류에서 저장 순서의 첫 2개를 찾기 위한 예시로 제시합니다. 대표 표본이나 해당 유형의 전체 결론이 아닙니다.', '']
+    lines += ['', '### A02 The first example of observation', '',
+              'The first in the order of storage in each category 2It\'s an example of finding a items, not a representative sample or a complete conclusion of a particular type.', '']
     categories = sorted({item['category'] for item in observations})
     for category in categories:
         lines += [f'#### {category}', '']
@@ -138,19 +138,19 @@ def render_review(name: str, result: dict, observations: list[dict], linked: dic
             ko = item.get('display') or item.get('display_ko') or {}
             lines += [f'- **{item["id"]} · {ko.get("title", item["title"])}**: '
                       f'{ko.get("observation", item["observation"])} '
-                      f'한계: {ko.get("limitation", item["limitation"])}']
+                      f'Limitation: {ko.get("limitation", item["limitation"])}']
         lines.append('')
-    lines += ['', '## 해석 범위', '',
-              '- 유형별 문항 수·난도·제작 당시 외부지식 사용 표기가 서로 달라 유형 간 비율 차이는 인과 비교가 아닙니다.',
-              '- 원본과 각 변형은 같은 원본 문항에서 출발했습니다. 응답 32개를 독립 문항 32개처럼 세지 않습니다.',
-              '- 숫자 반환, null, 분류 표기, 인용된 설명은 별개의 관찰입니다. 후보 숫자 일치를 충돌 인식·근거 선택의 정답률로 바꾸지 않습니다.',
-              '- SQ2·SQ4·SQ5·SQ6에 관한 직접 결론은 이번 유형별 재집계에서 새로 만들지 않았습니다.', '',
-              '## 근거 읽기', '',
-              '1. [README](README.md)에서 파일과 범위를 확인합니다.',
-              '2. [summary.json](summary.json)의 모든 변형·네 설정별 분모와 형식 상태를 확인합니다.',
-              '3. [cases.jsonl](cases.jsonl)에서 원천 ID·난도·문항별 A02 관찰 ID를 확인하고, '
-              '[A02 원문](../../02_comparison/interpretations.jsonl)과 실험 뷰어의 같은 문항 응답으로 돌아갑니다.',
-              '4. [전체 A03 주제 색인](../../03_research/rq-review.md)의 주장·반례·한계는 별도로 읽습니다.', '']
+    lines += ['', '♪ The range of interpretation ♪', '',
+              '- Type-by-type case number: Nanndo: The target of external knowledge usage at the time of manufacture varies from one type to another, and the difference in the ratio between types is not a comparison to the other.',
+              '- The original and each variation started from the same original case. 32items independent cases 32They don\'t count like items.',
+              '- Number return, null, classification tag, cited description are separate observations. They don\'t change the number of candidates to the correct rate of conflict recognition and near selection.',
+              '- The direct conclusions about SQ2, SQ4, SQ5, and SQ6 are not new to this type-re-assortment.', '',
+              '## Read the evidence', '',
+              '1. [README](README.md)Check the file and range.',
+              '2. [summary.json](summary.json)Check the status of all variations and formats of the four settings.',
+              '3. [cases.jsonl](cases.jsonl)From the source ID to the Nando problem A02 Check the ID of the observer, '
+              '[A02 Source text](../../02_comparison/interpretations.jsonl)And we\'re going back to the same case response as the experimental viewer.',
+              '4[A0 as a whole.]3 The color of the subject.](../../03_research/rq-review.md)The argument and the contradiction are read separately.', '']
     return '\n'.join(lines)
 
 
@@ -245,11 +245,11 @@ def build(run: str) -> dict:
     if sum(item['case_count'] for item in index['types']) != 1080 or sum(item['response_count'] for item in index['types']) != 34560 or sum(item['observation_count'] for item in index['types']) != len(observations):
         raise ValueError('Source partitions do not cover all cases, responses, and observations.')
     save(out / 'source-type-index.json', index)
-    overview = ['# exp-001-luna · 원천 유형 간 관찰 대조', '',
-                '아래는 완료된 동일 run을 원천 계보로 나눈 기술 통계입니다. 유형 간 사례 구성·난도·원본 제작의 외부지식 사용 표기가 다릅니다. '
-                '따라서 비율 차이는 모델 성능 우열이나 유형의 인과효과가 아닙니다.', '',
-                '## 원본 문항과 숫자 일치', '',
-                '|원천 유형|원본 문항|Criteria-Guided Solving · Reasoning ON 원본 MATCH|Unguided Solving · Reasoning ON 원본 MATCH|형식 미통과 응답|',
+    overview = ['# exp-001-luna · Contrast between the observed types of source', '',
+                'Below is a technical statistic dividing the completed same run into source statistics. The out-of-the-box usage of type-inter-case configuration, data and source-production is different. '
+                'So the ratio difference isn\'t a model performance overhead or a type of interaction.', '',
+                '## The original case matches the number', '',
+                'Criteria-Guided Solving · Reasoning ON original MATCH • Unguided Solving • Reasoning On original MATCH · The formatting of the response',
                 '|---|---:|---:|---:|---:|']
     for name in KINDS:
         item = summaries[name]
@@ -258,19 +258,19 @@ def build(run: str) -> dict:
         overview.append(f'|[{name}](exp-001-luna-{name}/review.md)|{item["case_count"]}|'
                         f'{ratio(original["guided/on"]["original_result"].get("MATCH", 0), item["case_count"])}|'
                         f'{ratio(original["unguided/on"]["original_result"].get("MATCH", 0), item["case_count"])}|{bad}|')
-    overview += ['', '## 변형별 Criteria-Guided Solving · Reasoning ON 숫자 반환', '',
-                 '분모는 각 유형의 원본 문항 수입니다. 숫자 반환은 후보 숫자 일치나 의미상 정답과 다릅니다.', '',
-                 '|원천 유형|BEFORE|AFTER|SOURCE_A|SOURCE_B|RELATION|EA_01|EA_02|',
+    overview += ['', '## Differential Criteria-Guided Solving · Reasoning ON returns the number', '',
+                 'The denominator is the number of original cases for each type. The number returns is different from the corresponding or meaningful correct answer for the candidate number.', '',
+                 'The source type is the one before the source is the one after the source is.1|EA_02|',
                  '|---|---:|---:|---:|---:|---:|---:|---:|']
     for name in KINDS:
         item = summaries[name]
         cells = [ratio(item['conditions'][variant]['guided/on']['numeric_answer'], item['case_count']) for variant in VARIANTS[1:]]
         overview.append('|'+ '|'.join([name, *cells]) + '|')
-    overview += ['', '## 읽을 때 주의할 점', '',
-                 '- FinanceReasoning native 계보와 FinQA·TAT-QA embedded 계보는 원천 형식과 문항 구성이 다릅니다.',
-                 '- EA는 원본에서 서로 독립적으로 사실 하나씩 삭제한 변형입니다. 남은 정보로 계산 가능한지 개별 문항을 확인해야 합니다.',
-                 '- Guided 조건의 null 증가는 모델의 표시 행동입니다. 충돌 식별 정답률이나 지식 사용 여부가 아닙니다.',
-                 '- 유형별 A02 사례와 한계는 각 보고서에서, 전체 A03 주제와 RQ/SQ 연결은 기존 연구 해석에서 읽습니다.', '']
+    overview += ['', '## Be careful when reading', '',
+                 '- FinanceReasoning native statements and FinQA-TAT-QA embedded statements differ in source format and case structure.',
+                 '- EA is a variation that you deleted independently from the original, one by one, and you have to check the individual cases to see if they can be calculated with the rest of the information.',
+                 '- The null increment of guided conditions is the model\'s display behavior, not whether the collision identification response rate or knowledge usage.',
+                 '- Type A0 for each.2 The case and limitations in each report, the total A03 The connection between the subject and RQ/SQ is read from the existing interpretation of research.', '']
     (out / 'overview.md').write_text('\n'.join(overview))
     template = PROJECT / 'src/finarch/experiments/templates/source-type-index-readme.md'
     (out / 'README.md').write_text(template.read_text().format(run=run))

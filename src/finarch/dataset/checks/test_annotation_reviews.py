@@ -135,7 +135,7 @@ class ManagerReviewChecks(unittest.TestCase):
         self.assertEqual([item['filename'] for item in files], ['annotator1_Reviewer A.html', 'annotator2_Reviewer B.html'])
         for item in files:
             self.assertEqual(html_data(item['html'])['requests'][0]['note'], '')
-            self.assertIn('주석 없음', item['html'])
+            self.assertIn('\uc8fc\uc11d \uc5c6\uc74c', item['html'])
         self.assertEqual(result['groups'][0]['metrics'], self.metrics)
         for name, raw in self.originals.items():
             self.assertEqual((self.root / '20261001' / name).read_bytes(), raw)

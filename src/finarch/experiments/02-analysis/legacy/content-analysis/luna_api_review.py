@@ -117,11 +117,11 @@ def build(root):
     write(folder / 'test-0006.json', pairs.get(('test-0006', 'ORIGINAL', 'P0')))
     write(folder / 'identical-original-example.json', next((p for p in pairs.values()
           if p['off']['experiment'] == 1 and p['off']['response'] == p['on']['response']), None))
-    baseline_table = '\n'.join(table(['추론', '계획', '형식 통과', '숫자 일치', '숫자 불일치', '형식 실패', '형식 통과 유보'], baseline))
-    usage_table = '\n'.join(table(['추론', '요청', '입력 토큰', '출력 토큰', '그중 reasoning', '비용 추정 USD'],
+    baseline_table = '\n'.join(table(['Inference', 'The plan.', 'Format valid', 'Numeric match', 'Numeric mismatch', 'Format failed', 'Form-pass the u-bo.'], baseline))
+    usage_table = '\n'.join(table(['Inference', 'Request', 'Input tokens', 'Output tokens', 'And that\'s the reasoning.', 'Estimated cost USD'],
         [[mode, u['requests'], u['input_tokens'], u['output_tokens'], u['reasoning_tokens'], f"{u['cost_usd']:.6f}"]
          for mode, u in sorted(condition_usage.items())]))
-    pair_table = '\n'.join(table(['실험', 'off/on 비교 쌍', 'JSON 전체 동일', 'explanation 동일'],
+    pair_table = '\n'.join(table(['Experiment', 'Off/on comparison pair', 'JSON is the same as the whole', 'The explanation is the same.'],
         [[p['experiment'], p['pairs'], p['identical_response_json'], p['identical_explanation']] for p in pair_stats]))
     values = {'run_id': root.name, 'checked_at': verification['checked_at'], 'status': verification['status'],
               'requests': len(requests), 'attempts': model_summary['attempts'], 'valid': model_summary['statuses'].get('VALID', 0),

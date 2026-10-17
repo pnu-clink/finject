@@ -1,10 +1,10 @@
 # 03-validation
 
-[문서의 단계·요구·실행 흐름](../../../../../docs/01-dataset/02-generation/03-validation/README.md) · [전체 소스 구조](../../../../../docs/01-dataset/90-operations/05-source-layout.md)
+[Step of the letter: yoga; action flow](../../../../../docs/01-dataset/02-generation/03-validation/README.md) · [A whole source structure](../../../../../docs/01-dataset/90-operations/05-source-layout.md)
 
-이 폴더는 위 문서 단계의 실행 코드를 소유합니다. 결과의 물리 경로는 기존 run 계약을 따릅니다.
+This folder owns the execution code for the documented stage. Output paths follow the existing run contract.
 
-|파일|역할|
+|File|Role|
 |---|---|
 |[ea_inverse_review.py](ea_inverse_review.py)|Q/C-only recovery annotation using the dedicated ea_inverse_review profile (gpt-6.1-sol/high API); pin the resolved profile, validate response/display, save immutable attempt and path/hash reference; never changes EA quality status.|
 |[dtt_answer.py](dtt_answer.py)|R18: independent individual answers to saved, audited final observations.|

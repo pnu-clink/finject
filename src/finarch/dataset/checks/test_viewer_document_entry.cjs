@@ -53,18 +53,18 @@ test('switching to a dataset clears the document route and restores ordinary sel
 });
 test('missing document runs display an error without loading another dataset',async()=>{
   const f=await fixture({payload:null});assert.equal(f.context.DATA.batch,undefined);
-  assert.match(f.get('notice').textContent,/문서 링크를 열지 못했습니다/);
+  assert.match(f.get('notice').textContent,/\ubb38\uc11c \ub9c1\ud06c\ub97c \uc5f4\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4/);
   assert(!f.requests.some(url=>url.includes('name=latest-dataset')));
 });
 test('unlisted or empty document paths cannot silently display the entry document',async()=>{
   for(const path of ['docs/missing.md','']){
     const f=await fixture({query:'?run='+docRun+'&doc='+encodeURIComponent(path)});
-    assert.equal(f.context.DATA.batch,undefined);assert.match(f.get('notice').textContent,/문서 목록에 없습니다/);
+    assert.equal(f.context.DATA.batch,undefined);assert.match(f.get('notice').textContent,/\ubb38\uc11c \ubaa9\ub85d\uc5d0 \uc5c6\uc2b5\ub2c8\ub2e4/);
   }
 });
 test('a document parameter pointing at a dataset cannot display dataset results',async()=>{
   const f=await fixture({payload:datasetPayload(docRun)});assert.equal(f.context.DATA.batch,undefined);
-  assert.match(f.get('notice').textContent,/파이프라인 문서 기록이 없습니다/);
+  assert.match(f.get('notice').textContent,/\ud30c\uc774\ud504\ub77c\uc778 \ubb38\uc11c \uae30\ub85d\uc774 \uc5c6\uc2b5\ub2c8\ub2e4/);
 });
 test('a late document response cannot replace a dataset selected by the user',async()=>{
   const f=await fixture({hold:true});f.get('batch-select').value='latest-dataset';f.get('batch-select').onchange();

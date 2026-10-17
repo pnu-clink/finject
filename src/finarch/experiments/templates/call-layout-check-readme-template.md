@@ -1,18 +1,18 @@
-# 실험 호출 폴더 정리 검사
+# Experiment call the folder clean up check
 
-상태: **{status}** · 확인 시각: {verified_at}
+State of play: **{status}** · Check-in time: {verified_at}
 
-## 읽는 순서
+## Reading order
 
-1. [실제 JSON 예시](../../experiments-run/20260920-exp-003/gemini-2.5-flash/calls/test-0006/00-Original/test-0006-P0-R-off.json): 원본 문제의 요청과 응답.
-2. [변형 JSON 예시](../../experiments-run/20260920-exp-003/gemini-2.5-flash/calls/test-0006/01-IC-value-before/test-0006-P1-R-on.json): 유보 유도·추론 on 조건.
-3. [구조와 읽는 법](../../../../docs/02-experiments/README.md): 전체 유형·필드·코드 책임·실제 순서도.
-4. [검증 결과](verification.json): 문항별 파일 수, 현재 결과·원응답 연결, 집계와 비용 불변.
-5. [로컬 검사 로그](tests.log): {tests_passed}개 검사 통과. 실제 모델 호출 없음.
-6. `exp001-migration.log`, `exp002-migration.log`, `exp003-migration.log`, `root-migration.log`: 프로그램의 실제 정리 로그.
+1. [Real example of JSON](../../experiments-run/20260920-exp-003/gemini-2.5-flash/calls/test-0006/00-Original/test-0006-P0-R-off.json): Request and response to the original problem.
+2. [Example of the JSON variable](../../experiments-run/20260920-exp-003/gemini-2.5-flash/calls/test-0006/01-IC-value-before/test-0006-P1-R-on.json): Ubo induction; comment on condition.
+3. [How to Make and Read](../../../../docs/02-experiments/README.md): Full type, field code responsibility, and actual order.
+4. [Exam results](verification.json): number of files per case, current results; raw response connection, estimate and cost variable.
+5. [local check log](tests.log): {tests_passed}Passing items inspection. No real model calls.
+6. `exp001-migration.log`, `exp002-migration.log`, `exp003-migration.log`, `root-migration.log`: The actual order log of the program.
 
-exp-003은 모델당 원문 100개 × 원본 2조건·변형 28조건 = 3,000개, 두 모델 총 6,000개 JSON입니다. exp-001은 이전 선정 기준의 시도 이력이고, exp-002는 미호출로 대체된 실행이므로 호출 JSON이 없습니다.
+exp-003The originals for each model 100× original 2Conditions and variations 28The condition is equal to 3,000items, two model guns. 6,000It's a JSON items.001It's the previous selection criteria's attempt to lead, and exp-002So there's no call JSON.
 
-EA 번호 정정은 각 실행의 `label-migration`에 변경 전 원본·이전 manifest를 보존했습니다. 폴더 이동은 그 이후 원기록 해시와 집계값을 대조했습니다. 원응답·사용량·추정 비용은 그대로이며 새로운 모델 호출은 0건입니다.
+EA number adjustment of each run `label-migration`The original and previous manifests were preserved before the changes were made to the original. The folder moves have since contrasted the original log chart with the computed value. 0entries.
 
-이 README는 `src/finarch/experiments/templates/call-layout-check-readme-template.md`에서 생성했습니다. 새 화면이나 HTML을 생성하지 않았습니다.
+This README is a `src/finarch/experiments/templates/call-layout-check-readme-template.md`I didn't create a new screen or HTML.

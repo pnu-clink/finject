@@ -472,14 +472,14 @@ def render_readme(root):
     states = []
     for p in sorted((root / ROOT).rglob('state.json')):
         state = store.read(p)
-        states.append(f"|{p.parent.relative_to(root / ROOT)}|{state['status']}|{state.get('requests', 0)}|{state.get('token_cost_estimate_usd', '대기')}|")
+        states.append(f"|{p.parent.relative_to(root / ROOT)}|{state['status']}|{state.get('requests', 0)}|{state.get('token_cost_estimate_usd', 'Waiting')}|")
     if run_layout.ordered(root):
         template = store.PROJECT / 'src/finarch/experiments/templates/ordered-analysis-readme.md'
     config = run_layout.analysis_config(root)
-    backend = config.get('backend', '미설정')
+    backend = config.get('backend', 'Unknown.')
     selected = config.get('backends', {}).get(backend, {})
     text = template.read_text().replace('{{run}}', root.name).replace('{{states}}', '\n'.join(states))
-    text = text.replace('{{backend}}', backend).replace('{{model}}', selected.get('model', '미설정')).replace('{{effort}}', selected.get('reasoning_effort', '미설정'))
+    text = text.replace('{{backend}}', backend).replace('{{model}}', selected.get('model', 'Unknown.')).replace('{{effort}}', selected.get('reasoning_effort', 'Unknown.'))
     store.write_text(root / ROOT / 'README.md', text)
 
 

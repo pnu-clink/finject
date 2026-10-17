@@ -20,18 +20,18 @@ PRIMARY = ('integrity', 'numeric_comparison', 'result_collection', 'source_verif
            'comparison_recovery', 'comparison_collection', 'research_request_preparation', 'research_models',
            'research_recovery', 'research_collection', 'publication', 'finding_grouping')
 LABELS = {
-    'pipeline_total': '전체 실행', 'evaluation_collection': '기존 Evaluation 수집',
-    'analysis_total': 'Analysis 실행', 'integrity': '입력 무결성 확인',
-    'numeric_comparison': '저장 응답의 숫자 비교', 'result_collection': 'A01 결과 취합',
-    'source_verification': '재개 시 원자료 확인', 'relationship_aggregation': 'A02 관계 집계',
-    'comparison_request_preparation': 'A02 분석 요청 구성', 'comparison_models': 'A02 모델 해석',
-    'comparison_recovery': 'A02 실패 확인·대기·재시도',
-    'comparison_collection': 'A02 해석 검사·취합', 'research_request_preparation': 'A03 연구 요청 구성',
-    'research_models': 'A03 모델 해석', 'research_collection': 'A03 해석 검사·취합',
-    'research_recovery': 'A03 실패 확인·대기·재시도',
-    'publication': 'A03 최종 보고 생성', 'model_call': '개별 모델 호출',
-    'finding_grouping': 'A04 D01 연구 발견 주제·조건 정리',
-    'state_persistence': '분석 상태·결과 저장', 'codex_auth': 'Codex 인증 확인',
+    'pipeline_total': 'Full run', 'evaluation_collection': 'Collect existing Evaluation',
+    'analysis_total': 'Run Analysis', 'integrity': 'Verify input integrity',
+    'numeric_comparison': 'Numeric comparison of saved responses', 'result_collection': 'A01 collect results',
+    'source_verification': 'Verify source data on resume', 'relationship_aggregation': 'A02 aggregate relationships',
+    'comparison_request_preparation': 'A02 prepare analysis requests', 'comparison_models': 'A02 model interpretation',
+    'comparison_recovery': 'A02 inspect failures, wait, and retry',
+    'comparison_collection': 'A02 validate and collect interpretations', 'research_request_preparation': 'A03 prepare research requests',
+    'research_models': 'A03 model interpretation', 'research_collection': 'A03 validate and collect interpretations',
+    'research_recovery': 'A03 inspect failures, wait, and retry',
+    'publication': 'A03 generate final report', 'model_call': 'Individual model call',
+    'finding_grouping': 'A04 D01 organize finding topics and conditions',
+    'state_persistence': 'Save analysis state and results', 'codex_auth': 'Verify Codex authentication',
 }
 
 
@@ -169,11 +169,11 @@ def refresh(root, *, force=False):
         value = summarize(events)
         store.write(folder / 'timing.json', value)
         table = '\n'.join(f"|{r['label']} {r['stage'] or ''}|{r['occupied_wall_seconds']:.2f}|{r['completed']}|{r['running']}|{r['p50_seconds']:.2f}|" if r['p50_seconds'] is not None else
-                          f"|{r['label']} {r['stage'] or ''}|{r['occupied_wall_seconds']:.2f}|{r['completed']}|{r['running']}|미완료|"
+                          f"|{r['label']} {r['stage'] or ''}|{r['occupied_wall_seconds']:.2f}|{r['completed']}|{r['running']}| Incomplete |"
                           for r in value['steps'])
         bottleneck = value['bottleneck']
-        description = (f"{bottleneck['label']} · 측정된 Analysis 단계 시간의 {bottleneck['share_of_measured_analysis_steps']:.1%}"
-                       if bottleneck else 'Analysis 단계 측정 전')
+        description = (f"{bottleneck['label']} · The measured analysis phase time {bottleneck['share_of_measured_analysis_steps']:.1%}"
+                       if bottleneck else 'Analysis steps before measuring')
         template = (store.PROJECT / 'src/finarch/experiments/templates/analysis-timing.md').read_text()
         store.write_text(folder / 'timing.md', template.format(run=root.name, updated_at=value['updated_at'],
             status=value['status'], bottleneck=description, table=table))

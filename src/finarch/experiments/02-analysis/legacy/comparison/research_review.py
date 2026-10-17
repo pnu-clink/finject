@@ -97,7 +97,7 @@ def render(root, notes_ko=None):
         raise ValueError('VALID_RESEARCH_REVIEW_REQUIRED')
     evidence = result['response']
     if notes_ko is None:
-        notes = '아래는 분석 모델의 영어 원판정이며 한국어 검토 설명은 작성 대기입니다.\n\n' + evidence['overall_assessment']
+        notes = 'Below is the English preface to the analysis model and the Korean review description is pending.\n\n' + evidence['overall_assessment']
         for finding in evidence['findings']:
             notes += '\n\n- **' + finding['title'] + '**: ' + finding['observation'] + '\n  - Alternative: ' + finding['alternative_explanation'] + '\n  - Limitation: ' + finding['limitation']
     else:
@@ -107,14 +107,14 @@ def render(root, notes_ko=None):
     evaluation = store.read(layout.validation(root) / 'summary.json')
     model = review.model_for(root)
     conditions = [(prompt, reasoning) for prompt in layout.PROMPT_FILES for reasoning in ('off', 'on')]
-    matrix = '|모델|유형|Unguided OFF|Unguided ON|Criteria-Guided OFF|Criteria-Guided ON|\n|---|---|---:|---:|---:|---:|'
+    matrix = 'The model is the model of the model, the model is the one that is the model, and the model is a model of the Model, the model, which is the model.\n|---|---|---:|---:|---:|---:|'
     variants = review.pipeline.dataset.LABELS
-    for solver in sorted({r.get('model') or '기존 모델 합산' for r in summary['matrix']}):
+    for solver in sorted({r.get('model') or 'Aggregated across existing models' for r in summary['matrix']}):
         for variant in ['ORIGINAL', *variants]:
             cells = []
             for prompt, reasoning in conditions:
-                cell = next((r for r in summary['matrix'] if (r.get('model') or '기존 모델 합산', r['variant'], layout.prompt_condition(r['prompt']), r['reasoning']) == (solver, variant, prompt, reasoning)), None)
-                cells.append(f"{cell['appropriate']}/{cell['assessed']} ({cell['unassessed']})" if cell else '미기록')
+                cell = next((r for r in summary['matrix'] if (r.get('model') or '\uae30\uc874 \ubaa8\ub378 \ud569\uc0b0', r['variant'], layout.prompt_condition(r['prompt']), r['reasoning']) == (solver, variant, prompt, reasoning)), None)
+                cells.append(f"{cell['appropriate']}/{cell['assessed']} ({cell['unassessed']})" if cell else 'Not recorded')
             matrix += '\n|' + solver + '|' + variant + '|' + '|'.join(cells) + '|'
     config = store.configuration(root)
     limits = {r['max_output_tokens'] for m in config['models'] for r in store.rows(layout.requests(root, m['key']))}
@@ -123,8 +123,8 @@ def render(root, notes_ko=None):
                   numeric_compared=overall['numeric_compared'], assessed=overall['assessed'], unassessed=overall['unassessed'],
                   analysis_model=model['model'], effort=model['reasoning_effort'], backend=model['backend'],
                   solver_models=', '.join(m['model'] + ' · ' + m['transport'] for m in config['models']),
-                  analysis_billing='Codex 분석의 추가 API 과금은 0입니다. 구독 사용량은 별도입니다.' if model['backend'] == 'codex' else
-                      'API 분석 비용·누락 사용량은 각 분석 단계 state.json의 비용 추정과 원응답에서 확인합니다.',
+                  analysis_billing='The additional API for Codex analysis is 0So subscriber usage is a star.' if model['backend'] == 'codex' else
+                      'API analysis cost-benefit analysis is determined in the cost estimate and raw response of each analysis step state.json.',
                   matrix=matrix, notes=notes, run_output_limit=', '.join(map(str, sorted(limits))),
                   cost=sum(m.get('paid_batch_usage_cost_estimate_usd', 0) for m in evaluation['models']))
     template = store.PROJECT / 'src/finarch/experiments/templates/research-findings-template.md'

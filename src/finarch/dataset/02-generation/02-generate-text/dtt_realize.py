@@ -169,21 +169,7 @@ def check_response(request, response):
     return {'context': context, 'question': request['question']}, enriched
 
 
-README_TEMPLATE = """# 16번 실제 문장 생성 — {label}
-
-상태: {status}. 의미 판정·독립 풀이(17·18번)는 미실행, 역산은 보류입니다.
-
-읽는 순서:
-1. `01-input.json`: 전달할 원문·편집 범위·Python/DAG 연결.
-2. {call_note}
-3. `03-result/validation.json`: 위치·원문·겹침·그래프 ID·보존 및 숫자 검사.
-4. `03-result/patches.json` → `04-final-observation.json`: 실제 적용 내역 → 본문·질문만.
-5. `03-result.json`, `03-result/metadata.json`: 뷰어 비교 및 앞/뒤 위치·출처 조건·호출 연결.
-
-뷰어: http://127.0.0.1:8893/?run={run}&case={case}&tab=dtt
-해당 유형의 5번 문장과 답변에서 실제 본문과 하단 LLM 디버그를 확인합니다.
-`events.jsonl`과 `usage.jsonl`은 문항 루트의 공통 로그입니다.
-"""
+README_TEMPLATE = "# R16 actual text realization — {label}\n\nStatus: {status}. Semantic assessment and independent answers (R17/R18) have not run; inverse recovery remains pending.\n\nReading order:\n1. `01-input.json`: source text, edit scope, and Python/DAG links.\n2. {call_note}\n3. `03-result/validation.json`: positions, source spans, overlap, graph IDs, preservation, and numeric checks.\n4. `03-result/patches.json` → `04-final-observation.json`: actual applied edits → context and question only.\n5. `03-result.json`, `03-result/metadata.json`: viewer comparison, before/after placement, attribution conditions, and call references.\n\nViewer: http://127.0.0.1:8893/?run={run}&case={case}&tab=dtt\nSelect this type's section 5 (Text and answers) to inspect the actual context and the LLM debug panel below it.\n`events.jsonl` and `usage.jsonl` are shared logs at the case root.\n"
 
 
 def finish(ctx, variant, request, response, call_ref, pair_preview=None, stage=None):
@@ -220,7 +206,7 @@ def finish(ctx, variant, request, response, call_ref, pair_preview=None, stage=N
         ctx.save(stage+'/04-final-observation.json', final)
         ctx.save_text(stage+'/context.txt', final['context'])
         ctx.save_text(stage+'/README.md', README_TEMPLATE.format(label=label, status='PASS', run=(ctx.root.parent.parent.name+'&round='+ctx.root.parent.name if ctx.root.parent.name.endswith('-round') else ctx.root.parent.name),
-            case=ctx.root.name, call_note=f'실제 호출 기록: `{call_ref}/` (입력·프롬프트·스키마·원응답·토큰).'))
+            case=ctx.root.name, call_note=f'Actual call record: `{call_ref}/` (input; prompt; schema; raw response; tokens)'))
         ctx.trace.update(status='PASS', reason='Stage16 structural editing passed; semantic audit not run.')
         return preview
 
@@ -324,7 +310,7 @@ def run(case_dir, config_path, revision=None, selected_labels=None):
         except (StepStopped, ValueError, KeyError, TypeError) as error:
             reason=error.result.reason if isinstance(error,StepStopped) else str(error)
             ctx.save(stage+'/03-result/failure.json',{'status':'FAIL','reason':reason,'automatic_retry':False})
-            ctx.save_text(stage+'/README.md',f'# 16번 {label}\n\n실패: {reason}\n원요청·수신 원응답·검사 기록을 보존했습니다. 최종 본문은 다음 단계로 넘기지 않습니다.\n')
+            ctx.save_text(stage+'/README.md',f'# 16 {label}\n\nFailure: {reason}\nThe final text does not go beyond the next step.\n')
             results.append({'label':label,'status':'FAIL','reason':reason})
         print(json.dumps(results[-1],ensure_ascii=False),flush=True)
     preserved=all(digest(case/p)==h for p,h in original_hashes.items())
@@ -337,9 +323,9 @@ def run(case_dir, config_path, revision=None, selected_labels=None):
                       for v in variants if resolve_read(case/stage_for(v['label'])/'realize/03-result/usage.json').exists()],
              'prerequisite_audit':prerequisite_audit,'stage17':'PARTIAL' if prerequisite_audit else 'NOT_RUN','stage18':'NOT_RUN','inverse':'DEFERRED_BY_USER'}
     ctx.save(family+'/review.json',summary)
-    ctx.save_text(family+'/README.md','# 16번 실행 결과\n\n`plan.json` → 각 유형 `README.md` → `review.json` 순서로 읽습니다.\n'
-                  '공통 로그는 문항 루트 `events.jsonl`, 토큰은 각 `realize/03-result/usage.json`입니다.\n'
-                  f'뷰어에서 {case.name} → 유형 → 5번 문장과 답변을 선택합니다. 17·18번과 역산은 실행하지 않았습니다.\n')
+    ctx.save_text(family+'/README.md','# 16The result of the run\n\n`plan.json` → Each type `README.md` → `review.json` in this order.\n'
+                  'Common logs are rooted in the case `events.jsonl`So, the token is each of the `realize/03-result/usage.json`.\n'
+                  f'In the viewer, {case.name} → Type of 5You pick the sentence and answer. 17·18The bar and the reverse didn\x27t run.\n')
     return summary
 
 

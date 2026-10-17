@@ -63,13 +63,13 @@ def build():
     matrix = ['|' + variant + '|' + '|'.join(f'{counts[variant,p,r,False]} / {counts[variant,p,r,True]}' for p, r in CONDITIONS) + '|' for variant in VARIANTS]
     def observed(row):
         answer = row['response']['answer']
-        mark = '숫자 답 없음' if answer is None else '일치' if row['checks'].get('numeric_comparison', {}).get('matches') is True else '불일치'
+        mark = 'No numeric answer' if answer is None else 'Match' if row['checks'].get('numeric_comparison', {}).get('matches') is True else 'Mismatch'
         return f'{answer if answer is not None else "null"} · {mark}'
     index = []
     for case in cases:
         off, on = [lookup[case, 'ORIGINAL', 'P0', r] for r in ('off', 'on')]
         reference = private[off['item_id']]['reference']['reference_answer']
-        variants = ' · '.join(link(f'{"일반" if p == "P0" else "기준"}/{r.upper()}', lookup[case, VARIANTS[0], p, r]['call_path']) for p, r in CONDITIONS)
+        variants = ' · '.join(link(f'{"General" if p == "P0" else "The standard."}/{r.upper()}', lookup[case, VARIANTS[0], p, r]['call_path']) for p, r in CONDITIONS)
         index.append(f'|{case}|{reference}|{link(observed(off),off["call_path"])}|{link(observed(on),on["call_path"])}|{variants}|')
     case = cases[0]
     def sample(variant, conditions):
@@ -81,7 +81,7 @@ def build():
             raw = call['records']['raw_response_path']
             assert (RUN / raw).is_file()
             title = f'{"Unguided" if prompt == "P0" else "Criteria-Guided"} Solving · Reasoning {reasoning.upper()}'
-            parts += [f'**{title}** · {link("실제 요청·응답", row["call_path"])} · {link("제공자 원응답", raw)}',
+            parts += [f'**{title}** · {link("The real request and response", row["call_path"])} · {link("Provider raw response", raw)}',
                       '', '```json', json.dumps(row['response'], ensure_ascii=False, indent=2), '```', '']
         return '\n'.join(parts)
     first = lookup[case, 'ORIGINAL', 'P0', 'off']

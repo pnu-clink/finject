@@ -1,35 +1,35 @@
-# QI03 SOURCE/VALUE 별도 짝 보고 — {run_id}
+# QI03 Sources/Values are not even close. {run_id}
 
-실제 frozen SOURCE176건을 전부 분모에 남깁니다. SOURCE1은 같은 case VALUE-before, SOURCE2는 VALUE-after만 비교합니다. SOURCE1 대 SOURCE2의 단순 차이를 효과로 해석하지 않습니다. 새 API0입니다.
+The real frozen SOURCE176So we leave the whole thing in the denominator. SoURCE1 compares the same case VALUE-before, SOURCE2 compares the VALUE -after, and doesn't interpret the simple difference between SOURCE1 and SOURCE2, as an effect.
 
-## 읽는 순서
+## Reading order
 
-1. `summary.json`: SOURCE1 86·SOURCE2 90의 전체/정확 매칭/제외/양쪽 완료/한쪽 이상 잘림/비교 가능한 cue 분모와 이유별 수.
-2. `pair_manifest.json`: 모든176건의 dependency 경로·hash·정확 되돌리기 결과·A/B 원래/변경 정체성·실제 삽입 위치·양쪽 응답 상태/cue·제외 이유입니다.
-3. `manifest.json`: 읽은 기존 frozen·생성·dependency·QI06 및 raw/result 입력 hash 불변 확인입니다.
-4. `sidecar-schema.json`: 실제 보고서 JSON Schema입니다. LLM response schema가 아닙니다.
-5. `events.jsonl`, `checks.txt`: 생성 단계와 fixture/실제자료/뷰어 검사입니다.
+1. `summary.json`: SOURCE1 86·SOURCE2 90The total/exact matching/external/west complete/one or more side cuts/bits of the cue denominator and the reasoning.
+2. `pair_manifest.json`All of them:176The dependency path of the building; hash; exact reversal result; A/B original/change identity; actual insertion position; reverse response state/cue; reason for the exception.
+3. `manifest.json`: read: existing frozen. viability. dependence.6 And the raw/result input hash is verified.
+4. `sidecar-schema.json`It's the JSON schema of the actual report, not the LLM response schema.
+5. `events.jsonl`, `checks.txt`It's the creation step and the fixture/reality material/viewer test.
 
-공통8892 viewer에서 `{run_id}`를 선택합니다. GET은 저장 JSON만 읽으며 source/base 원응답과 dependency·생성계획 hash 링크를 제공합니다. 브라우저 시각 확인은 메인 후속 확인입니다.
+Common8892 From the viewer. `{run_id}`GET reads only the stored JSON and provides the source/base raw response and dependency-organic hash links. Browser visual verification is the main back-up verification.
 
-## 실제 계약과 제한
+## Real contracts and restrictions
 
-현행 `g02_generate_text.py`가 저장한 `02-generate-text/00-value-dependency.json`의 source 경로와 canonical observation_sha256을 그대로 검사했습니다. SOURCE의 generation_request C/Q가 base C/Q인지 확인하고, 허가된 단일 SOURCE_A/B insertion slot의 위치·before·element_ids와 saved patch를 대조했습니다. exact patch text를 정확한 offset에서만 제거하여 base C/Q와 완전 일치해야 MATCHED입니다. 정규식 문구 삭제·원본 보정·재생성은 하지 않습니다.
+Current `g02_generate_text.py`saved by `02-generate-text/00-value-dependency.json`The source path and canonical observation_sha256So we checked the exact patch. Sources' generation_request C/Q verified that it was base C/Q, and we compared the location of the single authorized SOURCE_A/B insertion slot, before element_ids, to the saved patch.
 
-표 안의 출처는 TABLE_CELL이며 뒤 문장으로 취급하지 않습니다. 원래 A/변경 B 값은 claim의 앞/뒤 위치와 다릅니다. 출처별 SOURCE 계약·value_pair·target도 확인합니다.
+The source in the table is TABLE_CELL and is not treated as a back sentence. The original A/Variable B value is different from the front/back position of the claim.
 
-일치하지 않는 쌍은 목록과 이유를 보존하되 cue 변화 집계에서 제외합니다. 일치하더라도 한쪽 잘림/누락이면 cue 비교를 하지 않습니다. 전체쌍·양쪽완료·cue비교가능의 분모를 구분하며 반복1만 다룹니다. 네 variant 공통 case 수는 목록 교집합이며 이 수로 자동 효과를 계산하지 않습니다.
+The non-conforming pairs preserve the list and the reason, but they are excluded from the cue change sequence. Even if they match, they don't compare the cue if they're one cut/cut.1The four variants of the common case are the list sum and do not calculate the automatic effect with this number.
 
-QI06 의미와 A/B가 미확정이므로 의미효과 NOT_EVALUATED, A/B효과 UNRESOLVED입니다. lexical cue 변화는 충돌 이해·계산 정답·신뢰도 인과 효과가 아닙니다. 전수 judge·범용 parser·계약 수정·완전 교차 실험은 보류합니다.
+QI06 Meaning and A/B are uncertain, so meaning effects are NOT_EVALUATED, A/B-effect and UNRESOLVED. Lexical cue changes are not conflict understanding, resolution correct answers, trust, or ineffectiveness.
 
-## 실제 집계
+## The real estimate.
 
 ```json
 {summary}
 ```
 
-## 재현
+## Re-creation
 
-`PYTHONPATH=src .venv/bin/python -m finarch.dataset.03-release.source_pair_review --source reports/run/20260916-001 --quality-root reports/run/20260916-quality-v1 --screen-root reports/run/20260916-review-v2 --output reports/run/새로운-실행명`
+`PYTHONPATH=src .venv/bin/python -m finarch.dataset.03-release.source_pair_review --source reports/run/20260916-001 --quality-root reports/run/20260916-quality-v1 --screen-root reports/run/20260916-review-v2 --output reports/run/new-report`
 
-기존 output을 거부합니다. 기존 생성·frozen·Qwen 결과를 쓰지 않고 새 보고서만 저장합니다.
+It rejects the existing output, and it saves the new report, not the existing output.

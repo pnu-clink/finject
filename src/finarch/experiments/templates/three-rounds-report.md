@@ -1,55 +1,55 @@
-# Luna · 동일 100원문 3차 실험 기록
+# Luna · the same 100Source text 3The record of the car experiment.
 
-갱신: {{updated}}
+Updated: {{updated}}
 
-**작업 상태: {{completion}}**
+**The working state: {{completion}}**
 
-사용자 확정: **동일 100원문·700변형, P0/P1, 추론 OFF/ON, GPT-6-Luna, OpenAI Native Batch, 비용 상한 없음**. 원본은 P0의 OFF/ON 200회, 변형은 4조건 2,800회로 차수당 3,000회입니다. 2·3차는 앞 차수의 실험 → 강한 비판적 분석 → 논문 갱신 → 변경 결정 후 진행합니다.
+User confirmation: **Same 100The original.700The variation, P0/P1, the inference OFF/ON, GPT-6- Luna, OpenAI Native Batch, no charge**The original is P0's OFF/ON. 200The rotation, the transformation, the 4Condition 2,800Circuit by circuit. 3,000calls. 2·3The car goes after the test of the front wheel -- strong critical analysis -- paper update -- change decision.
 
-## 읽는 순서
+## Reading order
 
-1. [실험 뷰어](http://127.0.0.1:8894/?run=20260927-exp-001&tab=overview)의 차수 버튼으로 1·2·3차를 전환합니다.
-2. **00 Input → 01 Evaluation → 02 Analysis** 순으로 입력, 실제 요청·응답, 형식 검사, 내용 판정·조건 비교를 확인합니다.
-3. 이 문서에서 세 차수의 변경 이유·결과·비용·남은 한계를 함께 읽습니다. 별도 보고서 HTML은 생성하지 않습니다.
-4. [논문 초안](../20260924-paper-draft/PAPER-KO.md)의 8.1절은 수집·분석된 차수만 반영합니다.
+1. [Experimental Viewer](http://127.0.0.1:8894/?run=20260927-exp-001&tab=overview)And then I'm going to use the variable button. 1·2·3Turn the car around.
+2. **00 Input → 01 Evaluation → 02 Analysis** Check the input sequence, the actual request-response, format validation, content judgment-condition comparison.
+3. In this article, the three variables change the reason, result, cost, and other limits together. No report HTML is generated.
+4. [Draft of discussion](../20260924-paper-draft/PAPER-KO.md) 8.1The sections only reflect the graphs collected and analyzed.
 
-## 조건과 해석 범위
+## Conditions and scope of interpretation
 
-- 자료는 `20260917-002/results`의 원래 순서에서 preparation PASS와 7변형 PASS를 모두 만족하는 첫 100원문입니다. 100개를 모을 때까지 원문 준비 미통과 20개, 7변형 미완성 159개를 건너뛰었고 이유는 1차 `events.jsonl`에 남겼습니다. 무작위 표본이나 전체 데이터셋의 대표 표본이 아닙니다. 선택된 원본 100개의 사람 판단 기록은 모두 PENDING이므로 자동 검사 통과를 사람 승인으로 부르지 않습니다.
-- 풀이 입력은 public의 Q/C·precision입니다. private 정답·제작 라벨은 풀이에 전달하지 않습니다. 연결 정보와 조건은 모델별 manifest에 통합하고 선정 경위는 events 로그에 둡니다.
-- 1차는 현재 common/P0/P1과 공통 응답 schema를 동결했습니다. 추론 none/medium, 출력 상한 8,192토큰, 캐시 명시 모드·breakpoint 없음입니다. 차수별 변경은 아래 기록과 각 config·manifest로 확인합니다.
-- 입력 검토 800회는 풀이 응답을 보지 않는 Luna max Batch입니다. 후속 익명 응답 검토는 세 차수 모두 Luna high, 문항별 최대 4응답, 최대 800호출/차수이고, 분석 결과별 최대 8응답을 Luna max로 독립 재검토합니다. 최초 입력 검토의 출력 상한 12,000토큰에서 203건이 잘려 후속 분석은 32,768토큰으로 늘렸습니다. 기술·형식 실패만 별도 Batch로 한 번 재시도하며 필요하면 65,536토큰으로 늘립니다. 원래 실패와 비용을 보존하며 의미 점수가 낮다는 이유로 재호출하지 않습니다.
-- 같은 입력의 최초 답변 가능성 판단과 같은 분석 계약을 세 차수의 공통 비교 기준으로 씁니다. 후속 응답이 이를 반박하면 조용히 기준을 바꾸지 않고 별도 미해결로 기록합니다.
-- 응답 검토에는 모델명·P0/P1·OFF/ON 식별자를 주지 않지만 P1의 분류 문구와 설명 길이로 조건을 추측할 수 있습니다. 따라서 완전한 조건 은폐라고 주장하지 않습니다. 재검토도 같은 입력 판정을 제공하므로 그 판정과 공유하는 오류는 별도 원문 대조가 필요합니다.
-- 정확도·의미 적절성·응답 안정성은 다릅니다. 동일 100개에 대한 수정은 개발 실험이며 독립 검증이 아닙니다. 지시가 바뀐 차수의 차이를 동일 요청 반복의 불안정성이라고 부르지 않습니다.
-- 원본 P1 정상 대조군, 독립 모델 계열의 전수 의미 판정, 제작 기준 방식 비교는 이번 범위 밖입니다. 논문의 해당 가설을 검증한 것처럼 쓰지 않습니다.
+- The data is `20260917-002/results`In the original order of preparation PASS and 7The first one that satisfies all the transformation PASS 100source text. 100And the first thing I'm gonna do is get the items ready. 20, 7The transformation is incomplete. 159I jumped over the items. 1round `events.jsonl`It's not a random sample or a representative sample of the entire dataset. 100The items's human judgment record is all pending, so we don't call automatic inspection passes human approval.
+- The pool input is public's Q/C. Precision, private answer-production labels don't deliver to the pool. Connection information and conditions are integrated into the model manifest and the ranking is placed in the events log.
+- 1The car has now synchronized the common/P0/P1 and common response schema. 8,192No token, cache specified mode breakpoint. The variable changes are verified as the record below and each config.
+- Check the input 800The rotating grass is the Luna max batch that does not see the response. 4Answer, up to 800So it's a call/calculator, and the analytical results are maximal. 8The response is independently re-examined with Luna max. 12,000tokens 203Cut the hole and then analyze it. 32,768It's been increased to tokens, but the technical and formatting failures are not enough to re-introduce it as a batch, and if necessary, it's a lot more like a batch. 65,536It's raised to tokens, preserving the original failure and cost, and not re-issuing because of the low significance score.
+- We use the same analytical agreement as a three-dimensional comparison of the first probability of the same input, and if the next response rejects it, it's silently not changing the criteria, and it's not solving anything.
+- The response review does not give the model name;P0/P1;OFF/ON identifier, but it can guess the condition by the classification phrase and description length of P1. It therefore does not claim to be a complete condition cover-up.
+- Accuracy, intent appropriateness, response stability are different. 100The correction in items is not a developmental experiment, it's not an independent verification, and we don't call the variance in the number of variables that the instruction changes the uncertainty of the same repetition of the request.
+- The original P1 summit counterparts, the whole semantic assessment of the independent model array, the method of production comparisons are outside this range, and they don't write as if they've validated the hypothesis in the paper.
 
-## 차수별 비용
+## The cost per unit
 
-OpenAI가 반환한 입력·출력 토큰에 공식 Batch 단가를 적용한 **사용량 추정액**입니다. 영수증·청구서 대조액은 아닙니다. 입력 $0.05/백만, 출력 $0.25/백만이며 추론 토큰은 출력에 이미 포함됩니다. 입력 판정 비용은 1차에만 귀속하고 2·3차에서 중복 합산하지 않습니다. 수집된 사용량에는 실패·잘림·재시도 비용도 포함합니다. [모델 가격](https://developers.openai.com/api/docs/models/gpt-6-luna), [Batch 50% 가격·완료 창](https://developers.openai.com/api/docs/guides/batch)
+OpenAI has applied the official batch limit to the input and output tokens returned. **Estimated use**This is not the receipt.0.05- Million, $500,000 is coming out.0.25/million and the inference tokens are already included in the output. 1I'm just going to be in the car. 2·3The amount of use collected includes failure, failure, and accident costs.](https://developers.openai.com/api/docs/models/gpt-6-luna), [Batch 50% Price: Finished window](https://developers.openai.com/api/docs/guides/batch)
 
-|차수|상태|풀이|분석·재검토|합계|비용 미확인 기록|
+|Round|Status|The grass.|Analysis and re-examination|Total|Unknown cost record|
 |---|---|---:|---:|---:|---:|
 {{costs}}
 
-## 세 차수의 핵심 수치
+## The key of the three digits.
 
-원본은 **숫자 일치 / 계획 100개**, 변형은 **잠정 적절 / 내용 판정 가능**입니다. 서로 다른 분모이며 평가 실패·미해결은 아래 상세 표에 보존합니다. P1 모순은 선언한 방식과 실제 숫자/null이 어긋난 응답 수이며 공통 schema 통과와 별도입니다.
+The original is **Number matching / plan 100items**And the variation is **Subject appropriate/content determined**The difference is that the denominator is different and the evaluation failure and the misresolution is preserved in the detailed table below. The P1 contradiction is a response that is in opposition to the declared manner and the actual number/null and is different from the common schema passage.
 
-|차수|원본 수치 일치|변형 P0 OFF|변형 P0 ON|변형 P1 OFF|변형 P1 ON|P1 선언·숫자 모순|
+|Round|The original numbers match.|The change is P0 OFF|The change is P0 ON.|Transform P1 off|Transformed P1 ON|Declaration of P1 - numerical contradiction|
 |---|---|---:|---:|---:|---:|---:|
 {{outcomes}}
 
 {{rounds}}
 
-## 실행·보존
+## Execution and Preservation
 
-1차 최초 파싱에서 보조 commentary와 final_answer를 합쳐 읽어 1건을 형식 실패로 기록했습니다. 실제 최종 JSON은 유효했으므로 수집기를 수정하여 **추가 호출 없이 3,000/3,000 형식 통과**로 재검사했습니다. 이전 검사 파일과 원응답은 보존했습니다. 이 건은 대상 모델 오류율로 집계하지 않습니다. 입력 분석은 최초 800회 중 형식·인용 검사 통과 567, 추론 중 잘림 203, 정확 인용 불일치 30이었고 후속 기록에서 별도 재시도 결과를 확인합니다.
+1Read the first passing of the car together with the second commentary and the final answer. 1So the actual final JSON was valid, so the collector modified the format and the data was stored in the JSON file. **No further calls. 3,000/3,000 Format valid**So we re-examined the original test file and the raw response, which is not calculated as the error rate of the target model. 800Pass the form-use test in the circuit 567Cutting through the argument. 203Accurate citation inconsistency 30And we're going to check the results of the follow-up.
 
-`src/finarch/experiments/90-operations/three_rounds.py`가 완료된 Batch를 수집하고 분석 → 논문 표 → 이 문서를 갱신합니다. 다음 차수 변경 결정은 실제 응답·분석 근거를 읽은 뒤 기록합니다. 호출 전달이 불확실하면 같은 Batch ID를 먼저 조회하며 중복 제출하지 않습니다. OpenAI Batch는 최대 24시간 창이므로 완료 시각은 제공자 처리에 따릅니다.
+`src/finarch/experiments/90-operations/three_rounds.py`Collect and analyze the completed batch → paper tables → update this document. The next parameter change decision is recorded after reading the actual response and analysis basis. If the call delivery is uncertain, the same batch ID is first checked and not submitted. OpenAI Batch is up to the maximum 24So the time window is the finished view, and the provider's procedure is followed.
 
-원래 입력과 각 차수의 prompt/schema·manifest, Batch 전송 파일·ID·원응답·사용량을 보존합니다. 실패 응답을 조용히 고치거나 미평가를 오답으로 바꾸지 않습니다. 각 차수에 관한 후속 연구 판단과 개선 이유는 config의 improvement 및 events에 남깁니다.
+Preserves the original input and prompt/schema·manifest, batch transfer file ID, raw response·use. Doesn't quietly fix the failure response or change the understatement to an incorrect response. The reason for subsequent study judgments and improvements on each variable is left to the improvement and events of the config.
 
-## 최종 확인
+## Final confirmation
 
 {{verification}}

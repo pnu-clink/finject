@@ -1,56 +1,56 @@
-# FInject 원논문 단원별 상세 해설
+# FInject One-page commentary
 
-2026-09-26 · 비공개 투고 원고를 다시 읽기 위한 내부 학습자료입니다. 현재 작성 중인 논문과 분리했습니다.
+2026-09-26 It's an internal learning tool for re-reading a non-public release, separated from the paper that's currently being written.
 
-원전은 [5쪽 PDF](</Users/wooix/workspace/논문/Finject_NAACL/2026_CIKM_FinanceBench (10).pdf>)입니다. 제목은 **FInject: Expanding Finance Reasoning Problems through Injection of Unanswerability**이며, 채택된 출판 논문으로 표시하지 않습니다. 본문의 주장과 해설자의 해석, 확인하지 못한 세부 사항을 구별합니다.
+The atom is [5The other side of the PDF.](%3C/Users/wooix/workspace/%EB%85%BC%EB%AC%B8/Finject_NAACL/2026_CIKM_FinanceBench%20%2810)The title is: **FInject: Expanding Finance Reasoning Problems through Injection of Unanswerability**And it's not a published paper that's been adopted, it's a separate statement from the commentator's interpretation, which is unverified details.
 
-## 읽는 순서
+## Reading order
 
-|순서|자료|포함 내용|
+|In order.|The data.|Content|
 |---|---|---|
-|01|[전체 개요](chapters/01-overview.md)|초록·주장 구조·전체 숫자·읽는 방법|
-|02|[서론과 관련 자원](chapters/02-introduction-related.md)|1·2절, 그림 1·2, 기여 4가지|
-|03|[원문 선정과 여섯 변형](chapters/03-construction-taxonomy.md)|3.1–3.3절, 그림 3, 각 유형의 의미와 예외|
-|04|[자동 검증과 사람 검수](chapters/04-validation-human.md)|3.4–3.5절, 검사식·표 1·3·4·표본 추출·보정|
-|05|[과제와 평가 지표](chapters/05-tasks-metrics.md)|4절, 세 과제·지표의 뜻·분모·가상 계산 예시|
-|06|[실험 결과](chapters/06-experiments.md)|5절 Q1–Q3, 표 2의 전체 모델·표 3·4·해석 한계|
-|07|[결론과 참고문헌](chapters/07-conclusion-references.md)|6절·AI 사용 공개·범위·참고문헌 15개·재확인 목록|
+|01|[A summary of the whole thing](chapters/01-overview.md)|Green, main field structure, whole number, how to read|
+|02|[Theory and related resources](chapters/02-introduction-related.md)|1·2Me, the painting. 1·2, contributing 4Go on.|
+|03|[Selection of the source and six variations](chapters/03-construction-taxonomy.md)|3.1–3.3Me, the painting. 3Each type of meaning and exception|
+|04|[Auto-verification and human testing](chapters/04-validation-human.md)|3.4–3.5I'm the one who checks. 1·3·4• Sampling and reporting|
+|05|[Practical and evaluation indicators](chapters/05-tasks-metrics.md)|4Section, three objects, meaning of the denominator, value calculation example|
+|06|[Experimental results](chapters/06-experiments.md)|5I'm going to get Q1Q3, table. 2The full model of the 3·4· Limit of analysis|
+|07|[Footnotes and notes](chapters/07-conclusion-references.md)|6I.A. Use of AI Publicity Crime and Litigation 15List of identification and identification|
 
-각 장의 ‘한눈 정리’를 먼저 읽고 본문으로 들어가셔도 됩니다. 계산을 하는 일과 계산에 필요한 장부가 갖춰졌는지 검토하는 일을 구별하는 비유로 설명했습니다.
+You can read the blink of an eye first, and then you can go into the text, and I've described it as a metaphor for the difference between doing calculations and reviewing whether you have the necessary branches for calculations.
 
-## 전체 지도
+## The whole map.
 
-![단원별 지도](images/00-mindmap.svg)
+[Department map](images/00-mindmap.svg)
 
 <details>
-<summary>단원별 핵심을 텍스트로 보기</summary>
+<summary>See the unitary core as text.</summary>
 
-- [01 전체 구조](chapters/01-overview.md): 계산과 답변 가능성 구별 · 원문·변형을 짝지어 평가 · 78 × 6 × 4 = 1,872
-- [02 서론·관련 자원](chapters/02-introduction-related.md): 결측·충돌의 직관 · 제작 검증과 모델 평가 분리 · 데이터·유형·과제·품질
-- [03 원문·여섯 유형](chapters/03-construction-taxonomy.md): 답에 필요한 근거 변경 · 결측 3유형·충돌 3유형 · 유형 형태 ≠ 답변 불가능
-- [04 자동·사람 검증](chapters/04-validation-human.md): 구조 → 의미 → 사람 검수 · 같은 판정자의 두 축 PASS · 71 × 6 = 426
-- [05 과제·지표](chapters/05-tasks-metrics.md): 유형 예측·이유 생성도 지원 · MCScore와 PairSucc 구별 · 원문 정답 AND 변형 유보
-- [06 실험 Q1–Q3](chapters/06-experiments.md): Q1 과도한 답변·Q2 과잉 유보 · Q3 생성·검수 병목 · 평가 분모가 모델마다 다름
-- [07 결론·문헌](chapters/07-conclusion-references.md): 결론과 AI 사용 공개 · 참고문헌 15개의 역할 · 영어·단일 문항·통제 실패
+- [01 The whole structure.](chapters/01-overview.md): calculation and probability of answering distinctions · parity of the elementary and variable evaluations · 78 × 6 × 4 = 1,872
+- [02 Reference and related resources](chapters/02-introduction-related.md): intuition of measurement; collision; manufacturing verification and model evaluation separation; data; model; medical; quality
+- [03 Type of the first letter](chapters/03-construction-taxonomy.md): Changes to the answer 3Type: collision 3Type · Type form ≠ Unanswered
+- [04 Automatic verification of the person](chapters/04-validation-human.md): structure → meaning → man's check · two axes of the same judge PASS · 71 × 6 = 426
+- [05 The task sheet](chapters/05-tasks-metrics.md)Type prediction; support for e-production; MCScore and PairSucc distinction; original reference answer AND variation e-books
+- [06 Experiment Q1  Q3](chapters/06-experiments.md)Q1 Excessive response; Q2 Excess Ubo; Q3 Production; Check bottlenecks; Valuation denominator varies by model
+- [07 Conclusions and literature](chapters/07-conclusion-references.md): Conclusions and use of AI Publication · References 15Role of items · English; single case; control failure
 
 </details>
 
-지도를 읽고 난 뒤에는 각 장의 제목만 보고 핵심 내용을 떠올려 보시면 됩니다. 설명하기 어려운 장부터 다시 읽으시면 됩니다.
+And after you read the map, you can just look at the title of each chapter and think back to the main point, and start with the difficult chapter.
 
-## 한 화면에서 읽기
+## Read it on a screen.
 
-[공통 연구 자료 뷰어](http://127.0.0.1:8896/viewer/research/)에서 **FInject 원논문 단원별 상세 해설**을 선택하면 실제 통합본을 읽습니다. 뷰어는 본문·표 중심이며, SVG 도해는 단원 Markdown 또는 images/ 파일에서 확인하실 수 있습니다. 서버가 꺼져 있으면 저장소의 viewer/research/start.command를 실행합니다.
+[Public research footage viewer](http://127.0.0.1:8896/viewer/research/)in **FInject One-page commentary**If you select the actual integrated copy, the viewer is text-centered, and you can check the SVG error in the unit Markdown or images/file. If the server is off, it runs the repository's viewer/research/start.command.
 
-[통합 읽기본](RESEARCH-DIRECTION.md)은 단원 파일을 순서대로 합친 파생본입니다. 수정 기준은 chapters/이고, 통합본의 구성·해시는 verification.json으로 확인합니다. 결과 폴더에 별도 HTML 뷰어를 만들지 않았습니다.
+[Crossword reading](RESEARCH-DIRECTION.md)It's a derivative of a single-member file that's sorted in sequence. The correction criteria are chapters/, and the configuration and description of the consolidated copy is verification.json. No HTML viewer was created in the resulting folder.
 
-## 검토 자료
+## Review material
 
-- [단원·그림·표 대조 목록](COVERAGE.md): 초록부터 참고문헌까지 포함 여부를 확인합니다.
-- [원전과 해시](sources.json): PDF와 추출본의 역할을 구별합니다.
-- [검토 기록](REVIEW.md): 원고 내부의 불일치와 해설 수정 내역입니다.
-- [검증 기록](verification.json), [작업 로그](events.jsonl): 파일·링크·그림 및 원고 보존 확인입니다.
-- source/paper-layout.txt: 실제 PDF에서 위치를 보존해 추출한 확인용 텍스트입니다. 행 번호가 포함됩니다.
+- [List of contrast between the elements, graphs, and symbols](COVERAGE.md)See if it includes everything from green to reference.
+- [The original and the sketch](sources.json): distinguish between the role of PDF and extract.
+- [Examining records](REVIEW.md): The inconsistency within the petition and the correction of the commentary.
+- [Record of the verification](verification.json)[Operating log](events.jsonl): File link, image and archive preservation check.
+- source/paper-layout.txt: This is authentication text that you save and extract from the actual PDF, and it includes the row number.
 
-원고에는 별도 부록이 없으며, 본문이 보충자료로 안내한 세부 지표·파싱·스키마를 임의로 채우지 않았습니다. 공개 데이터 상태나 참고문헌의 출판 상태를 외부에서 재검증한 자료는 아닙니다. 새 실험과 모델 호출은 수행하지 않았습니다.
+There's no appendix in the manuscript, and the detailed indexing and pasting schemes that the source provided as supplementary documents were not randomly filled in, nor were the data publicly available, nor the publications of the reference work reviewed externally, nor were new experiments and model calls made.
 
-이 README는 src/finarch/documentation/templates/research/finject-section-guide-readme.md에서 생성합니다.
+This README is generated from src/finarch/documentation/templates/research/finject-section-guide-readme.md.

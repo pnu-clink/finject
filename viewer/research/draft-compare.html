@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FInject / Draft v2 문단 비교</title>
+<title>FInject / Draft v2 comparison of the graph</title>
 <style>
 :root{color-scheme:light;--ink:#243142;--muted:#67758a;--blue:#1556c0;--line:#dce3eb;--green:#17674f}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f6f8;color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif}button,a{touch-action:manipulation}button{font:inherit;cursor:pointer}a{color:var(--blue);text-underline-offset:3px}header{position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:14px max(24px,calc((100% - 1392px)/2));background:#fffffff5;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.brand{font-size:18px;font-weight:750;white-space:nowrap}.brand small{font-size:12px;color:var(--muted);display:block;font-weight:400}.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.actions a,.actions button{font-size:13px;padding:7px 13px;border:1px solid #cbd5e1;border-radius:6px;background:white;text-decoration:none;color:var(--ink)}.actions button[aria-pressed=true]{border-color:var(--blue);color:var(--blue);background:#edf3ff}.actions button:disabled{opacity:.45;cursor:default}main{max-width:1440px;margin:auto;padding:30px 24px 70px}.eyebrow{font-size:12px;font-weight:700;letter-spacing:.09em;color:var(--blue)}h1{font-size:30px;line-height:1.35;margin:6px 0 10px}.intro{margin:0;color:var(--muted);font-size:14px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0 10px}.stat{padding:18px 22px;background:white;border:1px solid var(--line);border-radius:8px}.stat span{display:block;font-size:13px;color:var(--muted)}.stat strong{font-size:28px;font-variant-numeric:tabular-nums}.stat small{font-size:12px;color:var(--muted);margin-left:8px}.stat.result{border-color:#bfdace;background:#f4faf7}.stat.result strong{color:var(--green)}.count-note{font-size:12px;color:var(--muted);margin:8px 0}.count-note strong{font-weight:600}.notice{border-left:3px solid #e2b361;background:#fff7e9;padding:12px 16px;font-size:14px;margin:16px 0}.jump{display:flex;flex-wrap:wrap;gap:7px;margin:22px 0}.jump a{font-size:12px;color:#5a6879;text-decoration:none;padding:4px 9px;border:1px solid var(--line);background:white;border-radius:5px}.column-labels{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin:24px 0 12px;padding:0 24px;font-size:13px;font-weight:700;color:var(--muted)}.column-labels span:last-child{color:var(--blue)}.paragraph{background:white;border:1px solid var(--line);border-radius:9px;margin-bottom:16px;scroll-margin-top:100px;overflow:hidden}.paragraph-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 22px;border-bottom:1px solid #e9edf3;background:#fafbfd}.paragraph-head h2{font-size:15px;font-weight:700;margin:0}.paragraph-number{color:#7b8799;font-size:12px;margin-right:12px;font-variant-numeric:tabular-nums}.reduction{font-size:12px;white-space:nowrap;border-radius:20px;background:#eaf5ef;padding:3px 10px;color:var(--green);font-variant-numeric:tabular-nums}.pair{display:grid;grid-template-columns:1fr 1fr}.copy{padding:22px 26px 18px;min-width:0}.copy.revised{background:#fbfdff;border-left:1px solid var(--line)}.copy p{margin:0 0 12px;line-height:1.95;word-break:keep-all;overflow-wrap:anywhere}.copy.original{color:#4d5869}.copy.revised p{color:#183d76}.size{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.mobile-label{display:none}.footer-note{font-size:13px;color:var(--muted);padding:20px 2px}.status{font-size:12px;color:var(--green);min-height:20px}.only-revised .column-labels{grid-template-columns:1fr;max-width:900px;margin:24px auto 12px}.only-revised .column-labels span:first-child,.only-revised .copy.original{display:none}.only-revised .paragraph{max-width:900px;margin-left:auto;margin-right:auto}.only-revised .pair{grid-template-columns:1fr}.only-revised .copy.revised{border-left:0;background:white}.only-revised .copy.revised p{color:var(--ink)}button:focus-visible,a:focus-visible{outline:3px solid #6f9ce1;outline-offset:3px}[hidden]{display:none!important}
@@ -15,36 +15,36 @@
 </style>
 </head>
 <body>
-<header><div class="brand">FInject / Draft Compare v2<small>한글 본문 검토 / 문단별 비교</small></div><div class="actions"><a href="/draft-side-by-side">두 원고 나란히 보기</a><a id="source" href="/draft#s1" target="_blank" rel="noopener">원본 Draft ↗</a><button id="compare" aria-pressed="true">나란히 비교</button><button id="reading" aria-pressed="false">수정안만 읽기</button><button id="copy-selected" disabled>선택한 문장 복사</button><button id="copy" disabled>수정안 전체 복사</button></div></header>
+<header><div class="brand">FInject / Draft Compare v2<small>The study of the Hanseatic language</small></div><div class="actions"><a href="/draft-side-by-side">Look at the two rows in a row.</a><a id="source" href="/draft#s1" target="_blank" rel="noopener">The original draft.</a><button id="compare" aria-pressed="true">Compare the sequence</button><button id="reading" aria-pressed="false">Read the amendment.</button><button id="copy-selected" disabled>Copy the selected sentence</button><button id="copy" disabled>The full copy of the amendment</button></div></header>
 <div id="copy-feedback" class="copy-feedback" role="status" aria-live="polite" hidden></div>
 <main>
-<nav id="chapters" class="chapters" aria-label="단원 선택"></nav>
-<div id="eyebrow" class="eyebrow">DRAFT / 한국어</div>
-<h1>단원별 문단 검토</h1>
-<p class="intro">문단별로 원본 유지 / 채택 / 수정채택 / 제거를 선택합니다. 기본값은 원본 유지입니다. 제거는 적용 시 해당 문단을 삭제합니다. 수정채택은 문장을 편집해 저장하고, 맨 아래 적용을 누르면 선택한 내용이 한글 Draft와 Draft 압축에 함께 반영됩니다.</p>
-<div class="stats"><div class="stat"><span>현재 v2 원문</span><strong id="before">—</strong><small>글자</small></div><div class="stat"><span id="proposal-count-label">수정안</span><strong id="after">—</strong><small>글자</small></div><div class="stat result"><span>분량 변화</span><strong id="reduction">—</strong></div></div>
-<p class="count-note"><span id="basis"></span> <strong id="target-note">별도 요청 없이 원문을 축약하지 않습니다.</strong> 글자 수의 감소가 페이지 감소와 같지는 않으며, 최종 영문 조판에서 확인합니다.</p>
-<p id="stale" class="notice" hidden>이 단원의 원문이 비교안 작성 이후 변경되었습니다. 아래 왼쪽은 비교를 시작할 당시의 원문입니다. 최신 원문을 확인한 뒤 비교안을 갱신해야 합니다.</p>
+<nav id="chapters" class="chapters" aria-label="Select the single member"></nav>
+<div id="eyebrow" class="eyebrow">DRAFT / Korean</div>
+<h1>Reviewing the individual articles</h1>
+<p class="intro">The default value is maintaining the original. When the removal is applied, the item is deleted. The edit option saves the sentence, and if you click on the bottom of the application, the selected content is reflected together in the Hanging Draft and Draft compression.</p>
+<div class="stats"><div class="stat"><span>The current v2 code</span><strong id="before">—</strong><small>Letters</small></div><div class="stat"><span id="proposal-count-label">Amendments</span><strong id="after">—</strong><small>Letters</small></div><div class="stat result"><span>Changes in the volume</span><strong id="reduction">—</strong></div></div>
+<p class="count-note"><span id="basis"></span> <strong id="target-note">I don't shorten the original without asking.</strong> The decrease in the number of characters is not the same as the decrease of the page, and it's verified in the final English subtitle.</p>
+<p id="stale" class="notice" hidden>The source code of this unit has changed since the comparison was made, and the bottom left is the source code from when the comparison started, so you have to check the most recent source code and update the comparison.</p>
 <p id="review-progress" class="review-progress"></p>
-<nav id="jump" class="jump" aria-label="문단 바로가기"></nav>
-<div class="column-labels"><span>기준 원문</span><span id="proposal-column-label">수정안</span></div>
+<nav id="jump" class="jump" aria-label="The stairs are fixed."></nav>
+<div class="column-labels"><span>The standard.</span><span id="proposal-column-label">Amendments</span></div>
 <div id="paragraphs" aria-busy="true"></div>
-<p id="status" class="status" role="status" aria-live="polite">비교안을 불러오는 중입니다.</p>
-<section class="apply-panel" aria-label="선택한 문단 적용">
-<h2>선택한 내용 적용</h2>
-<p id="apply-summary">문단 선택을 불러오는 중입니다.</p>
-<div class="apply-actions"><p id="apply-help">선택과 수정문 저장만으로는 원고가 변경되지 않습니다.</p><button id="apply" type="button" disabled>적용</button></div>
+<p id="status" class="status" role="status" aria-live="polite">I'm trying to make a comparison.</p>
+<section class="apply-panel" aria-label="Apply the selected step">
+<h2>Apply the selected content</h2>
+<p id="apply-summary">It's calling for a choice of scores.</p>
+<div class="apply-actions"><p id="apply-help">Only the selection and the modification of the folder save the file.</p><button id="apply" type="button" disabled>Apply</button></div>
 <p id="apply-feedback" class="apply-feedback" role="status" aria-live="polite"></p>
-<div id="apply-links" class="apply-links" hidden><a id="applied-draft" href="/draft#s1" target="_blank" rel="noopener">Draft 확인 ↗</a><a id="applied-compressed" href="/draft-compressed#s1" target="_blank" rel="noopener">Draft 압축 확인 ↗</a></div>
+<div id="apply-links" class="apply-links" hidden><a id="applied-draft" href="/draft#s1" target="_blank" rel="noopener">Check the draft.</a><a id="applied-compressed" href="/draft-compressed#s1" target="_blank" rel="noopener">Check the draft compression</a></div>
 </section>
-<p class="footer-note">새로 작업한 단원만 위 목록에 추가합니다. 적용할 때 선택하지 않은 문단은 원본을 사용합니다.</p>
+<p class="footer-note">I add only newly worked items to the list above, and the documents that aren't selected when they're applied use the original.</p>
 </main>
 <script>
 'use strict';
 let data,busy=false;
 const dirtyEdits=new Set(),reviewCards=new Map();
-const $=s=>document.querySelector(s),number=n=>n.toLocaleString('ko-KR');
-function changeLabel(reduction){return Math.abs(reduction)<0.05?'원본과 동일':Math.abs(reduction).toFixed(1)+(reduction<0?'% 증가':'% 감소');}
+const $=s=>document.querySelector(s),number=n=>n.toLocaleString('en-US');
+function changeLabel(reduction){return Math.abs(reduction)<0.05?'Same as the original':Math.abs(reduction).toFixed(1)+(reduction<0?'Increase in %':'Decrease in %');}
 function displayHTML(raw){const box=document.createElement('div');box.innerHTML=raw;for(const a of box.querySelectorAll('a[href^="#"]')){const target=a.getAttribute('href').slice(1);a.href='/draft#'+(data.section_ids.includes(target)?target:'ko-'+target);a.target='_blank';a.rel='noopener';}return box.innerHTML;}
 function mode(reading){document.body.classList.toggle('only-revised',reading);$('#compare').setAttribute('aria-pressed',String(!reading));$('#reading').setAttribute('aria-pressed',String(reading));}
 $('#compare').addEventListener('click',()=>mode(false));$('#reading').addEventListener('click',()=>mode(true));
@@ -82,7 +82,7 @@ async function copyText(text,message){
   try{await navigator.clipboard.writeText(text);}
   catch{if(!legacyCopy(text))throw Error('Clipboard unavailable');}
   copyFeedback(message);
- }catch{copyFeedback('복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.',true);}
+ }catch{copyFeedback('I can\x27t copy it. Please check the clipboard permissions in your browser.',true);}
 }
 document.addEventListener('selectionchange',updateSelection);
 document.addEventListener('pointerdown',event=>{
@@ -91,22 +91,22 @@ document.addEventListener('pointerdown',event=>{
 // Keep native keyboard focus in the web page after dragging non-editable prose.
 $('#paragraphs').addEventListener('pointerdown',event=>{event.target.closest('.copy-text')?.focus({preventScroll:true});});
 $('#copy-selected').addEventListener('mousedown',event=>event.preventDefault());
-$('#copy-selected').addEventListener('click',()=>{const text=selectedProse()||selectedText;if(text.trim())copyText(text,'선택한 문장을 복사했습니다.');});
+$('#copy-selected').addEventListener('click',()=>{const text=selectedProse()||selectedText;if(text.trim())copyText(text,'I copied the selected sentence.');});
 const editing=target=>target instanceof Element&&target.closest('input,textarea,[contenteditable]:not([contenteditable="false"])');
 document.addEventListener('keydown',event=>{
  if(!(event.metaKey||event.ctrlKey)||event.altKey||event.shiftKey||event.key.toLowerCase()!=='c'||editing(event.target))return;
  const text=selectedProse();if(!text.trim())return;
- event.preventDefault();event.stopPropagation();copyText(text,'선택한 문장을 복사했습니다.');
+ event.preventDefault();event.stopPropagation();copyText(text,'I copied the selected sentence.');
 },true);
 document.addEventListener('copy',event=>{
  if(editing(event.target))return;
  const text=selectedProse();if(!text.trim()||!event.clipboardData)return;
- event.clipboardData.setData('text/plain',text);event.preventDefault();copyFeedback('선택한 문장을 복사했습니다.');
+ event.clipboardData.setData('text/plain',text);event.preventDefault();copyFeedback('I copied the selected sentence.');
 });
-$('#copy').addEventListener('click',()=>copyText(revisedCopy(),`수정안 ${data.paragraphs.length}문단을 복사했습니다.`));
+$('#copy').addEventListener('click',()=>copyText(revisedCopy(),`Amendments ${data.paragraphs.length}I copied the sculpture.`));
 async function reviewRequest(path,payload){
  const response=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({section_id:data.section_id,proposal_revision:data.proposal_revision,...payload})});
- const result=await response.json();if(!response.ok)throw Error(result.error||'저장하지 못했습니다.');return result;
+ const result=await response.json();if(!response.ok)throw Error(result.error||'I couldn\x27t save it.');return result;
 }
 function updateReview(){
  if(!data)return;
@@ -118,18 +118,18 @@ function updateReview(){
   refs.editorPanel.hidden=!edited;refs.prose.hidden=edited;
   refs.editor.setAttribute('contenteditable',String(!busy));
   refs.save.disabled=busy||!dirty;
-  refs.state.textContent=refs.error||({original:'원본 유지',accept:'수정안 채택',remove:'제거 선택 · 적용 시 원고에서 삭제',edited:dirty?'수정 중 · 저장 필요':'수정채택 · 저장됨'})[p.decision];
-  refs.editStatus.textContent=refs.error||(dirty?'수정문을 저장한 뒤 적용해 주세요.':'저장된 수정문을 적용할 준비가 되었습니다.');
+  refs.state.textContent=refs.error||({original:'Keep the original.',accept:'Adoption of the Amendment',remove:'Select Remove · Remove from the application file',edited:dirty?'In the process of modification':'The correctional data'})[p.decision];
+  refs.editStatus.textContent=refs.error||(dirty?'Save the lens and apply it.':'I\x27m ready to apply the saved lens.');
   refs.editStatus.classList.toggle('error',Boolean(refs.error));
-  refs.size.textContent=p.decision==='remove'?'적용 후 0자 · 문단 제거':number(edited?p.edited_count:p.revised_count)+'자'+(edited?' · 저장한 수정문':'');
+  refs.size.textContent=p.decision==='remove'?'After applying 0Now remove the toothbrush.':number(edited?p.edited_count:p.revised_count)+'Now, what?'+(edited?' · Saved window':'');
  }
  const counts=data.decisions;
- const summary='원본 유지 '+counts.original+'문단 · 채택 '+counts.accept+'문단 · 수정채택 '+counts.edited+'문단 · 제거 '+(counts.remove||0)+'문단';
+ const summary='Keep the original. '+counts.original+'The stage of adoption '+counts.accept+'The walls of the house '+counts.edited+'Scratch off '+(counts.remove||0)+'The ladder.';
  $('#review-progress').textContent=summary;
- $('#apply-summary').textContent=summary+' / 적용 후 '+number(data.selected_totals.count)+'자 ('+changeLabel(data.selected_totals.reduction)+')';
+ $('#apply-summary').textContent=summary+' - After applying. '+number(data.selected_totals.count)+'So, what?'+changeLabel(data.selected_totals.reduction)+')';
  const dirty=data.paragraphs.some(p=>p.decision==='edited'&&dirtyEdits.has(p.id));
  $('#apply').disabled=busy||dirty||data.source_changed||!data.pending_application;
- $('#apply-help').textContent=busy?'저장하는 중입니다.':dirty?'수정 중인 문단을 먼저 저장해 주세요.':data.source_changed?'현재 Draft 원문을 기준으로 비교안을 갱신해야 합니다.':data.pending_application?'적용을 누르면 이 단원의 선택한 내용이 두 원고에 반영됩니다.':data.applied_at?'현재 선택은 두 원고에 적용되어 있습니다.':'현재 모든 문단은 원본 유지입니다.';
+ $('#apply-help').textContent=busy?'It\x27s storing.':dirty?'First, save the marbles that are being modified.':data.source_changed?'We need to update the comparison with the current draft.':data.pending_application?'And when you click on the application, the content of this unit is reflected in both applications.':data.applied_at?'The current choice applies to both petitions.':'All the documents are still original.';
  $('#stale').hidden=!data.source_changed;
  $('#applied-draft').href='/draft#'+data.section_id;
  $('#applied-compressed').href='/draft-compressed#'+data.section_id;
@@ -143,43 +143,43 @@ async function saveChoice(id,decision,editedHtml){
   const saved=data.paragraphs.find(p=>p.id===id);
   if(editedHtml!==undefined){dirtyEdits.delete(id);refs.editor.innerHTML=saved.edited_html;}
   else if(decision==='edited'&&!dirtyEdits.has(id))refs.editor.innerHTML=saved.edited_html||saved.revised_html;
-  $('#status').textContent=decision==='edited'?'수정채택을 저장했습니다. 적용 버튼으로 원고에 반영할 수 있습니다.':'문단 선택을 저장했습니다.';
+  $('#status').textContent=decision==='edited'?'I saved the correctional file, and I can apply it to the file.':'I saved the choice of scratches.';
  }catch(error){refs.error=error.message;$('#status').textContent=error.message;}
  finally{busy=false;updateReview();}
 }
 function addReview(card,p,prose,size){
- const controls=document.createElement('div');controls.className='review-controls';controls.setAttribute('role','group');controls.setAttribute('aria-label',p.label+' 채택 선택');
+ const controls=document.createElement('div');controls.className='review-controls';controls.setAttribute('role','group');controls.setAttribute('aria-label',p.label+' Adoption');
  const radios=[];
- for(const [value,labelText] of [['original','원본 유지'],['accept','채택'],['edited','수정채택'],['remove','제거']]){
+ for(const [value,labelText] of [['original','Keep the original.'],['accept','Adoption'],['edited','The glasshouse.'],['remove','Remove it.']]){
   const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='decision-'+p.id;radio.value=value;radio.checked=p.decision===value;radio.addEventListener('change',()=>saveChoice(p.id,value));label.append(radio,document.createTextNode(labelText));controls.append(label);radios.push(radio);
  }
  const state=document.createElement('span');state.className='review-state';state.setAttribute('role','status');controls.append(state);card.append(controls);
  const editorPanel=document.createElement('div');editorPanel.className='edit-panel';editorPanel.hidden=true;
- const label=document.createElement('label');label.className='edit-label';label.textContent='문단 수정';label.htmlFor='edit-'+p.id;
- const editor=document.createElement('div');editor.id='edit-'+p.id;editor.className='editable';editor.setAttribute('role','textbox');editor.setAttribute('aria-label',p.label+' 수정문');editor.setAttribute('aria-multiline','true');editor.setAttribute('contenteditable','true');editor.spellcheck=false;editor.innerHTML=p.edited_html||p.revised_html;
+ const label=document.createElement('label');label.className='edit-label';label.textContent='The tooth is fixed.';label.htmlFor='edit-'+p.id;
+ const editor=document.createElement('div');editor.id='edit-'+p.id;editor.className='editable';editor.setAttribute('role','textbox');editor.setAttribute('aria-label',p.label+' Amendment to the Constitution');editor.setAttribute('aria-multiline','true');editor.setAttribute('contenteditable','true');editor.spellcheck=false;editor.innerHTML=p.edited_html||p.revised_html;
  editor.addEventListener('input',()=>{dirtyEdits.add(p.id);reviewCards.get(p.id).error='';updateReview();});
  editor.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();document.execCommand('insertLineBreak');}});
  editor.addEventListener('paste',event=>{event.preventDefault();document.execCommand('insertText',false,event.clipboardData.getData('text/plain'));});
- const tools=document.createElement('div');tools.className='edit-tools';const save=document.createElement('button');save.type='button';save.className='save-edit';save.textContent='수정문 저장';save.addEventListener('click',()=>saveChoice(p.id,'edited',editor.innerHTML));
+ const tools=document.createElement('div');tools.className='edit-tools';const save=document.createElement('button');save.type='button';save.className='save-edit';save.textContent='Save the window';save.addEventListener('click',()=>saveChoice(p.id,'edited',editor.innerHTML));
  const editStatus=document.createElement('span');editStatus.className='edit-status';editStatus.setAttribute('role','status');tools.append(save,editStatus);editorPanel.append(label,editor,tools);prose.after(editorPanel);
  reviewCards.set(p.id,{card,radios,state,editorPanel,editor,save,editStatus,prose,size,error:''});
 }
 $('#apply').addEventListener('click',async()=>{
  if($('#apply').disabled)return;
- busy=true;updateReview();$('#apply-feedback').classList.remove('error');$('#apply-feedback').textContent='선택한 내용을 두 원고에 적용하는 중입니다.';
+ busy=true;updateReview();$('#apply-feedback').classList.remove('error');$('#apply-feedback').textContent='I\x27m applying the selected content to both of these applications.';
  try{
   const result=await reviewRequest('/api/draft-compare/apply',{});data=result.comparison;
-  const time=new Date(result.applied_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  $('#apply-feedback').textContent=time+' · 한글 Draft와 Draft 압축에 적용했습니다.';$('#apply-links').hidden=false;
+  const time=new Date(result.applied_at).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  $('#apply-feedback').textContent=time+' • Applied to the Hanging Draft and Draft compression.';$('#apply-links').hidden=false;
  }catch(error){$('#apply-feedback').textContent=error.message;$('#apply-feedback').classList.add('error');}
  finally{busy=false;updateReview();}
 });
-async function load(){try{const sectionId=new URLSearchParams(location.search).get('section')||'abstract';const response=await fetch('/api/draft-compare?section='+encodeURIComponent(sectionId),{cache:'no-store'});data=await response.json();if(!response.ok)throw Error(data.error||'비교안을 불러오지 못했습니다.');document.title='FInject / '+data.title+' 문단 비교';$('h1').textContent=data.title+' 문단별 검토';$('#eyebrow').textContent='DRAFT '+(data.manuscript_version||'')+' / 한국어 / '+data.paragraphs.length+'문단';$('#source').href='/draft#'+data.section_id;$('#before').textContent=number(data.totals.original);$('#after').textContent=number(data.totals.revised);$('#reduction').textContent=changeLabel(data.totals.reduction);$('#basis').textContent=data.count_basis+'.';$('#stale').hidden=!data.source_changed;
+async function load(){try{const sectionId=new URLSearchParams(location.search).get('section')||'abstract';const response=await fetch('/api/draft-compare?section='+encodeURIComponent(sectionId),{cache:'no-store'});data=await response.json();if(!response.ok)throw Error(data.error||'I didn\x27t get a comparison.');document.title='FInject / '+data.title+' Comparison of the scratches';$('h1').textContent=data.title+' Step by step review';$('#eyebrow').textContent='DRAFT '+(data.manuscript_version||'')+' - Korean. - What? '+data.paragraphs.length+'The ladder.';$('#source').href='/draft#'+data.section_id;$('#before').textContent=number(data.totals.original);$('#after').textContent=number(data.totals.revised);$('#reduction').textContent=changeLabel(data.totals.reduction);$('#basis').textContent=data.count_basis+'.';$('#stale').hidden=!data.source_changed;
  if(data.proposal_status==='compression'){
   const range=data.target_reduction_range;
-  $('#proposal-count-label').textContent='축약안';$('#proposal-column-label').textContent='축약안';
-  $('#reading').textContent='축약안만 읽기';$('#copy').textContent='축약안 전체 복사';
-  if(range?.length===2)$('#target-note').textContent='이번 축약 목표: '+Math.round(range[0]*100)+'–'+Math.round(range[1]*100)+'%.';
+  $('#proposal-count-label').textContent='Condensed version';$('#proposal-column-label').textContent='Condensed version';
+  $('#reading').textContent='Just read the summary.';$('#copy').textContent='Full copy of the summary';
+  if(range?.length===2)$('#target-note').textContent='The goal of this concussion is: '+Math.round(range[0]*100)+'–'+Math.round(range[1]*100)+'%.';
  }
  for(const chapter of data.comparisons){const link=document.createElement('a');link.href='/draft-compare?section='+encodeURIComponent(chapter.section_id);link.textContent=chapter.title;if(chapter.section_id===data.section_id)link.setAttribute('aria-current','page');$('#chapters').append(link);}
  let groupId;
@@ -188,11 +188,11 @@ async function load(){try{const sectionId=new URLSearchParams(location.search).g
   const jump=document.createElement('a');jump.href='#'+p.id;jump.textContent=String(i+1).padStart(2,'0')+' '+p.label;$('#jump').append(jump);
   const card=document.createElement('section');card.className='paragraph';card.id=p.id;
   const head=document.createElement('div');head.className='paragraph-head';const title=document.createElement('h2');const seq=document.createElement('span');seq.className='paragraph-number';seq.textContent=String(i+1).padStart(2,'0');title.append(seq,document.createTextNode(p.label));const badge=document.createElement('span');badge.className='reduction';badge.classList.toggle('increased',p.reduction<0);badge.textContent=changeLabel(p.reduction);head.append(title,badge);card.append(head);
-  const pair=document.createElement('div');pair.className='pair';let revisedProse,revisedSize;for(const version of ['original','revised']){const copy=document.createElement('div');copy.className='copy '+version;const label=document.createElement('span');label.className='mobile-label';label.textContent=version==='original'?'기준 원문':'수정안';copy.append(label);const text=document.createElement('div');text.className='copy-text';text.tabIndex=0;text.innerHTML=displayHTML(p[version+'_html']);copy.append(text);const size=document.createElement('div');size.className='size';size.textContent=number(p[version+'_count'])+'자';copy.append(size);pair.append(copy);if(version==='revised'){revisedProse=text;revisedSize=size;}}card.append(pair);addReview(card,p,revisedProse,revisedSize);$('#paragraphs').append(card);
+  const pair=document.createElement('div');pair.className='pair';let revisedProse,revisedSize;for(const version of ['original','revised']){const copy=document.createElement('div');copy.className='copy '+version;const label=document.createElement('span');label.className='mobile-label';label.textContent=version==='original'?'The standard.':'Amendments';copy.append(label);const text=document.createElement('div');text.className='copy-text';text.tabIndex=0;text.innerHTML=displayHTML(p[version+'_html']);copy.append(text);const size=document.createElement('div');size.className='size';size.textContent=number(p[version+'_count'])+'Now, what?';copy.append(size);pair.append(copy);if(version==='revised'){revisedProse=text;revisedSize=size;}}card.append(pair);addReview(card,p,revisedProse,revisedSize);$('#paragraphs').append(card);
  }
  updateReview();
- if(data.applied_at){$('#apply-feedback').textContent='마지막 적용: '+new Date(data.applied_at).toLocaleString('ko-KR');$('#apply-links').hidden=false;}
- $('#paragraphs').setAttribute('aria-busy','false');$('#copy').disabled=false;$('#status').textContent=data.proposal_status==='baseline'?'최신 v2 원문을 불러왔습니다. 현재 수정안은 원문과 같습니다.':`${data.paragraphs.length}문단의 비교안을 불러왔습니다. 원본은 보존되어 있습니다.`;
+ if(data.applied_at){$('#apply-feedback').textContent='And the last application is: '+new Date(data.applied_at).toLocaleString('en-US');$('#apply-links').hidden=false;}
+ $('#paragraphs').setAttribute('aria-busy','false');$('#copy').disabled=false;$('#status').textContent=data.proposal_status==='baseline'?'So we\x27ve got the latest version of v2 in the original, and the current version is the same as the original.':`${data.paragraphs.length}It\x27s a comparison of the civilization.`;
  if(location.hash){document.getElementById(location.hash.slice(1))?.scrollIntoView();}
  }catch(error){$('#paragraphs').setAttribute('aria-busy','false');$('#status').textContent=error.message;$('#status').style.color='#b42318';}}
 load();

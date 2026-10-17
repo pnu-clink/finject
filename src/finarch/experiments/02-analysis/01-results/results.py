@@ -110,8 +110,8 @@ def prepare(source, target, *, analysis=None, tag=None):
     store.event(target, 'EVALUATION_REUSED_FOR_ANALYSIS', source_run=source.name,
                 copied_files=len(manifest)-1, new_target_model_calls=0, independent_evaluation=False)
     verify_reuse(target)
-    render(target, 'run', source=source.name, status='분석 준비', planned=0)
-    render(target, 'analysis', source=source.name, status='분석 준비')
+    render(target, 'run', source=source.name, status='Ready for the analysis.', planned=0)
+    render(target, 'analysis', source=source.name, status='Ready for the analysis.')
     return target
 
 
@@ -215,7 +215,7 @@ def build(root):
     store.write(folder / 'state.json', state)
     render(root, '01_results', source=source.name, planned=len(output), statuses=state['statuses'])
     if 'evaluation_reuse' in config:
-        render(root, 'run', source=source.name, status='A01 취합 완료', planned=len(output))
+        render(root, 'run', source=source.name, status='A01 Complete the merger', planned=len(output))
     store.event(root, 'A01_RESULTS_COLLECTED', **state)
     verify_reuse(root)
     materials = __import__('finarch.experiments.02-analysis.01-results.rq1_materials', fromlist=['build'])

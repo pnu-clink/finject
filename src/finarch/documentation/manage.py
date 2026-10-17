@@ -103,7 +103,7 @@ def source_inventory(rows):
             if match:
                 sections.append({'line': index, 'level': len(match[1]),
                                  'title': match[2], 'anchor': anchor(match[2])})
-            if re.search(r'사용자|확정|요구|금지|보류|미구현|철회|필수|후속 결정', line):
+            if re.search('\uc0ac\uc6a9\uc790|\ud655\uc815|\uc694\uad6c|\uae08\uc9c0|\ubcf4\ub958|\ubbf8\uad6c\ud604|\ucca0\ud68c|\ud544\uc218|\ud6c4\uc18d \uacb0\uc815', line):
                 requirements.append({'line': index, 'text': line})
         inventory.append({'original': row['original'], 'archive': row['archive'],
                           'destination': row['destination'], 'sections': sections,
@@ -125,15 +125,15 @@ def migrate():
             raise ValueError('ORIGINAL_CHANGED:' + item['original'])
     write_json(RUN / 'migration.json', rows)
     source_inventory(rows)
-    text = '# 기존 문서 이관 대응표\n\n'
-    text += '원본은 바이트 그대로 보관했습니다. 새 소속은 현재 읽는 입구이며, 과거 실행 결과·대체된 정책은 보관 이력으로 남깁니다. '
-    text += '혼재 문서의 여러 주제는 새 단계 문서에 분산했고, 이 표는 대표 소속을 표시합니다. 절·요구 문장별 원문 위치는 '
-    text += '[취합 색인](../../reports/run/20260923-dataset-documentation/source-inventory.json)에 있습니다.\n\n'
-    text += '|기존 파일 / 원본|현재 소속|처리|\n|---|---|---|\n'
+    text = '# The existing documentary cross-reference chart\n\n'
+    text += 'The original was kept in bytes, the new ones are now read entries, and the replacement policies are now kept in storage. '
+    text += 'Several of the topics in the mixed document were split into new step documents, and this table shows the representative sub-genres. '
+    text += '[The color of the mixed color](../../reports/run/20260923-dataset-documentation/source-inventory.json)is the location.\n\n'
+    text += 'The file is now in the original file.\n|---|---|---|\n'
     for row in rows:
         archived = Path(row['archive']).name
         target = row['destination']
-        meaning = '실험 자료 보존·후속 재정리' if row['disposition'] == 'EXPERIMENT_HISTORY' else '요구·흐름 취합 / 당시 결과·변경 이력 보관'
+        meaning = 'Conservation of experimental data and retrofitting' if row['disposition'] == 'EXPERIMENT_HISTORY' else 'Requirement: Flow accumulation / time result: change in dynamic storage'
         text += f'|[{archived}](docs/{archived})|[{target}](../../{target})|{meaning}|\n'
     (ARCHIVE / 'MIGRATION.md').write_text(text)
     for row in rows:
@@ -160,20 +160,20 @@ def refresh():
     rows.sort(key=lambda row: (front.index(row['path']), '') if row['path'] in front
               else (3, row['path'].replace('/README.md', '/')))
     write_json(RUN / 'documentation.json', {'kind': 'PIPELINE_DOCUMENTATION',
-        'title': '데이터셋·실험 파이프라인 · 단계별 요구사항', 'documents': rows,
+        'title': 'Data set, experimental pipeline, step by step requirements', 'documents': rows,
         'archive_manifest': 'migration.json', 'model_calls': 0,
         'scope': 'Current dataset and experiment pipeline documentation; run results remain separately scoped.'})
     write_json(RUN / 'summary.json', {'kind': 'PIPELINE_DOCUMENTATION', 'documents': len(rows),
                                      'status': 'DOCUMENTATION_READY', 'model_calls': 0})
     migration = json.loads((RUN / 'migration.json').read_text())
-    table = '# 기존 문서 이관 대응표\n\n'
-    table += '원본은 바이트 그대로 보관했습니다. 대표 소속으로 현재 문서를 연결합니다. 과거 실행·대체된 요구를 모두 현재 기준으로 채택한 표가 아닙니다. '
-    table += '[절·요구 문장 취합 색인](../../reports/run/20260923-dataset-documentation/source-inventory.json)과 '
-    table += '[R01~R35 대응표](../../reports/run/20260923-dataset-documentation/requirements-map.json)에 상세 근거를 보존합니다.\n\n'
-    table += '|기존 파일 / 원본|현재 소속|처리|\n|---|---|---|\n'
+    table = '# The existing documentary cross-reference chart\n\n'
+    table += 'The original was kept in the byte, and it\'s a representative link to the current document, not a label that has adopted all past execution and replacement requests as current standards. '
+    table += '[J: Yogurt phrase syntax color](../../reports/run/20260923-dataset-documentation/source-inventory.json)and '
+    table += '[R01~R35 The response chart.](../../reports/run/20260923-dataset-documentation/requirements-map.json)It preserves the detailed data.\n\n'
+    table += 'The file is now in the original file.\n|---|---|---|\n'
     for item in migration:
         name = Path(item['original']).name
-        note = '실험 자료 보존·후속 재정리' if item['disposition'] == 'EXPERIMENT_HISTORY' else '단계별 요구·흐름 취합 / 당시 결과·대체안은 보관'
+        note = 'Conservation of experimental data and retrofitting' if item['disposition'] == 'EXPERIMENT_HISTORY' else 'Step by step requirements flow accumulation / time outcome'
         table += f"|[{name}](docs/{name})|[{item['destination']}](../../{item['destination']})|{note}|\n"
     (ARCHIVE / 'MIGRATION.md').write_text(table)
     event('refresh_readmes_and_index', documents=len(rows), templates=len(READMES))
@@ -203,14 +203,14 @@ def refresh_experiments(documents):
                 references.add(path.relative_to(ROOT).as_posix())
     references.update(p.relative_to(ROOT).as_posix() for p in run.rglob('*') if p.is_file())
     write_json(run / 'documentation.json', {
-        'kind': 'PIPELINE_DOCUMENTATION', 'title': '실험 · Input → Evaluation → Analysis',
+        'kind': 'PIPELINE_DOCUMENTATION', 'title': 'The first is the experimental method.',
         'entry_document': 'docs/02-experiments/README.md', 'documents': selected,
         'reference_files': sorted(references), 'model_calls': 0,
-        'navigation': [['실험 전체', 'docs/02-experiments/README.md'],
+        'navigation': [['All experiments', 'docs/02-experiments/README.md'],
                        ['00 Input', 'docs/02-experiments/00_input/README.md'],
                        ['01 Evaluation', 'docs/02-experiments/01_evaluation/README.md'],
                        ['02 Analysis', 'docs/02-experiments/02_analysis/README.md'],
-                       ['작업 기록', 'reports/run/20260927-experiment-documentation/README.md']]})
+                       ['Work record', 'reports/run/20260927-experiment-documentation/README.md']]})
     steps = json.loads(Path(__file__).with_name('experiment-pipeline.json').read_text())
     source_paths = {call['file'] for stage in steps for step in stage['steps'] for call in step.get('calls', [])}
     source_paths.update(path for stage in steps for path in stage.get('existing_sources', []))
@@ -264,15 +264,15 @@ def refresh_experiment_source_layout():
     references.add('config/experiments/config.toml')
     references.update(p.relative_to(ROOT).as_posix() for p in (ROOT / 'docs/02-experiments').rglob('*.md'))
     write_json(run / 'documentation.json', {
-        'kind': 'PIPELINE_DOCUMENTATION', 'title': '실험 소스 구성 · Codex/API 분석 설정',
+        'kind': 'PIPELINE_DOCUMENTATION', 'title': 'The configuration of the experimental source; the setting of the Codex/API analysis',
         'entry_document': 'src/finarch/experiments/README.md', 'documents': documents,
         'reference_files': sorted(references), 'model_calls': 0,
-        'navigation': [['소스 전체', 'src/finarch/experiments/README.md'],
+        'navigation': [['The whole source.', 'src/finarch/experiments/README.md'],
                        ['00 Input', 'src/finarch/experiments/00-input/README.md'],
                        ['01 Evaluation', 'src/finarch/experiments/01-evaluation/README.md'],
                        ['02 Analysis', 'src/finarch/experiments/02-analysis/README.md'],
                        ['config.toml', 'config/experiments/README.md'],
-                       ['검사 기록', 'reports/run/20260927-experiment-source-layout/README.md']]})
+                       ['The inspection records.', 'reports/run/20260927-experiment-source-layout/README.md']]})
     write_json(run / 'summary.json', {'kind': 'PIPELINE_DOCUMENTATION',
         'status': 'DOCUMENTATION_READY', 'documents': len(documents), 'model_calls': 0})
 

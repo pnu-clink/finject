@@ -148,7 +148,7 @@ def build(root):
                               'excluded':sum(r['eligible'] is False for r in rows),'undetermined':sum(r['eligible'] is None for r in rows)}
         for relative, digest in hashes.items():
             if store.file_hash(root/relative)!=digest: raise ValueError('RQ1_SOURCE_CHANGED:'+relative)
-        summary = {'schema_version':'RQ1MaterialsV1','run_id':root.name,'title':'RQ1 분석자료',
+        summary = {'schema_version':'RQ1MaterialsV1','run_id':root.name,'title':'RQ1 analysis data',
             'created_at':store.now(),'status':'AVAILABLE','new_model_calls':0,
             'basis':'SUBMITTED_CLASSIFICATION_NOT_SEMANTIC_SUCCESS','original_axis':'SAVED_NUMERIC_MATCH',
             'groups':summaries,'source_hashes':hashes,

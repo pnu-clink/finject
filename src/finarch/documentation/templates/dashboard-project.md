@@ -1,16 +1,16 @@
-# 프로젝트 현황 · 세션과 남은 일
+# Project Status: Session and remaining work
 
-[대시보드 전체](../README.md) → [프로젝트 현황 열기](http://127.0.0.1:8895/dashboard/03-project/) → [자료·코드 흐름](../../../docs/03-dashboard/README.md) 순서로 읽습니다. 프로젝트 루트에서 `./viewer/dashboard/start.command`를 실행합니다.
+[The entire dashboard is](../README.md) → [Open the project scenario](http://127.0.0.1:8895/dashboard/03-project/) → [From source code flow](../../../docs/03-dashboard/README.md) I read it in sequence. `./viewer/dashboard/start.command`Run the program.
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[index.html](index.html)|한눈에 보는 지표, 실행 단계, 세션 관계, 작업 목록, 서버 상태의 자리|
-|[project.js](project.js)|읽기 전용 API 요청, 전체 세션 신호 목록·우선 과제·실행 단계 표시, 세션/과제/생성 관계 팝업과 1분 갱신|
-|[project.css](project.css)|데스크톱과 좁은 화면의 배치·상태 구분|
-|[monitor.py](../../../src/finarch/dashboard/03-project/monitor.py)|Codex 로컬 세션 및 저장 자료를 읽는 Python 구현|
-|[session-map.json](../../../src/finarch/dashboard/03-project/session-map.json)|주요 세션의 업무별 화면 분류|
-|[제작·검증 기록](../../../reports/run/20260929-project-dashboard/README.md)|실행 로그, 검증 결과, 해석 범위|
+|[index.html](index.html)|The one-way indicator, the execution step, the session relationship, the task list, the server status position.|
+|[project.js](project.js)|Read-only API requests, full session signal list; preferred task; action step display; session/project/organic relationship popups and 1minute refresh|
+|[project.css](project.css)|Distinguishing between the desktop and the narrow screen|
+|[monitor.py](../../../src/finarch/dashboard/03-project/monitor.py)|Implementation of Python reading the Codex local session and storage data|
+|[session-map.json](../../../src/finarch/dashboard/03-project/session-map.json)|Key session task-by-screen sorting|
+|[Created and verified records](../../../reports/run/20260929-project-dashboard/README.md)|Run logs, verification results, scope of interpretation|
 
-읽는 순서는 **왼쪽 전체 세션 구조 → 오른쪽 제작·평가·분석·연구 단계 → 우선 확인 6건과 현재 작업 중 → 저장 실행·업무별 남은 일 → 서버 상태**입니다. 화면을 스크롤하지 않고 주요 구조를 볼 수 있도록 세션별 내용과 전체 과제는 팝업으로 옮겼습니다. 업무별 묶음은 편의를 위한 분류이고, `↳`와 부모·자식 팝업은 Codex 생성 기록이 있는 경우에만 표시합니다. 신호 점은 **녹색 작업 중 / 빨강 막힘 연결 / 노랑 미완료 연결 / 회색 대기**입니다. 한 세션의 최근 요청 3건은 최근 사용자 입력이며 완료 여부를 단정하는 작업 목록이 아닙니다. 관련 미완료 3건은 별도의 문서·run 상태에서 확인한 항목입니다.
+The order in which you read it. **Left full session structure → Right creation, evaluation, analysis, research step → Priority check 6Previous and current work → Save run; business breakdown remaining → Server status**So we've moved the content of each session and the entire task to pop-up, so you can see the main structure without scrolling through the screen, and then the task group is sorted for convenience, and then you can see that the whole task group is pop-up. `↳`And the parent-name pop-up only shows if there's a codex creation record. **Green working / Red barrier connection / Yellow unfinished connection / Gray air**That's the most recent request for a session. 3This is not a list of tasks that are recent user input and completed. 3The item is the item that was verified in separate document-run state.
 
-자료가 누락되면 경고나 `미기록`으로 표시합니다. 다른 호스트의 세션은 로컬 세션 기록에 없을 수 있습니다. 과제 팝업과 실행 목록의 `원문 근거`에서 저장 파일을 확인할 수 있습니다. 화면은 프로젝트 자료를 고치거나 모델을 호출하지 않습니다.
+If the data is missing, you can give me a warning. `Not recorded`The session of the other host may not be in the local session record. `Source evidence`The screen doesn't fix the project data or call the model.

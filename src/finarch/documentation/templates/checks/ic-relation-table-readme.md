@@ -1,14 +1,14 @@
-# IC-RELATION · 표 뒤 독립 문단 배치
+# The independent ranking behind the table
 
-생성·검증 프롬프트 v4에 표 내부 문장 삽입 금지를 추가했습니다. Python 계획은 대상 표 전체의 마지막 행 뒤 좌표를 지정하며 빈 줄을 요구합니다. 구형 배치 계획은 재시도에서 재사용하지 않습니다. 응답 schema, 관계 방향·계수·수치 선택은 유지합니다.
+The creation and verification prompt v4 added a prohibition on inserting phrases inside a table. The Python plan specifies a coordinate after the last row of the entire target table, requiring a blank line.
 
-## 읽는 순서와 확인 범위
+## Read order and verification range
 
-1. `validation.json`: 검사 결과와 위치 변경 요약.
-2. `terminal.log`: 관련 31개 로컬 검사.
-3. `test-0100-placement.json`, `test-0105-placement.json`: 새 요청·편집·적용 본문. 저장된 영어 문장을 재사용한 Python 배치 확인이며 신규 LLM 생성이나 의미 검증 결과가 아닙니다. 기존 run·최종 합본·평가 HTML·Import ID는 변경하지 않았습니다.
-4. 아래 미리보기: 공통 dataset viewer의 문서 보기에서 읽을 수 있습니다. 결과별 HTML은 만들지 않습니다.
+1. `validation.json`: Results of the examination and summary of the change of position.
+2. `terminal.log`Related: 31items local inspection.
+3. `test-0100-placement.json`, `test-0105-placement.json`Python placement verification that reuses stored English phrases and is not the result of new LLM creation or meaning verification. The existing run, updated copy, evaluation, HTML Import ID has not changed.
+4. Preview below: You can read it from the document view of the common dataset viewer.
 
-별도 레거시 프롬프트 검사는 과거 fixture 누락 및 현재 모델·공통 지시·EA 문구와의 불일치로 통과하지 않았습니다. 해당 오류를 이번 변경의 통과 근거에 포함하지 않습니다.
+The standard legacy prompt test did not pass past fixture failures and current inconsistencies with the Model-General Directions-EA statements. The error does not include the basis for passing this change.
 
 {{EXAMPLES}}

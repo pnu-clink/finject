@@ -1,40 +1,40 @@
-# Python 계산 전 숫자 표현 변환
+# Python calculation before the number expression conversion
 
-예를 들어 원래 값 `80,000`을 계산용 `80000`으로 바꿉니다. 원문, 모델 원응답, 저장된 풀이 코드는 그대로 둡니다.
+So, for example, the original value. `80,000`For the calculation `80000`The source code, the model raw response, the stored grass code, it's left.
 
-설정은 [number-rules.json](number-rules.json), 실행 코드는 [number_normalization.py](number_normalization.py)입니다. 현재 버전 2에는 계산용 값의 천 단위 쉼표 제거와 원문 인용문의 달러 표기 보정이 있습니다. `1,5`처럼 다른 의미일 수 있는 쉼표는 임의로 제거하지 않습니다. 괄호의 음수 해석이나 단위 환산은 이 규칙에 포함하지 않습니다.
+The setting is [number-rules.json](number-rules.json)The execution code is [number_normalization.py](number_normalization.py)This is the current version. 2There's a thousand-unit comma removal of the computing value and a dollar sign adjustment of the original citation. `1,5`Commas that can have different meanings, like, are not removed arbitrarily, and the negative interpretation of the brackets or the unit translation is not included in this rule.
 
-## 적용 순서와 추가 방법
+## Application order and adding methods
 
-`rules` 배열의 위에서 아래로 적용합니다. 앞 규칙의 출력이 다음 규칙의 입력입니다. 한 규칙에 맞았다고 끝내지 않고 활성 규칙을 모두 거칩니다. `enabled: false`인 규칙은 건너뜁니다.
+`rules` It's applied from top to bottom of the array, and the output of the front rule is the input of the next rule, and it doesn't end up being in line with one rule, but it goes through all the active rules. `enabled: false`The rules are broken.
 
-|등록된 처리 방식|설정과 동작|
+|The registered processing method|Setup and operation|
 |---|---|
-|`regex_replace`|전체 값이 `match` 정규식에 맞으면 `pattern`을 `replacement`로 치환합니다.|
-|`literal_replace`|문자열 `from`을 문자열 `to`로 치환합니다.|
-|`strip_whitespace`|문자열 양끝의 공백을 제거합니다.|
+|`regex_replace`|The whole value is `match` If you're in the regulars, `pattern` `replacement`R is the replacement.|
+|`literal_replace`|The string. `from`The string `to`R is the replacement.|
+|`strip_whitespace`|It removes the gaps at both ends of the string.|
 
-새 패턴은 고유 `id`, `kind`, `enabled`와 해당 방식의 설정을 배열에 추가합니다. 처리 방식 자체가 새로 필요하면 Python 함수를 구현하고 `TRANSFORMS`에 명시적으로 등록합니다. 등록되지 않은 방식은 오류이며 설정으로 임의 코드를 실행하지 않습니다. 규칙 변경 시 버전을 올리고, 값의 의미가 유지되는 예시와 거절해야 할 예시로 확인합니다.
+The new pattern is unique. `id`, `kind`, `enabled`And we add the settings of the same method to the array, and if the process itself needs a new one, we can implement the Python function and then we can do that. `TRANSFORMS`The unregistered method is an error and does not run any code as setup. When the rules change, the version is updated, and the value is confirmed as an example of maintaining meaning and an example of rejecting.
 
-문자열 치환 → 공백 제거 → 정규식 치환을 순차 적용하는 조합은 검사에 포함합니다. 이 조합을 운영 규칙으로 자동 활성화하지는 않습니다.
+A combination that ranks a string replacement → blank removal → regular replacement includes a test, and it doesn't automatically activate that combination as an operating rule.
 
-## 기록과 실패
+## Record and failure.
 
-문항별 `02-calculation/03-execute-python/02-number-normalization.json`에 실제 적용한 규칙 전체·버전·해시, 근거별 원래 값·계산용 값·변경 규칙, 각 규칙의 입력과 출력·변경 여부를 저장합니다. 맞지 않은 활성 규칙도 `changed: false`로 남습니다. 이후 원문 숫자와 대조하고 통과해야 Python을 실행합니다. 처리할 수 없는 쉼표 표기는 오류로 남기고 실행을 중단합니다.
+By case `02-calculation/03-execute-python/02-number-normalization.json`The actual rules that are applied to the entire version of the hash, the base-by-base original values, the computation values, the variation rules, each rule is stored whether the input and output and variation of each rule are incorrect. `changed: false`Then we run Python, which must be passed by and contrasted with the source numbers, leaving the unprocessed comma tag as an error and stopping the execution.
 
-중앙 뷰어의 ‘계산과 정답’에서 변환 표와 상세 내역을 확인합니다. 과거 실패 결과는 덮어쓰지 않고, 저장된 코드 재실행은 별도 실행 폴더에 원코드 해시와 함께 보존합니다.
+The conversion tables and detailed inputs are checked in the Central Viewer's cache and correct answer tables. The stored code re-enactments are stored in the execution folder with the source hash without overwriting past failures.
 
 
-## 원문 인용문 보정 — 버전 2
+## Original quote corrected by the editors 2
 
-`source_rules`도 등록된 방식으로 순차 적용합니다. 현재 `remove_adjacent_currency_prefix` 방식의 `align_adjacent_dollar_citation` 규칙이 활성화돼 있습니다. 지정 범위가 숫자이고, 원문에서 그 숫자 바로 앞에 실제 달러가 있으며, 모델 인용문과 범위 안 글자의 차이가 달러 하나뿐이면 계산용 사본의 인용문에서 달러를 제거합니다. 숫자 값·원문 위치·통화 단위·생성 코드는 그대로 둡니다.
+`source_rules`And it's applied in a registered way. `remove_adjacent_currency_prefix` method `align_adjacent_dollar_citation` The rule is activated: the specified range is a number, and in the original there's a real dollar right in front of that number, and if the difference between the model quotation and the letter within the range is only one dollar, it removes the dollar from the citation in the calculation copy, leaving the numeric value, the source value, the currency unit, and the biological code.
 
-순서는 **원문으로 확인되는 인용문 보정 → 계산용 숫자 표현 변환 → 원문 글자 일치 검사 → 숫자 값 대조 → Python 실행**입니다. 기존 python_runtime.py의 24번째 줄에 도달하기 전에 보정합니다. 값이 다르거나 다른 통화·다른 위치이면 이 규칙으로 덮지 않고 해당 원인을 기록합니다.
+The order. **The proof of the citation as a proof of the original → the calculation of the numerical expression conversion → the proof of the correspondence of the original letters → the numerical value contrast → the Python execution**It's the same thing as the old python_runtime.py. 24Before you get to the second row, you're going to check if the value is different or if the currency is different or the location is different, and you're not going to cover it with this rule, you'll be recording the cause.
 
-`number-normalization.json`에는 `source_text`(원래 인용문), `validated_source_text`(검사에 사용할 인용문), `source_applied_rules`, `source_steps`를 함께 저장합니다. 모델 원응답이나 저장된 프로그램 본문은 덮어쓰지 않습니다.
+`number-normalization.json`In some cases `source_text`(Original quote) `validated_source_text`(Quotation for the investigation) `source_applied_rules`, `source_steps`The model does not overwrite the raw response or the stored program text.
 
-## 운영 원칙: 숫자 읽기 오류의 자율 보완
+## Operating principle: Autocomplete the number reading error
 
-숫자 표기를 읽거나 Python 숫자로 변환하는 과정에서 오류가 발견되면 에이전트가 원인을 확인하고 규칙을 추가·보완합니다. 사용자가 매번 요청하지 않아도, 발견한 문제와 추가할 규칙을 짧게 알린 뒤 수정·재실행·회귀 검사를 수행합니다. 필요하면 새로운 처리 함수를 등록하고 규칙 버전도 올립니다. 원래 자료와 변환 내역을 남기며 README와 중앙 뷰어에서 결과를 확인합니다.
+If an error is detected in the process of reading a number tag or converting it to Python numbers, the agent identifies the cause and adds and complements the rules. Without requiring the user to do so every time, they briefly inform the user of the problems they have found and the rules to add, then perform a correction, correction, and return check. If necessary, they register a new processing function and upload a rule version, leaving the original data and the conversion data, and verifying the results in README and Central Viewer.
 
-숫자 의미를 바꾸는 수식·단위 해석이나 gold 불일치를 문자열 규칙으로 숨기지 않습니다. 이미 제외한 gold 불일치 문항은 추가 처리하지 않습니다.
+It doesn't hide the numerical, unitary interpretation or gold inconsistency by stringing rules.

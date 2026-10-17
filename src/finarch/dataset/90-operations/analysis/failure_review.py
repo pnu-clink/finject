@@ -24,158 +24,158 @@ def save(name, value):
 CAT = {}
 
 
-def category(key, phase, title, owner, why, supply, fix, example, confidence='기록에 근거한 원인 분류; 개선 효과는 미검증'):
+def category(key, phase, title, owner, why, supply, fix, example, confidence='Causal classification based on records; improvement effects are misdiagnosed'):
     CAT[key] = dict(id=key, phase=phase, title=title, owner=owner, why=why,
                     supply=supply, fix=fix, example=example, confidence=confidence)
 
 
-category('P_PERIOD', 'Preparation', '질문의 연도·회사와 자료가 맞지 않습니다', '원본 확인·보완',
-         '질문에서 요구한 시점이나 회사의 수치가 없습니다. 정답과 맞는 다른 연도를 대신 쓰면 질문 자체가 달라집니다.',
-         '질문의 회사·연도와 일치하는 표, 표 제목, 주석을 함께 제공해야 합니다.',
-         '원문 출처에서 질문의 오기인지 자료 누락인지 확인합니다. 확인된 정정본을 별도 버전으로 만들고 원본·변경 이유를 보존합니다.',
-         'test-0022: 질문은 2014년인데 표는 2004·2003년입니다. 2004년의 875−848=27이 저장 정답과 같아도 2014년 답이라고 할 수 없습니다.')
-category('P_MISSING', 'Preparation', '필요한 금액·대상·조건이 빠져 있습니다', '원본 보완 + 준비 단계 확인',
-         '있어 보이는 비슷한 수치를 사용해도 질문이 요구한 값은 아닙니다. 필요한 값이나 적용 조건을 추가하지 않고는 해당 계산을 확정하기 어렵습니다.',
-         '숫자마다 무엇의 값인지, 어느 범위인지, 필요한 시작값·만기·거래 방향을 명시해야 합니다.',
-         '계산에 필요한 항목 목록과 제공된 항목을 먼저 대조합니다. 빠진 내용은 출처에서 보완하며 비슷한 항목이나 정답으로 대신하지 않습니다.',
-         'test-0029: 발행할 수 있도록 허용된 주식 수만 있는데 실제 발행된 주식 수를 묻습니다. 두 수는 같은 뜻이 아닙니다.')
-category('P_MEASURE', 'Preparation', '어떤 값·비율을 구하라는지 분명하지 않습니다', '질문 명확화 또는 검토 기준 보완',
-         '표에는 여러 계산이 가능하지만 질문이 대상이나 비교 방법을 충분히 정하지 않아 검토가 멈췄습니다. 모든 사례가 원본 오류로 확정된 것은 아닙니다.',
-         '예를 들어 기본 주당이익인지 희석 주당이익인지, 단순 차이인지 변화율인지 명시합니다.',
-         '실제로 답이 달라지는 두 해석을 먼저 비교합니다. 금융 용어만으로 의미가 정해지는 경우는 인정하고, 그렇지 않으면 질문을 보완합니다.',
-         'test-0214: 기본 주당이익은 1.563, 희석 주당이익은 1.551인데 질문에는 어느 쪽인지 없습니다.')
-category('P_CONVENTION', 'Preparation', '계산 관례를 어디까지 인정할지 정하지 못했습니다', '검토 기준 우선 보완; 필요한 조건만 원본에 추가',
-         '검토기는 이자 계산·평균·반올림 등에 다른 관례가 있다는 이유로 멈췄습니다. 관례를 문장에 쓰지 않았다는 사실만으로 원본이 잘못됐다고 단정할 수 없습니다.',
-         '일수 기준, 복리 방식, 평균 방식, 초기값, 반올림 방식을 공통 지침이나 문항 조건으로 제공합니다.',
-         '허용할 기본 관례와 적용 근거를 사전에 정합니다. 이름이 명확한 표준 방법은 사용하고, 실제로 경쟁하는 해석이 결과를 바꾸는 경우만 추가 조건을 요구합니다.',
-         'test-0965: 집별 평당가격의 단순 평균은 181.64, 전체 가격÷전체 면적은 180.00입니다. 어느 평균을 원하는지 정하면 됩니다.')
-category('P_SCALE', 'Preparation', '단위·정답 표기가 질문과 맞지 않습니다', '원본·정답 메타정보 확인 + 정제 보완',
-         '달러와 천 달러, 소수와 백분율, 질문의 자릿수와 정답 자릿수가 섞였습니다. 숫자만 비교하면 서로 다른 뜻의 값을 비교하게 됩니다.',
-         '표의 단위, 출력 단위, 자릿수, 정답 산출 근거를 함께 제공합니다.',
-         '값과 단위를 함께 변환하고 변환 전후를 기록합니다. 정답에 맞추기 위해 질문이나 수치를 바꾸지 말고 어느 기록을 정정해야 하는지 출처로 확인합니다.',
-         'test-0320: 713천 주×42달러는 29.946백만 달러입니다. 백만 단위의 정수 답은 30인데 저장 정답은 29,946입니다.')
-category('P_TEXT', 'Preparation', '깨진 문자·날짜를 안전하게 고치지 못했습니다', '정제 규칙 보완',
-         '날짜가 붙어 있거나 구두점이 숫자처럼 남았습니다. 현재 규칙은 숫자를 보호하므로 문자 깨짐까지 막거나 수정 위치를 확정하지 못합니다.',
-         '깨지기 전 원문, 정제된 문장, 두 문장의 위치 대응표를 제공합니다.',
-         '출처로 확인된 문자 깨짐과 실제 숫자를 구별합니다. 반복되는 문구는 위치와 주변 문장으로 지정하고 모든 편집을 원문 기준으로 한 번에 적용합니다.',
-         'test-0229: “december 292000”을 날짜로 분리하는 작업이 숫자 변경으로 취급됐습니다. test-0300은 반복 문구의 수정 위치에서 멈췄습니다.')
-category('P_VERIFY_UNCERTAIN', 'Preparation', '계산은 됐지만 검토가 해석을 확정하지 못했습니다', '검토 기준 우선 보완; 문항별 원본 확인',
-         '계산 실행과 별개로 검토기가 질문의 뜻·관례를 확정하지 못했습니다. 이것은 틀렸다는 확정 판정과 다릅니다.',
-         '선택한 항목·단위·기간·공식과 그 선택 이유, 대안 해석이 실제로 만드는 답을 함께 제공합니다.',
-         '상식적인 방향·금융 관례를 무시한 과도한 모호성 판정을 먼저 재검토합니다. 남는 실질적 모호성만 질문에 보완합니다.',
-         'test-0014: 1분기 60%에서 2분기 50%로 바뀌었습니다. −10%p의 변화와 감소 폭 10%p를 구분하면 됩니다. 모든 경우를 자료 부족으로 볼 필요는 없습니다.')
-category('P_VERIFY_FAIL', 'Preparation', '풀이·설명·검토 판단 중 서로 맞지 않는 부분이 있습니다', '계산·검토 과정 우선 보완',
-         '저장된 검토에서 계산 방법·단위·근거 또는 설명의 문제가 지적됐습니다. 일부 판단에는 이견이 있어 14건 모두 계산 오류로 확정하지 않습니다.',
-         '중간 계산, 사용한 원문 구절, 단위와 마지막 반올림 규칙을 같이 제공합니다.',
-         '잘못된 계산·설명은 고치고, 검토가 근거 없이 한 관례만 강제한 경우에는 검토를 고칩니다. 숫자가 우연히 맞아도 단위가 다른 계산은 통과시키지 않습니다.',
-         'test-0083: 지수가 100→205이면 변화는 105포인트입니다. 이를 105%라고 설명하면 숫자는 같아도 묻는 양이 달라집니다.')
-category('P_GOLD', 'Preparation', '계산과 저장 정답이 다릅니다', '원본 정답·계산을 따로 재확인',
-         '의미 검토는 통과했지만 계산 결과와 저장 정답이 달라 멈췄습니다. 의미 검토 통과만으로 저장 정답이 틀렸다고 확정할 수 없습니다.',
-         '정답 숫자만이 아니라 근거 행, 공식, 중간값, 단위와 반올림 규칙이 필요합니다.',
-         '원문으로 양쪽 계산을 재현해 차이가 나는 지점을 찾습니다. 정답에 맞추기 위한 숫자 보정은 금지하고 기존 제외 상태와 원본을 보존합니다.',
-         'test-0349: 실행값은 480.0, 저장 정답은 129.6입니다. 다르다는 사실과 어느 쪽이 맞는지는 구별해야 합니다.')
-category('P_NOANSWER', 'Preparation', '필요한 정보가 없어 숫자 답을 만들지 못했습니다', '원본 보완 + 준비 단계에서 조기 확인',
-         '생성된 풀이가 답을 비워 두었는데 실행기는 숫자만 받으므로 멈췄습니다. 단순한 숫자 읽기 오류가 아닙니다.',
-         '질문에 필요한 수치와 조건, 없을 경우 무엇이 빠졌는지 명시한 기록을 제공합니다.',
-         '실행 전 정보 부족을 별도 상태로 반환하도록 하고 출처에서 필요한 자료를 보완합니다. 0이나 정답 숫자를 임시로 넣지 않습니다.',
-         'test-0324: 세금 납부액과 세금 비용을 묻는데 자료에는 미지급 세금 잔액만 있습니다.')
-category('P_NUMBER', 'Preparation', '사람이 읽는 숫자 표현을 프로그램이 받지 못했습니다', '숫자 정제·등록 규칙 보완',
-         'four, five, three, six months, EUR90처럼 의미는 읽을 수 있지만 숫자만 기대한 프로그램과 맞지 않았습니다.',
-         '원문 표현, 뜻이 같은 숫자값, 단위, 원문 위치를 한 묶음으로 제공합니다.',
-         'number-rules.json과 숫자 등록을 보완하여 문자 수량과 통화 접두어를 처리합니다. 원문과 변환 로그를 남기고 같은 표현의 회귀 검사를 합니다. 이번 분석에서는 규칙을 변경하지 않았습니다.',
-         'test-0768: four를 4로 기록했지만 원문이 숫자 토큰이 아니라 거절됐습니다. 원본을 새로 만들 문제는 아닙니다.')
-category('P_LINK', 'Preparation', '원문·코드의 연결 정보가 맞지 않습니다', '정제·근거 연결·검사 과정 보완',
-         '인용 구절의 위치, 코드 줄, 수식 이름, 계산에 연결되는 입력 등의 약속이 맞지 않아 내용을 검사하기 전에 멈췄습니다.',
-         '같은 버전의 원문과 질문, 인용 위치, 코드 줄, 값의 역할을 일관되게 제공합니다.',
-         '문장 정제 후 위치를 다시 계산하고 실제 인용문과 대조합니다. 반복·조건문에서 이번 계산에 쓰지 않은 값도 구별합니다. 생성 오류와 검사기 오류를 원기록으로 나눕니다.',
-         'test-1957: 인용 위치가 문장 끝 마침표까지 포함했지만 인용문에는 마침표가 없었습니다.')
-category('P_CODE', 'Preparation', '생성된 코드가 실행 규칙과 맞지 않습니다', '계산 코드 생성·실행 보완',
-         '리스트 위치처럼 정수를 요구하는 자리에 소수를 넘겨 계산이 중단됐습니다.',
-         '숫자의 값 외에 개수·위치·금액 등 용도를 제공합니다.',
-         '개수는 정수인지 확인한 뒤 정수로 사용합니다. 금액을 무조건 정수로 바꾸는 식의 일괄 보정은 하지 않습니다.',
-         'test-1948: 관측 개수가 실수로 전달되어 리스트 범위를 지정하는 계산에서 멈췄습니다.')
-category('P_TRANSPORT', 'Preparation', '응답을 끝까지 받지 못했습니다', '실행·재시도 관리',
-         '연결 실패 또는 불완전한 응답으로 검사를 끝내지 못했습니다. 자료의 내용이 틀렸다는 증거가 아닙니다.',
-         '데이터 내용은 그대로 두고 요청 식별자·완료 상태·수신 응답을 보존합니다.',
-         '통신 재시도와 내용 수정 재시도를 분리하고 완료된 단계부터 안전하게 재개합니다.', 'Preparation 7건: 연결 실패 6건, 불완전 응답 1건.')
+category('P_PERIOD', 'Preparation', 'The company and the data in question are not correct.', 'Original verification and replacement',
+         'There\'s no time or company number required in the question, and if you use a different time to get the correct answer, the question itself will change.',
+         'You have to provide a table, a table title, a keyword that matches the company and the report in question.',
+         'We check the source of the question for a missing document, and then we make the verified copy a separate version, and then save the reason for the change.',
+         'test-0022The question is: 2014years, while the table 2004·2003years. 2004What the fuck? 875−848=27It\'s like this storage answer. 2014You can\'t say that\'s the answer.')
+category('P_MISSING', 'Preparation', 'The amount, the answer, the condition is missing.', 'Original backup + prepping steps verified',
+         'And even if you use the same numbers as you can see, it\'s not the value that the question asks for, and it\'s hard to verify the calculation without adding the necessary values or the necessary conditions.',
+         'You have to specify what each number is worth, what range, what the starting value is, how much, and where you want to trade.',
+         'First, we compare the list of items needed to be calculated with the items provided, and the missing items are complementary to the source, and not replaced by similar items or correct answers.',
+         'test-0029So, I\'m asking you how many shares are allowed to be issued, and the actual number of shares is not the same.')
+category('P_MEASURE', 'Preparation', 'It\'s not clear what the price or rate is.', 'Question clarification or review criteria supplement',
+         'The table has multiple calculations, but the question is not well defined or the method of comparison is not enough, and the review is stopped, and not all cases are confirmed to be original errors.',
+         'For example, it specifies whether the basic dividend is a dividend or a dividend, or a simple difference or a change in the rate.',
+         'So we compare two different interpretations, and we first acknowledge that the financial terms alone make sense, and then we supplement the question.',
+         'test-0214The basic dividend is: 1.563So, the dividend payout is 1.551But the question is not which.')
+category('P_CONVENTION', 'Preparation', 'I haven\'t figured out how far to go with the calculation practice.', 'Priority review criteria supplement; only the necessary conditions are added to the original',
+         'The review machine stopped because there were other procedures, like interest rate calculation, average, and subtraction, and the fact that you didn\'t write the procedure in the sentence doesn\'t make the original wrong.',
+         'It provides the numerical standard, the method of replication, the method average, the initial value, the method reversal as common guidelines or case conditions.',
+         'We set the basic rules and the basis for the application in advance, using a clear standard method of naming, and actually only requiring additional conditions if the competing interpretation changes the outcome.',
+         'test-0965The simple average of the per-family rate is: 181.64So the total price of the whole thing is 180.00So you can just figure out what average you want.')
+category('P_SCALE', 'Preparation', 'The unit-to-correct vote is not the question.', 'Original, correct answer, verification of metadata + cleaning supplement',
+         'You mixed dollars and thousands of dollars, the prime and the percentage, the question number and the answer number, and you compared the numbers, and you compare the values of different meanings.',
+         'It\'s a unit of the table, a unit of output, a digit, a base of the correct output.',
+         'It converts the values and units together and records the pre-conversion, and instead of changing the questions or the numbers to match the correct answer, it determines which records to correct as the source.',
+         'test-0320: 713Thousands of times.42The dollar is 29.946That\'s a million dollars. 30But the answer is, 29,946.')
+category('P_TEXT', 'Preparation', 'I couldn\'t fix the broken text and date safely.', 'The rules of purification',
+         'The date is either stuck or the punctuation is left as a number, and the current rule protects the numbers, so it can\'t stop the text from breaking or confirm the correct position.',
+         'It\'s a pre-breaking code, a clean sentence, and a location matching sign for both sentences.',
+         'It distinguishes between the broken letters identified by the source and the actual numbers, the repeated phrases are assigned to the location and surrounding phrases, and all edits are applied at once on a primitive basis.',
+         'test-0229: “december 292000The task of separating the shell from the date was treated as a numerical change.0300The reiteration stopped at the correction position of the sentence.')
+category('P_VERIFY_UNCERTAIN', 'Preparation', 'The calculations were done, but the review didn\'t confirm the interpretation.', 'Priority replenishment; verification of the original by paragraph',
+         'Apart from the calculation, the reviewer couldn\'t confirm the meaning and the order of the question, which is different from the validation judgment that it\'s wrong.',
+         'It provides the selected items, the category, the duration, the form and the reasons for their selection, together with the answers that make the alternative interpretation actually work.',
+         'First, we re-examine the excessive ambiguity judgments that ignore the sensible direction and financial practices, and the rest are complementary to the question of actual ambiguity.',
+         'test-0014: 1The quarter. 60%in 2The quarter. 50%It\'s changed to −.10%The change and decrease in width of p 10%You can only tell p. You don\'t have to think of every case as a lack of data.')
+category('P_VERIFY_FAIL', 'Preparation', 'There are some inconsistencies in the analysis of the whole, the explanation, the evaluation.', 'The first step in the calculation and verification process',
+         'The reviews in the archive have pointed to problems with calculation, composition, approximation, or explanation. 14Not all of them are validated by calculation errors.',
+         'It provides the middle calculation, the original sentence used, the unit and the final inverse rule.',
+         'If we correct a wrong calculation, if we force a single rule to be reviewed without a basis, we correct a reviewer, even if the numbers are random, and the unit doesn\'t pass another calculation.',
+         'test-0083The index: 100→205The change in the face. 105It\'s a point. 105%So if you\'re going to say, "The numbers are the same", then the amount of questions you ask will vary.')
+category('P_GOLD', 'Preparation', 'The calculation and the storage are different.', 'Original answer: Re-certification of the account',
+         'The meaning review passed, but the calculation results and the storage correctness stopped, so just passing the meaning review can\'t confirm that the storage correctly.',
+         'We need not just the exact numbers, but the base lines, the formulas, the mean, the units, and the inverse rules.',
+         'We use the source items to recreate both calculations and find the points where the difference is, to ban numerical adjustments to match the correct answer, and to preserve the existing exclusion status and the original.',
+         'test-0349The execution value is: 480.0The answer is, 129.6We have to distinguish between what\'s different and what\'s right.')
+category('P_NOANSWER', 'Preparation', 'I didn\'t have the information I needed, so I couldn\'t make a numerical answer.', 'Original backup + early confirmation in the preparation phase',
+         'The resulting loop left the answer blank, but the runner stopped because it only received numbers, not just a number reading error.',
+         'It gives you the necessary numbers and conditions for the question, and if not, what\'s missing.',
+         'It returns the missing information to a separate state before it runs and supplements the data you need from the source. 0Or you don\'t put the correct numbers in temporarily.',
+         'test-0324I\'m asking about the tax bill and the tax bill, but the data only shows the remaining unpaid taxes.')
+category('P_NUMBER', 'Preparation', 'The program didn\'t get the numbers that people read.', 'Number clearance: Regular supplementation',
+         'four, five, three, six months, EUR90The meaning is read, but it didn\'t fit the program that predicted only numbers.',
+         'The source items expression, the meaning, the same numerical value, the unit, the source items position, is given as a set.',
+         'It complements the number-rules.json and the number register to process the number of characters and the call prefix, leaves the font and the conversion log, and checks the return of the same expression, and this analysis hasn\'t changed the rules.',
+         'test-0768So, what\'s the point? 4It was written, but the original was rejected, not a token, but a number.')
+category('P_LINK', 'Preparation', 'The source code link information is not correct.', 'Repair, close connection, inspection process',
+         'The quote\'s location, the code line, the name of the formula, the input that connects to the calculation, etc. were not correct, so I stopped before I checked the contents.',
+         'It provides the same version of the source code and the same function of the question, the quote position, the code line, the value.',
+         'After the sentence is cleared, we re-calculate the location and compare it to the actual quotation, and we also distinguish the values that were not included in this calculation from the repeat and condition box, and we divide the generating error and the checker error into the original record.',
+         'test-1957The quote position included the end of the sentence, but there was no end in the quote.')
+category('P_CODE', 'Preparation', 'The code generated doesn\'t match the execution rules.', 'Generate and execute code',
+         'So you just put the subset in a place that requires an integer, like a list position, and you stop the calculation.',
+         'It gives us a number value, a value, a quantity, and so on.',
+         'We use the numbers to determine if a number is a positive integer, and we don\'t make a total adjustment to the formula for changing the number to a positive intege.',
+         'test-1948The observation number was mistakenly passed and stopped in the calculation of the list range.')
+category('P_TRANSPORT', 'Preparation', 'I didn\'t get the answer to the end.', 'Execution and incident management',
+         'We didn\'t finish the test with a failure to connect or an incomplete response, which is not proof that the data is wrong.',
+         'The data content is kept in place, and the request identifier, the completed state, and the call response are preserved.',
+         'It separates the communication re-runs and the content-modification re-rums and re-opens safely from the finished stage.', 'Preparation 7The connection failed. 6That\'s it. 1That one.')
 
-category('G_NUM_DUP', 'Generation', '삭제할 값과 같은 숫자가 보존 목록에도 남습니다', '변형 계획·숫자 검사 보완',
-         '삭제할 값이 같은 편집 구간에 반복되는데 숫자 목록에서는 한 번만 뺐습니다. 실제 요청이 나머지 같은 숫자를 보존하도록 요구하므로 완전히 지우면 숫자 검사에 걸릴 수 있습니다.',
-         '같은 사실이 반복되는 위치 전체와 각각의 역할, 삭제할 위치와 남길 위치를 구별해서 제공합니다.',
-         '숫자가 같다는 이유만으로 모두 지우지 말고 같은 사실의 반복인지 확인한 뒤 삭제 계획에 묶습니다. 검사기도 그 계획의 남을 숫자 목록을 사용해야 합니다.',
-         'test-0012: 원문은 “6% (6 %)”입니다. 저장된 요청의 허용 숫자 목록에는 6이 한 개 남습니다. 두 표현을 모두 지우는 목적과 충돌합니다.',
-         '집계는 삭제 대상과 같은 숫자가 보존 목록에 남은 후보 수입니다. 같은 숫자가 다른 사실인 경우도 있어 전부 동일 원인으로 확정하지 않습니다.')
-category('G_NUM', 'Generation', '남겨야 할 숫자와 실제 편집 결과가 맞지 않습니다', '편집 계획·생성·검사 보완',
-         '새 숫자를 넣은 경우뿐 아니라 연도·다른 금액을 빠뜨렸거나 같은 숫자의 개수가 달라도 멈춥니다. 오류 이름만으로 숫자를 지어냈다고 단정하면 안 됩니다.',
-         '삭제 대상과 보존할 연도·금액을 원문 위치별로 표시하고, 문자 깨짐으로 생긴 숫자는 먼저 구별합니다.',
-         '실제 편집 전후 숫자와 개수를 비교해 추가·누락·표기 차이를 따로 표시합니다. 검사 조건이 잘못됐으면 생성문 대신 계획·검사기를 고칩니다.',
-         '이 분류는 전체 숫자 검사 실패 279유형 중 삭제 대상과 같은 숫자가 보존 목록에 남은 후보 40유형을 따로 뺀 239유형입니다.')
-category('G_UNCHANGED', 'Generation', '값이나 관계를 바꿔도 최종 답이 달라지지 않습니다', '변형 대상 선택 보완',
-         '답에 영향을 주지 않는 입력, 0인 값, 같은 값으로 돌아오는 계산, 마지막 반올림 등에서 현재 후보는 필요한 다른 답을 만들지 못합니다. 각 원인은 별도 확인이 필요합니다.',
-         '각 입력을 바꾸었을 때 반올림 전후 답이 어떻게 달라지는지와 허용 범위를 제공합니다.',
-         '처음 보이는 숫자를 고정 선택하지 말고 답에 영향을 주는 다른 입력·변경폭을 탐색합니다. 범위를 벗어난 과장된 수치로 억지로 통과시키지 않습니다.',
-         '값 변경 276유형, 관계 변경 32유형이 답 불변으로 멈췄습니다. 출처 유형에도 같은 사전 계산 문제가 반복 기록되어 원인 문항 수와 같지 않습니다.')
-category('G_QUESTION', 'Generation', '질문에 있는 숫자를 다음 단계에 전달하지 못했습니다', '단계 간 데이터 전달 보완',
-         '계산에 쓰는 숫자의 출처가 질문인데, 다음 단계가 그 질문 문자열을 받지 못해 위치를 확인할 수 없었습니다. 원본에 질문이 없다는 뜻이 아닙니다.',
-         '본문·질문·각 숫자의 출처 구분·정제 버전을 함께 전달해야 합니다.',
-         '본문만 전달하는 경로를 고치고 질문 출처의 값도 끝까지 유지합니다. 본문 위치와 질문 위치를 서로 섞어 정렬하지 않습니다.',
-         'test-0250: 저장된 실패는 질문 출처 문자열 누락입니다. 질문을 새로 작성할 일이 아니라 단계 사이 전달을 확인할 일입니다.')
-category('G_CONTROL', 'Generation', '값을 지운 뒤 조건문·반복 계산을 표현하지 못합니다', '계산 표현·검사 지원 보완',
-         '숫자가 있을 때는 계산되지만 값을 지운 상태의 조건문·반복문을 현재 프로그램이 지원하지 않아 멈춥니다. 자료 부족을 만들려던 작업이 프로그램 지원 범위에 걸린 것입니다.',
-         '삭제된 입력을 미정인 값으로 남긴 계산 흐름과 조건에 따라 달라지는 결과를 제공합니다.',
-         '미정 값을 포함한 계산·분기를 표현하도록 보완합니다. 프로그램이 실행되지 않는다는 사실만으로 답을 알 수 없는 문제라고 인증하지 않습니다.',
-         'test-0003: 삭제형 두 유형이 이 단계에서 멈췄습니다. 현재 구현은 조건·반복 계산에 미정 입력이 있으면 명시적으로 중단합니다.')
-category('G_DEP', 'Generation', '앞에서 만들 충돌 문장이 통과하지 못했습니다', '앞 단계 수정 + 후속 재개',
-         '출처를 붙이는 유형은 먼저 검증된 충돌 문장이 있어야 합니다. 앞 단계가 없거나 실패하면 후속 생성도 멈춥니다.',
-         '같은 문항·같은 실행에서 통과한 앞쪽 또는 뒤쪽 충돌 본문과 그 판정 기록을 제공합니다.',
-         '출처 문장을 새로 꾸미기 전에 연결된 값 변경 유형의 실패 원인을 해결합니다. 후속 정지는 별도 원본 결함으로 중복 계산하지 않습니다.',
-         '검증된 충돌 본문이 없어 막힌 기록 116개와 선행 문장이 없어 막힌 기록 12개를 묶었습니다.')
-category('G_INQUESTION', 'Generation', '본문에서 지워도 질문에 같은 숫자가 남습니다', '대상 선택·동일 사실 판별 보완',
-         '질문은 고정한 채 본문만 지우려는데 질문에도 같은 숫자가 있어 삭제 후보가 차단됐습니다. 현재 비교는 숫자 겹침이어서 같은 사실인지까지 보장하지 않습니다.',
-         '본문·질문에서 같은 사실을 가리키는 모든 위치와 값의 역할을 제공합니다.',
-         '단순 숫자 일치 대신 같은 사실인지 확인하고 질문에 없는 다른 필수값을 선택합니다. 실제 필수값이 질문에 고정되어 있다면 그 값은 본문 삭제 대상으로 쓸 수 없습니다.',
-         '109유형이 이 조건으로 차단됐습니다. 이 수가 모두 답 노출 확정 건수인 것은 아닙니다.')
-category('G_SECOND', 'Generation', '두 번째로 지울 입력을 찾지 못했습니다', '입력 목록·유형 적용 가능성 확인',
-         '현재 풀이에 등록된 입력이 하나뿐인데 두 번째 입력을 지우는 유형까지 요구했습니다. 원문 전체에도 반드시 값이 하나뿐이라는 뜻은 아닙니다.',
-         '답에 실제로 필요한 입력 목록과 각 입력의 원문 위치를 제공합니다.',
-         '누락된 필수 입력이 있으면 추출을 보완합니다. 실제로 하나만 필요한 문제라면 없는 두 번째 입력을 만들지 말고 유형 적용 기준을 별도로 결정합니다.',
-         'test-0001: 두 번째 삭제 대상이 없어 생성 이전에 멈췄습니다. 문장을 다시 써 달라는 재시도로 해결되지 않습니다.')
-category('G_INTENT', 'Generation', '문장을 바꿨지만 원하는 문제가 만들어지지 않았습니다', '변형 계획·문장 생성 보완',
-         '삭제한 값이 다른 곳에 남거나, 충돌시킬 대상·기간·관계·출처가 계획과 달라 검토에서 거절됐습니다. 세부 원인은 문항별 저장 근거에서 확인합니다.',
-         '대상 금액의 회사·기간·단위, 반복 등장 위치, 관련 합계·다른 풀이 경로, 출처를 붙일 한 주장을 명시합니다.',
-         '삭제는 같은 사실의 반복과 답을 복원하는 경로까지 조사합니다. 값 충돌은 동일 대상에 대한 두 주장인지, 출처는 지정한 한 주장에만 붙는지 확인합니다.',
-         'test-0004의 두 번째 삭제형: 표의 99를 지웠지만 반복된 잔액 행과 2008년 말 금액 설명에 99가 남았습니다.')
-category('G_READ', 'Generation', '삭제·추가 후 문장이나 표가 깨졌습니다', '문장 경계·편집 방식 보완',
-         '숫자 위치만 지우거나 문장을 부적절한 위치에 끼워 넣어 문법·표 구조가 깨졌습니다.',
-         '편집할 문장·표 셀의 경계와 유지해야 할 주변 문맥을 제공합니다.',
-         '표는 셀만 편집하고 산문은 금액을 지운 뒤 문법을 최소한으로 잇습니다. 원래부터 깨진 문장과 이번 편집으로 깨진 문장을 나누어 검사합니다.',
-         'test-0009의 두 번째 삭제형: “the remaining .”처럼 금액을 뺀 자리의 문장이 미완성으로 남았습니다.')
-category('G_EXTRA', 'Generation', '바꾸지 말아야 할 내용까지 바뀌었습니다', '편집 범위·검사 보완',
-         '목표 이외의 값·대상·조건이 변해 한 종류의 변화만 비교하기 어려워졌습니다.',
-         '바꿀 부분과 반드시 유지할 부분을 구절 단위로 제공합니다.',
-         '수정 범위를 좁히고 편집 전후를 비교합니다. 관련 없는 문장을 통째로 다시 쓰게 하지 않습니다.', '저장된 의미 검사에서 24유형이 이 사유로 남았습니다.')
-category('G_FORMAT', 'Generation', '제작용 표시나 편집 형식이 최종 문장에 남았습니다', '생성 형식·검사 규칙 보완',
-         '내부 이름, 대괄호 표시, 출처 괄호, 수정 위치 등의 형식 조건을 충족하지 못했습니다. 정상적인 원문 괄호까지 잡았는지도 구별해야 합니다.',
-         '사람에게 보여줄 문장과 내부 관리 정보를 별도 칸에 제공하고 수정 위치는 프로그램이 관리합니다.',
-         '내부 표시는 최종 본문에 넣지 않도록 분리합니다. 대괄호 전부를 일괄 금지하기보다 실제 내부 표시인지 확인하고 형식은 가능하면 프로그램에서 조립합니다.', '제작 표시 검사 33유형을 포함합니다. 현재 검사는 일반 대괄호 표현도 잡을 수 있어 전부 내부 정보 노출로 단정하지 않습니다.')
-category('G_EXEC', 'Generation', '바꾼 값으로 계산하는 과정이 멈췄습니다', '변형값 범위·계산 지원 보완',
-         '변경 후보를 넣은 계산이나 계산 연결을 만들지 못했습니다. 오류 이름만으로 0 나누기 등 한 원인으로 단정할 수 없습니다.',
-         '허용되는 값의 범위와 실행 실패의 구체적 연산·입력을 제공합니다.',
-         '단위·범위·수학적 조건을 만족하는 후보를 고르고 실제 실패 위치를 남깁니다. 같은 실패 후보를 반복하지 않습니다.', '계산 실행 실패 22유형과 답에 연결되지 않은 입력 1유형입니다.')
-category('G_TRANSPORT', 'Generation', '연결이 끊기거나 응답이 불완전했습니다', '실행·재시도 관리',
-         '생성 또는 검증 응답을 확보하지 못했습니다. 데이터 제공 방식의 개선만으로 막을 수 있는 문제가 아닙니다.',
-         '원래 요청과 완료 여부, 수신한 원응답을 보존합니다.',
-         '통신 실패를 내용 실패와 분리해 해당 호출만 재개합니다. 검증 응답이 없으면 통과 처리하지 않습니다.', '연결 실패 65유형, 불완전 응답 8유형입니다.')
-category('G_STORAGE', 'Generation', '저장하려는 위치에 이전 파일이 있어 멈췄습니다', '결과 저장·재개 방식 보완',
-         '재사용 기록을 만들려는 위치에 파일이 이미 있어 새 기록을 저장하지 못했습니다. 문장이나 원본 데이터의 오류가 아닙니다.',
-         '시도별 저장 위치, 기존 결과의 소유 작업과 완료 상태를 제공합니다.',
-         '시도마다 고유한 저장 위치를 사용하고 이미 완료된 기록은 확인 후 재사용합니다. 이전 결과를 무조건 덮어쓰거나 지우지 않습니다.',
-         'test-0259·0276·0292·1850의 값 변경 유형은 기존 reuse.json과 저장 위치가 겹쳐 멈췄습니다.')
-category('G_UNKNOWN', 'Generation', '검토가 완료되지 않아 최종 판정을 남기지 못했습니다', '검토 완료 확인 + 문장 대상 명확화',
-         '세 유형은 최종 미평가로 남았습니다. 검토 결과가 없다는 기록과 문장의 대상·기간이 불분명하다는 지적이 섞여 있으므로 모두 통신 실패로 보지 않습니다.',
-         '추가한 값이 어느 항목·기간을 뜻하는지 명확한 문장과 실제 검토 완료 결과를 제공합니다.',
-         'test-0034는 검토 완료 여부를 확인합니다. test-0165는 어느 연체 구간인지, test-0867은 어느 분기인지 문장을 명확히 한 뒤 검토합니다. 기존 미평가 표시는 보존합니다.',
-         'test-0867: 원문은 네 분기의 배당 목록인데 추가 문장은 단지 “어느 분기의 배당”이라고 해 같은 분기의 충돌인지 확인하지 못했습니다.')
+category('G_NUM_DUP', 'Generation', 'The same number as the deleted value is left in the preserve list.', 'Transformational planning and numerical testing',
+         'The value to delete is repeated over the same editing interval, and you only click once in the number list, so the actual request requires you to save the same number, so if you delete it completely, it can take a number check.',
+         'It\'s the same thing that makes a distinction between the whole repeating position and each role, the deleted position and the left position.',
+         'Instead of deleting them all just because they\'re the same, we check if they\'re repeating the same thing, and then we tie them to the deleting plan, and the scanner uses the rest of the list of numbers.',
+         'test-0012The source is:6% (6 The list of permissible numbers for the request that you saved is %). 6And this one is left, and it\'s in conflict with the purpose of deleting both expressions.',
+         'The statistic is the number of candidates that are left on the list of deleted objects, and even if the same number is different, they\'re not all confirmed for the same cause.')
+category('G_NUM', 'Generation', 'It\'s not the same as the actual editing results.', 'Editing planning, creativity and testing',
+         'Not only if you put in a new number, but if you\'ve lost a year, a different amount, or if you\'re counting the same number, you don\'t just have to make a number by mistake.',
+         'The deleted object and the retained lead are marked by the position of the element, and the number that appears as a character breach is first distinguished.',
+         'We compare the actual pre-edit numbers to the figures, and then we separate the difference between the add-on and the sub-add-on, and if the test conditions are wrong, we fix the planning and scanning instead of the generating line.',
+         'This is a categorization of the total number of failures. 279The number of deleted objects from the type remaining on the preserve list 40Type the type. 239type.')
+category('G_UNCHANGED', 'Generation', 'So if you change the value or the relationship, the final answer doesn\'t change.', 'Modified object selection supplement',
+         'The input that doesn\'t affect the answer, 0The resulting value, the same returns, the last inverse, etc. doesn\'t produce the different answers that the current candidate needs, and each cause requires no confirmation.',
+         'It gives you how the response after the counter-lift varies and the permissible range when you change each input.',
+         'Instead of selecting the first number that appears, we\'re looking for other input and output that affect the answer, and we\'re not pushing it past an exaggerated number that\'s out of range.',
+         'Change the value 276Type, change of relationship 32The type stops with the answer unchanged, and the same pre-calculation problem is repeatedly recorded in the source type, and it\'s not the same as the number of cause cases.')
+category('G_QUESTION', 'Generation', 'We didn\'t get the numbers in the question to the next level.', 'Interstep data transfer complement',
+         'The source of the numbers used in the calculation is the question, and the next step is to get the question string and not be able to locate it, which doesn\'t mean there\'s no question in the original.',
+         'We need to get the source-differentiation and correction versions of each of the text, the query, and the numbers together.',
+         'It fixes the path that only the text is sent, and it keeps the value of the source of the question to the end, so it doesn\'t mix the position of the text with the question position.',
+         'test-0250The failure to save is the missing query source string, not the task of rewriting the question, but the task of verifying the passage between steps.')
+category('G_CONTROL', 'Generation', 'So you can\'t just write the condition-by-reverse calculation after you\'ve deleted the value.', 'Calculation representation and analysis support',
+         'When there\'s a number, it\'s calculated, but the conditioned and half-representation of the value is lost, and the program doesn\'t support it now, so the work that was trying to create the data shortage is within the scope of the program support.',
+         'It gives results that vary depending on the flow of computation and the conditions that left the deleted input with an unknown value.',
+         'It\'s complementary to the calculation of the parameters, including the default values, and it doesn\'t validate the fact that the program isn\'t running as an unanswered problem.',
+         'test-0003Two types of deletion have stopped at this stage. The current implementation will explicitly stop if there is a mismatched input to the condition-reverse calculation.')
+category('G_DEP', 'Generation', 'The front-end created collision phrases failed to pass', 'Fix the front step + reboot',
+         'The type that\'s going to be the source must first have a verified collision phrase, and if there\'s no front step or failure, then the next step stops.',
+         'Provides a text of the front or rear collision passing through the same case as the execution and its judgment records.',
+         'It solves the cause of the associated value change type failure before you rearrange the source phrase. The subsequent stop does not count backwards for any original error.',
+         'No confirmed collision record, blocked records. 116No items and no forwarding phrase. 12I tied the items up.')
+category('G_INQUESTION', 'Generation', 'If you delete it from the text, the same number remains in the question.', 'Objective selection: correctly actually the addition of the',
+         'The question is fixed and the text is deleted, and the question has the same number, and the deleted candidate is blocked, and the current comparison is overlapping, so it doesn\'t even guarantee the same thing.',
+         'It gives all the positions and values a role that points to the same fact in the main subject.',
+         'Instead of a simple number match, we check that it\'s the same thing, and then we select another element that\'s not in the question. If the actual element is fixed in the question, it can\'t be used as a text-delete.',
+         '109The type is blocked by this condition, and not all of these numbers are valid for exposure.')
+category('G_SECOND', 'Generation', 'And the second time, I couldn\'t find the clearing entry.', 'Check the list of input types',
+         'Now, there\'s only one input that\'s registered in the array, and it requires the type that deletes the second input, which doesn\'t necessarily mean that there\'s one value in the entire array.',
+         'It gives you a list of inputs you actually need to answer and the location of each input.',
+         'If there\'s a missing essential input, it complements the extraction, and instead of creating a second input that doesn\'t exist if there\'s actually only one problem, it separately determines the type of application.',
+         'test-0001There\'s no second deletion object, it stopped before it was created, and the rewrite procedure won\'t work.')
+category('G_INTENT', 'Generation', 'I changed the sentence, but I didn\'t get the problem I wanted.', 'Transformational planning and problem-creating complement',
+         'The deleted values are left elsewhere, or the object, time, and source of the conflict are rejected in the review, as opposed to the plan.',
+         'Specifies the amount of the company, the duration, the category, the recurring position, the relevant aggregate, the other pool path, the claim attached to the source.',
+         'The deletion investigates the repetition of the same fact and the path to restore the answer, to see if the value conflict is two claims about the same object, or if the source only holds to one claim that is specified.',
+         'test-0004The second type of deletion: table 99I erased the remainder, but I repeated the remainder. 2008The year-end amount is explained 99I\'m left with it.')
+category('G_READ', 'Generation', 'After deleting, adding, or missing, the phrase or tag is broken.', 'Line boundary and editing method',
+         'You can just delete the number position or put the sentence in the wrong place, and the grammatical and punctuation structure is broken.',
+         'It provides the boundaries of the sentence and the marking cells to edit and the surrounding context to maintain.',
+         'The tables edit the cells, the tables erase the amount, then the phrases are minimized, and the phrasing that\'s broken from the beginning is checked and the phrase that\'s broke is checked.',
+         'test-0009The second type of deletion: the remaining . left the sentence unfinished as the amount of the . left.')
+category('G_EXTRA', 'Generation', 'It\'s changed to the point where it shouldn\'t be changed.', 'Edit scope and verification',
+         'It\'s hard to compare just one type of change in value, value, and condition other than the goal.',
+         'It\'s a part of the sentence that you can change and the part that you can keep.',
+         'We narrow down the correction range and compare the post-editing, and we don\'t rewrite the entire unrelated sentence.', 'In the stored meaning test, 24The type is left with this.')
+category('G_FORMAT', 'Generation', 'The final sentence left the designation or the editing format.', 'Generate formatting and check rules',
+         'It didn\'t meet the formal requirements of internal names, parentheses, source parentheses and correction positions, and we have to distinguish whether we\'ve gotten to the normal parentheses.',
+         'The program manages the modification position and the phrases and internal management information that you show to the person in a separate space.',
+         'It separates the internal mark from the final text, instead of banning the entire parenthesis, to verify that it\'s actually an internal mark, and then to assemble it in the program if possible.', 'Manufacturing mark inspection 33Now, the test can also capture a general overarching expression, so it doesn\'t just determine the inside exposure.')
+category('G_EXEC', 'Generation', 'So the process of calculating the change value is stopped.', 'Variation value range; calculation support supplement',
+         'I couldn\'t create a calculation or a calculation link that put the change candidate in. 0 And we can\'t just define it as a cause of division.',
+         'It gives a range of permissible values and a specific calculation and input of execution failures.',
+         'They pick candidates that satisfy the unit, the crime, the mathematical conditions and leave the actual failure position, not repeat the same failure candidates.', 'Failed to execute the calculation 22Type and answer unconnected input 1type.')
+category('G_TRANSPORT', 'Generation', 'The connection is broken or the response is incomplete.', 'Execution and incident management',
+         'We didn\'t get a response to the data or the verification, and it\'s not just an issue that can be stopped by improving the way we deliver data.',
+         'It preserves the raw response received, whether the original request is completed or not.',
+         'It separates the communication failure from the content failure and restarts the call itself. If there\'s no verification response, it doesn\'t process the pass.', 'Connection failure 65Type, imperfect response 8type.')
+category('G_STORAGE', 'Generation', 'I\'ve got an earlier file in the storage location.', 'Results storage and recovery method',
+         'The file is already in the reuse file, and the new file is not saved, not because of a phrase or a data error.',
+         'Provides a storage location for each attempt, a state of ownership of the existing results and a state of completion.',
+         'Each attempt uses a unique storage location and reuses the already completed record, and it doesn\'t necessarily overwrite or delete the previous results.',
+         'test-0259·0276·0292·1850The change of value type stopped overlapping with the existing reuse.json and storage location.')
+category('G_UNKNOWN', 'Generation', 'The review was not completed and the final verdict was not made.', 'Completed review verification + clarification of the subject of the sentence',
+         'Three types remained as the final under-review, a mix of records that didn\'t have a review result and indications that the subject and duration of the sentence were unclear, so we don\'t see them as communication failures.',
+         'It provides a clear phrase on which item/period the added value refers to and the actual results of the review.',
+         'test-0034Check whether the review is complete.0165So what is the length of the test?0867It reviews the sentences and then makes it clear which quarter they are, and preserves the existing undervaluation mark.',
+         'test-0867The circle is a list of the four quarks, but the additional phrase just doesn\'t confirm if the same quarks collide as the one we call the quarks.')
 
 
 REVIEW_GROUPS = {
@@ -204,7 +204,7 @@ def prep_group(error, evidence):
     if code.startswith('API_'): return 'P_TRANSPORT'
     if code == 'AMBIGUOUS_SOURCE_REVISION_ANCHOR': return 'P_TEXT'
     if code == 'QUESTION_PRECISION_INSTRUCTION_REMOVED_OR_ADDED': return 'P_SCALE'
-    if code == '상세 검사 실패': return 'P_CODE'
+    if code == '\uc0c1\uc138 \uac80\uc0ac \uc2e4\ud328': return 'P_CODE'
     return 'P_LINK'
 
 
@@ -216,7 +216,7 @@ GEN_GROUPS = {
     'EA_VALUE_PRESENT_IN_QUESTION': 'G_INQUESTION', 'MISSING_SECOND_EA_INPUT': 'G_SECOND',
     'unintended_change': 'G_EXTRA', 'BRANCH_EXECUTION_FAILED': 'G_EXEC',
     'FACT_NOT_CONNECTED_TO_ANSWER': 'G_EXEC', 'API_CONNECTION_FAILED': 'G_TRANSPORT',
-    'API_RESPONSE_INCOMPLETE': 'G_TRANSPORT', '상세 검사 실패': 'G_UNKNOWN',
+    'API_RESPONSE_INCOMPLETE': 'G_TRANSPORT', '\uc0c1\uc138 \uac80\uc0ac \uc2e4\ud328': 'G_UNKNOWN',
     'NOT_EVALUATED': 'G_UNKNOWN',
     **{x: 'G_FORMAT' for x in ['CONSTRUCTION_TAG_IN_CONTEXT','UNAUTHORIZED_PATCH_OR_GRAPH_MAPPING',
        'PARENTHESIZED_SOURCE_REQUIRED','PYTHON_IDENTIFIER_IN_CONTEXT','STANDALONE_SENTENCE_REQUIRED','INSERTION_NEEDS_SEPARATOR']},
@@ -255,7 +255,7 @@ def main():
         refs.append(str((SOURCE / '01-preparation' / error['case'] / 'run.json').relative_to(ROOT)))
         evidence['recovery'] = top.get('recovery', {})
         group = prep_group(error, evidence)
-        rows.append(dict(phase='Preparation', case=error['case'], type='원문 준비', status='FAIL',
+        rows.append(dict(phase='Preparation', case=error['case'], type='Get the original ready.', status='FAIL',
                          group=group, classification_code=error['code'], refs=refs, evidence=evidence))
     failing = {(e['case'], e['category']): e for e in gen['errors']}
     clean = []
@@ -270,7 +270,7 @@ def main():
             group = GEN_GROUPS[code]
             file = SOURCE / variant['path'] / 'run.json'
             saved = read(file)
-            if code == '상세 검사 실패' and str(saved.get('reason', '')).startswith('FileExistsError:'):
+            if code == '\uc0c1\uc138 \uac80\uc0ac \uc2e4\ud328' and str(saved.get('reason', '')).startswith('FileExistsError:'):
                 group = 'G_STORAGE'
             refs = [str(file.relative_to(ROOT)), *sample_refs[case]]
             plan = saved.get('plan', {})
@@ -309,7 +309,7 @@ def main():
     assert len(clean) == 1080 and len(gen_cases) == 758
     assert len({(r['phase'], r['case'], r['type']) for r in rows}) == len(rows)
     assert sum(x['count'] for x in CAT.values()) == len(rows)
-    summary = dict(kind='FAILURE_CAUSE_REVIEW', title='FinanceReasoning 실패 원인·개선안',
+    summary = dict(kind='FAILURE_CAUSE_REVIEW', title='FinanceReasoning Failure Causes and Progress',
                    preparation_failed=212, generation_nonclean_cases=758, generation_failed=1664,
                    generation_not_evaluated=3, clean_cases=1080, source_run=SOURCE.name)
     payload = dict(summary=summary, categories=list(CAT.values()), rows=rows,
@@ -337,26 +337,26 @@ def main():
 def report_text(payload):
     category_counts = collections.Counter(row['group'] for row in payload['rows'])
     generation_types = (
-        ('IC_VALUE_01_BEFORE', 'IC-v1', '앞쪽에 다른 값 주장 추가'),
-        ('IC_VALUE_01_AFTER', 'IC-v2', '뒤쪽에 다른 값 주장 추가'),
-        ('IC_SOURCE_A_ONLY', 'IC-s1', '원래 주장에 출처 부착'),
-        ('IC_SOURCE_B_ONLY', 'IC-s2', '추가 주장에 출처 부착'),
-        ('IC_RELATION_01', 'IC-r', '서로 맞지 않는 관계 추가'),
-        ('EA_01', 'EA-v1', '첫 번째 필수값 삭제'),
-        ('EA_02', 'EA-v2', '두 번째 필수값 삭제'),
+        ('IC_VALUE_01_BEFORE', 'IC-v1', 'Add another value to the front'),
+        ('IC_VALUE_01_AFTER', 'IC-v2', 'Add another value claim on the back'),
+        ('IC_SOURCE_A_ONLY', 'IC-s1', 'The original claim is attached to the source.'),
+        ('IC_SOURCE_B_ONLY', 'IC-s2', 'Additional claims to the source'),
+        ('IC_RELATION_01', 'IC-r', 'Adding incompatible relationships'),
+        ('EA_01', 'EA-v1', 'Delete the first essential value'),
+        ('EA_02', 'EA-v2', 'Delete the second essential value'),
     )
     type_names = {code: name for code, name, _ in generation_types}
     stage_order = {
         'Preparation': {
-            '02-review': 'P02 원문 검토',
-            '03-calculation': 'P03 풀이 생성·실행',
-            '04-graph': 'P04 계산 그래프',
-            '05-verification': 'P05 종합 검증',
+            '02-review': 'P02 The original review',
+            '03-calculation': 'P03 Grass generation and action',
+            '04-graph': 'P04 Calculation graph',
+            '05-verification': 'P05 Comprehensive verification of the',
         },
         'Generation': {
-            '01-perturbation': 'G01 변형 계획',
-            '02-generate-text': 'G02 문장 생성',
-            '03-validation': 'G03 완성문 검증',
+            '01-perturbation': 'G01 The transformation plan.',
+            '02-generate-text': 'G02 Text realization',
+            '03-validation': 'G03 Validate final text',
         },
     }
     stages = {phase: collections.defaultdict(list) for phase in stage_order}
@@ -397,48 +397,48 @@ def report_text(payload):
             raise ValueError('FAILURE_STAGE_COUNT_MISMATCH:' + phase)
         return ''.join(lines)
 
-    text = '''# FinanceReasoning 20260917-002: 실패 원인과 개선안
+    text = '''# FinanceReasoning 20260917-002The Causes of Failure and the Way to Improve
 
-가장 먼저 구분할 것은 **원문에 필요한 정보가 없는 문제**와 **있는 정보를 프로그램이 제대로 넘기거나 편집하지 못한 문제**입니다. 둘을 같은 데이터 불량으로 처리하면 원인을 고치기 어렵습니다.
+The first thing to distinguish between **Problems that don't have the information they need.**and **The problem is that the program doesn't pass or edit the information correctly.**And if you treat both of them with the same data deficiency, it's hard to fix the cause.
 
-## 분석 범위와 읽는 법
+## The scope of analysis and how to read
 
-Preparation의 입력은 2,050문항입니다. 이 가운데 212문항이 제외되고 1,838문항이 통과해 Generation으로 넘어갔습니다. Generation에서는 1,838문항 중 1,080문항이 일곱 유형 모두 통과했고, 758문항은 한 유형 이상 실패하거나 미평가됐습니다.
+The input of the preparation is 2,050And that's the case. 212Except for the case 1,838The phrase passed and went to Generation. 1,838In a case. 1,080The case passed all seven types. 758The case has failed or been underestimated in more than one category.
 
-Generation 전체의 검사 단위는 **문항 × 유형**으로, 1,838 × 7 = 12,866개입니다. 모두 통과한 1,080문항에서는 1,080 × 7 = 7,560개 유형이 통과했습니다. 나머지 758문항의 758 × 7 = 5,306개 결과는 **통과 3,639개 + 실패 1,664개 + 미평가 3개**입니다. 즉 1,664와 3은 문항 수가 아니라 유형별 결과 수입니다. 한 문항에서 여러 유형이 실패할 수 있고, 같은 문항의 다른 유형은 통과할 수도 있습니다. 준비 실패 212문항은 Generation에 들어가지 않았습니다.
+The whole Generation's testing unit is **The type of the case**To the right. 1,838 × 7 = 12,866It's a items. 1,080In the case, 1,080 × 7 = 7,560The items type passed. 758In this case, 758 × 7 = 5,306results **Pass 3,639+ failed 1,664+ not evaluated 3items**. That is, 1,664and 3It's not the number of cases, it's the number of type-by-type results. 212The phrase didn't make it into Generation.
 
-입력 전 제외된 188문항은 이번 212문항에 포함하지 않습니다. 차수별 이전 실패 뒤 최종 통과한 건도 최종 실패 수에 다시 넣지 않습니다. clean pass는 저장된 자동 검사 기준이며 의미 정답을 사람이 확정했다는 뜻이 아닙니다.
+Excluded before entry 188The phrase is 212It's not included in the clause. Even if you passed the final after the previous failure, you don't put it back in the final failure number. Clean pass is a stored automated verification criterion, and it doesn't mean that the person has confirmed the correct answer.
 
-아래 분류는 원문 준비는 문항당 하나, 생성은 문항×유형당 하나의 주된 관찰 원인입니다. 여러 문제가 겹칠 수 있고 범주별 원문 수는 서로 겹칩니다. 저장된 검토기 설명은 근거 자료이지 확정 사실이 아닙니다. 특히 관례·모호성·검사기 오류 주장은 원문과 맞춰 판단해야 합니다.
+The following classification is the elemental preparation for each case, and the origin is the main observation cause for each case x model. Many problems can overlap, and the number of elements per category overlaps. The stored review times are not valid data, but they are not valid. In particular, the custom, consistency, and verifier error claims must be judged according to the original.
 
-## 먼저 바꾸면 좋은 순서
+## First, we need to change the order.
 
-1. **자료를 그대로 옮기는 부분부터 고칩니다.** 본문과 질문을 함께 넘기고, 숫자의 원문 위치와 정제 버전을 유지합니다. 문자로 쓴 수량도 처리합니다.
-2. **생성 전에 이 문항으로 각 유형을 만들 수 있는지 확인합니다.** 실제 답을 바꾸는 입력인지, 지울 두 번째 입력이 있는지, 질문에 같은 사실이 남는지 확인합니다.
-3. **무엇을 지우고 무엇을 남길지 한 계획으로 맞춥니다.** 같은 사실의 반복을 모두 조사하고 편집 계획·문장 생성·숫자 검사가 같은 목록을 사용하게 합니다.
-4. **필요한 정보가 없는 원문을 보완합니다.** 해당 연도·회사·단위·필요 수치를 출처에서 확인하고 버전별 정정 내역을 남깁니다.
-5. **검토가 지나치게 엄격하거나 서로 모순되는 부분을 줄입니다.** 허용할 금융 관례·반올림을 먼저 정하고, 저장 정답과 다르다는 이유만으로 원문이나 계산을 고치지 않습니다.
-6. **통신 실패는 따로 재개합니다.** 내용 보완 횟수와 섞지 않고, 이미 통과한 결과는 보존합니다.
+1. **And it's the part where you move the data.** It's going to pass the text and the question along, and it's going into the original position of the numbers, and it is going to be the sorted version, and it will be the amount of text that's written in the characters.
+2. **Before you create, check if you can create each type with this case.** Check to see if the input changes the actual answer, if the second input is erased, if the same thing remains in the question.
+3. **It's a plan of what to delete and what to leave behind.** We're going to test all the repetitions of the same fact, and we're going into the editing plan, the field generating, the numerical check using the same list.
+4. **It supplements the source code that doesn't have the information you need.** We check the year, company, team, and requirements from the source and leave a version-by-version settings.
+5. **It reduces the scope of the review that is too strict or contradictory.** We set the financial standard and the half-year we can allow first, and we don't fix the originals or the calculations just because they're different from the storage answer.
+6. **The communication failure is resumed separately.** It doesn't mix with the number of content replenishments, it preserves the results that have already been passed.
 
-이 순서는 개선 제안입니다. 이번에는 제작 코드·원문·정답을 바꾸거나 새 모델 호출을 하지 않았으므로 개선 후 통과 건수는 아직 알 수 없습니다.
+This is a proposed improvement, this time it's not changing the production code, the source code, the answer, or calling a new model, so we don't know yet how to pass after the improvement.
 
-## Preparation: 원본을 바꿔야 하나요, 정제를 바꿔야 하나요?
+## Preparation: Should I change the original, or should I change the layout?
 
-원본 전체를 교체해야 한다는 결론은 아닙니다. 빠진 정보는 출처에서 보완해야 하지만, 숫자 표현·인용 위치·통신·전달 문제는 처리 과정에서 고칠 수 있습니다. 검토가 해석을 확정하지 못한 건은 원본 오류로 일괄 계산하지 않습니다.
+It's not that we need to replace the entire original. The missing information needs to be replenished from the source, but the issues of numerical representation, user position, communication, and transmission can be fixed in the process. What the reviewer doesn't confirm the interpretation doesn't count as a total original error.
 
-아래 구간은 최종 상태를 대표하는 시도에서 실패가 기록된 위치입니다. 실제 수정 책임은 오른쪽 열과 문항별 근거를 함께 확인해야 합니다. 같은 원인 분류가 여러 구간에 걸치면 구간별 행으로 나눕니다.
+The bottom section is where attempts to represent the final state have failed. The actual correction responsibility must be identified along with the right column and the case basis. If the same cause classification occurs in multiple sections, it's divided by the column row.
 
-|구간|원인 분류|문항 수|먼저 손볼 곳|
+|Segment|Causes|Number of cases|First place to see your hands.|
 |---|---|---:|---|
 '''
     text += stage_table('Preparation')
-    text += '\n### Preparation 세부내역\n'
+    text += '\nPreparation detail\n'
     for c in CAT.values():
         if c['phase'] == 'Preparation': text += detail(c, category_counts[c['id']])
     text += '''
-## Generation: 일곱 유형별로 보면 무엇이 막혔나요?
+## Generation: What's stopping you, by seven types?
 
-|type|만들려던 유형|통과|실패|미평가|
+|type|The type that we're trying to create.|Pass|Fail|Not evaluated|
 |---|---|---:|---:|---:|
 '''
     type_summaries = {row['category']: row for row in payload['generation_types']}
@@ -448,58 +448,58 @@ Generation 전체의 검사 단위는 **문항 × 유형**으로, 1,838 × 7 = 1
         row = type_summaries[code]
         text += f"|{name}|{meaning}|{row['PASS']}|{row['FAIL']}|{row['NOT_EVALUATED']}|\n"
     text += '''
-type 이름은 이 보고서와 뷰어의 표시명입니다. 저장된 제작 type 코드는 바꾸지 않았습니다.
+The type name is the name of this report and the viewer.
 
-같은 원문에서 값 변경이 실패하면 출처 유형도 막힐 수 있습니다. 따라서 출처 유형 실패를 모두 출처 문장 자체의 문제로 해석하면 안 됩니다. 삭제형은 값이 다른 곳에 남는 문제뿐 아니라, 미정 값을 계산 프로그램이 다루지 못하는 문제도 있습니다.
+If you fail to change values in the same element, you can also block the source type, so you can't interpret all the source type failures as problems in the source phrase itself.
 
-아래 구간은 최종 상태를 대표하는 시도의 중단 위치입니다. `발생 type`의 숫자를 합하면 해당 행의 실패·미평가 유형 수가 됩니다. 선행 유형 실패의 영향은 별도 원본 결함으로 해석하지 않습니다.
+The bottom is the stop position of the attempt representing the final state. `Type of occurrence`And the number of failures and undervalues of the row is the number of failed types.
 
-|구간|원인 분류|실패·미평가 유형 수|발생 type (건수)|해당 원문 수|먼저 손볼 곳|
+|Segment|Causes|Failure: Number of types of undervaluation|Type of occurrence|Number of source items|First place to see your hands.|
 |---|---|---:|---|---:|---|
 '''
     text += stage_table('Generation')
-    text += '\n### Generation 세부내역\n'
+    text += '\n# # Generation detail station\n'
     for c in CAT.values():
         if c['phase'] == 'Generation': text += detail(c, category_counts[c['id']])
     text += '''
-## 데이터가 어떻게 제공됐어야 하나요?
+## How should the data be provided?
 
-원문 한 건마다 **질문·본문 → 필요한 값과 뜻 → 계산 → 허용할 변경 → 같은 사실의 다른 위치**가 이어져야 합니다. 예를 들어 매출 100이 표와 설명 문장에 모두 있으면 두 위치가 같은 매출이라는 표시가 필요합니다. 한쪽만 지우면 정보 부족 문제가 되지 않습니다. 반면 날짜 100이나 다른 항목의 100까지 지우면 엉뚱한 내용이 바뀝니다.
+Every single question. **Question: Text → required value and meaning → calculation → allow change → other position of the same fact**It's going to have to go on. 100If you have both this chart and this description sentence, you need to have a sign that both locations have the same revenue. 100Or other items. 100And when you delete it, the wrong content changes.
 
-|제공할 내용|작은 예|막으려는 문제|
+|What you're going to provide|A small example.|The problem is trying to stop it.|
 |---|---|---|
-|값의 뜻과 출처|2019년 A회사 매출 100, 백만 달러, 본문 표 2행|다른 회사·기간·단위 혼동|
-|질문과 본문을 함께 전달|질문에 있는 만기 5년도 원문 위치와 함께 전달|질문 출처 유실|
-|출처로 확인된 정제 대응|four → 4, 원문은 보존|숫자 표현 거절·위치 어긋남|
-|계산 기준|증감은 뒤 기간−앞 기간, 출력은 %p|부호·백분율·자릿수 혼동|
-|변경 가능한 값과 범위|양수 금액, 변경 후 답이 실제 달라짐|답이 그대로이거나 실행 불가|
-|반복된 같은 사실의 위치|표의 매출 100과 본문의 동일 매출 100|하나만 삭제하거나 보존 규칙 충돌|
-|연결된 합계·다른 계산 경로|전체 150과 다른 부분 50으로 삭제한 100을 복원 가능|삭제해도 답을 구할 수 있음|
-|통과한 선행 본문|앞쪽·뒤쪽 충돌 문장별 검증 결과|출처 유형의 선행 입력 부재|
+|The meaning and the source of the value|2019A company sales 100One million dollars, the table below. 2rows|Other company, time, group mix|
+|To convey the question and the text together|The touch of the question. 5The year also conveyed with the original position|The source of the question|
+|The source-verified response is|four → 4The source is preserved.|Number expression refusal: over and over|
+|Calculation definitions|The increase is after period--after period, output is %p.|The fractional fractional factor|
+|Variable values and scope|The positive amount, the change, the change in the answer.|The answer is either the same or it's not going to work.|
+|The location of the same repeated fact|Sales of the ticket 100And the same sales of the headquarters 100|Only one is deleted or preserve rules collide|
+|Connected sums. Other computation paths|All 150And other parts 50Deleted by 100The Restoration|You can delete it and get the answer.|
+|The passage of the preceding text.|The front and rear collision phrase verification results|No input of the source type|
 
-### 종합 세부내역
+### Comprehensive detail station
 
-#### 채택 판단과 확인할 최소 범위
+#### Minimum scope for adoption and verification
 
-**채택:** 원문·질문 동시 전달, 위치 대응 유지, 같은 사실의 반복 위치 관리, 통신 실패 분리. 확인 방법은 대표 원기록을 넣어 누락 없이 이어지는지 보는 작은 로컬 검사입니다.
+**Adopted:** The primary question is synchronous transmission, position correlation maintaining, repetitive position management of the same fact, communication failure separation. The verification method is a small local check to see if the representative's primary record is being put without missing.
 
-**수정 채택:** 원본 질문의 조건 명시와 변형 대상 선택 개선. 실제로 모호한 경우만 명확화하고 금융 관례가 충분한 경우까지 원본을 억지로 늘리지 않습니다. 변경 전후 의미와 결과를 함께 확인해야 합니다.
+**Adopted amendments:** The condition of the original question and the modification of the subject selection, clarifying only if it is actually vague and not forcing the original to increase until financial practices are sufficient, must be verified along with the meaning and results of the change.
 
-**보류:** 현재 실패한 모든 문항을 일곱 유형 모두 통과하도록 만드는 목표. 실제 필요한 입력이 하나뿐인 문항은 두 번째 삭제형의 의미부터 정해야 하며, 데이터를 꾸며 넣어 달성해서는 안 됩니다.
+**The reservation:** The goal is to make all the currently failed cases pass through all seven types. The only cases that actually need one entry should be defined from the meaning of the second type of deletion, and not achieved by putting data together.
 
-**기각:** 오류 이름만 보고 원본 불량으로 판정하기, 저장 정답에 맞게 수치를 바꾸기, 검사를 느슨하게 만들어 통과 수만 늘리기. 이렇게 하면 제작 품질을 확인할 수 없습니다.
+**- What is it?** You can just name the error and judge it as a faulty original, change the score to match the correct answer, make the test loose and increase the passing capacity, and you can't verify the quality of the product.
 
-#### 근거와 한계
+#### The basis and the limits
 
-문항별 원문, 최종 판정, 당시 검토·계산 결과, 생성 요청과 실패 기록은 공통 뷰어의 근거 버튼으로 확인할 수 있습니다. 전체 파일 해시는 manifest.json에 있습니다. 범주별 설명은 관찰된 실패 구조를 설명하며 모든 문항의 금융적 정답을 독립적으로 다시 증명한 결과는 아닙니다.
+Article-by-case originals, final judgments, at-time review and settlement results, creation requests and failure records can be verified with a common viewer's base button. The entire file hash is on manifest.json. The category-by-category description describes the observed failure structure and is not the result of independently re-proving the financial correctness of each case.
 
-현재 코드에서 질문 출처 검사, 삭제 시 숫자 개수 검사, 미정 입력의 조건·반복 계산 중단을 확인했습니다. 현재 코드를 당시 실행 코드와 동일하다고 가정하지 않고, 당시 저장된 요청·결과와 맞는 범위에서만 사용했습니다. 예를 들어 test-0012의 중복 6은 당시 요청 자체에 남아 있어 코드 변경 이력과 무관하게 확인할 수 있습니다.
+We checked the source of the query in the current code, we checked the number of numbers when deleted, we checks the condition of the default input, we check the countdown. We didn't assume that the current code was the same as the execution code at the time, but we used it only in the range that corresponded to the request and result that was stored at the time.0012The translation of 6The silver remains in the request itself at the time, so you can verify the code change irrespective of the variable.
 '''
     return text
 
 
 def detail(c, count):
-    return f"\n#### {c['title']} ({count}건)\n\n왜 멈췄나요? {c['why']}\n\n어디를 고치나요? {c['owner']}\n\n어떤 자료를 주어야 하나요? {c['supply']}\n\n어떻게 개선하나요? {c['fix']}\n\n실제 기록 예: {c['example']}\n\n판단 범위: {c['confidence']}\n"
+    return f"\n#### {c['title']} ({count}entries)\n\nWhy did you stop? {c['why']}\n\nWhere are you fixing it? {c['owner']}\n\nWhat data should we provide? {c['supply']}\n\nHow do you improve it? {c['fix']}\n\nReal record example: {c['example']}\n\nScope of the judgement: {c['confidence']}\n"
 
 
 if __name__ == '__main__':

@@ -6,5 +6,5 @@ const original=JSON.stringify(events),rows=ctx.normalizeEvents(events);
 assert.equal(rows[0].startClosed,true);assert.equal(rows[1].startClosed,false);assert.equal(rows[2].kind,'llm');assert.equal(JSON.stringify(events),original);
 assert.equal(ctx.filterEvents(rows,'fail','a',null).length,1);assert.equal(ctx.filterEvents(rows,'llm',null,null).length,3);assert.equal(ctx.filterEvents(rows,'all','a','3').length,1);
 assert.equal(ctx.sortedEvents(rows,'elapsed_seconds',1)[0].elapsed_seconds,2);assert.equal(ctx.sortedEvents(rows,'elapsed_seconds',-1)[0].elapsed_seconds,12);
-assert.match(ctx.causeText('GOLD_MISMATCH'),/정답 대조 실패/);assert.equal(ctx.stageName({stage:'human-review'}),'사람 검토 자료 준비');
+assert.match(ctx.causeText('GOLD_MISMATCH'),/\uc815\ub2f5 \ub300\uc870 \uc2e4\ud328/);assert.equal(ctx.stageName({stage:'human-review'}),'\uc0ac\ub78c \uac80\ud1a0 \uc790\ub8cc \uc900\ube44');
 console.log('PASS live logs: original preservation, per-case span identity, failure/LLM filters, numeric sort, readable causes (5 checks)');

@@ -1,26 +1,26 @@
-# Qwen 27B 금융 계산·추론 모델 재조사 안내
+# Qwen 27B Financial calculation and reporting model re-analysis guidance
 
-2026-10-01, 금융 설명 위주의 모델과 금융 수치·추론 학습 모델을 구별하여 다시 조사했습니다. 전체 가중치 3개를 우선 후보로 정리하고, adapter·GGUF·금융 추론 시스템 논문을 별도로 검토했습니다. 모델 가중치 다운로드, A100 구동, LLM 호출, 벤치마크는 진행하지 않았습니다.
+2026-10-01We re-examined the financial explanatory model, distinguishing it from the financial statistics and the reference learning model. 3We sorted the items as candidates, and we reviewed the paper on the adapter, the GGUF, the financial inference system separately.00 The drive, the LLM call, the benchmark didn't progress.
 
-## 읽는 순서
+## Reading order
 
-1. [조사 보고서](RESEARCH-DIRECTION.md): Eikos·FAB·Jackrong의 학습 내용, 출력 방식, 기반 모델, 실행 조건과 추천 한계를 읽습니다.
-2. [후보 판단](candidates.json): 영어로 저장한 제안과 근거·미확인 항목을 확인합니다. 실행 설정이나 사용자 승인 기록이 아닙니다.
-   [데이터셋 적합성 판단](dataset-fit.json)은 저희 7개 변형·응답 계약에 대한 Jackrong·FAB·Eikos의 예상 적합성과 근거 파일 해시를 기록합니다. 예상과 실제 결과를 구별합니다.
-3. [저장소 색인](repository-index.json)과 [원천 파일](sources/): 고정 revision, 공개 파일 목록, 모델 카드, config, tokenizer 설정과 가중치 shard 연결을 확인합니다. 가중치 내용 자체는 받지 않았습니다.
-4. [검색 기록](search-log.json)과 [관련 논문 기록](related-papers.json): 검색 범위와 금융 학습 가중치·추론 시스템 논문의 차이를 확인합니다.
-5. [확인 결과](verification.json)와 [로그](events.jsonl): 자료 해시·문서·뷰어 확인과 실제 모델 구동 여부를 구별합니다. [문서 검사 로그](documentation-validation.log)도 함께 보관합니다.
+1. [Report of the investigation](RESEARCH-DIRECTION.md): Read Eikos, FAB, Jackrong's learning content, output methods, base model, running conditions and recommended limits.
+2. [Candidate judgement](candidates.json): Check the suggestions and the basis and the uncertainties in English, not the execution settings or user approval records.
+   [Data set suitability judgement](dataset-fit.json)We're going to 7It records the predicted compatibility and base file hash of Jackrong, FAB, Eikos for the items-modification-response contract, distinguishing the predicted from the actual results.
+3. [The color of the cage](repository-index.json)And [source file](sources/)Fixed revision, open file list, model card, config, tokenizer settings and overweight shard connections.
+4. [Search records](search-log.json)And [related paper record](related-papers.json): Identify the differences between the scope of the search and the financial learning focus and the reference system.
+5. [Confirmed results](verification.json)Oh, my God.](events.jsonl)It distinguishes between data hashing, text-view verification and whether the actual model is running.](documentation-validation.log)And they keep it together.
 
-## 화면에서 확인
+## Check it on the screen.
 
-[공통 연구 뷰어](http://127.0.0.1:8896/viewer/research/)에서 **2026-10-01 · Qwen 27B · 금융 계산·추론 재조사**를 선택합니다. viewer/research의 기존 단일 화면이 reports/run의 실제 조사 보고서를 읽습니다. 결과 폴더별 HTML을 생성하지 않습니다. 자동 화면 확인은 사용자 직접 검토 완료를 뜻하지 않습니다.
+[Public research viewer](http://127.0.0.1:8896/viewer/research/)in **2026-10-01 · Qwen 27B • Financial calculation and re-investigation of claims**The viewer/research's existing single screen reads the actual survey report of the reports/run. The result does not generate a folder-by-folder HTML. Automatic screen verification does not mean the user completes the review themselves.
 
-## 자료를 해석할 때
+## When we interpret data,
 
-- 금융 학습, 숫자 정오판정, 도구를 사용한 풀이, 직접 수치 답 생성은 서로 다른 학습·평가입니다.
-- Qwen3.5·Qwen3.6·Qwen3.8을 같은 기준 모델로 취급하지 않습니다.
-- 공개 전체 가중치와 vLLM 지원 구조 확인은 특정 A100에서 실행 성공을 확인한 것이 아닙니다. 실행은 NOT_RUN입니다.
-- 게시자 설명·점수를 이번 조사에서 재현한 결과로 표시하지 않습니다. 공개 카드에 없는 학습 문항·정답·전용 논문을 추측하지 않습니다.
-- Eikos 데이터 공개 이후 제거된 자료가 있어 현재 공개 건수와 당시 학습 건수를 구별합니다. 문항별 학습 포함 여부와 평가 오염 부재를 독립 검증하지 않았습니다.
+- Financial learning, numerical determination, tooling, and the creation of direct numerical responses are all different learning and evaluation.
+- Qwen3.5·Qwen3.6·Qwen3.8We don't treat them as the same standard model.
+- Open full weight and vLLM support structure verification specific A100The run is NOT_RUN.
+- The publisher's description and score are not reflected in this survey, nor do they speculate on learning cases, answers, and general papers that are not on the public card.
+- Data from Eikos data that has been removed since the release of the data distinguishes between current public droughts and those of the time, whether they include paragraph-by-paragraph learning or not, and whether they have not independently verified the contamination.
 
-이 README는 src/finarch/documentation/templates/research/qwen27-financial-reasoning-readme.md에서 생성합니다.
+This README is src/finarch/documentation/templates/research/qwen27-financial-reasoning-readme.md is the source of the data.

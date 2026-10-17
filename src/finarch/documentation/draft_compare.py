@@ -62,7 +62,7 @@ def comparison_data(directory, sections, section_id='s1'):
     for paragraph in data['paragraphs']:
         decision = paragraph.setdefault('decision', 'original')
         if decision not in decisions:
-            raise ValueError('문단의 채택 상태를 확인해 주세요.')
+            raise ValueError('Please check the status of the adoption of the document.')
         decisions[decision] += 1
         edited = paragraph.get('edited_html', paragraph['revised_html'])
         selected = {
@@ -91,19 +91,19 @@ def comparison_data(directory, sections, section_id='s1'):
         'reduction': round(100 * (1 - selected_count / totals['original']), 1),
     }
     data['pending_application'] = pending
-    data['count_basis'] = '공백 포함 글자 수 / 인용 번호와 그림 캡션 제외'
+    data['count_basis'] = 'Includes blank letter count/citation number and picture captions excluded'
     return data
 
 
 def compressed_revision(directory):
     """Identify changes to the separate, editable compressed manuscript."""
-    stat = (directory / 'draft 압축.md').stat()
+    stat = (directory / 'Draft compression.md').stat()
     return f'{stat.st_mtime_ns}:{stat.st_size}'
 
 
 def compressed_document(directory, sections, root):
-    """Render only the sections actually written in draft 압축.md."""
-    source = directory / 'draft 압축.md'
+    """Render only the sections actually written in draft compression.md"""
+    source = directory / 'Draft compression.md'
     markdown = source.read_text()
     rendered = subprocess.run(
         ['pandoc', '-f', 'gfm', '-t', 'html5', '--wrap=none'],
@@ -120,7 +120,7 @@ def compressed_document(directory, sections, root):
             title = node.get_text(' ', strip=True)
             if title not in by_title:
                 if active is None:
-                    raise ValueError('압축 원고의 절 제목을 원본에서 찾지 못했습니다: ' + title)
+                    raise ValueError('I couldn\'t find the title of the passage in the original: ' + title)
                 active['html'] += str(node)
                 continue
             original = by_title[title]
@@ -129,7 +129,7 @@ def compressed_document(directory, sections, root):
         elif active is not None:
             active['html'] += str(node)
     if not result:
-        raise ValueError('압축 원고에 작업한 단원이 없습니다.')
+        raise ValueError('There\'s no one working on the compression file.')
 
     assets = Path(unicodedata.normalize('NFC', str(root / 'paper/asset'))).resolve()
     for section in result:
@@ -143,10 +143,10 @@ def compressed_document(directory, sections, root):
                 path = directory / path
             path = Path(unicodedata.normalize('NFC', str(path.resolve())))
             if not path.is_relative_to(assets) or not path.is_file():
-                raise ValueError('압축 원고의 그림 경로를 확인해 주세요: ' + src)
+                raise ValueError('Please check the drawing path of the compression file: ' + src)
             mime = mimetypes.guess_type(path.name)[0]
             if mime not in ['image/png', 'image/jpeg', 'image/svg+xml', 'image/webp', 'image/gif']:
-                raise ValueError('지원하지 않는 그림 형식입니다: ' + path.name)
+                raise ValueError('It\'s a graphics format that doesn\'t support: ' + path.name)
             image['src'] = 'data:' + mime + ';base64,' + base64.b64encode(path.read_bytes()).decode()
         # Markdown stores each figure image and its caption in adjacent paragraphs.
         for paragraph in list(body.find_all('p', recursive=False)):
@@ -161,4 +161,4 @@ def compressed_document(directory, sections, root):
                 caption.name = 'figcaption'
                 figure.append(caption.extract())
         section['html'] = str(body)
-    return {'title': 'Draft 압축', 'sections': result, 'revision': compressed_revision(directory)}
+    return {'title': 'Draft compression', 'sections': result, 'revision': compressed_revision(directory)}

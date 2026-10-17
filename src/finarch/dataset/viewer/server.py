@@ -90,7 +90,7 @@ def batch_path(root, name):
 
 
 def list_batches(root):
-    # [VW01] docs/02-architecture.md#VW01 — 실제 실행 디렉터리 목록을 읽는다. 결과 폴더를 복사하거나 쓰지 않는다.
+    # [VW01] docs/02-architecture.md#VW01 The resulting folder does not copy or write.
     if not root.exists(): return []
     result=[]
     for item in root.iterdir():
@@ -312,7 +312,7 @@ def viewer_review_gate(bundle):
 
 
 def batch_data(root, name, round_name=None, case_name=None, *, detail_only=False, artifact_filter=None, final_only=False):
-    # [VW02] docs/02-architecture.md#VW02 — 선택한 실행의 문항·로그·문서·코드만 읽어 화면 데이터로 보낸다.
+    # [VW02] docs/02-architecture.md#VW02 Read the case, log, and text code of the selected execution and send it to the screen data.
     bundle=batch_path(root,name)
     if (bundle/'json-context-adapter-check.json').is_file():
         from finarch.dataset.viewer.reports.json_context_adapter import view

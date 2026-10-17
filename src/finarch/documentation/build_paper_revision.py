@@ -85,7 +85,7 @@ def image_uri(path):
 
 def prepare_html(text, base=SRC):
     text = text.replace('Orange panels add conflicting claims; the purple panel removes input evidence.', 'Conflict panels add conflicting claims; the absence panel removes input evidence.')
-    text = text.replace('주황색 패널은 충돌하는 주장을 추가하고, 보라색 패널은 입력 근거를 삭제합니다.', '충돌 패널은 충돌하는 주장을 추가하고, 부재 패널은 입력 근거를 삭제합니다.')
+    text = text.replace('\uc8fc\ud669\uc0c9 \ud328\ub110\uc740 \ucda9\ub3cc\ud558\ub294 \uc8fc\uc7a5\uc744 \ucd94\uac00\ud558\uace0, \ubcf4\ub77c\uc0c9 \ud328\ub110\uc740 \uc785\ub825 \uadfc\uac70\ub97c \uc0ad\uc81c\ud569\ub2c8\ub2e4.', 'The conflict panel adds the conflict arguments, and the absence panel deletes the input basis.')
     doc = soup(resolve_citations(text))
     for embedded in doc.find_all('embed'):
         im=doc.new_tag('img',src=embedded['src'],alt='Perturbation taxonomy')
@@ -138,9 +138,9 @@ for part in en_parts:
     part['html'] = str(doc)
 
 abstract_en = re.search(r'\\begin\{abstract\}(.*?)\\end\{abstract\}', (SRC/'main.tex').read_text(), re.S).group(1).strip()
-abstract_ko = '''금융 에이전트의 근거 없는 답변은 큰 손실로 이어질 수 있으므로, 계산 능력 외에 언제 답변하지 않아야 하는지 판단하는 능력이 중요하다. 최근 벤치마크는 에이전트의 의사결정 과정을 평가하는 방향으로 확장되고 있으며, 이에 따라 추론 과정과 답변·기권 선택을 함께 살펴볼 필요가 커지고 있다. 그러나 수치 정답 여부만으로는 금융 근거가 충돌하거나 불완전할 때 이러한 판단이 적절한지 확인하기 어렵다. 우리는 금융 수치 추론에서 적절한 기권에 초점을 둔 벤치마크 FInject를 제안한다. FInject는 실행 가능한 풀이와 계산 그래프를 이용해 참조 풀이 경로에 필요한 근거를 찾고, 정보 충돌을 추가하거나 필요한 근거를 제거하는 일곱 가지 통제된 변형을 구성한다. 우리는 모델이 답변과 기권을 적절히 선택하는지, 그리고 충돌·제거 조건에 따라 그 판단이 어떻게 달라지는지 평가한다. 판단 기준 안내와 reasoning 지시를 조합한 네 조건에서 답변, 설명, 인용 근거를 비교하여 정당한 기권과 단순히 더 자주 거부하는 행동을 구분한다. FInject는 수치 정답 여부를 넘어, 금융 에이전트가 근거가 충분할 때 답하고 확정적인 답을 뒷받침하지 못할 때 기권하는지를 평가한다. FInject는 데이터셋 제작·평가·분석을 위한 자동화된 프레임워크와 재사용 가능한 데이터셋을 제공한다.'''
+abstract_ko = '''We propose a benchmark FInject, which focuses on appropriate authorities in financial statistics. FInject uses executable pools and calculation graphs to find the necessary basis for a pool of reference, and to add or remove the necessary basis of information. We evaluate whether the model selects the answer appropriately, and how the model differs from the judge based on the basis of the conflict. When FInject provides a set of criteria for evaluating the basis of reasoning, it provides sufficient data to evaluate the basis of a set of data, and when FInject sets up a set of statistics to evaluate and evaluate the data, it often provides sufficient data for evaluating and evaluating the data. FInjet provides sufficient data when it compares the basis of reference to a pool of relevant data, and then it can add or eliminate the necessary basis.'''
 caption_en = 'FInject evaluates answer-or-abstain decisions under conflicting or insufficient financial evidence through classification, reasons, and cited evidence.'
-caption_ko = 'FInject는 금융 근거가 충돌하거나 부족할 때의 답변·기권 판단을 분류, 이유, 인용 근거와 함께 평가한다.'
+caption_ko = 'FInject evaluates responses and authority judgments when financial grounds conflict or are lacking, along with classification, reasoning, citation.'
 
 sections = []
 def add(sid, en, ko, enhtml, kohtml, state, olden='', oldko='', level=0):
@@ -163,8 +163,8 @@ def brief_column_notes(number, lang):
     for start in range(0,len(entries),4):
         definitions=[f'<strong>{html.escape(x[lang])}</strong>: {html.escape(x["brief_"+lang])}' for x in entries[start:start+4]]
         result+='<p class="table-note column-definitions">'+'; '.join(definitions)+'.</p>'
-    label='Detailed definitions and comparison criteria are provided in ' if lang=='en' else '세부 정의와 비교 판정 기준은 '
-    suffix='.' if lang=='en' else '을 참조한다.'
+    label='Detailed definitions and comparison criteria are provided in ' if lang=='en' else 'The definition of the comparison criteria is '
+    suffix='.' if lang=='en' else 'See also'
     return result+'<p class="table-note">'+label+'<a href="#appendix-table-definitions">Appendix #</a>'+suffix+'</p>'
 
 # Keep both comparison matrices and their definitions from the current manuscript.
@@ -186,7 +186,7 @@ for collection, lang in [(tables,'en'),(ko_tables,'ko')]:
     doc=soup(collection[1])
     for th in doc.find_all('th'):
         if th.get_text(' ',strip=True) in ['Confl. QA','Conflict QA']:
-            th.clear();th.append('Abst. under conflicts' if lang=='en' else '충돌 상황 기권')
+            th.clear();th.append('Abst. under conflicts' if lang=='en' else 'The Conflict Situation Control')
     collection[1]=str(doc)
 # Keep the main comparison row label concise in both languages.
 for collection in [tables, ko_tables]:
@@ -202,19 +202,19 @@ for i, sid in enumerate(['s2','s2-1','s2-2']):
     if i:
         tab_id = f'table-{i}'
         title_en = ['','Construction and quality assurance features of financial datasets.','Evaluation scope of financial datasets.'][i]
-        title_ko = ['','금융 데이터셋의 제작 및 품질 확인 요소.','금융 데이터셋의 평가 범위.'][i]
+        title_ko = ['','The manufacturing and quality assurance elements of financial datasets.','Scope of the financial data set.'][i]
         en += f'<div id="{tab_id}" class="comparison"><p class="table-caption">Table {i}. {title_en}</p>'+tables[i-1]+'</div>'
-        ko += f'<div id="{tab_id}" class="comparison"><p class="table-caption">표 {i}. {title_ko}</p>'+ko_tables[i-1]+'</div>'
+        ko += f'<div id="{tab_id}\x22 class=\x22comparison\x22><p class=\x22table-caption\x22>Table {i}. {title_ko}</p>'+ko_tables[i-1]+'</div>'
         en += brief_column_notes(i,'en')
         ko += brief_column_notes(i,'ko')
         en += '<p class="table-note">✓: identified under the table definitions; blank: not established under those definitions, not proof of absence. The FInject row records design coverage. PoT / execution includes executable reference calculations; a checkmark does not necessarily mean PoT prompting. The calculation graph describes construction dependencies, not hidden model reasoning.</p>' if i == 1 else '<p class="table-note">✓ and blanks follow Table 1. Evaluation coverage does not imply identical correctness criteria or denominators. The FInject row records the evaluation design; input recovery and semantic consistency require corresponding reference judgments.</p>'
-        ko += '<p class="table-note">✓는 표의 정의에 해당하는 사용을 확인한 경우이며, 빈칸은 해당 사용을 확인하지 못했다는 뜻으로 기능 부재를 증명하지 않습니다. FInject 행은 설계 범위입니다. PoT·풀이 실행의 ✓가 모두 PoT 프롬프팅을 뜻하지는 않습니다. 계산 그래프는 제작 과정의 의존 관계이며 모델 내부 추론이 아닙니다.</p>' if i == 1 else '<p class="table-note">✓와 빈칸의 의미는 표 1과 같습니다. 같은 열의 ✓가 동일한 정답 기준이나 분모를 뜻하지는 않습니다. FInject 행은 평가 설계이며, 역산 평가와 의미 정합성은 필요한 판정 근거가 있는 범위에 적용합니다.</p>'
+        ko += '<p class="table-note">✓ is a validation of a table\'s definition of use, and a blank does not prove a lack of functionality, meaning that it did not validate the use. The FInject row is a design range. The ✓ in the PoT fulfillment execution does not all mean PoT prompting. The calculation graph is a dependence of the manufacturing process, not an internal model inference.</p>' if i == 1 else '<p class="table-note">✓ and the meaning of a blank is a table. 1It\'s like, ✓ in the same column doesn\'t mean the same exact answer criteria or denominator. The FInject row is an evaluation design, and the inverse evaluation and the meaning complexity are applied to the extent that the judgement is based on what is needed.</p>'
     add(sid,new_en[i]['title'],new_ko[i]['title'],en,ko,'revised',old_en[i]['html'],old_ko[i]['html'],0 if i==0 else 1)
 
 sec=2; sub=0
 figure_at = {'3.1':[2], '3.2':[3], '3.3':[4], '3.4':[5,6], '3.5':[7], '3.6':[8]}
 ko_titles={'6':'AI Usage','7':'Ethical Consideration','8':'Limitations','9':'Data','10':'Software','11':'Appendices'}
-ko_tail={'6':'<p class="pending">[미작성 — PDF 원고에 본문이 없습니다.]</p>','7':'<p>우리는 잘하고 있다.</p><p class="pending">[기존 원고의 “We are good” 임시 문구입니다. 작성 필요.]</p>','8':'<p>우리 연구는…</p><p class="pending">[기존 원고의 “Our work is..” 임시 문구입니다. 작성 필요.]</p>','9':'<p class="pending">[미작성 — PDF 원고에 본문이 없습니다.]</p>','10':'<p class="pending">[미작성 — PDF 원고에 본문이 없습니다.]</p>','11':'<p class="pending">[PDF의 부록 본문은 미작성입니다. 아래 비교표는 프로젝트에 보관된 비금융 비교 자료를 검토용으로 가져왔으며, 최종 부록·표 번호는 미정입니다.]</p>'}
+ko_tail={'6':'<p class="pending">[There is no copy in the PDF file of the unconventional file.]</p>','7':'<p>We\'re doing well.</p><p class="pending">[We are good is a temporary sentence in the Presence Document.</p>','8':'<p>Our research is...</p><p class="pending">[Our work is.. our work is a temporary sentence.</p>','9':'<p class="pending">[There is no copy in the PDF file of the unconventional file.]</p>','10':'<p class="pending">[There is no copy in the PDF file of the unconventional file.]</p>','11':'<p class="pending">[The PDF\'s appendix is unfinished. The comparison table below is for the review of the non-financial comparison data stored for the project, and the final appendix and the number of the appendix are unfinished.]</p>'}
 for part in en_parts[3:]:
     if part['level']==0: sec+=1;sub=0
     else: sub+=1
@@ -225,9 +225,9 @@ for part in en_parts[3:]:
     if num=='11': en='<p class="pending">[The PDF appendix is not yet written. The non-financial comparison tables below are imported from existing project material for review; final numbering remains pending.]</p>'
     for n in figure_at.get(num,[]): en += figures[n]
     # Korean sections use existing translations; update figure numbering to the current PDF.
-    ko = re.sub(r'(그림|Figure) ([1-7])(?!\d)',lambda m:m[1]+' '+str(int(m[2])+1),ko)
+    ko = re.sub('(\uadf8\ub9bc|Figure) ([1-7])(?!\\d)',lambda m:m[1]+' '+str(int(m[2])+1),ko)
     # Do not renumber the reference to the earlier manuscript's Figure 3.
-    ko = ko.replace('기존 FInject 원고의 Figure 4','기존 FInject 원고의 Figure 3')
+    ko = ko.replace('\uae30\uc874 FInject \uc6d0\uace0\uc758 Figure 4','Figure of the existing FInject file 3')
     kd=soup(ko)
     for image in list(kd.find_all('img')):
         original=image['src']
@@ -239,11 +239,11 @@ for part in en_parts[3:]:
         if parent.name=='p':
             caption_node=parent.find_next_sibling('p')
             fig=kd.new_tag('figure')
-            match=re.search(r'(?:그림|Figure) (\d+)',image.get('alt',''))
+            match=re.search('(?:\uadf8\ub9bc|Figure) (\\d+)',image.get('alt',''))
             if match: fig['id']='fig:revision-'+str(int(match[1])-1)
             parent.replace_with(fig);fig.append(image)
             caption=kd.new_tag('figcaption')
-            if caption_node and re.match(r'(?:그림|Figure) \d+',caption_node.get_text()):
+            if caption_node and re.match('(?:\uadf8\ub9bc|Figure) \\d+',caption_node.get_text()):
                 caption.string=caption_node.get_text();caption_node.decompose()
             else:caption.string=image.get('alt','')
             fig.append(caption)
@@ -263,7 +263,7 @@ if f:
 taxonomy_ko = next(x for x in sections if x['id']=='s3-2')
 if not soup(taxonomy_ko['kohtml']).find('figure'):
     figure_doc = soup(figures[3])
-    figure_doc.find('figcaption').string = '그림 3. 부채비율 문제를 예로 든 네 범주와 일곱 변형. 충돌 패널은 충돌하는 주장을 추가하고, 부재 패널은 입력 근거를 삭제합니다. 각 IC-source 변형은 대응하는 부모 IC-value 문항과 비교합니다. 이 예시는 변형 유형을 설명하며, 평가가 완료된 벤치마크 문항을 뜻하지 않습니다.'
+    figure_doc.find('figcaption').string = 'Painting 3For example, four categories and seven variations. The conflict panel adds conflicting claims, and the absence panel deletes the input basis. Each IC-source variation compares with the corresponding parent IC-value clause. This example describes the variation type, not the benchmark clause where the evaluation is completed.'
     figure_doc.find(['img', 'embed'])['src'] = str(ROOT/'paper/asset/Figure3-bh.png')
     taxonomy_ko['kohtml'] += str(figure_doc)
 
@@ -291,16 +291,16 @@ for i,filename in enumerate(['nonfinancial-construction.tex','nonfinancial-evalu
     table='<table>'+''.join(rows)+'</table>'
     fragment=f'<div id="appendix-table-{i}"><h3>Table N{"+1" if i else ""}. {title}</h3>{table}</div>'
     appendix['enhtml']+=fragment
-    korean_fragment=fragment.replace(title,['비금융 데이터셋의 제작 요소','비금융 데이터셋의 평가 범위'][i])
-    columns={'Dataset':'데이터셋','Reuse':'기존 자료','Source check':'원천 검토','LLM':'LLM 생성','Rules':'규칙·구조','Run':'풀이 실행','Edit':'원본 변형','Auto':'자동 검사','Human':'사람 검토','Tools':'검토 지원','Calc.':'수치 풀이','Fact':'사실 판정','Find':'충돌 탐지','Conflict QA':'Conflict QA','Need':'근거 부족','Abst.':'기권 지표','Inv.':'역산 평가','Align':'설명 일치','Pair':'짝 비교','Setup':'풀이 설정'}
+    korean_fragment=fragment.replace(title,['The building blocks of a non-financial dataset','Scope of evaluation of non-financial datasets'][i])
+    columns={'Dataset':'The data set','Reuse':'The existing data','Source check':'Source reviews','LLM':'LLM generated','Rules':'Rules and structure','Run':'The grass runs','Edit':'The original modification.','Auto':'Automated testing','Human':'Human review','Tools':'Support for review','Calc.':'The numerical set.','Fact':'Actually, the verdict.','Find':'The impact detector.','Conflict QA':'Conflict QA','Need':'Insufficient evidence','Abst.':'The power index','Inv.':'Reverse evaluation','Align':'The description matches','Pair':'Compare','Setup':'Set the grass'}
     for a,b in columns.items():korean_fragment=korean_fragment.replace('<th>'+a+'</th>','<th>'+b+'</th>')
     appendix['kohtml']+=korean_fragment
 
 for lang in ['en','ko']:
-    heading='Appendix #. Definitions and comparison criteria for Tables 1–2' if lang=='en' else 'Appendix #. 표 1·2의 항목 정의와 비교 판정 기준'
+    heading='Appendix #. Definitions and comparison criteria for Tables 1–2' if lang=='en' else 'Appendix #. Table 1·2The definition of the item is compared to the judgement criteria'
     detail=f'<div id="appendix-table-definitions"><h3>{heading}</h3>'
     for number,entries in column_notes.items():
-        detail+=f'<h4>{"Table" if lang=="en" else "표"} {number}</h4><dl>'
+        detail+=f'<h4>{"Table" if lang=="en" else "Table"} {number}</h4><dl>'
         for entry in entries:
             detail+=f'<dt><strong>{html.escape(entry[lang])}</strong></dt><dd>{html.escape(entry["detail_"+lang])}</dd>'
         detail+='</dl>'
@@ -319,7 +319,7 @@ refs=''.join(references)
 add('references','References','References',refs,refs,'carried')
 
 # Provide index targets for the captioned and unnumbered tables printed by the PDF.
-table_labels={'s3-5':[('Evaluation conditions','평가 조건')], 's4':[('Release sampling stages','공개 표본 선정 단계'),('Table 3. Human-review agreement','표 3. 사람 검토 일치도')], 's5-1':[('RQ1 metrics','RQ1 측정 지표')], 's5-2':[('RQ2 analysis dimensions','RQ2 분석 항목')]}
+table_labels={'s3-5':[('Evaluation conditions','Evaluation conditions')], 's4':[('Release sampling stages','Public sample selection'),('Table 3. Human-review agreement','Table 3. Human reviewer agreement')], 's5-1':[('RQ1 metrics','RQ1 metrics')], 's5-2':[('RQ2 analysis dimensions','RQ2 analysis items')]}
 for item in sections:
     if item['id'] not in table_labels:continue
     for lang in ['en','ko']:
@@ -340,7 +340,7 @@ for item in sections:
     if item['id']=='s2':
         # Show the exact requested deletion without hiding it among earlier paragraphs.
         item['olden']='<p>Financial data informs decisions ranging from personal asset management to corporate reporting and national economic activity. Datasets for evaluating financial language models therefore need to address not only text comprehension but also numerical units and periods, computational relationships, and evidence supporting an answer.</p>'
-        item['oldko']='<p>금융 데이터는 개인의 자산 관리부터 기업의 재무 보고와 국가의 경제 활동까지 폭넓은 판단에 사용된다. 따라서 금융 언어 모델을 평가하는 데이터셋은 문장에 대한 이해뿐 아니라, 수치의 단위와 기간, 계산 관계, 답을 뒷받침하는 근거를 함께 다뤄야 한다.</p>'
+        item['oldko']='<p>Financial data is used for a wide range of judgments, from individual asset management to corporate financial reporting and the economic activity of a country. Therefore, a dataset evaluating a financial language model must address not only the understanding of a sentence, but also the units and durations of the figures, the calculation relationships, and the basis supporting the answer.</p>'
 
 from revise_construction import apply_review
 sections = apply_review(sections)
@@ -366,7 +366,7 @@ for lang in ['ko','en']:
         for path in all_assets.values():
             if path.exists():plain=plain.replace(image_uri(path),str(path))
         parts.append(plain+'\n')
-    (RUN/f'PAPER-{lang.upper()}.md').write_text('# FInject — '+('논문 검토 초안' if lang=='ko' else 'Paper Revision Draft')+'\n\n'+''.join(parts))
+    (RUN/f'PAPER-{lang.upper()}.md').write_text('# FInject — '+('Draft paper review' if lang=='ko' else 'Paper Revision Draft')+'\n\n'+''.join(parts))
 
 manifest={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [SRC/'main.tex',SRC/'revision-20261002-body.tex',SRC/'sections/01-introduction.tex',OLD,RUN/'content/related-ko.md',RUN/'content/related-en.md',RUN/'content/table-column-notes.json']}
 (RUN/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')

@@ -47,7 +47,7 @@ def bundle(run):
     (run / "README.md").write_text(readme, encoding="utf-8")
     now = datetime.now(timezone.utc).isoformat()
     summary = {
-        "kind": "DATASET_SURVEY", "status": "RESEARCH_COMPLETE", "title": "최근 1년 금융 QA 데이터셋 조사",
+        "kind": "DATASET_SURVEY", "status": "RESEARCH_COMPLETE", "title": "Recently. 1QA data set survey",
         "as_of": catalog["as_of"], "window_start": catalog["window_start"], "updated_at": now,
         "candidates": len(catalog["candidates"]), "documents": len(documents),
         "count_verified": sum(c["count_basis"] != "PAPER_REPOSITORY_CLAIM" for c in catalog["candidates"]),

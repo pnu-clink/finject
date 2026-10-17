@@ -51,6 +51,6 @@ def begin(root, stages, selected, case_id):
 def finish(ctx, result, selected):
     result.update(selected_stages=list(selected),allow_next_stage=False)
     ctx.save('run.json',result)
-    text='# 단계별 실행 결과\n\n선택 구간: '+', '.join(selected)+'\n\n상태: '+result['status']+'\n\n각 단계 폴더 → run.json → events.jsonl 순서로 확인합니다. 이전 결과는 stage-history에 보존합니다. 사람 승인은 자동으로 부여하지 않습니다.\n'
+    text='# Step by step execution results\n\nThe range of choice: '+', '.join(selected)+'\n\nState of play: '+result['status']+'\n\nEach step is checked in the order of the folder → run.json → events.jsonl. The previous results are saved to stage-history.\n'
     (ctx.root/'README.md').write_text(text)
     return result

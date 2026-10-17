@@ -30,14 +30,14 @@ def apply_review(sections):
             h=re.sub(r'<span class="citation"[^>]*>.*?</span>', '<a href="#ref-finance_reasoning">Tang et al., 2025</a>; <a href="#ref-tatqa">Zhu et al., 2021</a>',h,flags=re.S)
             item[lang+'html']=h
     for lang in ['en','ko']:
-        cap=('Dataset Construction prepares and generates evidence variants; Model Evaluation records responses and analyzes answer-or-abstain decisions.' if lang=='en' else 'Dataset Construction은 원본을 준비하고 근거 변형을 생성하며, Model Evaluation은 응답을 수집하고 답변·기권 판단을 분석한다.')
+        cap=('Dataset Construction prepares and generates evidence variants; Model Evaluation records responses and analyzes answer-or-abstain decisions.' if lang=='en' else 'Dataset Construction prepares the originals and generates the base variations, while Model Evaluation collects the responses and analyzes the responses.')
         new[0][lang+'html']+=figure(ROOT/'paper/asset/pipeline-overview-v3-abstract.png',2,'fig:revision-1',cap)
-        cap=('Four categories and seven variants connect conflicting claims and independent evidence deletions to the same original.' if lang=='en' else '네 범주·일곱 변형은 같은 원본에 충돌하는 주장과 독립적인 근거 삭제를 연결한다.')
+        cap=('Four categories and seven variants connect conflicting claims and independent evidence deletions to the same original.' if lang=='en' else 'The four-category-seven variation links claims that conflict with the same source to independent base deletions.')
         new[2][lang+'html']+=figure(ROOT/'paper/asset/Figure3-bh.png',3,'fig:revision-2',cap)
     appendix=[]
-    head=dict(id='s11-pipeline',en='Appendix #. Framework workflow',ko='Appendix #. 프레임워크 상세 흐름',enhtml='',kohtml='',state='revised',olden='',oldko='',level=1)
+    head=dict(id='s11-pipeline',en='Appendix #. Framework workflow',ko='Appendix #. Detailed flow of framework',enhtml='',kohtml='',state='revised',olden='',oldko='',level=1)
     for lang in ['en','ko']:
-        cap=('The complete FInject workflow: Preparation, Generation, Evaluation, and Analysis.' if lang=='en' else 'Preparation, Generation, Evaluation, Analysis로 이어지는 FInject의 전체 흐름.')
+        cap=('The complete FInject workflow: Preparation, Generation, Evaluation, and Analysis.' if lang=='en' else 'The whole flow of FInject that leads to Preparation, Generation, Evaluation, Analysis.')
         head[lang+'html']=figure(ROOT/'paper/asset/pipeline-overview-v3.png',4,'fig:pipeline-full',cap)
     appendix.append(head)
     for num,(name,oldid) in enumerate([('Preparation','s3-3'),('Generation','s3-4'),('Evaluation','s3-5'),('Analysis','s3-6')],1):
@@ -48,15 +48,15 @@ def apply_review(sections):
                 if 'revision-5' not in f.get('id',''):f.decompose()
                 else:
                     c=f.find('figcaption')
-                    if c:c.string=re.sub(r'^(Figure|그림)\s*6',r'\1 5',c.get_text())
+                    if c:c.string=re.sub('^(Figure|\uadf8\ub9bc)\\s*6',r'\1 5',c.get_text())
             h=str(d)
             # The former cropped panels are replaced by the complete workflow figure.
-            h=re.sub(r'(Figure|그림)\s*[478](?!\d)',r'\1 4',h)
+            h=re.sub('(Figure|\uadf8\ub9bc)\\s*[478](?!\\d)',r'\1 4',h)
             h=h.replace('fig:revision-3','fig:pipeline-full').replace('fig:revision-4','fig:pipeline-full').replace('fig:revision-6','fig:pipeline-full').replace('fig:revision-7','fig:pipeline-full')
             if num==1:
-                h+=('<p>The recorded runs use <code>gpt-5.6-sol</code> with medium reasoning effort for Python solution authoring and <code>gpt-5.6-luna</code> with max reasoning effort for review, text generation, and verification. These settings describe dataset construction, not target-model evaluation.</p>' if lang=='en' else '<p>저장된 제작 실행에서는 Python 풀이 작성에 <code>gpt-5.6-sol</code>(reasoning effort: medium), 검토·문장 생성·검증에 <code>gpt-5.6-luna</code>(reasoning effort: max)를 사용했다. 이는 데이터셋 제작 설정이며 대상 모델의 평가 설정과 구분한다.</p>')
+                h+=('<p>The recorded runs use <code>gpt-5.6-sol</code> with medium reasoning effort for Python solution authoring and <code>gpt-5.6-luna</code> with max reasoning effort for review, text generation, and verification. These settings describe dataset construction, not target-model evaluation.</p>' if lang=='en' else '<p>In the stored build execution, the Python root is used to create the <code>gpt-5.6-sol</code>(reasoning effort: medium), to review, to create, to verify, to test, to test. <code>gpt-5.6-luna</code>(reasoning effort: max) is used to set the data set and distinguish it from the evaluation set of the target model.</p>')
             if num==2 and lang=='ko':
-                h+=figure(ROOT/'reports/run/20261003-overleaf-related-works/revised/revision-graph-example.png',5,'fig:revision-5','2017년 자산 19,201과 2016년 자산 23,280으로 계산한 원본 답은 -4,079이다. 2017년 자산을 21,121.1로 제시하는 문장을 추가하면 조건부 후보 답은 -2,159가 된다. 원본 표와 추가 문장이 함께 있으므로 후보 B를 유일한 정답으로 간주하지 않는다. 이 화면은 제작 예시이며 미평가 상태를 유지한다.')
+                h+=figure(ROOT/'reports/run/20261003-overleaf-related-works/revised/revision-graph-example.png',5,'fig:revision-5','2017Annual assets 19,201and 2016Annual assets 23,280The original answer to this is:4,079It is. 2017The property of the pig 21,121.1And if you add the sentence that you\'re going to present as a conditioned candidate,2,159The original table and the additional sentence are together so candidate B is not considered the only correct answer. This screen is a production example and maintains an underrated status.')
             if num==2:
                 tax=BeautifulSoup(old['s3-2'][lang+'html'],'html.parser')
                 for f in tax.find_all('figure'):f.decompose()
@@ -71,12 +71,12 @@ def apply_review(sections):
             continue
         for key in ['enhtml','kohtml']:
             x[key]=x[key].replace('1,637','1,817').replace('1,080','1,260')
-            x[key]=x[key].replace('Figure 6','Figure 5').replace('그림 6','그림 5')
+            x[key]=x[key].replace('Figure 6','Figure 5').replace('\uadf8\ub9bc 6','Painting 5')
         if x['id']=='s3':x['state']='revised'
         if x['id']=='s11':
             shell=copy.deepcopy(x);shell['enhtml']='';shell['kohtml']=''
             out.append(shell);out.extend(appendix)
-            x['id']='s11-comparisons';x['en']='Appendix #. Supplementary comparisons';x['ko']='Appendix #. 보충 비교';x['level']=1
+            x['id']='s11-comparisons';x['en']='Appendix #. Supplementary comparisons';x['ko']='Appendix #. Complementary comparison';x['level']=1
         if x['id'].startswith('s11-pipeline') or x['id']=='s11-comparisons':
             # Only retained comparisons are appended below; repeated overlays must not duplicate sections.
             if x['id']!='s11-comparisons':continue

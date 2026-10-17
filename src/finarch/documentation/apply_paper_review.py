@@ -65,18 +65,18 @@ for item in sections:
 configs={
   1:{'sid':'s2-1','cols':[0,2,3,4,5,7,8,9],
      'en':['Dataset','Review','PoT / exec.','Graph','LLM text','Edits','Auto.','Human'],
-     'ko':['데이터셋','원천 검토','PoT / 실행','계산 그래프','LLM 문장','변형','자동 검사','사람 검증'],
+     'ko':['The data set','Source reviews','PoT / run','Calculation graph','LLM phrases','Variant','Automated testing','Human verification.'],
      'groups_en':[('Source',1),('Construction',4),('Verification',2)],
-     'groups_ko':[('원천',1),('제작',4),('검증',2)],
+     'groups_ko':[('The source.',1),('Production',4),('Validation',2)],
      'note_en':'Review: source-item checks. PoT/exec.: executable reference calculations. Graph: input–operation–answer dependencies. LLM text: generated questions, contexts, or edits. Edits: controlled changes. Auto./Human: automated checks or human review. Appendix # gives full definitions.',
-     'note_ko':'원천 검토: 원본 문항 점검. PoT/실행: 실행 가능한 참조 계산. 계산 그래프: 입력·연산·답의 의존 관계. LLM 문장: 질문·문맥·변경 문장 생성. 변형: 통제된 변경. 자동 검사·사람 검증: 각 검증 방식. 세부 정의는 Appendix #에 둔다.'},
+     'note_ko':'Source review: original case checking. PoT/practice: executable reference calculation. Calculation graph: input; mixing; dependent relationship of answers. LLM phrase: question; context; change phrase creation. modification: controlled change. automatic check; person verification: each verification method. Detailed definition is set out in Appendix #.'},
   2:{'sid':'s2-2','cols':[0,1,3,5,4,8,9],
      'en':['Dataset','Numerical QA','Conflict detection','Missing evidence','Abstention','Response support','Paired'],
-     'ko':['데이터셋','수치 QA','충돌 탐지','정보 부족','기권','응답 뒷받침','대응 비교'],
+     'ko':['The data set','Number QA','The impact detector.','Lack of information','Abstention','Respond back up','Compare the correspondence'],
      'groups_en':[('Tasks and evidence conditions',3),('Decision evaluation',3)],
-     'groups_ko':[('과제·근거 조건',3),('결정 평가',3)],
+     'groups_ko':[('The task and the conditions',3),('The decision evaluation',3)],
      'note_en':'Numerical QA: numerical correctness. Conflict detection: contradictions or rule violations. Missing evidence: insufficient information. Abstention: abstaining when conflicting evidence prevents a supported answer. Response support: answer–explanation–evidence consistency. Paired: matched original–variant comparisons. Appendix # gives full definitions.',
-     'note_ko':'수치 QA: 수치 정답. 충돌 탐지: 모순·규칙 위반 탐지. 정보 부족: 불충분한 정보 평가. 기권: 충돌로 답을 뒷받침할 수 없을 때의 기권. 응답 뒷받침: 답·설명·근거의 일치. 대응 비교: 연결된 원본·변형 비교. 세부 정의는 Appendix #에 둔다.'}}
+     'note_ko':'Numerical QA: Numerical accuracy. Conflict detection: contradiction; rule violation detection. Information shortage: inadequate information assessment. Authority: Authority when no response can be backed up by a collision. Response backing: response; explanation; proximity matching. Corresponding comparison: linked source; variable comparison. Detailed definition is in Appendix #.'}}
 matrices={}; full_tables={}
 for number,cfg in configs.items():
     old=next(x for x in original if x['id']==cfg['sid'])
@@ -100,41 +100,41 @@ for number,cfg in configs.items():
             for index in cfg['cols']: tr.append(copy.deepcopy(row[index]))
             if 'FInject' in tr.get_text():tr['class']='ours'
             doc.tbody.append(tr)
-        title=('Construction and verification features.' if number==1 else 'Evaluation tasks and decisions.') if lang=='en' else ('제작·검증 요소.' if number==1 else '평가 과제와 결정.')
+        title=('Construction and verification features.' if number==1 else 'Evaluation tasks and decisions.') if lang=='en' else ('The manufacturing and verification element.' if number==1 else 'Assessment tasks and decisions.')
         note=cfg['note_'+lang]
-        status=('✓: reported coverage; blank: not established, not proof of absence. FInject checks describe the evaluation or construction design, not completed human verification or measured superiority.' if lang=='en' else '✓는 보고된 범위이며 빈칸은 미확인으로 기능 부재를 뜻하지 않는다. FInject의 체크는 제작·평가 설계이며 사람 검증 완료나 품질 우위를 뜻하지 않는다.')
-        new[lang+'html']+=f'<div class="comparison" id="tab:related-{number}"><p class="table-caption">'+('Table ' if lang=='en' else '표 ')+str(number)+'. '+title+'</p>'+str(doc)+'</div><p class="table-note">'+note+'</p><p class="table-note">'+status+'</p>'
+        status=('✓: reported coverage; blank: not established, not proof of absence. FInject checks describe the evaluation or construction design, not completed human verification or measured superiority.' if lang=='en' else 'A check mark indicates reported scope; a blank means unverified, not an absent feature. FInject check marks describe its construction/evaluation design, not completed human validation or superior quality.')
+        new[lang+'html']+=f'<div class="comparison" id="tab:related-{number}"><p class="table-caption">'+('Table ' if lang=='en' else 'Table ')+str(number)+'. '+title+'</p>'+str(doc)+'</div><p class="table-note">'+note+'</p><p class="table-note">'+status+'</p>'
 
 def append_section(sid,en,ko,enhtml,kohtml):
     idx=next(i for i,x in enumerate(sections) if x['id']=='s11-comparisons')
     sections.insert(idx,dict(id=sid,en=en,ko=ko,enhtml=enhtml,kohtml=kohtml,state='revised',olden='',oldko='',level=1))
 
-append_section('s11-rubric','Appendix #. Semantic review and model settings','Appendix #. 의미 판정과 모델 설정',html_text(EN['s11-rubric']),html_text(KO['s11-rubric']))
+append_section('s11-rubric','Appendix #. Semantic review and model settings','Appendix #. Semantic assessment and model setting',html_text(EN['s11-rubric']),html_text(KO['s11-rubric']))
 for lang in ['en','ko']:
     # Retain the detailed metric tables without crowding the main exposition.
     tables=''
     for sid,label in [('s5-1','RQ1'),('s5-2','RQ2')]:
         old=next(x for x in original if x['id']==sid)
         tab=BeautifulSoup(old[lang+'html'],'html.parser').find('table')
-        tables+='<div class="comparison" id="app-metric-'+sid+'"><p class="table-caption">'+label+(' metric details' if lang=='en' else ' 세부 측정 항목')+'</p>'+str(tab)+'</div>'
+        tables+='<div class="comparison" id="app-metric-'+sid+'"><p class="table-caption">'+label+(' metric details' if lang=='en' else ' Detailed measurement items')+'</p>'+str(tab)+'</div>'
     if lang=='en':metrics_en=tables
     else:metrics_ko=tables
-append_section('s11-metrics','Appendix #. Metric definitions and analysis dimensions','Appendix #. 지표 정의와 분석 항목',metrics_en,metrics_ko)
+append_section('s11-metrics','Appendix #. Metric definitions and analysis dimensions','Appendix #. Indicator definition and analysis items',metrics_en,metrics_ko)
 for lang in ['en','ko']:
-    text='<p>'+('These matrices preserve the full comparison columns from the preceding draft. Checkmarks do not establish matched data quality or completed human verification. Individual coverage claims still require source-level review.' if lang=='en' else '아래 표는 이전 초안의 전체 비교 열을 보존한다. 체크 수로 동일 기준의 품질 우위나 사람 검증 완료를 주장하지 않는다. 개별 비교 근거는 원문 수준에서 확인해야 한다.')+'</p>'
+    text='<p>'+('These matrices preserve the full comparison columns from the preceding draft. Checkmarks do not establish matched data quality or completed human verification. Individual coverage claims still require source-level review.' if lang=='en' else 'The table below preserves the entire comparison column of the previous draft. Check figures do not claim the same standard of quality excellence or human verification completion. Individual comparison bases should be verified at the original level.')+'</p>'
     for number in [1,2]:
-        title=('Full construction comparison' if number==1 else 'Full evaluation comparison') if lang=='en' else ('제작 요소 전체 비교' if number==1 else '평가 범위 전체 비교')
+        title=('Full construction comparison' if number==1 else 'Full evaluation comparison') if lang=='en' else ('Comparison of the total manufacturing elements' if number==1 else 'Comparison of the total scope of evaluation')
         text+='<div class="comparison" id="app-full-table-'+str(number)+'"><p class="table-caption">'+title+'</p>'+full_tables[number][lang]+'</div>'
     if lang=='en':full_en=text
     else:full_ko=text
-append_section('s11-full-tables','Appendix #. Full financial dataset comparisons','Appendix #. 금융 데이터셋 전체 비교',full_en,full_ko)
+append_section('s11-full-tables','Appendix #. Full financial dataset comparisons','Appendix #. Comparison of the financial data set as a whole',full_en,full_ko)
 
 # Explicit pending notes replace misleading unfinished prose, without inventing disclosures.
 pending={
- 's6':('Author confirmation pending: specify the use of AI in manuscript preparation and distinguish it from the construction models in Section 3.1.','저자 확인 필요: 논문 작성에서의 AI 사용을 구체적으로 기록하고 3.1의 제작 모델과 구분해야 한다.'),
- 's7':('Author confirmation pending: describe annotation consent and compensation, applicable data rights, and safeguards for possible misuse. Do not treat this draft as a completed ethics assessment.','저자 확인 필요: 주석 참여 동의·보상, 데이터 사용 권한, 오용 가능성에 대한 조치를 기록해야 한다. 이 초안은 윤리 검토 완료를 뜻하지 않는다.'),
- 's9':('Release details pending: confirm final human-verified counts, source licenses, distribution permissions, and the released data fields.','공개 정보 확인 필요: 사람 검증 후 최종 수량, 원천 라이선스, 재배포 권한, 공개 필드를 확정해야 한다.'),
- 's10':('Release details pending: document the code location, license, version, and instructions needed to reproduce construction and evaluation.','공개 정보 확인 필요: 코드 위치·라이선스·버전과 제작·평가 재현 방법을 기록해야 한다.')}
+ 's6':('Author confirmation pending: specify the use of AI in manuscript preparation and distinguish it from the construction models in Section 3.1.','Author verification: specifically documenting the use of AI in writing articles, 3.1It\'s a different model than the production model.'),
+ 's7':('Author confirmation pending: describe annotation consent and compensation, applicable data rights, and safeguards for possible misuse. Do not treat this draft as a completed ethics assessment.','Author verification: The key participant must record the consent/confirmation, data usage permissions, and misuse possibilities. This draft does not imply completion of ethical review.'),
+ 's9':('Release details pending: confirm final human-verified counts, source licenses, distribution permissions, and the released data fields.','Public information verification is required: After verification of the person, the final quantity, source license, redistribution authorization, and public field must be confirmed.'),
+ 's10':('Release details pending: document the code location, license, version, and instructions needed to reproduce construction and evaluation.','Public information needs to be verified: code location, license version and production and evaluation reproduction methods must be recorded.')}
 for sid,values in pending.items():
     item=next(x for x in sections if x['id']==sid);item['state']='revised'
     for lang,value in zip(['en','ko'],values):
@@ -144,7 +144,7 @@ for item in sections:
         d=BeautifulSoup(item[lang+'html'],'html.parser')
         fig=d.find(id='fig:abstention-intro')
         if fig:
-            fig.figcaption.string=('Figure 1. FInject evaluates whether models answer or abstain appropriately under conflicting evidence and support their decisions with reasons and evidence. Responses are illustrative.' if lang=='en' else 'Figure 1. FInject는 충돌 근거에서 모델이 적절히 답변·기권하고 이유와 근거로 결정을 뒷받침하는지 평가한다. 응답은 설명용 예시다.')
+            fig.figcaption.string=('Figure 1. FInject evaluates whether models answer or abstain appropriately under conflicting evidence and support their decisions with reasons and evidence. Responses are illustrative.' if lang=='en' else 'Figure 1.FInject evaluates whether the model responds appropriately, authorizes, and supports a decision based on reason and reason.')
             item[lang+'html']=str(d)
 
 # Synchronize local TeX prose while preserving figure positions and the two main table floats.

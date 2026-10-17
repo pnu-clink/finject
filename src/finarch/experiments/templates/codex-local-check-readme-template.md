@@ -1,8 +1,8 @@
-# Codex 로컬 실험 경로 검사
+# Codex Local test trajectory
 
-1. `verification.json`: 검사 실행 수, 대상 코드, 실제 실행과의 구분.
-2. `tests.log`: 모델을 호출하지 않은 단위·재개 회귀 검사 전체 출력.
-3. [로컬 실행 안내](../../../../docs/02-experiments/README.md): 설정·파일 책임·실제 순서도.
-4. [실제 exp-004 보고서](../../experiments-run/20260920-exp-004/REPORT.md): 모델 수집 상태와 사용량. 로컬 테스트 통과를 실제 모델 실험 완료와 혼동하지 않습니다.
+1. `verification.json`: check the actual row count, object code, and distinguish it from actual execution.
+2. `tests.log`: Uncalling model unit; recall return check full output.
+3. [Local runway](../../../../docs/02-experiments/README.md)It's the same as the actual order.
+4. [Real exp-004 The report.](../../experiments-run/20260920-exp-004/REPORT.md)The state of the model collection and the amount of use. Local testing not to be confused with actual model testing.
 
-검사는 CPU 경계·메모리 중단·응답 원기록·도구 실행 거부·구독 환경·한도 중단·중복 호출 방지·캐시 사용량 중복 집계 방지·실패 진단의 점수 불변성을 포함합니다. README는 이 템플릿에서 생성합니다. 보고서는 Markdown이며 뷰어 HTML은 생성하지 않습니다.
+The tests include CPU boundaries, memory interrupts, response logs, loop execution denial, config environment, limit interrupts, duplicate call prevention, cache usage duplicate set prevention, failure diagnosis, and the scores invariability. README is generated from this template. The report is Markdown and the viewer HTML is not generated.

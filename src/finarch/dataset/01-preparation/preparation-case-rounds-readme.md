@@ -1,5 +1,5 @@
-# Preparation 문항별 차수
+# Preparation case rounds
 
-읽는 순서: `run.json`의 active_round/rounds → 해당 `NN-round/README.md` → 01-source부터 단계 순서 → 오류가 있으면06-exception-handler → 다음 차수00-round-input/seed.json과 LLM작업01-input/feedback-ref.json, rendered-prompt.json.
+Read `active_round` and `rounds` in `run.json`, then the selected `NN-round/README.md`, followed by stages starting at `01-source`. For errors, read `06-exception-handler`; for the next round, inspect `00-round-input/seed.json`, each LLM job's `01-input/feedback-ref.json`, and `rendered-prompt.json`.
 
-각 차수는 별도 폴더이며 이전 산출물을 덮어쓰지 않습니다. 00-round-input/seed.json의 REUSED는 이전 차수에서 복제한 파일의 원경로·해시입니다. 복제와 신규 실행을 구분합니다. feedback 원본은 오류 차수의06-exception-handler/feedback/적용차수 아래에 있고 소비 단계는 ref를 저장합니다. 07-human-review의 PENDING은 승인이 아닙니다. 단일 viewer에서 run·문항·차수를 선택하십시오.
+Each round has a separate folder and preserves earlier artifacts. REUSED entries in `00-round-input/seed.json` contain the original path and hash of copied files; distinguish reuse from new execution. Feedback originals remain under the failed round's `06-exception-handler/feedback/<target-round>/`; consuming stages save references. PENDING in `07-human-review` is not approval. Select the run, case, and round in the shared viewer.

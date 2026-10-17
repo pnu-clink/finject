@@ -24,19 +24,19 @@ MAX_ATTEMPTS = 2
 QUOTA_MAX_AGE_SECONDS = 600
 QUOTA_RESERVE_PERCENT = 15
 USER_MANAGED_USAGE = 'USER_MANAGED_ACCOUNT_USAGE_BY_EXPLICIT_REQUEST'
-README_TEMPLATE = """# {run_id} 제한 실행 안내
+README_TEMPLATE = """# {run_id} Restricted execution instructions
 
-`improvement-status.json` → `improvement-waves/` → `00-implementation/manifest.json` → 모델별 `calls/` 순서로 읽습니다.
+`improvement-status.json` → `improvement-waves/` → `00-implementation/manifest.json` → Model by model `calls/` in this order.
 
-- `improvement-status.json`: 최신 실행/차단 상태와 이유입니다.
-- `improvement-waves/`: 실행 전 공식 한도 확인 자료, 비용 추정과 실행 결과를 보존합니다.
-- `00-implementation/`: 준비 당시 Python 코드와 관련 템플릿 원본 및 SHA-256입니다. 재시작할 때 현재 파일과 비교합니다.
-- `events.jsonl`: 준비, 실행, 차단 이력입니다.
-- 모델별 `calls/`: 원요청·원응답·시도별 결과입니다. 뷰어는 프로젝트의 공용 `viewer/experiments/`를 사용합니다.
+- `improvement-status.json`: the latest run/differentiation status and why.
+- `improvement-waves/`It preserves official pre-run limit verification data, cost estimates and run results.
+- `00-implementation/`At the time of preparation: Python code and related template originals and SHA-256So when you restart it, compare it to the current file.
+- `events.jsonl`It's ready, running, blocking power.
+- By model. `calls/`So, the raw response is the city-specific results. `viewer/experiments/`I use it.
 
-한 번에 최대 100회, 문항별 누적 최대 2회입니다. 기본 정책은 최근 공식 계정 한도 검사입니다. 사용자가 계정 사용량을 직접 확인하겠다고 명시하고 그 승인을 동결 config에 기록한 경우에는 계정 한도 조회와 잔여량 기반 중단을 수행하지 않습니다. API 비용·시도·캐시 검사는 유지합니다. 자동 예약이나 반복 실행은 없습니다.
+Maximum at a time. 100The maximum of the total number of paragraphs 2The basic policy is a recent official account limit check. If the user specifies that they will verify the account usage directly and records their approval in the exclusive configuration, they do not perform an account limit check and a residual-based interruption. API cost, city, and cache checks are maintained. There are no automatic reservations or repeat executions.
 
-비용은 제공자 사용량에 가격표를 곱한 추정액이며 청구서가 아닙니다. 다음 실행분은 입력 문자 수 ÷ 4 추정과 최대 출력 토큰을 예약합니다. 입력 토큰 수는 근사이므로 전체 청구액의 엄밀한 상한은 아닙니다. 사용량이 없거나 전달 여부를 모르는 시도는 0원으로 간주하지 않고 새 호출을 차단합니다.
+The cost is an estimate of the price tag multiplied by the amount the provider uses, not the invoice. 4 So the number of input tokens is close, so it's not a strict limit on the total amount of bills. 0It doesn't count as a circle, it blocks the new call.
 """
 
 

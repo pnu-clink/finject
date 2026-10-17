@@ -1,30 +1,30 @@
-# IC-RELATION 적용 · 로컬 확인
+# IC-RELATION applies to local verification
 
-2026-10-01 승인한 관계 문장 규칙을 생성·검증 프롬프트와 Python 변경계획에 적용했습니다.
+2026-10-01 We applied the approved relationship phrase rules to the creation and verification of the prompt and the Python change plan.
 
-- 왼쪽에는 항목·기간만 쓰고 기존 관측값은 반복하지 않습니다. 원문 수치는 보존합니다.
-- 명시적인 부분·전체 관계는 전체가 왼쪽에 옵니다. 다른 연도를 우선하며, 다른 연도를 선택해도 부분이 그 연도의 전체를 초과하면 후보를 바꿉니다.
-- 오른쪽 기준값·계수·승인된 항목/기간 표기의 숫자만 허용합니다. 표 셀의 날짜에 포함된 31 같은 숫자도 항목 식별에 필요한 범위에서 허용합니다.
-- 관계 계획 버전이 달라지면 재시도에서 구형 계획을 재작성합니다. 계획이 달라진 경우 구형 생성 문장도 재사용하지 않습니다.
+- On the left, you'll only use the item-time, and you won't repeat the existing observation values.
+- The explicit partial-total relationship is the whole thing that comes to the left, and it gives priority to the other year, and if you choose the other year the part exceeds the whole year, it changes the candidate.
+- The right-hand side of the reference value, the counter, the number of items/period tables that are validated. 31 The same number is allowed to identify items to the extent necessary.
+- If the version of the relationship plan changes, it re-creates the schema in the hash. If the plan changes, the format generation phrase is not reused.
 
-**유료 LLM 호출: 0회.** {tests_run}개 로컬 검사 통과입니다. 실제 모델의 새 문장 생성·의미 검증은 실행하지 않았습니다. 아래 예문은 Python 편집 검사를 위한 수동 작성 예문이며 생성 데이터나 모델 응답이 아닙니다. 과거 002 실행의 원응답·판정·results 파일은 수정하지 않았습니다.
+**Payment LLM call: 0Chapter two.** {tests_run}The following example is a manual writing example for Python editing testing, and it's not a data or model response. 002 The raw response of the execution, the judgment, the results file, was not corrected.
 
-|문항|확인 내용|로컬 결과|
+|Case|Confirmation of the|Local results|
 |---|---|---|
-|test-0025|2015 balance의 기존 1,136은 추가 관계 문장에서 제외. 2014 기준값 1,171은 허용.|수치 반복 차단·원문 보존 확인|
-|test-0254|2018 총자산 = 2019 PPE × 2. 2019 PPE 2,235를 원문 좌표와 함께 private 관계 계산에 연결.|관계 계산 59.08%, 코드·그래프 일치 확인|
+|test-0025|2015 The balance of the existing 1,136Excluding additional relationship phrases. 2014 Reference value 1,171Let me see.|Number of repeat blocks and authentication of the original|
+|test-0254|2018 Total assets are equal to 2019 PPE × 2. 2019 PPE 2,235Connect to the private relationship calculation with the primal coordinates.|Relation calculation 59.08%Check the code graph match|
 
-읽는 순서:
+In order of reading:
 
-1. 이 README: 적용 내용과 검사 범위.
-2. `01-before-prompts.json` → `06-prompt-changes.json`: 실제 프롬프트 전후 내용·길이·해시.
-3. `05-sample-checks.json`: 기존 계획과 새 계획·요청·수동 예문·기계적 편집 검사. 의미 검증 상태는 NOT_RUN입니다.
-4. `04-local-checks.json`, `03-focused-tests.log`: 관련 로컬 검사 목록과 결과.
-5. `02-tests.log`: 확대 검사 당시 오류도 보존했습니다. 오래된 first-10 경로, 프롬프트 문구·설정·고정 설정 해시를 가정한 검사는 현재 자료와 맞지 않습니다. 관련 새 회귀 검사는 위 결과에서 별도로 확인합니다.
-6. `events.jsonl`: 이 확인 프로그램의 실행 기록.
+1. This README: Application content and scope of testing.
+2. `01-before-prompts.json` → `06-prompt-changes.json`: Real content after the Prompt.
+3. `05-sample-checks.json`The current and new plans, the applications, the running examples, the mechanical editing checks. The meaning verification status is NOT_RUN.
+4. `04-local-checks.json`, `03-focused-tests.log`: Related local checklist and results.
+5. `02-tests.log`I also saved the error during the scan.10 The path, the check that ran the prompt phrase, setup, and recording tabs is not consistent with the current data, and the new return check is separate from the results.
+6. `events.jsonl`This is a verification program run record.
 
-부분·전체의 Python 검사는 명시적인 표 그룹과 총계, 음수가 아닌 값에 한정합니다. 다른 문맥·회사·단위의 의미, 같은 숫자의 왼쪽/오른쪽 역할은 검증 LLM의 책임입니다. 다른 연도라는 사실이나 로컬 계산 성공만으로 문장 타당성을 확정하지 않습니다.
+Part-total Python testing is limited to explicit table groups and totals, nonnegative values. Other contexts, corporate, level meanings, the left/right roles of the same number are the responsibility of the verification LLM. The fact that there are other variables or local calculation successes alone does not confirm the validity of the sentence.
 
-공통 뷰어: {viewer_url}
+Common viewer: {viewer_url}
 
-이 실행은 공통 문서 화면에서 최신 프롬프트·아키텍처·로컬 결과를 읽습니다. 별도 뷰어 HTML은 생성하지 않습니다.
+This execution reads the latest prompt architecture and local results on a common document screen, and no separate viewer HTML is generated.

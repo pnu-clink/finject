@@ -41,7 +41,7 @@ async function showEvaluationExport(){
   if(!runs.length){status.textContent='내보낼 실행을 선택해 주세요.';return;}
   save.disabled=true;status.textContent='평가 화면을 모으고 있습니다. 문항이 많으면 몇 분 걸릴 수 있습니다.';
   try{
-   const response=await fetch('/api/evaluation-export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({runs,view:{lang:globalThis.FinarchI18n?.language||'ko',run:current,case:rows.find(r=>r.id===selected)?.sample.id,variant:window.preparationVariant||null,preparationStage:window.preparationStage,generationStage:window.generationStage,filters:Object.fromEntries(Object.entries(selections).map(([key,v])=>[key,[...v]])),includePrepFailed:$('include-prep-failed').checked}})});
+   const response=await fetch('/api/evaluation-export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({runs,view:{lang:globalThis.FinarchI18n?.language||'en',run:current,case:rows.find(r=>r.id===selected)?.sample.id,variant:window.preparationVariant||null,preparationStage:window.preparationStage,generationStage:window.generationStage,filters:Object.fromEntries(Object.entries(selections).map(([key,v])=>[key,[...v]])),includePrepFailed:$('include-prep-failed').checked}})});
    if(!response.ok){const error=await response.json();throw Error(error.error||'HTML 생성 실패');}
    const html=await response.text();evaluationDownload(runs.map(r=>r.name).join('+')+(globalThis.FinarchI18n?.language==='en'?'-evaluation.html':'-평가.html'),html,'text/html;charset=utf-8');status.textContent='HTML 다운로드를 시작했습니다. 이 파일 하나를 평가자에게 전달하세요.';
   }catch(error){status.textContent=error.message;}finally{save.disabled=false;}

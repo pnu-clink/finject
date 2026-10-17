@@ -30,7 +30,7 @@ test('v0.26 index uses exact paper questions and maps every saved group once', a
   const findings = review.groups.flatMap(group => group.primary_finding_ids);
   assert.equal(findings.length, 104);
   assert.equal(new Set(findings).size, findings.length);
-  for (const question of review.questions.filter(item => !item.group_ids.length)) assert.match(question.scope_ko, /없습니다|보류/);
+  for (const question of review.questions.filter(item => !item.group_ids.length)) assert.match(question.scope_ko, /\uc5c6\uc2b5\ub2c8\ub2e4|\ubcf4\ub958/);
   assert.match(review.groups.find(group => group.id === 'G01').boundary_ko, /SQ1/);
   assert.doesNotMatch(review.groups.find(group => group.id === 'G01').boundary_ko, /RQ1|H1/);
   assert.equal(saved.groups.find(group => group.id === 'G01').boundary_ko.includes('RQ1'), true);

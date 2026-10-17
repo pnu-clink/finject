@@ -1,0 +1,21 @@
+{
+  "purpose": "Small, unchanged records selected from the supplied pinned raw sources. Input preparation only; not a held-out benchmark.",
+  "sources": [
+    {
+      "name": "finance-easy",
+      "url": "https://raw.githubusercontent.com/BUPT-Reasoning-Lab/FinanceReasoning/b0fe6455396f831955e4eb988472b4a563403bc5/data/FinanceReasoning/easy.json",
+      "commit": "b0fe6455396f831955e4eb988472b4a563403bc5",
+      "sha256": "17d8fd370cc46780477d129e014f93cb008d3931ae71828b927ddf12232b4e25",
+      "path": "finance-easy.json",
+      "adapter": "finance"
+    },
+    {
+      "name": "tatqa-dev",
+      "url": "https://raw.githubusercontent.com/NExTplusplus/TAT-QA/870accc41953dcde885aabeb963d94aabdc0fbc3/dataset_raw/tatqa_dataset_dev.json",
+      "commit": "870accc41953dcde885aabeb963d94aabdc0fbc3",
+      "sha256": "7dd21e9b05837b13bb6594ac02ceebe4030223b0dcc657ae65f3b892b3251e38",
+      "path": "tatqa-dev.json",
+      "adapter": "tatqa"
+    }
+  ]
+}

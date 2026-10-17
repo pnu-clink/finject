@@ -1,33 +1,33 @@
-# viewer-exp 인계 기록
+# Viewer-exp record of the family
 
-2026-09-20 · 사용자가 지정한 **“실험 파이프라인 설계 인계”** 작업에서 구현 인계를 받았습니다.
-인계 작업 ID: `01a0b9ae-8110-7a22-bdf3-fb2b7b854c8b`.
+2026-09-20 • User-defined **The pipeline design is a test run.** I got the emblems from the work.
+The next job ID: `01a0b9ae-8110-7a22-bdf3-fb2b7b854c8b`.
 
-## 이번 구현의 기준
+## The criteria for this implementation
 
-- 최신 사용자 지정 경로는 `viewer/experiments`입니다. 이전 `exp-viewer/` 제안을 대체합니다.
-- 기존 data viewer의 실행 선택 → 문항 목록 → 필터 → 상세 패널 구조를 참고하며 전체 테마는 브라운입니다.
-- 실험 데이터 읽기 범위는 `reports/experiments-run`입니다. 제작 결과·원천 자료·private.source에 적힌 외부 경로를 따라가지 않습니다.
-- 여섯 화면: 전체 결과, 조건별 비교, 문항 비교, 실패 분석, 비용·실행, 보고서·이력.
-- 화면 비교 키는 같은 실행 안의 `case + variant + prompt_condition + reasoning`입니다. 모델마다 다른 trial_id를 직접 연결하지 않습니다.
-- 원문은 Unguided Solving × Reasoning OFF/Reasoning ON, 변형은 Unguided Solving/Criteria-Guided Solving × Reasoning OFF/Reasoning ON입니다. 유형은 원본, IC-value 앞/뒤, IC-source 앞/뒤, IC-relation, EA-01/02 순서입니다.
-- 형식 실패의 본문도 호출 JSON 및 원기록에서 읽습니다. V2, 평면 V3, V4 answer_meta를 원래 형태와 함께 표시합니다.
-- reference 정답은 분석자용입니다. 변형의 정답으로 재사용하지 않으며, scale을 곱하거나 숫자를 다시 추출해 채점하지 않습니다.
-- 비용의 null, 미평가, 미실행을 0이나 성공으로 바꾸지 않습니다. 입력 중 캐시, 출력 중 추론 토큰을 중복 합산하지 않습니다.
-- 의미 점수, 쓰기 가능한 사람 채점, 실행 간 자동 통합 비교, 새 모델 호출은 이번 범위에 포함되지 않습니다.
+- The latest customized paths `viewer/experiments`. Previous `exp-viewer/` I'm replacing the proposal.
+- The entire theme is brown, referring to the run selection → phrase list → filter → detailed panel structure of the existing data viewer.
+- The range of reading of the experimental data is `reports/experiments-run`It doesn't follow the external paths that are written in the production results, the source material, the private.source.
+- Six screens: overall results, conditional comparison, case comparison, failure analysis, cost-effectiveness, report-efficiency.
+- The screen comparison key is the same running within `case + variant + prompt_condition + reasoning`It doesn't directly connect to different trial_id models.
+- The type is the original, the IC-value front/back, the IC source front/back and the IC-relation, the EA-01/02 in this order.
+- The text for form failure is also read in the call JSON and the source code. V2, flat V3, V4 answer_meta with the original form.
+- The reference right answer is for the analyst, not to reuse it as the right answer to the variation, not to multiply the scale or to extract the numbers and then to tap it.
+- The null, the undervalued, the misrepresented cost 0It doesn't convert to success. It doesn's not add in caches, it doesn't add out logical tokens.
+- Meaning scores, writeable person captures, automatic integration comparisons between runs, new model calls are not included in this range.
 
-## 확인한 현행 자료
+## I've got the current data.
 
-1. [호출 폴더와 필드](../../docs/02-experiments/README.md)
-2. [응답 계약](../../docs/02-experiments/README.md)
-3. [로컬 Luna 실행](../../docs/02-experiments/README.md)
-4. [기존 화면 설계](../../docs/02-experiments/README.md) — 과거 경로·이동 전 상태는 이력입니다.
-5. exp-001~004의 실제 state/summary/plan/public/private/results/calls/analysis 파일.
+1. [Exit folder and field](../../docs/02-experiments/README.md)
+2. [Response agreement](../../docs/02-experiments/README.md)
+3. [Local Luna running](../../docs/02-experiments/README.md)
+4. [Existence screen design](../../docs/02-experiments/README.md) The previous state of the trajectory is the trajectories.
+5. exp-001~004The actual state/summary/plan/public/private/results/calls/analysis file.
 
-최신 완료 실행 exp-004는 Luna V4, 3,000응답입니다. exp-003은 Gemini 두 모델의 V2, 6,000응답입니다.
-exp-002는 미호출 대체 실행, exp-001은 인증 차단을 포함한 불완전 실행입니다. 최초 확인 값과 파일 보존 해시는 [검증 기록](../../log/viewer-experiments-v1/verification.json)에 있습니다.
+The latest completed run exp-004The Luna V4, 3,000The answer is, exp-003The Gemini V2 of both models, 6,000response.
+exp-002The expansion of the expansion of001It's an incomplete execution, including the authentication scale.](../../log/viewer-experiments-v1/verification.json)is the location.
 
-## 구현 선택
+## Selection of implementation
 
-별도 Node 표준 라이브러리 서버를 같은 폴더에 두었습니다. 새 의존성 설치가 필요 없으며 기존 Python 실험 실행기와 제작 뷰어를 호출하지 않습니다.
-현재 구현의 책임·흐름·한계는 [구현 안내](../../docs/02-experiments/README.md)를 따릅니다.
+And we put the standard library server Node in the same folder, and it doesn't require new dependency installation, and it won't call the existing Python experiment runner or build viewer.
+The current implementation of the responsibility, flow, limitations [guide to visualization](../../docs/02-experiments/README.md)And then we follow.

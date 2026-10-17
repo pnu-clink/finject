@@ -77,13 +77,13 @@ def external_records(run, rows):
 
 def results_readme(run_name, count, selection_policy):
     template = Path(__file__).with_name('results-readme-template.md').read_text()
-    note = ('현재 차수의 명시적 `REJECT`/`REJECTED`/`EXCLUDE`/`EXCLUDED` 사람 판정을 제외합니다. '
-            'Preparation 원본이 제외되면 해당 원본과 7유형을 모두 제외하고, Generation의 한 유형이 '
-            '제외되면 그 유형 행만 제외합니다. Accept·Pending·미판정·자동 FAIL은 이 규칙만으로 제외하지 않습니다. '
-            '제외 이유·판정 파일·해시는 `manifest.json`과 `export-log.json`의 `exclusions`에 보존합니다.'
+    note = ('The current variable is the explicit `REJECT`/`REJECTED`/`EXCLUDE`/`EXCLUDED` Except for the judgment of the people. '
+            'Except for the preparation original, the original and the 7Except for all types, one type of Generation is the '
+            'If you\'re excluded, you\'re only excluding the type line. Accept, pending, pending and automatic FAIL are not excluded by this rule alone. '
+            'Excluding reason: judgment file: `manifest.json`and `export-log.json` `exclusions`It\'s preserved.'
             if selection_policy == export_policy.POLICY else
-            '이 취합본은 이전 Export 정책을 유지합니다. 메타정보 보강만으로 기존 행이나 Reject 판정을 제외하지 않았습니다. '
-            '실제 선정 기준은 `manifest.json.selection_policy`를 확인하십시오. 새 전체 Export에만 현재 Reject 제외 규칙이 적용됩니다.')
+            'This copy maintains the previous export policy, which is that we\'re only reinforcing metadata, not excluding existing lines or rejects. '
+            'The actual ranking is `manifest.json.selection_policy`Check out the current rule excluding Reject only applies to new full Export.')
     return template.format(run_name=run_name, count=count, export_policy_note=note)
 
 

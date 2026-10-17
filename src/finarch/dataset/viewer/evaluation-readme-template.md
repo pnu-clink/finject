@@ -1,9 +1,9 @@
-# 평가 HTML 검증 산출물
+# The HTML verification output
 
-이 문서는 `src/finarch/dataset/viewer/evaluation-readme-template.md`로 생성했습니다.
+This document is `src/finarch/dataset/viewer/evaluation-readme-template.md`And it's created by the.
 
-1. [사용 방법과 구현](../../docs/76-offline-evaluation-export.md)을 먼저 읽습니다.
-2. [검증 로그](validation.json): 실행·문항 수·파일 크기·생성 시간·검사 결과.
-3. [검증용 평가 화면](evaluation-sample.html): 20260917-002와 003에서 각각 test-0001, test-0002를 넣은 단일 HTML입니다. 전체 실행 배포본이 아닙니다.
+1. [The way and implementation](../../docs/76-offline-evaluation-export.md)I read first.
+2. [Checking logs](validation.json)Running: issue number: file size: life time: test results.
+3. [Very useful for evaluating screen](evaluation-sample.html): 20260917-002and 003Each of them is a test-0001, test-0002It's a single HTML that you put in. It's not a full executable distribution.
 
-LLM 호출과 원본 판정 변경은 없습니다. 실제 배포 파일은 공통 뷰어 최상단의 `평가용 HTML Export`에서 대상 실행과 필터를 선택해 만듭니다. 평가자는 이름 입력 → 단계 확인 → 판정 저장 → 임시 저장/결과 Export 순으로 사용합니다. 재개 시 Import에서 임시 기록이나 JSON 파일을 선택합니다.
+There is no change in the LLM call and original judgment. `HTML Export for evaluation`The evaluator uses the name input → step verification → sentence storage → temporary storage/results export sequence. When rebooting, select temporary records or JSON files from Import.

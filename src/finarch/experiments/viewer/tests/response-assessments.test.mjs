@@ -115,7 +115,7 @@ test('three assessment files invalidate snapshot cache and partial writes keep t
   await f.write('02_analysis/02_comparison/response-assessment-summary.json', { ...f.saved.summary, boundary: 'Updated saved boundary.' });
   const second = await f.repository.snapshot(run); assert.notEqual(second, first); assert.equal(second.stale, undefined);
   await f.write('02_analysis/02_comparison/response-assessment-coverage.json', { ...f.saved.coverage, planned: 999 });
-  const stale = await f.repository.snapshot(run); assert.equal(stale.stale, true); assert.match(stale.warnings.at(-1), /완료율/);
+  const stale = await f.repository.snapshot(run); assert.equal(stale.stale, true); assert.match(stale.warnings.at(-1), /\uc644\ub8cc\uc728/);
   f.records[0].decision_grounding.reason = 'A newly saved judge reason, not a new solver response.';
   await f.save();
   const refreshed = await f.repository.snapshot(run); assert.equal(refreshed.stale, undefined);
@@ -130,10 +130,10 @@ test('missing V1 files stay absent, while orphan IDs or inconsistent saved count
   assert.equal((await f.repository.response(missing, f.rows[1])).response_assessment_state, 'MISSING');
   await f.save(); f.repository.cache.clear();
   f.records[0].response_id = 'an-unrelated-solver-response'; await f.save();
-  await assert.rejects(f.repository.snapshot(run), /실제 변형 응답/);
+  await assert.rejects(f.repository.snapshot(run), /\uc2e4\uc81c \ubcc0\ud615 \uc751\ub2f5/);
   f.records[0].response_id = f.rows[1].response_id; const saved = await f.save();
   await f.write('02_analysis/02_comparison/response-assessment-summary.json', { ...saved.summary, overall: { ...saved.summary.overall, decision_grounding: { SUPPORTED: 8 } } });
-  await assert.rejects(f.repository.snapshot(run), /판정 분포/);
+  await assert.rejects(f.repository.snapshot(run), /\ud310\uc815 \ubd84\ud3ec/);
 });
 
 test('offline export keeps the same summaries, reasons and source citations and inlines the renderer', async t => {
@@ -159,8 +159,8 @@ test('a changed solver body cannot inherit an earlier completed assessment; key 
   await f.write(row.result_path, { status: row.status, response: reordered });
   assert.equal((await f.repository.response(snap, row)).response_assessment.response_id, row.response_id);
   await f.write(row.result_path, { status: row.status, response: { ...reordered, answer: '99' } });
-  await assert.rejects(f.repository.response(snap, row), /응답 본문이 다릅니다/);
-  await assert.rejects(buildBundle(f.repository, snap), /응답 본문이 다릅니다/);
+  await assert.rejects(f.repository.response(snap, row), /\uc751\ub2f5 \ubcf8\ubb38\uc774 \ub2e4\ub985\ub2c8\ub2e4/);
+  await assert.rejects(buildBundle(f.repository, snap), /\uc751\ub2f5 \ubcf8\ubb38\uc774 \ub2e4\ub985\ub2c8\ub2e4/);
 });
 
 class FakeNode {
@@ -178,25 +178,25 @@ test('rendered reviews show real denominators, unjudged states and exact quoted 
   t.after(() => { globalThis.document = previous; });
   const f = await fixture(t), snap = await f.repository.snapshot(run);
   const missing = renderAssessmentSummary(null);
-  assert.match(missing.textContent, /판정 자료 없음/); assert.doesNotMatch(missing.textContent, /0\.0%/);
+  assert.match(missing.textContent, /\ud310\uc815 \uc790\ub8cc \uc5c6\uc74c/); assert.doesNotMatch(missing.textContent, /0\.0%/);
   assert.equal(assessmentShare(1, 8), '1/8 · 12.5%'); assert.equal(assessmentShare(0, 0), '0/0 · —');
   const summary = renderAssessmentSummary(snap.resultsAnalysis, { models: [{ key: 'luna' }] });
-  assert.match(summary.textContent, /4\/8 · 50\.0%/); assert.match(summary.textContent, /판단 유보/); assert.match(summary.textContent, /미판정 · null/);
-  assert.match(summary.textContent, /필요한 통합 집계 자료가 아직 생성되지/);
+  assert.match(summary.textContent, /4\/8 · 50\.0%/); assert.match(summary.textContent, /\ud310\ub2e8 \uc720\ubcf4/); assert.match(summary.textContent, /\ubbf8\ud310\uc815 · null/);
+  assert.match(summary.textContent, /\ud544\uc694\ud55c \ud1b5\ud569 \uc9d1\uacc4 \uc790\ub8cc\uac00 \uc544\uc9c1 \uc0dd\uc131\ub418\uc9c0/);
   const model = nodes(summary).find(node => node.className === 'assessment-model'); model.open = true; model.events.toggle();
   assert.match(model.textContent, /IC_VALUE_01_BEFORE/); assert.match(model.textContent, /1\/1 · 100\.0%/);
   for (const i of [1, 2, 3, 5, 6, 7, 8]) {
     const record = await f.repository.response(snap, f.rows[i]), view = renderResponseAssessment(record);
     assert.match(view.textContent, new RegExp(f.records[i - 1].review_status));
-    if (i === 1) assert.match(view.textContent, /해당 없음 · NOT_APPLICABLE/);
-    if (i === 3) assert.match(view.textContent, /판단 유보 · UNDETERMINED/);
-    if (i >= 5) assert.match(view.textContent, /미판정 · null/);
+    if (i === 1) assert.match(view.textContent, /\ud574\ub2f9 \uc5c6\uc74c · NOT_APPLICABLE/);
+    if (i === 3) assert.match(view.textContent, /\ud310\ub2e8 \uc720\ubcf4 · UNDETERMINED/);
+    if (i >= 5) assert.match(view.textContent, /\ubbf8\ud310\uc815 · null/);
     if (i === 2) {
       const citation = f.records[1].decision_grounding.citations.at(-1);
       assert.equal(assessmentCitationSource(citation, record.request, record.response), 'Revenue 13.');
       assert.ok(nodes(view).some(node => node.tag === 'mark' && node.textContent === 'Revenue 13.'));
       record.request.input.context = 'A different condition.';
-      assert.match(renderResponseAssessment(record).textContent, /실제 원문에서 인용을 확인할 수 없습니다/);
+      assert.match(renderResponseAssessment(record).textContent, /\uc2e4\uc81c \uc6d0\ubb38\uc5d0\uc11c \uc778\uc6a9\uc744 \ud655\uc778\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4/);
     }
   }
 });

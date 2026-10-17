@@ -1,31 +1,31 @@
-# 데이터셋 문서 재정리
+# Re-write the data set document
 
-작업일: 2026-09-23. 이 기록은 문서 취합·이관과 뷰어 연결입니다. 제작·실험 배치와 모델 호출은 실행하지 않았습니다.
+The day of work: 2026-09-23This record is a document collection, a link to the viewer, a production, experimental deployment, and model call that didn't run.
 
-## 읽는 순서
+## Reading order
 
-1. [전체 문서](../../../docs/README.md) → [데이터셋 파이프라인](../../../docs/01-dataset/README.md)
-2. 입력 → Preparation → Generation → 결과 전달의 각 README와 단계 문서
-3. [요구·구현 차이](../../../docs/01-dataset/99-open-issues.md)
-4. [기존 문서 이관표](../../../archive/20260923-documentation-reorganization/MIGRATION.md)
+1. [Full article in German](../../../docs/README.md) → [Data set pipeline](../../../docs/01-dataset/README.md)
+2. Each step of the README and the document of the result delivery
+3. [Yogui-gu-shi difference](../../../docs/01-dataset/99-open-issues.md)
+4. [Existing document double-check](../../../archive/20260923-documentation-reorganization/MIGRATION.md)
 
-## 파일 역할
+## File responsibilities
 
-|파일|역할|
+|File|Role|
 |---|---|
-|documentation.json|공통 뷰어가 읽는 현재 문서·보관 원본 색인|
-|migration.json|모든 기존 docs 파일의 원본 해시·보관 위치·새 소속|
-|source-inventory.json|기존 문서의 제목·절·요구 관련 문장 및 소속. 추출 결과를 자동으로 새 요구로 채택하지 않음|
-|requirements-map.json|기존 R01~R35 요구의 새 소속과 대체·보류 적용 범위|
-|run-layout-reference.json|채번 대조에 사용한 실제 run 단계·세부 폴더 목록|
-|validation.json|보관 원본 해시·새 링크·템플릿·색인 정합성 확인|
-|events.jsonl|이번 작업의 처리 기록|
-|ui-review.json|공통 뷰어에서 실제 확인한 항목과 한계|
+|documentation.json|The current document that the common viewer reads is the original color of the|
+|migration.json|All existing docs files are original hash, location, and bird belonging|
+|source-inventory.json|Title of existing documents; v. Yogurt related phrases and attachments. Automatically not adopting extraction results as new requirements|
+|requirements-map.json|R01~R35 New attire and replacement and maintenance application scope of demand|
+|run-layout-reference.json|List of actual run steps used in the graphing counterpart|
+|validation.json|Keep the original hash, new link, template, color, and complete the composition.|
+|events.jsonl|The record of the process of this operation.|
+|ui-review.json|The actual verified items and limits in the Common Viewer|
 
-## 확인 화면
+## Check the screen.
 
-공통 뷰어에서 실행 `20260923-dataset-documentation`을 선택합니다. 단일 화면이 색인에 연결된 실제 최신 문서를 읽으며 결과 폴더에 별도 HTML을 만들지 않습니다. 브라우저 검토 결과는 ui-review.json을 확인합니다. 파일 저장·자동 검사 통과를 사용자 검토 완료로 표시하지 않습니다.
+Running from Common Viewer `20260923-dataset-documentation`Select a single screen. The single screen reads the actual latest document that's attached to the coloring and doesn't create any HTML in the result folder. The browser review results check ui-review.json. The file save and auto-check pass doesn't show the user review finished.
 
-기존 파일은 [보관 안내](../../../archive/20260923-documentation-reorganization/README.md)에 원본 그대로 보존했습니다. 과거 자료의 상대 링크는 당시 원래 경로 기준이며 문서 뷰어가 이관표로 해석합니다. archive Markdown을 편집해 원본 해시를 바꾸지 않습니다.
+The existing files are in the [Minister's Guide](../../../archive/20260923-documentation-reorganization/README.md)The link to the original data is the original path reference at the time, and the document viewer interprets it as a binary, and doesn't edit the archive Markdown to change the original map.
 
-[요구사항 대응표](requirements-map.json) · [채번 기준 run 구조](run-layout-reference.json) · [문서 무결성 결과](validation.json)
+[Request response form](requirements-map.json) · [Chapter run structure](run-layout-reference.json) • [Results of written celibacy](validation.json)

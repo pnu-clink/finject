@@ -1,10 +1,10 @@
-# 숫자 형식 실험 분석 안내
+# The numerical form of the experimental analysis guide
 
-1. [분석 보고서](../ANALYSIS.md): 원본 숫자 비교, 변형별 유보 선언, 형식 실패, 자원 사용.
-2. `모델명-failures.md`: 실패·숫자 불일치 문항의 실제 질문·본문·응답·정답·검사 사유.
-3. `response-diagnostics.jsonl`: 각 요청의 진단 태그와 사용 토큰. 태그는 중복될 수 있습니다.
-4. `모델명-resources.json`: CPU·메모리·동시 처리 수의 관찰 범위.
-5. `모델명-precision-conflicts.jsonl`: 질문의 명시적 소수 자릿수와 실제 전달한 메타정보가 다른 요청. 원응답이나 점수는 수정하지 않습니다.
-6. `verification.json`이 있으면 실행 후 추가로 수행한 입력 해시·요청 수·토큰·원기록 링크·로컬 회귀 검사 결과를 확인합니다.
+1. [Analysis report](../ANALYSIS.md): comparison of the original numbers, variation-specific ubo declarations, form failure, resource use.
+2. `Model name-failures.md`Failure: The actual question of the numerical inconsistency case.
+3. `response-diagnostics.jsonl`Each request has a diagnostic tag and a token to use.
+4. `Model name-resources.json`: CPU memory, concurrent processing number of observation range.
+5. `Model name-precision-conflicts.jsonl`: The explicit minor digits of the question and the actual metadata transmitted are different requests.
+6. `verification.json`If this is the case, check the results of the input hash, request, sub-token, source log, link, local return checks that were performed after execution.
 
-numeric_analysis.py가 저장된 응답만 읽어 생성합니다. 추가 평가 모델을 호출하지 않으며 유보 선언을 유보 정확도로 바꾸지 않습니다. 이 README는 템플릿에서 생성합니다.
+Numeric_analysis.py only reads the saved response, does not call an additional evaluation model, and does not convert the ubo declaration to ubo accuracy. This README generates from the template.

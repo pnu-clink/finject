@@ -1,7 +1,7 @@
-# 질문 자릿수 검사와 LLM 보정
+# Question number test and LLM correction
 
-Python은 gold·precision의 일치와 질문의 명시적 소수 자릿수를 확인하며, 질문을 먼저 변경하지 않습니다. 원래 Q·C·A와 reference_answer_type·reference_precision을 기존 감사에 전달합니다.
+Python verifies the correspondence of gold·precision and the explicit number of digits in the question, and does not change the question first. It passes the original Q·C·A and reference_answer_type·reference_precision to the existing audit.
 
-불일치가 있으면 기존 preparation.revise에 동일한 QCA·type·precision을 전달하여 질문 수정안을 받습니다. 최소 1회 보정 기회를 주며, 숫자·원문 위치 검사는 자릿수 변경만 허용합니다. 수정된 QCA를 재감사하고 통과 후 작업용 data.json과 원본 대비 비교를 저장합니다. POT 요청에는 gold를 추가하지 않습니다.
+If there's a discrepancy, we'll pass the same QCA-type-precision to the existing preparation.revise and get a question correction. 1It gives you the opportunity to rectify, and the numerical and resource positioning checks only allow for digit changes, re-evaluate the modified QCA, and save comparisons to the original data.json for work after passing. POT requests don't add gold.
 
-01-check.json은 Python 검사 근거입니다. 각 round의 02-LLM-revise-text 및 03-check-revision에서 원응답·수정 전후를 확인합니다. 공통 뷰어의 02-review-and-correct에서 해당 파일과 QCA diff를 조회합니다.
+01-check.json is the basis for Python testing. 02-LLM-revise-text and 03Check-revision to check the raw response and the post-correction. 02-review-and-correct, and then you can see the file and the QCA diff.

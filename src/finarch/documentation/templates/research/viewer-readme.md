@@ -1,58 +1,58 @@
-# 연구 복기 자료 화면
+# The study's data is displayed on the screen.
 
-`start.command` 실행 후 http://127.0.0.1:8896/viewer/research/ 를 엽니다.
+`start.command` After execution. http://127.0.0.1:8896/viewer/research/ It opens up.
 
-## HTML 내보내기
+## I'm going to send out the HTML.
 
-자료를 선택하고 본문과 그림이 나타나면 상단의 **HTML 내보내기**를 누릅니다. 선택한 자료의 본문·그림·표·목차·서식을 담은 `<실행 ID>-research.html` 파일을 브라우저가 다운로드합니다. 이미지 파일 자체를 HTML 안에 담으므로 저장한 파일 하나만 서버나 인터넷 연결 없이 열 수 있습니다. 목차 이동과 접기도 사용할 수 있고, 파일 상단에 문서 제목·자료 이름·저장 시각을 표시합니다.
+If you select the data, and you see text and pictures, you can see the top of the page. **I'm going to send out the HTML.**Click on the text, the graphics, the traffic signs, the documentation of the selected material. `This is the first time I've seen this.` The browser downloads the file, so the image file itself is in HTML, so you can open only one saved file without a server or Internet connection, you can use the cart move and fold, and you can see the document title, the resource name, and the cache view at the top of the file.
 
-현재 화면에 표시된 문서를 저장합니다. 본문에 삽입한 그림은 포함하며, 다른 보고서나 일반 링크로 적힌 별도 첨부파일은 함께 묶지 않습니다. 본문·그림을 불러오는 중이거나 조회에 실패하면 버튼을 비활성화하고, 빠르게 자료를 바꿔도 마지막 선택의 응답만 표시합니다. 다운로드 위치·저장 창은 브라우저 설정을 따르며, 화면 안내는 다운로드 요청과 실제 디스크 저장 완료를 구별합니다.
+It stores the documents displayed on the screen now. Includes the images inserted in the text, and the separate attachments written as other reports or general links are not linked together. If the text image is being called or the view fails, disable the button, quickly change the data, and only display the response of the last choice. The download location-storage window follows browser settings, distinguishing between the in-screen download request and the actual disk storage completion.
 
-## 본문 그림
+## The picture in the title
 
-Markdown 이미지 문법을 단독 행에 쓰면 그림과 설명으로 표시합니다. 이미지 경로는 뷰어 주소가 아니라 해당 Markdown 파일의 위치를 기준으로 해석합니다. 같은 서버의 SVG·PNG·JPEG·GIF·WebP·AVIF를 지원하며 외부 서버 이미지와 일반 첨부파일은 자동으로 가져오지 않습니다. HTML 태그를 문서에서 직접 실행하지 않습니다.
+When you write a Markdown image grammar in a single row, it is shown as a picture and description. The image path is interpreted by the location of the relevant Markdown file, not the viewer's address. It supports SVG, PNG, JPEG, GIF, WebP, AVIF on the same server, and it doesn't automatically bring in external server images and common attachments. HTML tags aren't executed directly from the document.
 
-그림은 화면 너비에 맞춰 보입니다. **원본 크기로 보기**를 선택하면 그림 영역을 스크롤하며 작은 글씨를 읽을 수 있습니다. 이 기능은 내보낸 HTML에서도 JavaScript 없이 동작합니다. 이미지가 없거나 손상되면 해당 위치와 상단에 오류를 표시하고, 그림이 누락된 파일을 정상 내보내기로 처리하지 않습니다.
+The picture is exactly the same as the screen width. **See the original size.**If you select a screenshot, you can scroll through the image area and read small letters. This function works without JavaScript even in the output HTML. If the image is missing or damaged, it will display errors in the location and at the top, and it won't process the missing file to normal output.
 
-모바일에서는 본문의 긴 경로·문자열을 줄바꿈하고, 넓은 표와 확대 그림은 각 영역 안에서 스크롤합니다.
+On mobile, you can narrow down the long lines of text, and the wide tables and the enlarged images scroll through each area.
 
-제목 아래의 첫 문단과 뒤 문단은 같은 크기입니다. 본문·목록·표는 데스크톱 17px, 모바일 16px을 상속하고 강조는 굵기로 구별합니다. 그림 바로 다음의 ‘그림 1.’ 또는 ‘Figure 1.’ 같은 설명은 그림의 figcaption에 묶어 15px로 표시합니다. 제목은 별도의 큰 크기를 유지합니다. PoT·Graph처럼 열 제목을 강조한 비교표는 본문 글자 크기를 유지하면서 셀 여백과 열 너비를 조정해 여러 항목을 함께 보여 줍니다. 표는 소속 소절 안에 원문 순서대로 표시하고, 인라인 코드·링크와 코드 블록도 구분합니다. 본문 파일의 상대 링크는 해당 원문 경로를 기준으로 연결하며, 외부 근거 링크의 내용까지 HTML에 복사하는 기능은 아닙니다.
+The first sentence under the title is the same size as the next one. 17pxMobile, and mobile. 16pxThe following graph is the graph of the graph. 1or Figure 1The same description as the figcaption of the figure. 15pxThe headings are kept separate. The comparison chart that emphasizes column headings, like the PoT Graph, maintains the font size while adjusting the spacing and the column width to show multiple items together. The tables are shown in the parentheses in the parenthesies, and the inline code link and code block are also separated. The relative links in the text file link to the corresponding parentheses, not the function of copying the content of the external base links to HTML.
 
-|파일|역할|
+|File|Role|
 |---|---|
-|index.html|선택한 Markdown·그림 표시, 최신 선택 유지, 그림·서식을 포함한 HTML 생성과 브라우저 다운로드|
-|runs.json|reports/run 아래 복기 자료의 실행 목록|
-|start.command|프로젝트 루트를 찾아 Python 조회 서버 실행|
-|[research_viewer.py](../../src/finarch/shared/research_viewer.py)|localhost:8896에서 읽기 전용 파일·`/api/health` 제공|
-|[HTML 내보내기 확인 기록](../../log/research-viewer/20260928-html-export/README.md)|변경 전 사본·원문 해시·다운로드 및 오프라인 확인 범위|
-|[그림 표시·내보내기 확인 기록](../../log/research-viewer/20260928-image-export/README.md)|v0.26의 기존 그림 연결, 이미지 내장과 확대, 원문·그림 보존 확인 범위|
-|[부록·문자 크기 확인 기록](../../log/research-viewer/20260928-appendix-typography/README.md)|v0.27 부록, 전체 자료의 본문·표·캡션 크기, 표시 순서와 오프라인 HTML 확인|
+|index.html|Select Markdown; image display, keep up to date with selections, HTML creation and browser download including image syntax|
+|runs.json|Run the run list of the duplicate data below reports/run|
+|start.command|Find the root of the project and run the Python consultation server|
+|[research_viewer.py](../../src/finarch/shared/research_viewer.py)|localhost:8896Read from the dedicated file;`/api/health` Provided|
+|[HTML export verification record](../../log/research-viewer/20260928-html-export/README.md)|Pre-changed copy, original hash, download and offline verification scope|
+|[Image mark-out verification record](../../log/research-viewer/20260928-image-export/README.md)|v0.26The existing image connection, image interior and magnification, font and image preservation verification range|
+|[Footnote: Check the size of the letter](../../log/research-viewer/20260928-appendix-typography/README.md)|v0.27 In addition, check the full text, tag, caption size, display order and offline HTML of the material.|
 
 ```mermaid
 flowchart LR
  subgraph start["viewer/research/start.command · shell"]
- A["RV01 · 프로젝트 경로 확인"] --> B["RV02 · Python 서버 실행"]
+ A["RV01 • Project trajectory verification"] --> B["RV02 · Running Python servers"]
  end
  subgraph server["src/finarch/shared/research_viewer.py · Python"]
- B --> H["RV03 · localhost:8896 연결·서버 식별 제공"]
+ B --> H["RV03 · localhost:8896 Connection server identification provided"]
  end
  subgraph page["viewer/research/index.html · JavaScript"]
- C["RV04 · runs.json 읽기"] --> D["RV05 · 실행 선택"]
- D --> L["RV05.1 · 본문 초기화·내보내기 잠금"] --> E["RV06 · 실제 RESEARCH-DIRECTION.md 조회"] --> P["RV06.2 · 소절 순서·표·동일 본문 크기·코드·링크·그림·캡션 표시"]
- P --> Q["RV06.3 · 그림 경로 확인·조회·내장·디코딩"] --> F["RV07 · 현재 선택 확인·내보내기 활성화"]
- E -->|이전 선택의 늦은 응답| I["RV06.1 · 표시하지 않음"]
- Q -->|이미지 대기 중 자료 변경| I
- F --> J["RV08 · HTML 내보내기 선택"] --> K["RV09 · 내장 그림·본문·목차 복사·CSS 내장"] --> O["RV10 · 브라우저 HTML 다운로드 요청"]
- C -->|조회 오류| G["RV.E · 오류 표시"]
- E -->|조회 오류| G
- Q -->|이미지 경로·조회·형식·디코딩 오류| G
- J -->|문서 미준비| G
- K -->|파일 생성 오류| G
- O -->|다운로드 요청 오류| G
+ C["RV04 · Read runs.json"] --> D["RV05 · Select the run"]
+ D --> L["RV05.1 • Initial and export lockdown"] --> E["RV06 · The actual RESEARCH-DIRECTION.md visit"] --> P["RV06.2 · Subtract order, tag, syntax, code, link, and caption"]
+ P --> Q["RV06.3 • Trajectory checking, assembly, and decoding"] --> F["RV07 · Current Selection Verification and Export Activation"]
+ E -->|Late response to previous selection| I["RV06.1 · Not showing"]
+ Q -->|Change data in the image atmosphere| I
+ F --> J["RV08 · Select the HTML output"] --> K["RV09 • Interior painting, writing, street copy, CSS interior"] --> O["RV10 · Browser HTML download request"]
+ C -->|Error in the inspection| G["RV.E · Error mark"]
+ E -->|Error in the inspection| G
+ Q -->|Image path, assembly, formatting, decoding errors| G
+ J -->|Document preparation| G
+ K -->|File creation error| G
+ O -->|Error in request for download| G
  end
  H --> C
 ```
 
-Python 서버는 파일 조회와 위젯용 서버 식별만 담당하고 LLM 처리는 없습니다. 자료 읽기 재시도는 새로고침, 내보내기 재시도는 버튼으로 수행합니다. 통합 뷰어는 항상 reports/run의 실제 문서를 읽으며 결과 폴더마다 뷰어를 만들지 않습니다. 사용자가 내보낸 파일만 현재 표시 내용의 독립 사본이고, 서버나 원문을 갱신해도 이미 저장한 파일은 바뀌지 않습니다. 내보낸 파일에는 자료를 요청하는 JavaScript나 외부 스타일 파일이 없습니다.
+Python servers are only responsible for file checking and server identification for widgets, and there is no LLM processing. Data reads are re-routed with a new button, and output re-routing is done with a button. The integrated viewer does not always read the actual document of the reports/run and does not create a viewer for each resulting folder. The only files that are being uploaded by the user are independent copies of the current display, and even if the server or source is updated, the files that are already stored do not change. The uploaded files do not have any JavaScript or external style files that request data.
 
-흐름도의 상자는 실제 파일별 책임을 나타내며 별도 색상 의미나 분홍 확장 노드는 없습니다. 디스크 저장 완료와 사용자의 직접 확인은 별도로 확인해야 합니다. 이 README는 documentation/templates/research/viewer-readme.md에서 생성합니다.
+The flow rate box represents the actual file-by-file responsibilities, and has no color meanings or pink extension nodes. It must be separately verified that the disk storage is complete and the user's direct verification. This README is generated from documentation/templates/research/viewer-readme.md.

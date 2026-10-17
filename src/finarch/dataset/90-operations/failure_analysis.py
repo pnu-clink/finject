@@ -122,7 +122,7 @@ def _preview(snapshot, phase):
                 'input_per_million':rate.get('input_per_million'),'output_per_million':rate.get('output_per_million'),
                 'per_call_usd':per_call,'analysis_usd':None if per_call is None else n*per_call,
                 'translation_usd':None if per_call is None else n*per_call},
-            'estimate_note':'입력+출력 500K 한도를 매 호출에 모두 사용하는 캐시 미사용 기준입니다. 번역에도 같은 한도를 적용한 예산용 최대치이며 실제 입력량 기반 예상액·청구액이 아닙니다. 문항당 분석 1회와 화면 번역 1회이며 자동 재시도는 없습니다.'}
+            'estimate_note':'Input + output 500K It\'s the cached-use limit for each call, the maximum for the budget that applies the same limit to the translation, and not the actual input-based estimate. 1Circular and screen translation 1It\'s rotating and there\'s no automatic re-schedule.'}
 
 def preview(bundle, phase):
     """Read-only: no model calls and no files created before confirmation."""

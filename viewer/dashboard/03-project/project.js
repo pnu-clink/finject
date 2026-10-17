@@ -6,26 +6,26 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
   const names = {
-    active: '작업 중', idle: '대기', attention: '검토 필요', blocked: '차단',
-    pending: '미완료', open: '확인 사항', decision: '결정 대기',
-    complete: '완료', running: '진행 중', online: '정상',
-    unavailable: '응답 없음', unknown: '미기록'
+    active: 'In progress', idle: 'Waiting', attention: 'Review required', blocked: 'Block it.',
+    pending: 'Unfinished.', open: 'Confirmation', decision: 'Decision pending',
+    complete: 'Complete', running: 'In progress', online: 'Normal',
+    unavailable: 'No response', unknown: 'Not recorded'
   };
-  const analysisNames = {COMPLETE: '완료', PARTIAL: '부분', BLOCKED: '차단'};
+  const analysisNames = {COMPLETE: 'Complete', PARTIAL: 'Part of it.', BLOCKED: 'Block it.'};
   let data = null;
   const groupNames = new Map();
 
   function time(value) {
-    if (!value) return '시각 미기록';
+    if (!value) return 'Time not recorded';
     const date = new Date(value);
-    if (Number.isNaN(date.getTime())) return '시각 미기록';
-    return new Intl.DateTimeFormat('ko-KR', {
+    if (Number.isNaN(date.getTime())) return 'Time not recorded';
+    return new Intl.DateTimeFormat('en-US', {
       timeZone: 'Asia/Seoul', month: 'numeric', day: 'numeric',
       hour: '2-digit', minute: '2-digit', hour12: false
     }).format(date);
   }
 
-  function groupName(id) { return groupNames.get(id) || '분류 확인'; }
+  function groupName(id) { return groupNames.get(id) || 'Check the classification'; }
   function related(session) { return data.tasks.filter(task => task.relatedSessionId === session.id); }
   function signal(session) {
     const tasks = related(session);
@@ -40,17 +40,17 @@
   }
   function sourceLink(item) {
     if (!item.sourceRef) return '';
-    return `<a href="/api/project/source?ref=${encodeURIComponent(item.sourceRef)}" target="_blank" rel="noopener">원문 근거 ↗</a>`;
+    return `<a href="/api/project/source?ref=${encodeURIComponent(item.sourceRef)}\x22target=\x22_blank\x22 rel=\x22noopener\x22> source code is</a>`;
   }
 
   function renderSummary() {
     const active = data.sessions.filter(session => session.status === 'active').length;
     const blocked = data.tasks.filter(task => ['blocked', 'attention'].includes(task.status)).length;
     const cards = [
-      ['주요 세션', data.sessions.length, '업무별 전체 목록', '#497faa'],
-      ['진행 중 세션', active, '대화 턴 기준', '#249178'],
-      ['남은 확인·결정', data.tasks.length, '저장 문서·run 기준', '#c69039'],
-      ['막힘·검토', blocked, '실행 기록 기준', '#c65b5d']
+      ['Main session', data.sessions.length, 'Full list of tasks', '#497faa'],
+      ['The session is ongoing.', active, 'The conversation turn.', '#249178'],
+      ['The rest of the check.', data.tasks.length, 'Save document run by default', '#c69039'],
+      ['Barricade and scope', blocked, 'Running record standards', '#c65b5d']
     ];
     el('summary-grid').innerHTML = cards.map(([title, count, note, color]) =>
       `<div class="summary-card" style="--accent:${color}"><strong>${count}</strong><div><span>${esc(title)}</span><small>${esc(note)}</small></div></div>`
@@ -66,13 +66,13 @@
           String(b.updatedAt).localeCompare(String(a.updatedAt)));
       const rows = sessions.map(session => {
         const outstanding = related(session).length;
-        return `<button type="button" class="session-node" data-session-id="${esc(session.id)}" title="${esc(session.name)} · ${esc(names[signal(session)])}"><i class="signal ${signal(session)}" aria-hidden="true"></i><span class="node-name">${esc(session.name)}</span>${session.children.length ? `<span class="node-tag" title="실제 생성 자식 ${session.children.length}개">↳${session.children.length}</span>` : ''}${outstanding ? `<span class="node-task-count" title="연결된 미완료 ${outstanding}건">${outstanding}</span>` : ''}</button>`;
+        return `<button type="button" class="session-node" data-session-id="${esc(session.id)}" title="${esc(session.name)} · ${esc(names[signal(session)])}"><i class="signal ${signal(session)}" aria-hidden="true"></i><span class="node-name">${esc(session.name)}</span>${session.children.length ? `The child that actually created the node-tag. ${session.children.length}The items.${session.children.length}</span>` : ''}${outstanding ? `The number of nodes is not complete. ${outstanding}entries\x22>${outstanding}</span>` : ''}</button>`;
       }).join('');
       return `<div class="group-label"><span>${esc(group.name)}</span><span>${sessions.length}</span></div>${rows}`;
     }).join('');
     const parents = data.sessions.filter(session => session.children.length);
     const children = parents.reduce((total, session) => total + session.children.length, 0);
-    el('lineage-summary').textContent = `실제 생성 관계 · 부모 ${parents.length} / 자식 ${children}`;
+    el('lineage-summary').textContent = `The real relationship between parents ${parents.length} / child ${children}`;
   }
 
   function renderStages() {
@@ -82,10 +82,10 @@
     const research = data.tasks.filter(task => task.group === 'research').length;
     const dataset = data.dataset;
     const stages = [
-      ['01 / DATASET', '데이터셋 제작', dataset ? `원문 ${dataset.originals ?? '—'} · 준비 ${dataset.preparationPass ?? '—'}` : '저장 보고서 미확인', dataset?.generationPass != null ? `변형 통과 ${dataset.generationPass.toLocaleString('ko-KR')}` : '상태 확인'],
-      ['02 / EVALUATION', '모델 풀이', `${evaluated}개 run 수집 기록`, '형식 통과 ≠ 의미 정답'],
-      ['03 / ANALYSIS', '결과 분석', `완료 ${completed} · 확인 ${unfinished}`, 'A01 → A02 → A03'],
-      ['04 / RESEARCH', '연구·원고', `관련 남은 일 ${research}건`, '결과·결론 근거 대기']
+      ['01 / DATASET', 'Creating a data set', dataset ? `Source text ${dataset.originals ?? '—'} · Ready ${dataset.preparationPass ?? '—'}` : 'The storage report is unverified', dataset?.generationPass != null ? `Transformed through ${dataset.generationPass.toLocaleString('en-US')}` : 'Check the status.'],
+      ['02 / EVALUATION', 'The model pool.', `${evaluated}items run collection record`, 'Form pass ≠ meaning correct answer'],
+      ['03 / ANALYSIS', 'Analysis of the results', `Complete ${completed} · Check ${unfinished}`, 'A01 → A02 → A03'],
+      ['04 / RESEARCH', 'Research and development', `The rest of the business. ${research}entries`, 'Results: Based on the waiting']
     ];
     el('stage-strip').innerHTML = stages.map(([code, title, detail, status]) =>
       `<div class="stage"><small>${esc(code)}</small><strong>${esc(title)}</strong><span>${esc(detail)}</span><b>${esc(status)}</b></div>`
@@ -95,24 +95,24 @@
   function renderPriority() {
     el('task-count').textContent = data.tasks.length;
     el('priority-list').innerHTML = data.tasks.length ? data.tasks.slice(0, 6).map(task =>
-      `<button type="button" class="task-row" data-task-id="${esc(task.id)}" title="${esc(task.title)}"><i class="task-mark ${esc(task.status)}"></i><span class="task-title">${esc(task.title)}</span><span class="task-meta">${esc(groupName(task.group))} · ${esc(names[task.status] || '확인')}</span></button>`
-    ).join('') : '<p class="empty">문서·run에서 읽은 미완료 기록이 없습니다.</p>';
+      `<button type="button" class="task-row" data-task-id="${esc(task.id)}" title="${esc(task.title)}"><i class="task-mark ${esc(task.status)}"></i><span class="task-title">${esc(task.title)}</span><span class="task-meta">${esc(groupName(task.group))} · ${esc(names[task.status] || 'Check')}</span></button>`
+    ).join('') : '<p class=\x22empty\x22>There\x27s no unfinished record in the document run.</p>';
   }
 
   function renderActive() {
     const active = data.sessions.filter(session => session.status === 'active');
     el('active-count').textContent = active.length;
     el('active-list').innerHTML = active.length ? active.map(session =>
-      `<button type="button" class="active-row" data-session-id="${esc(session.id)}"><i class="signal active"></i><span><strong>${esc(session.name)}</strong><small>${esc(session.recentTasks[0]?.text || '현재 요청 내용 미기록')}</small></span></button>`
-    ).join('') : '<p class="empty">현재 작업 중으로 기록된 세션이 없습니다.</p>';
+      `<button type="button" class="active-row" data-session-id="${esc(session.id)}"><i class="signal active"></i><span><strong>${esc(session.name)}</strong><small>${esc(session.recentTasks[0]?.text || 'Currently requested content')}</small></span></button>`
+    ).join('') : '<p class=\x22empty\x22>There\x27s no session recorded as we\x27re working on it.</p>';
   }
 
   function renderRuns() {
     const rows = data.runs.slice(0, 6).map(run => {
-      const evaluation = ['FINISHED', 'EVALUATION_COMPLETE'].includes(run.evaluationStatus) ? '수집 완료' : '확인 중';
-      return `<div class="run-row"><span class="run-name" title="${esc(run.name)}">${esc(run.name)}</span><span>${esc(evaluation)}</span><span>${badge(run.status, analysisNames[run.analysisStatus] || '미기록')}</span>${sourceLink(run)}</div>`;
+      const evaluation = ['FINISHED', 'EVALUATION_COMPLETE'].includes(run.evaluationStatus) ? 'Collection completed' : 'Checking';
+      return `<div class="run-row"><span class="run-name" title="${esc(run.name)}">${esc(run.name)}</span><span>${esc(evaluation)}</span><span>${badge(run.status, analysisNames[run.analysisStatus] || 'Not recorded')}</span>${sourceLink(run)}</div>`;
     }).join('');
-    el('run-list').innerHTML = rows ? '<div class="run-row run-head"><span>저장 실행</span><span>풀이</span><span>Analysis</span><span>근거</span></div>' + rows : '<p class="empty">저장된 실행 상태가 없습니다.</p>';
+    el('run-list').innerHTML = rows ? '<div class=\x22run-row run-head\x22><span>Save and run</span><span>The grass.</span><span>Analysis</span><span>Evidence</span></div>' + rows : '<p class=\x22empty\x22>No running state saved.</p>';
   }
 
   function renderAreas() {
@@ -121,12 +121,12 @@
     el('area-list').innerHTML = rows.map(group => {
       const count = data.tasks.filter(task => task.group === group.id).length;
       return `<button type="button" class="area-row" data-area-id="${esc(group.id)}"><strong>${esc(group.name)}</strong><span class="area-track"><i style="width:${Math.round(count / max * 100)}%"></i></span><b>${count}</b></button>`;
-    }).join('') || '<p class="empty">영역별 미완료 기록이 없습니다.</p>';
+    }).join('') || '<p class=\x22empty\x22>There\x27s no unfinished record for each region.</p>';
   }
 
   function renderServices() {
     el('service-list').innerHTML = data.services.map(service =>
-      `<span class="service-item"><i class="${esc(service.status)}"></i>${esc(service.name)} ${service.port} · ${esc(names[service.status] || '확인 불가')}</span>`
+      `<span class="service-item"><i class="${esc(service.status)}"></i>${esc(service.name)} ${service.port} · ${esc(names[service.status] || 'Unverified')}</span>`
     ).join('');
   }
 
@@ -143,45 +143,45 @@
     if (!session) return;
     const tasks = related(session).slice(0, 3);
     const requests = session.recentTasks.length ? `<ol>${session.recentTasks.map(request =>
-      `<li>${esc(request.text)}<small class="muted"> · ${esc(time(request.at))} · ${request.turnStatus === 'completed' ? '응답 턴 완료' : '진행·확인 중'}</small></li>`
-    ).join('')}</ol>` : '<p class="muted">최근 요청을 읽지 못했습니다.</p>';
+      `<li>${esc(request.text)}<small class="muted"> · ${esc(time(request.at))} · ${request.turnStatus === 'completed' ? 'Answer turn is complete.' : 'In progress, confirmation'}</small></li>`
+    ).join('')}</ol>` : '<p class=\x22muted\x22>I didn\x27t read the last request.</p>';
     const outstanding = tasks.length ? tasks.map(task =>
       `<div class="detail-card"><strong>${esc(task.title)}</strong>${badge(task.status)}<small>${esc(task.detail)}</small>${sourceLink(task)}</div>`
-    ).join('') : '<p class="muted">이 세션에 연결된 문서·run 미완료 기록은 없습니다.</p>';
-    const children = session.children.length ? `<h3>실제 생성된 자식 세션 ${session.children.length}개</h3><ul>${session.children.map(child => `<li>${esc(child.name)}${child.role ? ` · ${esc(child.role)}` : ''}</li>`).join('')}</ul>` : '';
+    ).join('') : '<p class=\x22muted\x22>There is no unfinished record of the document run connected to this session.</p>';
+    const children = session.children.length ? `<h3>The actual child session that was created. ${session.children.length}items</h3><ul>${session.children.map(child => `<li>${esc(child.name)}${child.role ? ` · ${esc(child.role)}` : ''}</li>`).join('')}</ul>` : '';
     openDialog('SESSION / ' + groupName(session.group), session.name,
-      `${names[session.status] || '상태 확인'} · ${time(session.updatedAt)} · 세션 ID ${session.id}`,
-      `${session.lastReport ? `<h3>마지막 저장 보고</h3><p>${esc(session.lastReport)}</p>` : ''}<h3>최근 사용자 요청 · 최대 3건</h3>${requests}<h3>관련 미완료 기록 · 최대 3건</h3>${outstanding}${children}<p class="muted">요청의 응답 턴 완료는 구현·검증·사용자 승인을 뜻하지 않습니다.</p>`);
+      `${names[session.status] || 'Check the status.'} · ${time(session.updatedAt)} • Session ID ${session.id}`,
+      `${session.lastReport ? `<h3>Last save report</h3><p>${esc(session.lastReport)}</p>` : ''}<h3>Recent user requests · maximum 3entries</h3>${requests}<h3>Related incomplete records · maximum 3entries</h3>${outstanding}${children}<p class=\x22muted\x22>Completion of the response turn of a request does not imply implementation, verification, user approval.</p>`);
   }
 
   function showTask(id) {
     const task = data.tasks.find(item => item.id === id);
     if (!task) return;
     openDialog('TASK / ' + groupName(task.group), task.title,
-      `${names[task.status] || '상태 확인'} · ${task.sourcePath || '근거 미기록'}`,
-      `<h3>저장 기록의 내용</h3><p>${esc(task.detail)}</p><h3>근거 파일</h3><p>${sourceLink(task)}</p><p class="muted">이 항목은 저장 문서·실행 상태에서 읽은 확인 사항입니다. 완료 판단은 원문과 후속 검증을 함께 확인해 주세요.</p>`);
+      `${names[task.status] || 'Check the status.'} · ${task.sourcePath || 'The underlying sub-record'}`,
+      `<h3>The contents of the record</h3><p>${esc(task.detail)}</p><h3>The base file.</h3><p>${sourceLink(task)}</p><p class=\x22muted\x22>This item is a confirmation read from the saved document. Please confirm the completed judgment with the original and subsequent verification.</p>`);
   }
 
   function showTasks(group) {
     const tasks = data.tasks.filter(task => !group || task.group === group);
-    openDialog('ACTION QUEUE', group ? `${groupName(group)} · 남은 일` : '전체 남은 일',
-      `${tasks.length}건 · 저장 문서와 실행 상태 기준`,
-      tasks.map((task, index) => `<div class="detail-card"><strong>${index + 1}. ${esc(task.title)}</strong>${badge(task.status)}<small>${esc(task.detail)}</small>${sourceLink(task)}</div>`).join('') || '<p>현재 기록된 항목이 없습니다.</p>');
+    openDialog('ACTION QUEUE', group ? `${groupName(group)} • What remains` : 'The rest of the job.',
+      `${tasks.length}The storage and running status of the document`,
+      tasks.map((task, index) => `<div class="detail-card"><strong>${index + 1}. ${esc(task.title)}</strong>${badge(task.status)}<small>${esc(task.detail)}</small>${sourceLink(task)}</div>`).join('') || '<p>There\x27s no record of it at this time.</p>');
   }
 
   function showLineage() {
     const parents = data.sessions.filter(session => session.children.length);
-    openDialog('VERIFIED LINEAGE', '실제 부모·자식 생성 관계',
-      'Codex thread_spawn_edges 기록에서 읽은 관계만 표시합니다.',
-      parents.map(parent => `<h3>${esc(parent.name)} → 자식 ${parent.children.length}개</h3><ul>${parent.children.map(child => `<li>${esc(child.name)}${child.role ? ` · ${esc(child.role)}` : ''}</li>`).join('')}</ul>`).join('') || '<p class="muted">확인된 생성 관계가 없습니다.</p>');
+    openDialog('VERIFIED LINEAGE', 'The real parent-child relationship',
+      'It shows only the relationship you read from the Codex thread_spawn_edges record.',
+      parents.map(parent => `<h3>${esc(parent.name)} → Child ${parent.children.length}items</h3><ul>${parent.children.map(child => `<li>${esc(child.name)}${child.role ? ` · ${esc(child.role)}` : ''}</li>`).join('')}</ul>`).join('') || '<p class=\x22muted\x22>There\x27s no confirmed production relationship.</p>');
   }
 
   function render() {
     groupNames.clear();
     data.groups.forEach(group => groupNames.set(group.id, group.name));
-    el('updated-at').textContent = '마지막 확인 ' + time(data.generatedAt);
+    el('updated-at').textContent = 'Last check. ' + time(data.generatedAt);
     el('scope-note').textContent = data.scope;
-    el('source-age').textContent = '브라우저가 열려 있으면 1분마다 갱신';
+    el('source-age').textContent = 'If the browser is open, 1I\x27ll update you every minute.';
     el('warnings').hidden = !data.warnings.length;
     el('warnings').textContent = data.warnings.join(' · ');
     renderSummary(); renderStructure(); renderStages(); renderPriority();
@@ -198,7 +198,7 @@
       render();
     } catch (error) {
       el('warnings').hidden = false;
-      el('warnings').textContent = `현황을 읽지 못했습니다: ${error.message}. 새로 읽기를 눌러 다시 시도해 주세요.`;
+      el('warnings').textContent = `I didn\x27t read the situation: ${error.message}Please press read again.`;
       el('main').setAttribute('aria-busy', 'false');
     } finally {
       el('refresh').disabled = false;

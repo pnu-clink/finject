@@ -1,17 +1,17 @@
-# 영문 원고 리뷰 · 2026-10-03
+# English manuscript review 2026-10-03
 
-이 README는 문서 템플릿에서 생성합니다. 원고 수정이나 Overleaf 배포가 아닌 읽기 전용 리뷰입니다.
+This README is created from a document template, a read-only review, not a copy edit or an Overleaf distribution.
 
-## 읽는 순서
+## Reading order
 
-1. [작성 지침](../../../paper/instructdion/WRITING-GUIDELINES.md): 리뷰 기준.
-2. [리뷰 원본](../../../paper/instructdion/reviews/20261003-english-manuscript-review.md): 사용자 지정 기록 위치의 정본. 우선 수정 사항과 영문 표현 제안.
-3. [뷰어용 리뷰](RESEARCH-DIRECTION.md): 공통 뷰어가 읽는 동일 내용. 별도 HTML은 만들지 않습니다.
-4. [검토 자료 목록](manifest.json): 검토한 원고·PDF·지침의 경로와 SHA-256.
-5. [확인 기록](verification.json), [작업 로그](events.jsonl): 파일·링크·뷰어 확인 범위. 의미 정답이나 모델 실험의 검증 기록이 아닙니다.
+1. [Creative instructions](../../../paper/instructdion/WRITING-GUIDELINES.md): reviews by the standards.
+2. [Review](../../../paper/instructdion/reviews/20261003-english-manuscript-review.md): Customized record location. Priority amendments and English expression suggestions.
+3. [Review for the viewer](RESEARCH-DIRECTION.md)The same content that the common viewer reads. No HTML is created.
+4. [List of research data](manifest.json)Reviewed documents, PDFs, directions and SHA-256.
+5. [Confirmation of the record](verification.json)[Operating log](events.jsonl)File link viewer verification scope: meaning not validation of the correct answer or model experiment.
 
-[공통 연구 뷰어](http://127.0.0.1:8896/viewer/research/)에서 **2026-10-03 · 영문 원고 리뷰 · 주장·문체·표·그림**을 선택합니다.
+[Public research viewer](http://127.0.0.1:8896/viewer/research/)in **2026-10-03 · English language manuscript review · claims · text · signs · pictures**Choose the one.
 
-## 범위
+## Scope
 
-최신 저장 영문 LaTeX·PDF와 Revision Draft를 대조했습니다. 원고·그림·Overleaf를 변경하지 않았고 새 모델 호출도 하지 않았습니다. 개별 비교 논문의 모든 체크와 실험 원응답을 전수 감사한 것은 아닙니다. 권장 표현과 표 구성은 적용 전 제안입니다.
+We've compared the latest stored English LaTeX PDF to the Revision Draft. We haven't changed the source code, we've not changed the overleaf, we're not calling new models. We're not fully appreciative of all the checks in individual comparison papers and all the raw responses to the experiment.

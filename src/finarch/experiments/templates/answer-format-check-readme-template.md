@@ -1,14 +1,14 @@
-# 응답 형식 V4 로컬 검사
+# V4 response format local scanner
 
-상태: **{status}** · 오프라인 검사 {tests}개 통과 · 새 모델 호출 {calls}건.
+State of play: **{status}** • Offline testing {tests}items passes call new model {calls}That one.
 
-## 읽는 순서
+## Reading order
 
-1. `verification.json`: 검사 결과·프롬프트/스키마 해시·V2·평면 V3 호환 확인.
-2. `tests.log`: 실제 검사 로그.
-3. `request-example.json`: 합성 Q/C와 소수 자릿수·프롬프트·스키마.
-4. `provider-request-example.json`: 실제 전달 방식과 동일하게 구성한 Gemini 요청 예시(전송하지 않음).
-5. `expected-response-example.json`: 형식 검사용 예상 응답. LLM 출력이 아닙니다.
+1. `verification.json`Check results: Prompt/Skyma hash V2 and V3 compatibility.
+2. `tests.log`: The actual check log.
+3. `request-example.json`: Synthetic Q/C and minor digits; Prompt schemes.
+4. `provider-request-example.json`: Gemini request example, which is configured to match the actual delivery method.
+5. `expected-response-example.json`Formal validation: expected response. Not LLM output.
 
-실제 프로그램과 규칙: [응답 형식 안내](../../../../docs/02-experiments/README.md).
-새 모델 응답의 준수율은 미실측입니다. 기존 exp-003의 고정 manifest와 V2 요청 검사를 통과했습니다.
+The actual program and rules:](../../../../docs/02-experiments/README.md).
+The compliance rate for the new model is a mismatch.003I passed the V2 request test of the fixed manifest.

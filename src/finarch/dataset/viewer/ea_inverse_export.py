@@ -86,4 +86,7 @@ def render(project, run, name):
                              ('__STATE__', 'ea-inverse-annotation-state.js'),
                              ('__UI__', 'ea-inverse-annotator.js')):
         html = html.replace(marker, (folder/filename).read_text())
+    html = html.replace('__FINARCH_LOCALE_CSS__', (project/'viewer/shared/i18n.css').read_text())
+    locale = (project/'viewer/shared/i18n.js').read_text().replace('</script', '<\\/script')
+    html = html.replace('__FINARCH_LOCALE_JS__', locale)
     return html.replace('__PACKAGE__', inline_json(package)).encode('utf-8')

@@ -218,7 +218,7 @@ def mermaid(graph):
 
 @traced("python")
 def execute_handler(payload):
-    # [P02-1] docs/02-architecture.md#P02-1 — validated_tree·checked_facts 후 interpret로 제한 사칙연산을 계산합니다.
+    # [P02-1] docs/02-architecture.md#P02-1 Then we'll interpret the constraint rule as  validated_tree·checked_facts.
     value, trace = interpret(payload)
     return StepResult("PASS", "Checked supported arithmetic and source numeric spans.",
                       {"exact_value": str(value), "trace": trace, "engine": "bounded-ast-v1"})
@@ -226,7 +226,7 @@ def execute_handler(payload):
 
 @traced("python")
 def compile_handler(payload):
-    # [D01-1] docs/02-architecture.md#D01-1 — compile_program·evaluate_graph로 그래프·정확값·상수 제외 노드 목록을 반환합니다.
+    # [D01-1] docs/02-architecture.md#D01-1 return the list of nodes excluding graphs, values, and values to compile_program·evaluate_graph.
     graph, value = compile_program(payload["program"])
     return StepResult("PASS", "Extracted calculation dependencies from the same code.",
                       {"dag": graph, "variables": [node["id"] for node in graph["nodes"]
@@ -236,7 +236,7 @@ def compile_handler(payload):
 
 @traced("python")
 def local_handlers():
-    # [DG04] docs/02-architecture.md#DG04 — 기본 경로는 실제 Python 실행과 현재 코드의 그래프 추출을 사용한다.
+    # [DG04] docs/02-architecture.md#DG04 The default path uses the actual Python execution and graph extraction of the current code.
     from finarch.dataset.shared.calculation.python_runtime import execute
     from finarch.dataset.shared.calculation.python_graph import compile_handler as python_compile_handler
     return {"pot.execute": execute, "dag.compile": python_compile_handler}

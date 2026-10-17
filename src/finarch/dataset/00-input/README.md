@@ -1,34 +1,57 @@
-# 입력 준비
+# 00-input: source conversion and adapter guide
 
-## 시작 프로그램
+For example, `finance(record, source)` receives a FinanceReasoning record and pinned source metadata. It returns the original question, rendered context, numeric reference fields, source locations, and provenance. The builder adds the common item ID and validates the result. It does not solve the question, call a model, or execute an upstream solution program.
 
-FinanceReasoning 배포본 전체의 시작 프로그램은 `full_finance.py`입니다. 원천 종류에 따라 아래 기존 진입점을 선택합니다. 이 단계는 LLM을 호출하지 않습니다.
+Start with the actual [two-source sample](../../../../data/sample/README.md). The common command is `python -m finarch.cli prepare --sources CATALOG --output NEW_DIRECTORY --per-source N --seed SEED`, with `PYTHONPATH=src` and the repository's `.venv/bin/python`. Catalog paths are relative to the catalog's directory. SHA-256 must match the exact local file bytes.
 
-|입력 대상|시작 프로그램|받는 인자·처리|
-|---|---|---|
-|FinanceReasoning 전체|`src/finarch/dataset/00-input/full_finance.py`|`--catalog`, `--output`. easy → medium → hard 원천 해시 확인·제외·공통 입력 생성|
-|TAT-QA 전체|`src/finarch/dataset/00-input/tatqa_full.py`|출력 폴더를 위치 인자로 받음. `config/source-catalog.json`의 TAT-QA 원천 사용|
-|일반 표본 준비|`src/finarch/cli.py prepare` → `00-input/build.py`|`--sources`, `--output`, `--seed`, `--total` 또는 `--per-source`|
+## Existing adapters and selection
 
-저장소 루트에서 실행합니다. 아래 `PATH_TO_...`는 실제 경로로 바꿔야 하는 자리표시자이며, 새 출력 폴더를 지정합니다.
+| Catalog adapter | Function in `adapters.py` | Accepted input |
+| --- | --- | --- |
+| `finance` | `finance(record, source)` | Native FinanceReasoning records; the common builder excludes embedded sources. |
+| `tatqa` | `tatqa(record, question, source)` | A document and one arithmetic question from its `questions` list. |
+
+`build.py` explicitly recognizes these two names. It filters unsupported questions, excludes duplicate contexts within a source, ranks deterministically using the seed and raw ID, selects the requested count, and rejects duplicate IDs. The full four-source catalog is [config/source-catalog.json](../../../../config/source-catalog.json). Its `--total` mode requires a positive multiple of ten and the fixed easy:medium:hard:TAT-QA ratio 3:2:1:4; the two-source sample uses `--per-source` instead.
+
+Source-specific alternatives remain in `full_finance.py` and `tatqa_full.py`; inspect their `--help` before use. Their cohort policies differ from the common sampler and are not interchangeable paper-reproduction commands.
+
+## Add a new adapter
+
+There is no automatic plugin discovery. A catalog edit alone does not register a new source family.
+
+1. Preserve a small actual raw record and its source URL, commit/version, SHA-256, and redistribution terms. Add a separate catalog with a path relative to that catalog. Do not rewrite source answers to fit computed results.
+2. Implement the conversion in [adapters.py](adapters.py). Preserve a stable `raw_id`, the question, numeric reference and precision, sign/scale metadata, and provenance. Use the existing `extract_reference` helper rather than rounding values yourself.
+3. Extend the adapter allowlist, record/question iteration, dispatch, and explicit exclusion reasons in [build.py](build.py). A document with multiple questions needs question-level iteration, as TAT-QA does.
+4. Extend [content.py](content.py) for the new layout. Preserve tables/paragraphs and source pointers. Every `context_span` uses Unicode code points and a half-open interval `[start, end)`; `context[start:end]` must equal the stored fragment. JSON rendering uses [json_context.py](json_context.py). Do not reuse a renderer that drops evidence.
+5. Extend the typed provenance union in [schemas/prepared.py](../schemas/prepared.py) for a genuinely new source family, and update the registered JSON schema using `finarch.dataset.schemas.registry --output src/finarch/dataset/schemas/json` with the repository Python. The current union accepts FinanceReasoning and TAT-QA only. A generic Q/C/A object does not satisfy this contract.
+6. Run the new catalog through the offline builder in a new directory. Validate `input.json` with the command below; inspect source hashes, exclusions, IDs, reference precision/sign, tables, and source spans against the raw record. Include repeated-context, unsupported-question, and invalid-location cases when checking an adapter change. Schema PASS does not certify financial meaning.
 
 ```sh
-PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.00-input.full_finance --catalog PATH_TO_FINANCE_CATALOG --output PATH_TO_NEW_INPUT_FOLDER
+PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.schemas.validation \
+  --schema 01-preparation.01-source.prepared-input \
+  --input PATH_TO_NEW_INPUT_DIRECTORY/input.json
 ```
 
-Finance 전체 catalog에는 `finance-easy`, `finance-medium`, `finance-hard` 세 원천이 순서대로 있어야 합니다. TAT-QA를 포함한 원천 목록을 그대로 전달하면 거절됩니다. 출처를 한정할 때는 `--hyperparameter PATH_TO_HYPERPARAMETER_JSON`을 추가합니다. `input.source_prefix`로 출처를 고르고 `input.id_map_path`로 기존 입력의 raw_id → id 대응을 보존하며 `input.expected_count`로 최종 수량을 검사합니다. 원천·Q/C/A는 현재 어댑터로 새로 읽고 이전 LLM 결과는 재사용하지 않습니다.
+## Code and failure flow
 
-내부 경로: 원천 선정 → `adapters.py` → `content.py` → JSON 본문이면 `json_context.py` → 입력 스키마 검사 → `data/prepared/...` 산출물. `check_json_contexts.py`는 별도 점검 도구이고 제작 시작점이 아닙니다. 다음 01에는 완성된 `input.json`을 전달합니다.
+```mermaid
+flowchart TD
+  subgraph CLI["cli.py"]
+    I00["I00 Python: catalog, count, seed, new output path"]
+  end
+  subgraph BUILD["00-input/build.py"]
+    I01["I01 Python: verify source hashes and eligibility"]
+    I03["I03 Python: rank, select, assign IDs, validate schema"]
+    I04["I04 Python: write input, raw records, manifest, terminal status"]
+    IF["FAIL: preserve attempt and exclusion/error records"]
+  end
+  subgraph ADAPTER["adapters.py and content.py"]
+    I02["I02 Python: source-specific Q/C/A and location mapping"]
+  end
+  I00 --> I01 --> I02 --> I03 --> I04
+  I01 -->|invalid source| IF
+  I02 -->|conversion error| IF
+  I03 -->|count or schema error| IF
+```
 
-[문서의 단계·요구·실행 흐름](../../../../docs/01-dataset/00-input/README.md) · [전체 소스 구조](../../../../docs/01-dataset/90-operations/05-source-layout.md)
-
-이 폴더는 위 문서 단계의 실행 코드를 소유합니다. 결과의 물리 경로는 기존 run 계약을 따릅니다.
-
-|파일|역할|
-|---|---|
-|[adapters.py](adapters.py)|Explicit adapters for two source schemas. Source programs are never executed.|
-|[build.py](build.py)|Freeze inputs from hash-verified local sources; do not infer generation success.|
-|[content.py](content.py)|Common original-content structure and exact Unicode character locations.|
-|[dataset_survey.py](dataset_survey.py)|Bundle a documented dataset survey for the shared viewer without model calls.|
-|[full_finance.py](full_finance.py)|Prepare the complete pinned distribution; inspect source ASTs without execution.|
-|[tatqa_full.py](tatqa_full.py)|Prepare all local TAT-QA arithmetic questions without context-only deduplication.|
+All steps above use Python without model calls. Input files and the five actual outputs are explained in the [sample guide](../../../../data/sample/README.md). Keep all five files together for the next stage.

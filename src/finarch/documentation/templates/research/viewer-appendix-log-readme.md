@@ -1,28 +1,28 @@
-# 데이터 제작 부록과 연구 뷰어 문자 크기 정리
+# Data creation add-ons and studies view the character size sort
 
-2026-09-28 사용자 요청: 논문의 4.2·4.3에 축약한 데이터 생성 전체 로직을 부록으로 제공하고, 제목 아래 본문의 불규칙한 크기와 큰 그림 설명을 정리합니다.
+2026-09-28 User request: from the paper 4.2·4.3It provides the entire logic of the summary data creation as an appendix, and it sets out the irregular size and large graphic description of the text under the title.
 
-## 읽는 순서
+## Reading order
 
-1. [논문 v0.27](../../../reports/run/20260924-paper-draft/PAPER-KO.md)의 부록 B 또는 [부록 편집 원본](../../../reports/run/20260924-paper-draft/DATA-GENERATION-APPENDIX.md)을 읽습니다.
-2. [파일별 순서도](../../../reports/run/20260924-paper-draft/DATA-GENERATION-FLOWS.md)와 [근거 장부](../../../reports/run/20260924-paper-draft/DATA-GENERATION-EVIDENCE.json)에서 현재 구현·저장 사례·확인 시점을 대조합니다.
-3. [공통 연구 뷰어](http://127.0.0.1:8896/viewer/research/#s14)에서 한글 논문 v0.27을 선택하거나 [검사한 HTML 사본](../../../outputs/research/20260928-appendix-typography/20260924-paper-draft-research.html)을 엽니다.
-4. [확인 결과](verification.json)와 [작업 로그](events.jsonl)를 읽습니다. 저장 파일 검사·분리된 브라우저 검사·사용자 직접 확인은 구별합니다.
+1. [Discussion v0.27](../../../reports/run/20260924-paper-draft/PAPER-KO.md)The following is the list of the additions B or [additional edit](../../../reports/run/20260924-paper-draft/DATA-GENERATION-APPENDIX.md)is read.
+2. [File order is also available](../../../reports/run/20260924-paper-draft/DATA-GENERATION-FLOWS.md)Come on, Minister of the Interior.](../../../reports/run/20260924-paper-draft/DATA-GENERATION-EVIDENCE.json)In the current implementation, the case-control and confirmation times are contrasted.
+3. [Public research viewer](http://127.0.0.1:8896/viewer/research/#s14)From the Hungarian paper v0.27Select or [check out the HTML copy](../../../outputs/research/20260928-appendix-typography/20260924-paper-draft-research.html)It opens up.
+4. [Confirmed results](verification.json)[Working log](events.jsonl)It's a difference between a file check, a split browser check, and user-direct verification.
 
-## 변경과 파일 역할
+## Changes and file roles
 
-|파일|역할|
+|File|Role|
 |---|---|
-|before-index.html, before-runs.json, before-README.md|뷰어 수정 전 파일|
-|verification.json|자료별 본문·표 크기, 캡션, 순서, 다운로드·오프라인 검사|
-|events.jsonl|변경·확인·실패와 보완의 순서|
-|typography-desktop.png, typography-mobile.png|3.5 첫 문단과 후속 문단의 같은 크기 확인 화면|
-|figure-desktop.png, appendix-desktop.png|그림 캡션과 부록 표시 확인 화면|
+|before-index.html, before-runs.json, before-README.md|Viewer Fixed the file|
+|verification.json|Subject-specific text tables, captions, order, downloads, offline checks|
+|events.jsonl|Change, confirmation, failure and replacement order|
+|typography-desktop.png, typography-mobile.png|3.5 Check the same size of the first paragraph and the subsequent paragraphs|
+|figure-desktop.png, appendix-desktop.png|Picture captions and add-ons check screen|
 
-첫 문단만 19px, 나머지는 16px로 지정하던 규칙을 제거했습니다. 본문과 표는 상위 본문 크기를 상속하며 데스크톱 17px, 모바일 16px입니다. 제목은 별도의 크기를 유지하고 그림 상세 설명은 15px 캡션으로 묶었습니다. 소절의 표를 소절 밖에 추가하던 순서 문제도 수정했습니다. 링크와 코드 표기를 지원하여 부록의 실제 근거를 찾을 수 있게 했습니다.
+Just the first step. 19pxThe rest of you. 16pxI removed the rule that I set to text and tables, and I inherited the size of the top text, and I left it on the desktop. 17pxMobile, and mobile. 16pxThe title is kept a separate size and the detailed description of the picture is 15px I've also fixed the ordering problem that was adding the table of subtractions to the subtraction, and I've supported the link and the code tag, so you can find the actual base of the addendum.
 
-## 확인 범위
+## Check the range
 
-현재 파일을 분리된 Chromium의 입력으로 제공하는 화면·내보내기 검사를 사용합니다. 실제 localhost 서비스나 사용자 브라우저에 접속한 검사와 구별하며, 사용자 확인 완료를 주장하지 않습니다. 검사할 HTML은 outputs 아래에만 저장합니다. reports/run마다 별도 뷰어를 만들지 않습니다.
+It currently uses a screen-out-check that provides the files as input from a separate Chromium. It distinguishes them from actual localhost services or user browsers, and does not claim user authentication completion. The HTML to be checked is stored only under the outputs. It does not create a separate viewer for each reports/run.
 
-실험·생성·Evaluation·Analysis·모델 호출은 수행하지 않습니다. 논문 결과와 결론, RQ·SQ·H 및 기존 그림 원본은 유지합니다. 이 README는 documentation/templates/research/viewer-appendix-log-readme.md에서 생성합니다.
+Experimentation, Creation, Evaluation, Analysis, Model Calls are not performed. The paper results and conclusions, RQ, SQ, H and the existing drawing originals are maintained. This README is generated from documentation/templates/research/viewer-appendix-log-readme.md.

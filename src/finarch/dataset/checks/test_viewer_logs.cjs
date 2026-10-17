@@ -21,8 +21,8 @@ async function main(){
   '05-text/C/audit/01-input/cli-start.json':{role:'dtt.audit'},
   '05-text/D/audit/01-input.json':{role:'dtt.audit'}
  };
- const calls=ctx.logCalls(run),summary=ctx.logSummary(calls);assert.equal(calls.length,2);assert.equal(summary.seconds,2);assert.equal(summary.timed,1);assert.equal(ctx.logProcessState(calls[1]),'종료 기록 없음');
- assert.equal(ctx.logDuration(null),'기록 없음');assert.equal(ctx.logDuration(-1),'기록 없음');
+ const calls=ctx.logCalls(run),summary=ctx.logSummary(calls);assert.equal(calls.length,2);assert.equal(summary.seconds,2);assert.equal(summary.timed,1);assert.equal(ctx.logProcessState(calls[1]),'\uc885\ub8cc \uae30\ub85d \uc5c6\uc74c');
+ assert.equal(ctx.logDuration(null),'\uae30\ub85d \uc5c6\uc74c');assert.equal(ctx.logDuration(-1),'\uae30\ub85d \uc5c6\uc74c');
  console.log('PASS one CLI directory per call; missing times and unsent requests are not fabricated');
  assert.equal(ctx.logScope({stage:'03-graph',step:'DG03'},2),true);assert.equal(ctx.logScope({stage:'03-graph',step:'DG03'},3),false);
  assert.equal(ctx.logScope({stage:'03-graph',step:'EA01'},3),true);assert.equal(ctx.logScope({stage:'review',step:'EA15'},5),false);
@@ -35,9 +35,9 @@ async function main(){
  assert.equal(ctx.sortedLogEvents(ordering,'elapsed_seconds',false).map(x=>x.sequence).join(','),'1,3,2,4');
  assert.equal(ctx.logTime('2026-09-08T14:47:04.997Z'),'2026-09-08 23:47:04.997');
  console.log('PASS numeric sorting keeps absent durations last and UTC is displayed as Korean time');
- assert.equal(ctx.logLlmBoundary({function:'finarch.providers.cli.run_process',phase:'START'}),'LLM 실행 시작');
- assert.equal(ctx.logLlmBoundary({function:'finarch.providers.cli.run_process',phase:'END',status:'FAIL'}),'LLM 실행 종료');
- assert.equal(ctx.logLlmBoundary({phase:'ARTIFACT',path:'05-text/A/audit/02-raw-response.json'}),'LLM 원응답 저장');
+ assert.equal(ctx.logLlmBoundary({function:'finarch.providers.cli.run_process',phase:'START'}),'LLM \uc2e4\ud589 \uc2dc\uc791');
+ assert.equal(ctx.logLlmBoundary({function:'finarch.providers.cli.run_process',phase:'END',status:'FAIL'}),'LLM \uc2e4\ud589 \uc885\ub8cc');
+ assert.equal(ctx.logLlmBoundary({phase:'ARTIFACT',path:'05-text/A/audit/02-raw-response.json'}),'LLM \uc6d0\uc751\ub2f5 \uc800\uc7a5');
  assert.equal(ctx.logLlmBoundary({phase:'START',function:'dtt.audit',kind:'llm'}),null);
  assert.equal(ctx.logLlmBoundary({phase:'ARTIFACT',path:'05-text/A/audit/02-raw-response/cli-execution.json'}),null);
  assert.equal(ctx.logProcessor({function:'finarch.providers.cli.run_process',phase:'START',kind:'python'}),'LLM');
@@ -50,11 +50,11 @@ async function main(){
  assert.equal(fetches,1);assert.equal(history.length,1);assert.equal(ctx.logCalls(first).length,0);assert.equal(ctx.logCalls(history[0].run).length,1);
  console.log('PASS inherited POT call is separate from current execution count');
  old.artifacts['replay-source.json']={source_case:'/runs/current/case'};
- await assert.rejects(ctx.loadPotLogHistory(first,async()=>({runs:[old]})),/순환/);
+ await assert.rejects(ctx.loadPotLogHistory(first,async()=>({runs:[old]})),/\uc21c\ud658/);
  first.artifacts['replay-source.json'].source_case='/elsewhere/old/case';
- await assert.rejects(ctx.loadPotLogHistory(first,async()=>{throw Error('must not fetch');}),/같은 문항/);
+ await assert.rejects(ctx.loadPotLogHistory(first,async()=>{throw Error('must not fetch');}),/\uac19\uc740 \ubb38\ud56d/);
  first.artifacts['replay-source.json'].source_case='/runs/old/case';
- await assert.rejects(ctx.loadPotLogHistory(first,async()=>({runs:[]})),/찾지 못/);
+ await assert.rejects(ctx.loadPotLogHistory(first,async()=>({runs:[]})),/\ucc3e\uc9c0 \ubabb/);
  console.log('PASS invalid, cyclic, and missing history links report a limitation');
  const novel={path:'/runs/current/case',artifacts:{'events.jsonl':[
   {sequence:1,stage:'03-graph',step:'D01-compile',role:'new.graph.role',phase:'ARTIFACT',path:'03-graph/new/01-input/cli-start.json'},

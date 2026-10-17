@@ -61,11 +61,8 @@ def build(case_dir, revision='production-v1'):
         index=case/'06-human-review/03-result.json'
         if index.exists():ctx.save(family+'/previous-review-index.json',read(index))
         tmp=index.with_suffix('.tmp');tmp.write_text(json.dumps(reviews,ensure_ascii=False,indent=2)+'\n');tmp.replace(index);ctx.trace.artifact('06-human-review/03-result.json')
-        ctx.save_text(family+'/README.md',f'''# 사람 검토 준비 — {case.name}
+        ctx.save_text(family+'/README.md',f'''♪ People are ready to review ♪ {case.name}
 
-읽는 순서: 원문·Python·그래프 → 유형별 변경 계획 → 16번 최종 본문 → 17번 실제 감사 → review-index.json 및 유형별 검토 묶음.
-상태는 사람 판정 전입니다. 자동 감사 통과와 사람이 승인한 것은 다릅니다. 역산·우회는 보류이며 18번 예비 응답을 판정 근거에 넣지 않았습니다.
-뷰어의 6 사람 판정에서 직접 검토자·이유·승인/수정 요청/제외를 기록합니다. 검토 대상 해시는 제작 산출물에 연결되어 로그 추가만으로 무효화되지 않습니다.
-events.jsonl의 HR01은 이 묶음 생성 기록입니다. 이 README는 공통 템플릿으로 생성했습니다.
+The order of reading: Python graphs → Type change plans → 16The final text 17The status is before the person judges. Automatic audit passing is different from the person approved. 18And the first time I put the preliminary answer to the judgment base, 6 The person\x27s judgment directly records the reviewer, EU authorization/correction request/external. The reviewed list is not invalidated by log addition connected to the production output.1This is the set of records created by this README created by this common template.
 ''')
     return {'case':case.name,'ready':sum(r['status']=='AWAITING_HUMAN' for r in reviews),'total':len(reviews)}

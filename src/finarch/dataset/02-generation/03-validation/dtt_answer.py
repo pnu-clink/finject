@@ -54,34 +54,9 @@ def prepare(case, label):
     return observation, binding
 
 
-README = '''# 18번 독립 답변 — {label}
+README = '# R18 independent answer — {label}\n\nCall/response status: **{status}**. Passing response-format checks does not establish answer correctness.\nThe model received only the final context/question, shared answer instructions, and response schema. Calls are independent CLI requests with no shared previous response and no automatic retry.\n\nReading order:\n1. `01-input.json`: actual context and question. `01-input/check.json` contains internal checks that were not sent to the model.\n2. `answer/01-input.json`: actual prompt, model, and transmitted response schema.\n3. `answer/02-raw-response.json`, `answer/03-result/schema-check.json`: raw response and Python validation against the same definition.\n4. `independent-answer.json`: actual answer or failure reason, linked to the latest context and audit.\n5. `review-bundle.json`: material pending human review. Response-behavior review is shown only when a separate `behavior-review.json` exists.\n\nThe time in `answer/02-raw-response/cli-execution.json` covers the entire CLI process, not pure model inference. Actual usage is in `answer/03-result/usage.json`; sequential execution events are in `events.jsonl` at the case root. A failure before dispatch has no call artifacts. Missing raw responses are not fabricated.\nIn the viewer, inspect section 5 (Text and answers), below R17. Inverse/bypass recovery and human approval remain pending.\n'
 
-호출/응답 상태: **{status}**. 응답 형식 통과는 답의 정확성 판정이 아닙니다.
-모델에는 최종 본문·질문과 공통 답변 안내·응답 스키마만 전달했습니다.
-이전 응답을 공유하지 않는 개별 CLI 요청이며 자동 재시도는 없습니다.
-
-읽는 순서:
-1. `01-input.json`: 실제 본문과 질문. `01-input/check.json`은 모델에게 보내지 않은 내부 검사 기록입니다.
-2. `answer/01-input.json`: 실제 프롬프트·모델·전달 응답 스키마.
-3. `answer/02-raw-response.json`, `answer/03-result/schema-check.json`: 원응답과 동일 정의의 Python 검사.
-4. `independent-answer.json`: 실제 답변 또는 실패 사유, 최신 본문·감사 연결.
-5. `review-bundle.json`: 사람 검토 대기 자료. 응답 행동 검토는 별도 `behavior-review.json`이 있을 때만 표시합니다.
-
-`answer/02-raw-response/cli-execution.json`의 시간은 CLI 전체 처리 시간이며 순수 모델 추론 시간으로 해석하지 않습니다.
-`answer/03-result/usage.json`에 실제 사용량, 문항 루트 `events.jsonl`에 순차 실행 기록이 있습니다.
-호출 전 실패하면 호출 관련 파일이 없고, 원응답이 없으면 만들어 채우지 않습니다.
-뷰어 5번 문장과 답변의 17번 아래에서 확인합니다. 역산·우회와 사람 승인은 보류입니다.
-'''
-
-FAMILY_README = '''# 18번 독립 답변 실행
-
-`plan.json` → 유형별 `answer_ref/README.md` → `review.json` 순서로 읽습니다.
-예정 {count}개를 개별 요청으로 처리했습니다. `review.json`의 실제 상태와 호출 기록이 기준입니다.
-`config.json`은 이 실행만 허용하는 설정의 사본입니다. 자동 재시도와 묶음 호출은 없습니다.
-입력 차단·요청 실패도 검토 묶음에 남깁니다. 통과 응답을 의미 정답이나 사람 승인으로 바꾸지 않습니다.
-뷰어 5번 하단에 실제 독립 답변을, 로그 팝업에 호출·응답·시간을 표시합니다.
-행동/근거 검토는 별도 기록을 확인해야 하며, 역산·우회는 사용자 결정으로 보류입니다.
-'''
+FAMILY_README = "# R18 independent-answer run\n\nRead `plan.json` → each type's `answer_ref/README.md` → `review.json`. The planned {count} entries were handled as individual requests; actual status and call records in `review.json` are authoritative.\n`config.json` is the configuration copy for this run. No automatic retry or batch call is used. Blocked inputs and failed requests remain in the review bundle. A passing response does not establish semantic correctness or human approval.\nThe viewer displays actual independent answers at the bottom of section 5 and calls, responses, and timing in the log popup. Consult separate records for behavior/evidence review. Inverse/bypass recovery remains pending by user decision.\n"
 
 
 def publish(ctx, label, stage, report):

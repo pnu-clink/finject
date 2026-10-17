@@ -1,38 +1,38 @@
-# 계산 그래프 구문별 대표 검토
+# Calculation graph by category representative review
 
-7개는 구문 지원을 확인하기 위한 명시적 예제입니다. 실제 FinanceReasoning 문항의 새 POT·의미 검증·전체 통과 결과가 아닙니다. LLM 호출 0회입니다.
+7items are an explicit example of verifying the support of the discipline. 0calls.
 
-|구문|격리 Python|그래프|대조|
+|What do you mean?|Isolate Python|Graph|The opposite.|
 |---|---:|---:|---|
 {rows}
 
-## 처리 기준과 한계
+## Processing standards and limits
 
-- for/while: 현재 입력의 반복을 노드로 펼칩니다. while의 마지막 종료 조건도 기록합니다.
-- 기본 그래프에는 `1회차 계속 → 2회차 계속 → 3회차 계속 → 4번째 조건에서 종료`처럼 실제 반복 조건을 표시합니다. 이미 bool인 비교 결과에 붙던 이중 `not`은 생성하지 않습니다. 원래 코드의 `not`은 유지합니다.
-- **실선은 값 전달, 보라색 점선은 실행 조건**입니다. 계속 조건은 해당 회차에서 선택된 계산의 시작점으로, 종료 조건은 반복문 이후 처음 실행된 계산으로 연결합니다. while-else가 있으면 그 계산이 먼저 연결됩니다. 뒤에 계산이 없으면 화면용 `실행 종료` 표시로 연결합니다.
-- `graph.json`의 `control_flow.links`는 실제 AST 실행에서 기록한 조건·선택된 계산의 연결입니다. `nodes[].inputs`와 수치 계산용 `edges`에는 추가하지 않습니다. 예제 while의 연결은 1·2·3회차 조건 → 각 회차 6행 `min`, 종료 조건 → 9행 `answer`입니다. 조건 또는 계산을 선택하면 **실행 조건 연결 · 점선**에서 목적지를 확인합니다. if/else는 실제 선택된 분기의 계산 시작점들을 연결하며 미실행 분기는 만들지 않습니다.
-- 내부 조건 일치 비교·결합·최종 경로 검사는 `graph.json`과 재계산에 유지하고 화면의 **검사 상세**에서 확인합니다. 기본 그래프에서 숨겨도 경로 변경 검사는 생략되지 않습니다.
-- 반복·분기 확장 그래프의 같은 자료형·같은 값의 상수는 하나의 노드를 공유합니다. `while` 예제의 정수 `0`은 4행 초기값과 5행 반복 조건이 함께 사용합니다. 사용 위치는 `source_locations`에 모두 보존하며 두 행에서 같은 노드를 선택할 수 있습니다. `0`, `0.0`, `False` 및 출처가 다른 입력 fact는 합치지 않습니다.
-- if/else: 조건·선택 경로를 기록합니다. 다른 입력에서 경로가 달라지면 `GRAPH_CONTROL_PATH_CHANGED`로 재생성을 요구합니다. 전 경로를 표현한 정적 제어흐름도는 아닙니다.
-- 리스트·제너레이터·사전 축약식: 항목과 조건을 펼칩니다. 집합 반복, 컨테이너 변경, 동적 실행은 지원하지 않습니다.
-- sum/min/max/len/range/zip/enumerate/sorted 및 math.factorial/comb: 명시적 연산·반복·순서 조건으로 기록합니다. 순번과 정렬 경로가 바뀌어도 재생성이 필요합니다.
-- 모듈: math의 허용 연산과 statistics.mean만 지원합니다. 원본의 SciPy·NumPy 등은 POT 작성 시 의미가 같은 지원 수식으로 표현하도록 안내합니다. 지원하지 못한 호출을 상수 결과로 바꿔 통과시키지 않습니다.
-- 함수: 순수 함수의 위치·인자·반환 연결과 호출 경로를 펼칩니다. 재귀·부작용·복잡한 인자 계약은 지원하지 않습니다.
-- 실행 상한: 누적 반복/축약 512회, 노드 4,000개, AST 실행 10,000단계, 호출 깊이 16. 상한 초과는 구현 범위 오류이며 원문이 잘못되었다는 판정이 아닙니다.
-- 기존의 일렬 대입식·조건식 그래프는 기존 경로를 유지합니다. 입력 누락 EA 구조 분석은 확장 제어흐름을 역산하지 않고 미지원으로 구분합니다.
+- For/while: Play the repetition of the current input as a node, and record the last termination condition of the while.
+- So the basic graph is `1Keep the car going 2Keep the car going 3Keep the car going 4Ending in the first condition`It's like the actual repetition condition. `not`It's not generating the original code. `not`It keeps the silver.
+- **The string is the value transfer, the purple dot is the run condition**The continuum condition is the starting point of the calculation selected from that iteration, and the end condition connects to the first calculation after the iteration. If there's a while-else, that calculation connects first. `Execution ended` It connects to the sign.
+- `graph.json` `control_flow.links`is the connection of the condition-selected calculation recorded in the actual AST execution. `nodes[].inputs`And for the calculation of numbers. `edges`The connection to the example while is not added to the 1·2·3The conditions of each turn → 6rows `min`, termination conditions 9rows `answer`So if you choose a condition or a calculation, **Run conditions connection**If/else connects the starting points of the actual selected molecule and doesn't create a misspelled molecule.
+- Internal conditions match comparison, merger, and maximum path checks `graph.json`And keep it on the re-calculation and the screen **Exam details**Check in. Even hidden from the basic graph, the path change check is not omitted.
+- The constant of the same data type as the repeat-quotient expansion graph shares a node. `while` The set of the examples `0` 4And the initial value of the row. 5We use the line repeat condition together. `source_locations`You can save all of them and you can choose the same node from both rows. `0`, `0.0`, `False` And the source does not add other input facts.
+- If/else: It records the condition-selection path. `GRAPH_CONTROL_PATH_CHANGED`It requires regeneration, not a static control flow that represents the path.
+- List, generator, history summary: run items and conditions. Set repetition, container change, dynamic execution are not supported.
+- Sum/min/max/len/range/zip/enumerate/sorted and math.factorial/comb: It records as explicit operations, inversions, and sequences.
+- Modules: only supports permissible computation in math and statistics.mean. SciPy and NumPy in the original guide you to express the meaning in the same supported form when writing POT, and don't pass unsupported calls into continuous results.
+- Function: Location of the pure function, human-subjunctive connection and call paths are performed. Repeat, side-effect, overlapping human contracts are not supported.
+- Running disabled: cumulative repeat/shortening 512Round, nod. 4,000items, run the AST. 10,000Step, call depth 16The marginal fraction is an implementation error and not a judgment that the source is wrong.
+- The existing parallel-input-condition graphs maintain the existing path. The input-lack EA structure analysis does not reverse the extended control flow, but distinguishes it as sub-optimal.
 
-## 파일 읽는 순서
+## The order of the files.
 
-1. README: 처리 기준과 숫자 대조.
-2. graph-syntax-samples.json: 공통 뷰어에서 읽는 7종 결과.
-3. 각 종류/program.json → execution.json → graph.json → comparison.json. comparison의 control_links는 기록된 실행 조건 연결 수입니다.
-4. checks.jsonl: 종류별 대조 로그. regression.log가 있으면 관련 로컬 회귀 검사 결과, viewer-check.log가 있으면 화면용 그래프 연결·원본 보존 검사 결과입니다. navigation-check.log는 그래프 확대·이동 검사 결과입니다.
+1. Readme: Processing standards and numerical contrast.
+2. graph-syntax-samples.json: reading from a common viewer 7The species results.
+3. The control_links of each type/program.json → execution.json→graph.json ← comparison.json. comparison are the number of recorded run conditions.
+4. checks.jsonl: If you have a type-by-type contrast log, regression.log, the relevant local return test, if you have a viewer-check.log, it's a screen-graph connection and source preservation test, and navigation-check. log is a graph zoom and activation test.
 
-공통 뷰어에서 이 run을 선택한 뒤 왼쪽의 7개 구문 버튼을 누릅니다. 그래프 노드와 원래 코드 행을 함께 선택할 수 있습니다.
+So, you're going to select this run from the common viewer and then you're gonna go to the left of the left. 7You can click the button on the button, and you can choose the graph node and the original line of code together.
 
-## 운영 결정
+## Operating decision
 
-입력·출력 합계 한도는 500,000토큰입니다. 출력 자체의 기존 모델별 상한은 유지하며, 작은 잔여 합계 한도가 우선합니다. 실제 모델/API 허용 한도를 확장하는 설정은 아닙니다.
-실행 설정 고정 기능은 제외합니다. 모델·프롬프트·스키마·설정을 변경할 때 새 run 번호를 사용합니다. 기존 기록을 덮어쓰지 않습니다.
-통신 오류란 Python과 모델 API 사이의 429·연결 끊김·시간 초과 등을 말합니다. 계산 오류와 구분하며, 이번 작업은 통신 자동 재시도를 추가하지 않았습니다.
+The total input-output limit is 500,000It's a token, maintaining the existing model limit of the output itself, and giving priority to the small residual aggregate limit, not setting that expands the actual model/API limit.
+Excluding the run settings fix function, you use a new run number when changing model, prompt, or schema settings, and you don't overwrite the existing records.
+The communication error is the difference between Python and the model API. 429· Says disconnection, overtime, etc. To distinguish from calculation errors, this task did not add automatic re-interface communication.

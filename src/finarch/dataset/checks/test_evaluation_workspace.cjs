@@ -68,7 +68,7 @@ check('Numpad 1, 2 and 3 select pass, fail and hold; typing and key repeats are 
 });
 check('Physical Q/E and A/D navigate problems and types even with a non-English keyboard layout',()=>{
  const handler=handlers.find(h=>h.event==='keydown');ctx.evaluationJump({case:'test-0001',variant:types[4]});
- const event=code=>({code,key:'ㅁ',target:{closest:()=>null},preventDefault(){this.defaultPrevented=true;},stopImmediatePropagation(){this.stopped=true;}});
+ const event=code=>({code,key:'\u3141',target:{closest:()=>null},preventDefault(){this.defaultPrevented=true;},stopImmediatePropagation(){this.stopped=true;}});
  for(const [code,expectedCase,expectedType] of [['KeyE','test-0002',types[4]],['KeyA','test-0002',types[3]],['KeyQ','test-0001',types[3]],['KeyD','test-0001',types[4]]]){
   const e=event(code);handler.fn(e);assert(e.stopped);assert.equal(ctx.selected,expectedCase);assert.equal(ctx.window.preparationVariant,expectedType);
  }
@@ -80,15 +80,15 @@ check('Every filtered case renders beyond 160, with accurate fixed counts and no
  ctx.rows=batch.cases.map(c=>({id:c.case,sample:{id:c.case}}));ctx.selected='test-0001';ctx.window.preparationVariant=types[0];ctx.evaluationState.mode='case';ctx.evaluationState.search='';ctx.evaluationState.filter='all';saved.clear();
  const list=ctx.el('div');ctx.evaluationRenderCaseList(list);
  assert.equal(list.children.length,220);assert.equal(list.children.at(-1).children[0].textContent,'test-0220');
- assert.equal($('evaluation-list-count').textContent,'목록 220 / 220문항');assert(list.children.every(x=>!x.className.includes('evaluation-list-more')));
+ assert.equal($('evaluation-list-count').textContent,'\ubaa9\ub85d 220 / 220\ubb38\ud56d');assert(list.children.every(x=>!x.className.includes('evaluation-list-more')));
  for(const entry of batch.cases.slice(0,150))for(const variant of types)saved.set(JSON.stringify(['run',entry.case,variant]),{confirmed:true,decision:entry.case==='test-0005'&&variant===types[0]?'REJECTED':'APPROVED'});
  ctx.evaluationState.filter='todo';ctx.evaluationRenderCaseList(list);
- assert.equal(list.children.length,71);assert.equal($('evaluation-list-count').textContent,'목록 71 / 220문항 · 필터 일치 70문항');
+ assert.equal(list.children.length,71);assert.equal($('evaluation-list-count').textContent,'\ubaa9\ub85d 71 / 220\ubb38\ud56d · \ud544\ud130 \uc77c\uce58 70\ubb38\ud56d');
  ctx.evaluationState.filter='APPROVED';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,150);
- ctx.evaluationState.filter='REJECTED';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,2);assert.equal($('evaluation-list-count').textContent,'목록 2 / 220문항 · 필터 일치 1문항');
+ ctx.evaluationState.filter='REJECTED';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,2);assert.equal($('evaluation-list-count').textContent,'\ubaa9\ub85d 2 / 220\ubb38\ud56d · \ud544\ud130 \uc77c\uce58 1\ubb38\ud56d');
  ctx.evaluationState.mode='type';ctx.evaluationState.filter='APPROVED';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,149);
- ctx.evaluationState.search='test-0220';ctx.evaluationState.filter='todo';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,1);assert.equal($('evaluation-list-count').textContent,'목록 1 / 220문항');
- ctx.evaluationState.search='test-9999';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,0);assert.equal($('evaluation-list-count').textContent,'목록 0 / 220문항');
+ ctx.evaluationState.search='test-0220';ctx.evaluationState.filter='todo';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,1);assert.equal($('evaluation-list-count').textContent,'\ubaa9\ub85d 1 / 220\ubb38\ud56d');
+ ctx.evaluationState.search='test-9999';ctx.evaluationRenderCaseList(list);assert.equal(list.children.length,0);assert.equal($('evaluation-list-count').textContent,'\ubaa9\ub85d 0 / 220\ubb38\ud56d');
 });
 check('Q/E and arrow navigation share status and search filtering, including an excluded current case',()=>{
  saved.clear();ctx.evaluationState.mode='case';ctx.evaluationState.filter='PENDING';ctx.evaluationState.search='';
@@ -111,11 +111,11 @@ check('v and Shift+V jump to confirmed hold/reject only, preserve filters, and i
  ctx.evaluationJump({case:'test-0001',variant:types[0]});handler.fn(event());assert.equal(ctx.selected,'test-0003');assert.equal(ctx.window.preparationVariant,types[2]);
  handler.fn(event());assert.equal(ctx.selected,'test-0005');assert.equal(ctx.window.preparationVariant,types[4]);
  handler.fn(event(true));assert.equal(ctx.selected,'test-0003');
- ctx.evaluationState.filter='PENDING';handler.fn(event());assert.equal(ctx.selected,'test-0003');assert.match(ctx.evaluationState.status.textContent,/다음/);
+ ctx.evaluationState.filter='PENDING';handler.fn(event());assert.equal(ctx.selected,'test-0003');assert.match(ctx.evaluationState.status.textContent,/\ub2e4\uc74c/);
  ctx.evaluationState.filter='all';ctx.evaluationState.search='test-0003';handler.fn(event());assert.equal(ctx.selected,'test-0003');
  const typing=event();typing.target.closest=()=>({});handler.fn(typing);assert(!typing.stopped);
- ctx.evaluationState.search='';handler.fn({...event(),key:'ㅍ'});assert.equal(ctx.selected,'test-0005');
- handler.fn({...event(true),key:'ㅍ'});assert.equal(ctx.selected,'test-0003');
+ ctx.evaluationState.search='';handler.fn({...event(),key:'\u314d'});assert.equal(ctx.selected,'test-0005');
+ handler.fn({...event(true),key:'\u314d'});assert.equal(ctx.selected,'test-0003');
  handler.fn(event());assert.equal(ctx.selected,'test-0005');
  handler.fn({...event(),key:'V'});assert.equal(ctx.selected,'test-0003');
 });

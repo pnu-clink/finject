@@ -1,0 +1,38 @@
+[
+  {
+    "function_id": "article-1995",
+    "article_title": "Unadjusted Basis",
+    "function": "def calculate_unadjusted_basis(cash_payment: float, mortgage: float, property_taxes: float, closing_costs: float) -> float:\n    \"\"\"\n    Calculate the unadjusted basis for an asset purchase.\n\n    This function computes the unadjusted basis by summing the cash payment,\n    assumed liabilities, specific property-associated taxes, and closing costs\n    related to the acquisition of an asset.\n\n    Args:\n        cash_payment (float): The cash amount paid for the asset.\n        mortgage (float): The value of any mortgage or liability assumed.\n        property_taxes (float): Property taxes paid as part of the purchase transaction.\n        closing_costs (float): Total closing costs and fees incurred during the purchase.\n\n    Returns:\n        unadjusted_basis (float): The unadjusted basis of the asset.\n\n    Notes:\n        - Applicability: This function can be used in real estate or asset purchases\n          to determine the initial cost basis before any adjustments.\n        - Constraints: Ensure all values are non-negative and in the appropriate currency.\n        - Considerations: This function does not account for subsequent adjustments\n          such as improvements or depreciation.\n    \"\"\"\n    unadjusted_basis = cash_payment + mortgage + property_taxes + closing_costs\n    return unadjusted_basis",
+    "statistics": {
+      "number_statistics": {
+        "args_numbers": 4,
+        "question_numbers": 0,
+        "context_numbers": 4,
+        "total_numbers": 4
+      },
+      "operator_statistics": {
+        "operators": {
+          "+": 3,
+          "-": 0,
+          "*": 0,
+          "/": 0,
+          "%": 0,
+          "**": 0
+        },
+        "total_operators": 3
+      },
+      "code_statistics": {
+        "lines": 2,
+        "parentheses": 0
+      }
+    },
+    "difficulty": 1.791759469228055,
+    "context": "Maria is buying a residential property and needs to calculate the unadjusted basis of her new asset. She has made a cash payment of 120,000. In addition to this, she is assuming a mortgage of 250,000 to complete the purchase. As part of the transaction, Maria pays property taxes amounting to 7,500, and she incurs closing costs totaling 3,500.",
+    "question": "What is the unadjusted basis for Maria's residential property purchase? Answer in dollars to the nearest integer.",
+    "python_solution": "def solution():\n    # Define the financial variables with their respective values\n    cash_payment = 120000\n    mortgage = 250000\n    property_taxes = 7500\n    closing_costs = 3500\n\n    # Calculate the unadjusted basis by summing all the components\n    unadjusted_basis = cash_payment + mortgage + property_taxes + closing_costs\n\n    # Return the unadjusted basis rounded to the nearest integer\n    return round(unadjusted_basis)",
+    "ground_truth": 381000,
+    "source": "FinanceReasoning-test-1071",
+    "question_id": "test-470",
+    "level": "easy"
+  }
+]

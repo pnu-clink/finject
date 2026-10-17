@@ -22,7 +22,7 @@ class ValuePositionChecks(unittest.TestCase):
         self.assertEqual(payload, original)
 
     def test_unicode_positions_and_sentence_at_document_end(self):
-        payload = self.payload('은행 🙂. A is 80,000.')
+        payload = self.payload('\uc740\ud589 🙂. A is 80,000.')
         for p in compose_pair(payload, 'A is 90,000.', 'pair-2'):
             self.assertEqual(p['preview_context'][slice(*p['perturb_sentence_span'])], 'A is 90,000.')
             self.assertEqual(p['preview_context'][slice(*p['target_sentence']['preview_span'])], 'A is 80,000.')

@@ -1,20 +1,20 @@
-# FinanceReasoning 제작 실패 원인과 개선안
+# FinanceReasoning causes and improvements to manufacturing failure
 
-분석 기준: `{source_run}` · 저장된 최종 결과와 당시 요청·응답을 읽은 분석입니다. 모델 호출과 데이터 제작 재실행은 없습니다.
+The analytical criteria: `{source_run}` · The final result is stored and the analysis read the request-response at the time. There are no model calls and data creation re-enactments.
 
-읽는 순서: **공통 뷰어의 Preparation→Generation 문항 흐름 → 758문항의 유형별 결과 → 구간별 표와 발생 type → 접힌 세부내역 → 원인별 목록과 문항별 원문·근거**입니다. 1,664 실패와 3 미평가는 문항 수가 아니라 758문항×7유형에서 나온 결과 수입니다. 표의 P02–P05, G01–G03은 최종 중단 위치이며, 수리할 파일이나 원문의 오류가 확정된 위치를 뜻하지 않습니다. Generation type 표시명은 실행 순서대로 `IC-v1`, `IC-v2`, `IC-s1`, `IC-s2`, `IC-r`, `EA-v1`, `EA-v2`입니다. 저장된 제작 type 코드는 그대로 둡니다.
+In order of reading: **Common Viewer Preparation→Generation case flow → 758Type-specific results of cases → Type-specials and occurrence types → Folded details → Cause-specific lists and cases**. 1,664 Failure. 3 Misrepresentation is not a number of cases. 758This is a case.7So this is the result of the type.2–P05, G01–G03It's the final stop position, and it doesn't mean the correct location of the file or source error. `IC-v1`, `IC-v2`, `IC-s1`, `IC-s2`, `IC-r`, `EA-v1`, `EA-v2`The saved production type code is left intact.
 
-- `REPORT.md`: 문항 수와 문항×type 결과 수의 관계, 실행 순서의 구간별 표, Generation 행의 발생 type별 건수와 원인 설명, 원본 보완 여부, 처리 방식 개선안, 대표 사례. 공통 뷰어에서 표 아래의 `Preparation 세부내역`, `Generation 세부내역`, `종합 세부내역`을 펼쳐 읽습니다.
-- `failure-review.json`: Preparation 212문항과 Generation 실패·미평가 1,667유형의 분류 및 근거 연결. Generation 대상 원문은 758개입니다.
-- `manifest.json`: 실제 읽은 근거 파일의 경로와 SHA-256. 원기록은 수정하지 않습니다.
-- `analysis-log.jsonl`: 집계·분류·산출 기록.
-- `presentation-validation.json`: 단계별 문항·type 결과의 합계, 구간별 표의 순서·합계, 접기 영역의 화면 확인 기록.
-- `viewer-validation.json`: 실제 화면의 분류·검색·근거 열람과 근거 파일 해시 확인 결과.
-- `validation.json`: 수량, 중복, 분류 누락, 근거 파일 확인 결과.
-- `summary.json`: 공통 뷰어의 실행 선택 목록에 표시할 요약.
+- `REPORT.md`: number of phrases and the result number of phases × types, intersectional tables of execution order, generational rows of occurrence type-specific dryness and causation explanations, original supplementation or otherwise, processing method improvements, representative cases. In common viewer, the table below `Preparation detail`, `Generation sub-station`, `Comprehensive detail station`I read it out.
+- `failure-review.json`: Preparation 212The phrase and Generation failure: Criticism 1,667Type classification and base linkage. 758items.
+- `manifest.json`The path of the actual read database file and the SHA-256The original file is not edited.
+- `analysis-log.jsonl`: statistics, distribution and release records.
+- `presentation-validation.json`: the sum of the phrases by step; type results; the sequence of the regionally-defined tables; the sum of their sequences; the screen-check record of the folding region.
+- `viewer-validation.json`: real screen sorting, searching, search openings and database file hashing results.
+- `validation.json`: quantity, overlay, classification gaps, verification of the base file.
+- `summary.json`: Summary to be displayed in the list of run options of the common viewer.
 
-뷰어: [원인별 보기](http://127.0.0.1:8893/?run={report_run}). 화면은 `viewer/dataset/index.html` 하나를 사용하며 선택한 실행의 실제 JSON을 읽습니다.
+[Please see identity](http://127.0.0.1:8893/?run={report_run})The screen. `viewer/dataset/index.html` You can use one to read the actual JSON of the execution you've chosen.
 
-분류 산출 스크립트: `src/finarch/dataset/90-operations/analysis/failure_review.py`. 이 보고서의 type 표시와 건수 표시는 저장된 분류·원기록을 다시 생성하지 않습니다.
+Classification output script: `src/finarch/dataset/90-operations/analysis/failure_review.py`The type and the dry mark in this report do not recreate the stored classification and source records.
 
-이 README는 `src/finarch/dataset/90-operations/analysis/failure-review-readme-template.md`에서 생성됩니다. 자동 검사 통과를 사람이 확인한 의미 정답으로 간주하지 않습니다. 개선안은 제안이며 수정·재실행으로 입증된 효과가 아닙니다.
+This README is a `src/finarch/dataset/90-operations/analysis/failure-review-readme-template.md`Automatic testing is not considered a validated meaning by the person. Improvements are proposed and not proven by correction and re-examination.

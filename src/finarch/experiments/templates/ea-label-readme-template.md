@@ -1,16 +1,16 @@
-# EA 표기 변경과 실행 당시 원본
+# EA tag changes and execution of the original
 
-이 작업은 프로젝트의 EA 번호를 첫째 EA_01, 둘째 EA_02로 정정하는 별도 사용자 지시를 반영한 것입니다. 호출 폴더 정리보다 먼저 실행 메타데이터를 정리했습니다.
+This task is to get the EA number of the project first EA_01Second, EA_02It reflects the user instruction to set the star to the call folder before the run metadata is sorted.
 
-이전 EA_02 → 현재 EA_01, 이전 EA_03 → 현재 EA_02입니다. 숫자를 연속해서 두 번 내리지 않고 변경 전 원본에 한 번만 적용했습니다. 모델별 요청의 변경 필드는 `variant`뿐이며 trial_id, 실제 Q/C·프롬프트·스키마는 유지했습니다. 원응답을 치환하거나 다시 호출하지 않았습니다.
+Previously on EA_02 → Currently EA_01Previously on EA_03 → Currently EA_02So, we've done this one time, and we've only applied it to the original before the change, and we haven't done that twice. `variant`And the trial_id, the actual Q/C format scheme, was maintained.
 
-## 읽는 순서
+## Reading order
 
-1. [검증 결과](verification.json): 변경 파일과 이동 전후 SHA-256. 현재 manifest에는 검증한 메타데이터의 새 해시만 반영했습니다.
-2. [이전 manifest](manifest-before.json): 실행 당시 고정 파일의 해시.
-3. [변경 전 원본](originals.zip): 이전 manifest와 대조한 원본 메타데이터 및 당시 요청의 정확한 바이트.
-4. [호출 폴더 이동 검증](../layout/README.md): EA 번호 정리 이후 저장 경로만 바꾼 별도 작업입니다.
+1. [Exam results](verification.json)SHA-256The current manifest reflects only the newest version of verified metadata.
+2. [Previous manifest](manifest-before.json): The hash of the file fixed at run time.
+3. [Pre-modified copy](originals.zip): Original metadata and exact bytes of the request at the time as opposed to the previous manifest.
+4. [Exit folder move verification](../layout/README.md)EA: The task of changing the path of the save only after the number is sorted.
 
-현재 읽기용 호출 JSON과 집계는 정정된 EA 번호를 사용합니다. 실행 당시 메타데이터는 위 ZIP에 보존합니다. 제공자에 전달한 입력과 모델 원응답의 내용은 같습니다.
+Currently, JSON and statistics for read calls use a specified EA number. The metadata is stored in the ZIP above at run time. The input to the provider is the same as the raw response model.
 
-이 문서는 `src/finarch/experiments/templates/ea-label-readme-template.md`에서 생성했습니다.
+This document is `src/finarch/experiments/templates/ea-label-readme-template.md`It's generated from.

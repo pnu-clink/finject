@@ -7,7 +7,7 @@ from finarch.dataset.shared.calculation.number_normalization import prepare_nume
 
 
 def render_standalone(program, normalization=None):
-    # [PX01] docs/02-architecture.md#PX01 — 필요한 데이터·함수·임포트를 포함한 독립 계산용 코드를 구성한다.
+    # [PX01] docs/02-architecture.md#PX01 It composes independent computational code, including data, functions, and inputs.
     prepared = copy.deepcopy(program)
     if normalization is not None:
         if normalization.get('status') != 'PASS':

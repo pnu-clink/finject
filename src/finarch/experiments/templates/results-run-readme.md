@@ -1,18 +1,18 @@
-# {run} — Evaluation 응답 재사용·별도 Analysis
+# {run} Evaluation response reuse and differentiation Analysis
 
-Evaluation 출처는 **{source}**입니다. 입력·고정 요청·원응답·형식 검사 파일을 바이트 동일하게 보관했습니다. 새 대상 모델 호출은 **0회**, 독립된 반복 실험이 아닙니다. 현재 상태: **{status}**, 계획 응답 **{planned}개**.
+The evaluation source is **{source}**The input, verification request, raw response, format validation file was kept the same byte. **0times**It's not a standalone repeat experiment. **{status}**- Plan response. **{planned}items**.
 
-|읽는 순서|자료|역할|
+|Reading order|The data.|Role|
 |---|---|---|
-|1|[config.json](config.json), [manifest.json](manifest.json)|재사용 출처·해시와 선택한 분석 모델·effort·태그|
-|2|[00_input](00_input/README.md)|public Q/C·precision과 private 평가 자료|
-|3|[Evaluation](01_evaluation/README.md)|원출처의 요청·풀이 원기록·형식 결과. 내부 날짜와 run 표기는 원출처 유지|
-|4|[Analysis](02_analysis/README.md)|결과 취합 → 관계 비교 → 연구 해석|
-|5|[최종 연구 해석](02_analysis/03_research/findings.md)|관찰 수치·실제 응답·반례·한계·개선 토의|
-|6|[events.jsonl](events.jsonl), [state.json](state.json)|이번 분석의 진행·보존 확인 이력|
+|1|[config.json](config.json), [manifest.json](manifest.json)|Reuse source, hash and selected analytical model, effort tag|
+|2|[00_input](00_input/README.md)|Public Q/C accuracy and private assessment data|
+|3|[Evaluation](01_evaluation/README.md)|Request of source: Folded source: Formatting results.|
+|4|[Analysis](02_analysis/README.md)|The results of the study are summarized → Relation comparison → Study interpretation|
+|5|[The latest research interpretation](02_analysis/03_research/findings.md)|Observational numbers, actual responses, comparisons, limits, improvements and feedback|
+|6|[events.jsonl](events.jsonl), [state.json](state.json)|The progress and persistence of this analysis|
 
-[실험 뷰어](http://127.0.0.1:8894/?run={run}&tab=analysis)에서 같은 자료를 읽습니다. 문항 답변 가능성 재판정과 과거 분석 LLM 점수는 이번 분석의 선행 조건으로 사용하지 않습니다. 사용자 결정 전에는 새 실험이나 논문 결론을 자동 변경하지 않습니다.
+[Experimental Viewer](http://127.0.0.1:8894/?run={run}&tab=analysis)I read the same material in the article. The answering probability trial and past analysis LLM scores are not used as a prerequisite for this analysis.
 
-## 사용법과 시작 로그
+## Use and start log
 
-`PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline analysis --run reports/experiments-run/{run}`으로 A01 → A02 → A03을 실행합니다. 단계 시작 전 `TASK_START`에서 tag·실제 모델·effort·작업·Python/LLM 구분·요청 수·동시 한도를 출력합니다. `pipeline.log`와 `02_analysis/execution.log`에서 확인합니다. Evaluation은 완료된 응답의 재사용이며 새 풀이 요청은 없습니다.
+`PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline analysis --run reports/experiments-run/{run}`To A01 → A02 → A03Run the step before the start of the `TASK_START`In this, we're going to print the tag: actual model, effort, operation, Python/LLM separation, request, and synchronous limit. `pipeline.log`and `02_analysis/execution.log`Evaluation is a reuse of completed responses and no new grass requests.

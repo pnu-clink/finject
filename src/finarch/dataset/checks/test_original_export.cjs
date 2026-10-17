@@ -39,7 +39,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
  context.fetch=async()=>({ok:false,status:400,headers:{get:()=> 'application/json'},text:async()=> '{"error":"UNKNOWN_RUN"}'});
  await context.showOriginalExport();assert.equal(exportMessages.at(-1).textContent,'UNKNOWN_RUN');
  context.fetch=async()=>({ok:true,status:200,headers:{get:()=> 'text/html; charset=utf-8'},text:async()=> '<head><script>window.FINARCH_ORIGINAL=true;</script></head>'});
- await context.showOriginalExport();assert.equal(downloads[0][0],'run-원본.html');
+ await context.showOriginalExport();assert.equal(downloads[0][0],'run-\uc6d0\ubcf8.html');
  console.log('PASS: offline gzip cases, two-case cache, one displayed detail, stale response guard, exact Python');
  console.log('PASS: HTML 403 / JSON error handling and original HTML download');
 })().catch(error=>{console.error(error);process.exitCode=1;});

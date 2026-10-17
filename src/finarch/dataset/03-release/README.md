@@ -1,18 +1,18 @@
-# 결과 선정·전달
+# Selection and transmission of results
 
-[문서의 단계·요구·실행 흐름](../../../../docs/01-dataset/03-release/README.md) · [전체 소스 구조](../../../../docs/01-dataset/90-operations/05-source-layout.md)
+[Step of the letter: yoga; action flow](../../../../docs/01-dataset/03-release/README.md) · [A whole source structure](../../../../docs/01-dataset/90-operations/05-source-layout.md)
 
-이 폴더는 위 문서 단계의 실행 코드를 소유합니다. 결과의 물리 경로는 기존 run 계약을 따릅니다.
+This folder owns the execution code for the documented stage. Output paths follow the existing run contract.
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[export_run_results.py](export_run_results.py)|현재 제작 결과를 유형별 JSON으로 취합합니다. `prepare_copy()`/`--prepared-output`은 이미 취합된 결과를 새 `data/prepared` 폴더에 해시 확인 후 복사하고 전달 manifest·로그·템플릿 README를 작성합니다. 원천 run은 보존합니다.|
-|[concat_results.py](concat_results.py)|두 취합본의 해시·ID·Q/A를 확인하고 지정 출처 전체를 8파일에서 교체합니다. 전체 기록과 7유형 모두 PASS인 선정본·원천 run 지도·로그를 새 폴더에 저장하며 LLM을 호출하지 않습니다.|
-|[export_policy.py](export_policy.py)|현재 차수의 사람 Reject·Exclude를 제외합니다. 원본은 전체, Generation은 해당 유형만 제외하며 자동 FAIL·Pending과 구별합니다.|
-|[publication/consolidate.py](publication/consolidate.py)|전체 Generation 종료 후 data/generated에 실제 원문·7유형의 단일 JSONL·manifest·로그·README를 생성합니다. 실패·Reject 기록을 보존하고 기존 7유형 선정 조건을 표시합니다.|
-|[publication/schema.py](publication/schema.py)|원문·7유형 구조와 내용 해시, 평가자 rating의 ID·내용 해시 연결을 검증합니다.|
-|[edit_provenance.py](edit_provenance.py)|원본→VALUE→SOURCE 편집 복원과 현재 Q/C 해시를 확인합니다.|
-|[external_knowledge.py](external_knowledge.py)|검증 통과·실제 사용·필요 조건이 맞는 외부정보 유형만 기록합니다.|
+|[export_run_results.py](export_run_results.py)|Now we're going to combine the output into JSON by type. `prepare_copy()`/`--prepared-output`The results already collected are new. `data/prepared` After checking the hash in the folder, you copy and send the manifest log template README. The source run is saved.|
+|[concat_results.py](concat_results.py)|Check the hash ID of the two copies and then you can get the entire source. 8And then you replace it with the file. 7All types are PASS, select the source run map logs in the new folder and do not call the LLM.|
+|[export_policy.py](export_policy.py)|The current variable excludes Reject-Exclude, the original excludes the entire, Generation excludes the type, and distinguishes it from automatic FAIL-Pending.|
+|[publication/consolidate.py](publication/consolidate.py)|After the end of the entire generation, the actual source code in the data/generated;7It generates a single type of JSONL manifest log readme. 7It shows the type selection conditions.|
+|[publication/schema.py](publication/schema.py)|The original.7It verifies the type structure and content hash, the ID-input hash connection of the ratings.|
+|[edit_provenance.py](edit_provenance.py)|Source→VALUE→SOURCE Edit the file and check the current Q/C chart.|
+|[external_knowledge.py](external_knowledge.py)|It only records the type of external information that meets the verification requirements, the actual use and requirements.|
 |[original_baseline.py](original_baseline.py)|Prepare original Q/C only; never execute a baseline or import its runner.|
 |[response_screen.py](response_screen.py)|Explicit, immutable-input first-repeat screening. No provider calls.|
 |[review_first_repeat.py](review_first_repeat.py)|Explicit v2 entry point. Import never reads or writes legacy review artifacts.|

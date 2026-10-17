@@ -101,7 +101,7 @@ def launch(bundle, phase):
                'planned': len(selected), 'completed': 0, 'passed': 0, 'failed': 0,
                'not_evaluated': len(selected), 'targets': selected, 'results': []}
         write(directory/'job.json', job)
-        (directory/'README.md').write_text('# 실패건 재검토\n\njob.json: 버튼 클릭 시 고정한 대상과 현재 결과. queue.json: 동시 처리 현황. scheduler.log: 기존 스케줄러 실행 로그. 이전 단계 산출물은 각 문항의 stage-history에 보존됩니다. 대상 수는 문항 또는 문항×유형이며 전체 run 분모를 바꾸지 않습니다.\n')
+        (directory/'README.md').write_text('♪ Failure to review\n\njob.json: Fixed object and current result at the click of the button. queue.json. Simultaneous processing status. scheduler.log: existing scheduler run log. The output of the previous step is stored in the stage-history of each case. The object number is the case or case x type and does not change the entire run denominator.\n')
         project = (Path(__file__).resolve().parent / '../../../..').resolve()
         python = project/'.venv/bin/python'
         module = f'finarch.dataset.{"01-preparation" if phase == "preparation" else "02-generation"}.{"prepare" if phase == "preparation" else "generate"}_schedule'

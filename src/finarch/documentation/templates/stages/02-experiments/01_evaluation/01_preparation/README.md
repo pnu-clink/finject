@@ -1,82 +1,82 @@
-# E01 — 실험 대상·조건 준비
+# E01 Experimental subject: condition prepared
 
-[상위: Evaluation](../README.md) · [이전: Input](../../00_input/README.md) · [다음: E02 요청](../02_request/README.md)
+[Top of the list: Evaluation](../README.md) · [Previous: Input](../../00_input/README.md) · [Next: E0]2 Request](../02_request/README.md)
 
-## 사용법
+## Usage
 
-다음 명령은 프로젝트 루트에서 실행합니다. `RUN_PATH`는 `prepare`가 출력한 실험 폴더입니다. 이미 생성한 실험을 이어갈 때는 같은 경로를 사용합니다.
+The next command runs from the project root. `RUN_PATH` `prepare`It's an experimental folder that G.O.A. has created, and it uses the same path as the experiment that he's already created.
 
 ```sh
 PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline config --config config/experiments/config.toml
 PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline prepare --config config/experiments/config.toml
 ```
 
-`config`는 모델·effort·입력 경로를 읽어 출력합니다. `prepare`는 00 Input 선정, E01 설정 동결, E02 prompt/schema와 요청 작성까지 함께 수행하고 새 run 경로를 출력합니다. 출력 경로를 다음 실행에 전달하십시오. 이 단계는 모델 호출 0건입니다.
+`config`And then the model reads the input path, the input path and the output path. `prepare` 00 Select the input, E01 Set the equation, E02 Run the new run path and run the output path to the next run. This step calls the model 0entries.
 
-`config.json` → `00_input/selection.json` → `01_evaluation/02_request/plan.json` 순으로 대상·조건·요청 수·비용 추정을 확인합니다. 이후 프로젝트 TOML을 바꿔도 준비된 run의 Evaluation 설정은 바뀌지 않습니다.
+`config.json` → `00_input/selection.json` → `01_evaluation/02_request/plan.json` I'll check the subject, condition, request, and cost estimates in order, and then change the project TOML, and the Evaluation settings of the run that's ready won't change.
 
-사용자가 원문 100개와 각 7변형을 요청하면 선정 규칙을 충족하는 원문 ID와 연결된 변형을 고정합니다. **public/private는 공개 배포 여부가 아니라 풀이 모델에게 보여 줄 정보와 로컬 비교 정보를 나눈 것**입니다.
+The user is the original 100and each 7If you ask for a variation, you fix the variation that's connected to the elemental ID that meets the selection rules. **Public/private is not a public distribution, but sharing information that the grass will show the model, and comparing it locally.**.
 
-풀이 LLM에 전달할 문제 데이터는 public의 **질문(Q)·본문(C)·precision**입니다. 문항 ID·원문과 변형의 연결·실험 조건은 E02에서 만드는 **E02의 모델별 `manifest.jsonl`로 통합**합니다. 새 실행에 별도 `input-selection.json`을 만들지 않습니다. 선정 경위는 기존 `events.jsonl`에 남깁니다.
+The problem is that the grass will be transferred to the LLM data from the public **Question: Q. The text is precise.**The connection and experimental conditions for the expression ID and the variation are E02generated in **E02The model `manifest.jsonl`Integrated into**And I'm not going to start running this new thing. `input-selection.json`is not created. Selection provenance follows the existing `events.jsonl`So let's just leave it there.
 
-## 세부 스텝과 실제 파일
+## Detailed steps and actual files.
 
-|스텝|호출 파일·함수|입력 → 해야 할 일 → 출력|
+|Step by step|Call file-function|What to do → input → output|
 |---|---|---|
-|E01.01 · select_cases|[dataset.py](../../../../src/finarch/experiments/00-input/dataset.py) `select(settings)`|00 후보·사용자 설정 → 제외 ID·거절 상태·Preparation PASS·변형 조건 확인 → 선정/제외 기록|
-|E01.02 · split_solver_reference|같은 `select()` 내부, `public_input(row, precision)`|선정 행 → Q/C·precision을 완성한 public과 평가용 정답·제작 근거 분리 → public/private 행|
-|E01.03 · record_conditions|[prepare.py](../../../../src/finarch/experiments/01-evaluation/01-preparation/prepare.py) `prepare(config_path)`|선정 행·모델/추론/출력 설정 → run 할당·입력 저장·선정 로그 기록 → config·00_input·events|
+|E01.01 · select_cases|[dataset.py](../../../../src/finarch/experiments/00-input/dataset.py) `select(settings)`|00 Candidate/user settings → excluded ID; cancellation status; Preparation PASS; changeable conditions verified → selected/excluded record|
+|E01.02 · split_solver_reference|The same. `select()` internal, `public_input(row, precision)`|Selection rows → Q/C·precision completed public and evaluation answers; production basis separation → public/private rows|
+|E01.03 · record_conditions|[prepare.py](../../../../src/finarch/experiments/01-evaluation/01-preparation/prepare.py) `prepare(config_path)`|Select row, model, comment, output setting → run allocated; input stored; log recording → config;00_input·events|
 
-[settings.py](../../../../src/finarch/experiments/90-operations/settings.py) `load()`가 `evaluation.schedule/run`과 `analysis.schedule/run`을 읽고 기존 `codex-profiles.toml`의 선택 프로필을 해석합니다. 모델·추론·출력 상한을 run의 config에 고정한 뒤 `pipeline.prepare()`가 사용합니다. 준비된 run을 다시 열 때는 전역 프로필을 다시 적용하지 않습니다.
+[settings.py](../../../../src/finarch/experiments/90-operations/settings.py) `load()` `evaluation.schedule/run`and `analysis.schedule/run`Read the existing `codex-profiles.toml`Interpret the selection profile of the model, the reference output limit, and then set the configuration of the run to the `pipeline.prepare()`When you reopen the ready run, you don't reapply the entire profile.
 
-현재 `select()`는 원문 순서에서 조건을 충족한 앞쪽 `count`개를 고릅니다. 무작위·난이도 균형 추출로 설명하지 않습니다. 선정 순서·규칙·제외 이유·출처 해시는 `events.jsonl`의 `INPUT_SELECTION`에 남기며, 대상 모델이 못 풀었다는 이유로 제외하지 않습니다.
+Current `select()`The front of the order in which the condition is met `count`And I'm going to pick a items. `events.jsonl` `INPUT_SELECTION`It's not excluded because the target model didn't solve it.
 
 ```mermaid
 flowchart LR
  subgraph D["01-input/dataset.py"]
-  S["E01.01 · select"] --> F{"요건과 기록 충족?"}
-  F -->|예| P["E01.02 · public/private 구성"]
-  F -->|아니오| X["제외 사유 보존"]
+  S["E01.01 · select"] --> F{"Meet the requirements and records?"}
+  F -->|Yes| P["E01.02 · Public/private configuration"]
+  F -->|No, you can't.| X["Except for private storage."]
  end
  subgraph C["90-operations/settings.py · shared/providers/profiles.py"]
-  Q["schedule/run + 모델 프로필"] --> C1["모델·추론·출력 한도 해석"]
+  Q["schedule/run + model profile"] --> C1["Model, the output, the output and the interpretation"]
  end
  subgraph R["01-evaluation/pipeline.py"]
   C1 --> S
-  P --> W["E01.03 · run 할당과 입력 저장"] --> N["E02 · 같은 prepare에서 계속"]
+  P --> W["E01.03 · Run allocation and input storage"] --> N["E02 · Continue on the same prepare"]
  end
  classDef file fill:#eceff1,stroke:#607d8b;
- O["config · public/private · events의 INPUT_SELECTION"]:::file
+ O["INPUT_SELECTION of public/private events"]:::file
  W --> O
 ```
 
-회색은 파일, 나머지는 로컬 처리입니다. LLM 호출이 없습니다. 후보 부족·해시 불일치는 준비 실패이며 임의로 조건을 완화하지 않습니다.
+The gray is the file, the rest is the local processing. There are no LLM calls. Candidate lack and discrepancy failures and willfully do not mitigate conditions.
 
-## 실제 run의 산출물
+## The output of the actual run
 
 ```text
-reports/experiments-run/<실험ID>/
-├── config.json                   모델·추론·출력 한도·대상 요건
+The first is the "experimental ID".
+── config.json model promotion output expected
 ├── 00_input/
 │   ├── public.jsonl              item_id, question, context, answer_format
-│   └── private.jsonl             참조 정답·자릿수·유형·제작 근거
-└── events.jsonl                  INPUT_SELECTION: 선정 순서·규칙·제외 사유·출처 확인
+│ ── private.jsonl See correct answer, numeric, model, product basis
+── events.jsonl INPUT_SELECTION: Selection order, rules, private and foreign sources
 ```
 
-새 계약의 실제 데이터 예시: [public](../../../../reports/run/20260927-experiment-documentation/01-input-example/public.jsonl), [private](../../../../reports/run/20260927-experiment-documentation/01-input-example/private.jsonl), [선정 로그](../../../../reports/run/20260927-experiment-documentation/01-input-example/events.jsonl), [Luna 요청 manifest](../../../../reports/run/20260927-experiment-documentation/01-input-example/luna-api/01-requests/manifest.jsonl). 모델 호출 없이 저장된 dataset에서 준비한 확인 자료입니다.
+The actual data from the new contract is:](../../../../reports/run/20260927-experiment-documentation/01-input-example/public.jsonl), [private](../../../../reports/run/20260927-experiment-documentation/01-input-example/private.jsonl)[Log of the Charity](../../../../reports/run/20260927-experiment-documentation/01-input-example/events.jsonl)[Luna requested manifest,](../../../../reports/run/20260927-experiment-documentation/01-input-example/luna-api/01-requests/manifest.jsonl)It's a validation file that's stored in a dataset without a model call.
 
-|자료|실제 필드·역할|풀이 LLM 전달|
+|The data.|The real field.|Grass to deliver LLM|
 |---|---|---|
-|public 행|`item_id`, `question`, `context`, `answer_format.decimal_places`|E02에서 item_id만 제외한 완성 입력을 사용|
-|private 원본|`item_id`, `case`, `experiment`, `variant`, `reference`, `answer_metadata`, `source`, `human_decision`|어느 필드도 전달하지 않음. 응답을 받은 뒤 평가에 사용|
-|private 변형|위 참조 + 원본 연결·대체 답·patches·의존 관계·출처 해시 등|어느 필드도 전달하지 않음. 응답을 받은 뒤 평가에 사용|
-|precision 출처|dataset 원자료의 `input.reference_precision`|E01에서 `public.answer_format.decimal_places`로 저장. private에 남긴 같은 자릿수는 평가 참조이며 요청에서 읽지 않음|
+|Public Line|`item_id`, `question`, `context`, `answer_format.decimal_places`|E02Use the finished input except for item_id|
+|Private originals|`item_id`, `case`, `experiment`, `variant`, `reference`, `answer_metadata`, `source`, `human_decision`|No fields are transmitted.|
+|Private modification|References + source links, replacement answers, patches, relationship of purpose, source hash, etc.|No fields are transmitted.|
+|Precision source|The raw materials of the dataset `input.reference_precision`|E01in `public.answer_format.decimal_places`Save to private. The same digit left in the private is the evaluation reference and not read in the request.|
 
-**public은 precision까지 완성된 풀이 입력, private는 평가 정보입니다.** 요청을 만들 때 private에서 값을 꺼내 보충하지 않습니다. 처음 준비할 때 문항 ID·유형은 dataset 선정 결과에서 E02로 전달해 모델별 manifest에 저장합니다. 이 연결 정보는 LLM의 문제 내용에 넣지 않습니다. public에 자릿수가 없으면 준비 실패입니다. 기존 run은 과거 계약으로 보존하며 새 입력은 dataset에서 다시 준비합니다. 질문 지시와 자릿수의 충돌 여부는 별도 기록합니다.
+**Public is the complete pool of information to precision, private is the evaluation information.** When you create a request, you don't extract and replenish the value from private.2This linking information is not included in the problem content of the LLM. If there are no digits in the public, it's a failure to prepare. The existing run is preserved as a past contract, and the new entries are re-prepared in the dataset.
 
-## 재사용·분기와 다음 단계
+## Reuse and decomposition and the next step.
 
-- `require_collected_results`는 results 묶음을 필수로 하고, `reuse_input_run`은 이전 실험의 동결 public/private와 모델별 요청 manifest를 검증해 재사용합니다. [request_order.py](../../../../src/finarch/experiments/01-evaluation/02-request/request_order.py)의 `selection_from_manifests()`가 문항 연결을 복원하며 같은 문항의 연결·풀이 입력이 다르거나 모델별 대상이 다르면 중단합니다. 새 요청 생성과 과거 응답 재사용은 다릅니다. 두 입력 경로는 동시에 사용할 수 없습니다. public의 precision 누락은 private로 보충하지 않습니다.
-- `originals_only`는 선정 후 원본만 남기는 호출 시험 범위입니다. 전체 7변형을 호출한 실험으로 세지 않습니다.
-- 변형 후보의 audit·관찰·Q/C를 기존 제작 기록과 대조하는 검사는 E01에 남아 있습니다. 새 LLM 품질검사가 아니라 **선정에 사용한 기록의 일관성 확인**입니다.
-- 저장 후 E02가 같은 `prepare()`에서 정의를 복사하고 요청을 조합합니다. E01만의 독립 완료 상태 파일은 현재 없습니다.
+- `require_collected_results`And then we need to make the results necessary. `reuse_input_run`The results of previous experiments are verified by the public/private and model request manifests and reused.](../../../../src/finarch/experiments/01-evaluation/02-request/request_order.py) `selection_from_manifests()`It restores the case connection and stops if the same case's connection-foil input is different or the object is different by model. New request generation and reuse of past responses are different. The two input paths cannot be used simultaneously. Public's precision gaps are not supplemented by private.
+- `originals_only`The call test range is the one that leaves only the original after selection. 7It's not a test called a transformation.
+- The test compares the audit, inspection, Q/C of the modification candidate to the existing production record.1It's not the new LLM quality check. **Confirmation of consistency of records used in the appointment**.
+- E0 after storage2matching `prepare()`Copy the definition from and combine the request. E01The independent completed state file of the only is not present.

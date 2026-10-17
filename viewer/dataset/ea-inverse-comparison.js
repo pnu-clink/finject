@@ -130,7 +130,7 @@
     inverse.append(inverseTop);
     for (const [label, field] of [['누락 수량', 'missing_quantity'], ['판정 이유', 'reason']]) {
       const fact = node('p', null, 'review-fact');
-      fact.append(node('b', label + '  '), document.createTextNode(item.display_ko[field]));
+      fact.append(node('b', label + '  '), document.createTextNode(globalThis.FinarchI18n?.language === 'ko' ? item.display_ko[field] : review[field]));
       inverse.append(fact);
     }
     if (review.formula) inverse.append(node('pre', review.formula, 'formula'));
@@ -301,6 +301,7 @@
       if (current) active(current.dataset.key, false);
     });
   }, {passive: true});
+  document.addEventListener('finarch:language-change', () => render());
   const initialSelection = state.active;
   render({scroll: Boolean(initialSelection)});
   if (initialSelection) {

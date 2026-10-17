@@ -1,9 +1,9 @@
-<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>연구 방향 복기</title><style>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The direction of the study is well.</title><style>
 :root{color-scheme:light}*{box-sizing:border-box}body{margin:0;background:#f5f6f4;color:#23322e;font:17px/1.8 system-ui,sans-serif}header{background:#173d35;color:white;padding:16px max(24px,calc((100vw - 1100px)/2))}header p{margin:4px 0;opacity:.8}select{font:inherit;padding:8px;max-width:100%}.layout{max-width:1200px;margin:auto;display:grid;grid-template-columns:230px 1fr;gap:30px;padding:30px 24px}nav{position:sticky;top:20px;align-self:start;font-size:14px}nav a{display:block;padding:6px;color:#245b4e;text-decoration:none}article{min-width:0}header h1{margin:6px 0}#report>section:first-child{padding:12px 24px}#report>section:first-child h1{display:none}h1{font-size:30px;line-height:1.5}h2{font-size:23px;line-height:1.5;margin-top:0}section.focus{border:2px solid #276754;background:#f1f8f3}.hypothesis{background:white;border:1px solid #cbded1;border-left:5px solid #3a7960;border-radius:10px;padding:22px;margin:22px 0}.hypothesis.core{border-left-color:#ba7721;background:#fffbf3}.hypothesis h3{font-size:21px;line-height:1.5;margin:0 0 14px}.hypothesis .label{font-weight:700;color:#204e40}.layout nav details summary{font-weight:700;cursor:pointer}section{background:white;padding:28px;margin-bottom:20px;border:1px solid #dce3dd;border-radius:12px;scroll-margin-top:20px}p{white-space:pre-wrap;margin:12px 0}strong{color:#145943}.table{overflow-x:auto;overflow-wrap:normal}table{border-collapse:collapse;font-size:inherit;width:100%;min-width:560px}th,td{padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid #ddd}th{background:#edf3ef}a{color:#146459}#status{font-size:13px}@media(max-width:760px){.layout{display:block;padding:16px}nav{position:static;margin-bottom:20px}nav a{display:inline-block;margin-right:10px}section{padding:20px}h1{font-size:25px}body{font-size:16px}}
 .toolbar{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.toolbar label{display:grid;gap:4px;flex:1;min-width:0}.toolbar select{width:100%}.toolbar button{font:inherit;font-weight:650;white-space:nowrap;padding:8px 16px;border:1px solid #cee0d7;border-radius:6px;background:#f5faf7;color:#173d35;cursor:pointer}.toolbar button:hover:not(:disabled){background:#dcefe3}.toolbar button:disabled{opacity:.5;cursor:wait}#export-status,.export-meta{font-size:13px}header h1{overflow-wrap:anywhere}@media print{body{background:white;font-size:12pt}header{background:white;color:#23322e;padding:0 0 20px}.layout{display:block;max-width:none;padding:0}nav,.toolbar,#status,#export-status{display:none}section{border:0;padding:0}h2,h3{break-after:avoid}}
 article{overflow-wrap:anywhere}article p{font-size:inherit}article code{font-size:1em}article pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7f5;border:1px solid #dce3dd;border-radius:6px;padding:16px;line-height:1.7}.paper-figure .figure-message{font-size:14px}.paper-figure{margin:24px 0;min-width:0}.figure-frame{overflow:auto;border:1px solid #dce3dd;border-radius:8px;background:white;margin-top:8px}.figure-frame img{display:block;max-width:100%;height:auto;margin:auto}.figure-size:checked~.figure-frame{max-height:80vh}.figure-size:checked~.figure-frame img{max-width:none}.figure-size{margin:0 6px 0 0}.figure-size+label{font-size:14px;cursor:pointer;color:#245b4e}figcaption{font-size:15px;line-height:1.7;color:#52685f;margin-top:8px}.figure-message{font-size:14px;color:#735124}@media print{.figure-size,.figure-size+label{display:none}.figure-size:checked~.figure-frame{max-height:none}.figure-size:checked~.figure-frame img{max-width:100%}.paper-figure{break-inside:avoid}}
 table:has(th strong){table-layout:fixed}table:has(th strong) th,table:has(th strong) td{padding:10px 2px;overflow-wrap:anywhere}table:has(th strong) th:first-child{width:21%}table:has(th strong) th:nth-child(3),table:has(th strong) th:nth-child(10){width:9%}
-</style><header><p>회의 기록 → 연구 질문 → 남은 검증</p><h1>논문 연구 방향 복기</h1><div class="toolbar"><label>자료 선택 <select id="runs"></select></label><button id="export-html" type="button" disabled>HTML 내보내기</button></div><p id="status" role="status"></p><p id="export-status" role="status" aria-live="polite"></p></header><div class="layout"><nav><details open id="toc"><summary>목차 · 연구 질문부터 읽기</summary><div id="nav"></div></details></nav><article id="report"></article></div><script>
+</style><header><p>Meeting records → Research questions → remaining verification</p><h1>The direction of the paper research</h1><div class="toolbar"><label>Selection of data <select id="runs"></select></label><button id="export-html" type="button" disabled>I'm going to send out the HTML.</button></div><p id="status" role="status"></p><p id="export-status" role="status" aria-live="polite"></p></header><div class="layout"><nav><details open id="toc"><summary>Read from the research question</summary><div id="nav"></div></details></nav><article id="report"></article></div><script>
 const sel=document.querySelector('#runs'),report=document.querySelector('#report'),nav=document.querySelector('#nav');
 const exportButton=document.querySelector('#export-html'),exportStatus=document.querySelector('#export-status'),status=document.querySelector('#status');
 let currentItem=null,loadVersion=0;
@@ -44,21 +44,21 @@ function render(md,sourceURL){
       table=null;
       const figure=document.createElement('figure');figure.className='paper-figure';figure.setAttribute('aria-busy','true');
       const toggle=document.createElement('input');toggle.type='checkbox';toggle.className='figure-size';toggle.id='figure-size-'+(++imageCount);toggle.disabled=true;
-      const label=document.createElement('label');label.htmlFor=toggle.id;label.textContent='원본 크기로 보기';
+      const label=document.createElement('label');label.htmlFor=toggle.id;label.textContent='See the original size.';
       const frame=document.createElement('div');frame.className='figure-frame';
       const img=document.createElement('img');img.alt=image[1];img.dataset.source=image[2]||image[3];frame.append(img);
       const caption=document.createElement('figcaption');caption.textContent=image[1];
-      const message=document.createElement('p');message.className='figure-message';message.textContent='그림을 불러오는 중입니다.';
+      const message=document.createElement('p');message.className='figure-message';message.textContent='I\x27m trying to paint a picture.';
       figure.append(toggle,label,frame,caption,message);target.append(figure);lastFigure=figure;
-    }else if(lastFigure&&/^(?:그림|Figure)\s+\d+\./i.test(line.trim())){
+    }else if(lastFigure&&/^(?:\uadf8\ub9bc|Figure)\s+\d+\./i.test(line.trim())){
       const caption=lastFigure.querySelector('figcaption');caption.replaceChildren();rich(caption,line,sourceURL);lastFigure=null;
     }else if(line.startsWith('## ')){
       section=document.createElement('section');section.id='s'+(++n);target=section;
-      if(line.includes('먼저 보기'))section.classList.add('focus');report.append(section);
+      if(line.includes('Let\x27s see.'))section.classList.add('focus');report.append(section);
       const h=document.createElement('h2');h.textContent=line.slice(3);section.append(h);
       const a=document.createElement('a');a.href='#'+section.id;a.textContent=line.slice(3);nav.append(a);table=null;
     }else if(line.startsWith('### ')){
-      target=document.createElement('div');target.className='hypothesis'+(line.includes('중심 질문')?' core':'');
+      target=document.createElement('div');target.className='hypothesis'+(line.includes('The central question')?' core':'');
       const h=document.createElement('h3');h.textContent=line.slice(4);target.append(h);section.append(target);table=null;
     }else if(line.startsWith('# ')){
       const h=document.createElement('h1');h.textContent=line.slice(2);section.append(h);
@@ -71,7 +71,7 @@ function render(md,sourceURL){
     }else{
       table=null;if(line.trim()){const p=document.createElement('p');rich(p,line,sourceURL);target.append(p);}
     }
-    if(line.trim()&&!image&&!/^(?:그림|Figure)\s+\d+\./i.test(line.trim()))lastFigure=null;
+    if(line.trim()&&!image&&!/^(?:\uadf8\ub9bc|Figure)\s+\d+\./i.test(line.trim()))lastFigure=null;
   }
 }
 async function loadImages(sourceURL){
@@ -80,13 +80,13 @@ async function loadImages(sourceURL){
     const figure=img.closest('figure'),message=figure.querySelector('.figure-message');
     try{
       const url=new URL(img.dataset.source,sourceURL);
-      if(url.origin!==location.origin||!['http:','https:'].includes(url.protocol)||!/\.(svg|png|jpe?g|gif|webp|avif)$/i.test(url.pathname))throw Error('현재 자료의 이미지 경로를 확인해 주세요.');
+      if(url.origin!==location.origin||!['http:','https:'].includes(url.protocol)||!/\.(svg|png|jpe?g|gif|webp|avif)$/i.test(url.pathname))throw Error('Please check the current image path of the data.');
       const response=await fetch(url,{cache:'no-store',redirect:'error'});
-      if(!response.ok)throw Error('이미지 파일을 읽지 못했습니다.');
+      if(!response.ok)throw Error('I couldn\x27t read the image file.');
       const blob=await response.blob();
-      if(!/^image\/(svg\+xml|png|jpeg|gif|webp|avif)(;|$)/i.test(blob.type))throw Error('지원하는 이미지 파일이 아닙니다.');
+      if(!/^image\/(svg\+xml|png|jpeg|gif|webp|avif)(;|$)/i.test(blob.type))throw Error('It\x27s not a supported image file.');
       img.src=await new Promise((resolve,reject)=>{
-        const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('이미지 변환에 실패했습니다.'));reader.readAsDataURL(blob);
+        const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(Error('It failed to convert images.'));reader.readAsDataURL(blob);
       });
       await img.decode();
       img.removeAttribute('data-source');
@@ -94,9 +94,9 @@ async function loadImages(sourceURL){
       message.hidden=true;
       figure.removeAttribute('aria-busy');
     }catch(e){
-      message.textContent='그림 읽기 실패 · '+img.alt+' · '+e.message;
+      message.textContent='Failure to read the picture '+img.alt+' · '+e.message;
       figure.removeAttribute('aria-busy');
-      throw Error('그림을 모두 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.');
+      throw Error('I didn\x27t get all the pictures. Please try again after the new one.');
     }
   }));
 }
@@ -106,15 +106,15 @@ async function load(){
   currentItem=null;
   exportButton.disabled=true;
   exportStatus.textContent='';
-  status.textContent='자료를 불러오는 중입니다.';
+  status.textContent='I\x27m getting the data.';
   report.replaceChildren();
   nav.replaceChildren();
   try{
     const item=window.items.find(x=>x.id===sel.value);
-    if(!item)throw Error('선택한 자료가 없습니다.');
+    if(!item)throw Error('There\x27s no data to choose from.');
     const sourceURL=new URL('../../reports/run/'+encodeURIComponent(item.id)+'/RESEARCH-DIRECTION.md',location.href);
     const r=await fetch(sourceURL,{cache:'no-store'});
-    if(!r.ok)throw Error('자료 읽기 실패 · 새로고침 후 다시 시도해 주세요.');
+    if(!r.ok)throw Error('Failure to read data. Please try again after the new order.');
     const md=await r.text();
     if(version!==loadVersion)return;
     render(md,sourceURL);
@@ -124,16 +124,16 @@ async function load(){
     exportButton.disabled=false;
     document.querySelector('#toc').open=innerWidth>760;
     if(location.hash)document.getElementById(location.hash.slice(1))?.scrollIntoView();
-    status.textContent='실제 저장 문서 표시 · '+item.id+' · 회의 합의와 작성자 제안을 구분합니다.';
+    status.textContent='The actual stored document is displayed '+item.id+' • Distinguish between the meeting agreement and the writer\x27s proposal.';
   }catch(e){
     if(version===loadVersion)status.textContent=e.message;
   }
 }
 function standaloneHTML(){
-  if(!currentItem||currentItem.id!==sel.value)throw Error('자료를 모두 불러온 뒤 다시 시도해 주세요.');
+  if(!currentItem||currentItem.id!==sel.value)throw Error('So, you can get all the data and try again.');
   const title=report.querySelector('h1')?.textContent||currentItem.title;
   const output=document.implementation.createHTMLDocument(title);
-  output.documentElement.lang='ko';
+  output.documentElement.lang='en';
   output.documentElement.dataset.sourceRun=currentItem.id;
   const charset=output.createElement('meta');
   charset.setAttribute('charset','utf-8');
@@ -149,7 +149,7 @@ function standaloneHTML(){
   source.textContent=currentItem.title;
   const saved=output.createElement('p');
   saved.className='export-meta';
-  saved.textContent='저장 시각 · '+new Date().toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+' (KST)';
+  saved.textContent='Storage time '+new Date().toLocaleString('en-US',{timeZone:'Asia/Seoul'})+' (KST)';
   header.append(heading,source,saved);
   const content=document.querySelector('.layout').cloneNode(true);
   content.querySelector('#toc').open=true;
@@ -168,9 +168,9 @@ exportButton.addEventListener('click',()=>{
     link.hidden=true;
     document.body.append(link);
     link.click();
-    exportStatus.textContent='HTML 파일 다운로드를 요청했습니다 · '+filename;
+    exportStatus.textContent='I requested a download of the HTML file. '+filename;
   }catch(e){
-    exportStatus.textContent='HTML 내보내기 실패 · '+e.message;
+    exportStatus.textContent='Failed to export HTML '+e.message;
   }finally{
     link?.remove();
     if(url)setTimeout(()=>URL.revokeObjectURL(url),30000);
@@ -178,7 +178,7 @@ exportButton.addEventListener('click',()=>{
 });
 (async()=>{
   const r=await fetch('runs.json',{cache:'no-store'});
-  if(!r.ok)throw Error('자료 목록을 읽지 못했습니다. 새로고침 후 다시 시도해 주세요.');
+  if(!r.ok)throw Error('I didn\x27t read the list of materials. Please try again after the new call.');
   window.items=await r.json();
   for(const x of items){const o=document.createElement('option');o.value=x.id;o.textContent=x.title;sel.append(o);}
   sel.onchange=load;

@@ -1,12 +1,12 @@
-# 실험 목적 화면 확인
+# Screening the purpose of the experiment
 
-{{run}}의 목적·비교 조건·해석 한계를 결과 숫자보다 먼저 표시했습니다.
+{{run}}'s purpose, the bidirectional condition, the limit of the analysis is shown before the resulting number.
 
-읽는 순서: 실행 폴더 EXPERIMENT-PURPOSE.md → 실험 뷰어 전체 결과 → verification.json(실제 화면 확인 기록).
+Run the folder EXPERIMENT-PURPOSE.md → Experiment Viewer full result → verification.json(Real screen check record).
 
-코드: viewer/experiments/app.js. 문서 미등록 실행에는 미등록 안내를 표시합니다. 모델 재호출·기존 응답 변경은 없습니다.
+Code: viewer/experiments/app.js. Document unregistered execution shows unregistering instructions. There is no model re-recognition and no change in response to existence.
 
 
-## 목적 영역 접기·펼치기
+## Folding and folding
 
-전체 결과의 “이 실험은 무엇을 확인하나요?” 제목을 누르면 목적 내용을 접거나 펼칩니다. 처음에는 펼쳐져 있습니다. 기존 실행의 목적 문서를 그대로 읽습니다.
+What do you see in the whole "shutter" experiment? If you click the "shutters" title, you fold or open the object, and at first it's unfolded, and you read the object document in the existing execution.

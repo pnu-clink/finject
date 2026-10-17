@@ -1,14 +1,14 @@
-# {run} 검토 엑셀
+# {run} Examining the Excel
 
-1. [{filename}]({filename})의 **유형별 요약**에서 자동 통과·실패·미평가를 확인합니다.
-2. **{count}문항 매트릭스**에서 각 유형의 상태와 실제 처리 횟수를 확인합니다. 이월은 새 처리에 포함하지 않습니다.
-3. **실패 상세**와 **문장 비교**에서 실패 이유, 요청·원응답·판정 링크를 읽습니다.
-4. **앞단계 제외**는 Generation에 들어가지 않은 문항입니다. 현재 Preparation 상태와 이후 사람 판정을 함께 확인하십시오.
+1. [{filename}]({filename}) **Summary of each type**Check the automatic pass, fail, and evaluation.
+2. **{count}The matrix**In each type of condition and actual processing frequency check.
+3. **Failure details**and **Comparison of phrases**Read the link in Reasons for Failure, Requests, Raw Response, Judgments.
+4. **Except for the front.**Check the current Preparation status and subsequent human assessment together.
 
-`review-data.json`은 저장 기록을 추출한 자료입니다. `workbook-checks.json`은 수식 집계, `formula-errors.json`은 수식 오류 검사, `verification.json`은 파일·링크 검사입니다. `export.log`에는 생성 과정이 기록됩니다. PNG는 시트 미리보기입니다.
+`review-data.json`Silver is the data that extracts the storage records. `workbook-checks.json`The sum of the digits of the `formula-errors.json`The digestive error check, `verification.json`Silver is a file link test. `export.log`And then there's the process of creating. PNG is the preview of the sheet.
 
-본문의 `【 】`는 검토용 위치 표시입니다. 실패 응답의 진단용 적용본은 실제 통과 산출물과 구분합니다. 원응답과 기존 판정은 변경하지 않습니다. 최종 사람 검토는 이 보고서 생성에 포함되지 않습니다.
+The headquarters. `【 】`The application form for the diagnosis of failure responses distinguishes the actual passing output from the raw response and the existing assessment does not change. Final person review is not included in the creation of this report.
 
-[단일 뷰어에서 열기](http://127.0.0.1:8893/?run={run}) → **실패 검토 엑셀** 버튼을 사용하십시오.
+[Opening on Day Viewer](http://127.0.0.1:8893/?run={run}) → **Failure review workbook** Use the button.
 
-재생성 함수는 `finarch.dataset.viewer.reports.review_workbook.build`이며, 완료 실행 경로를 받아 같은 5개 시트 형식으로 저장합니다. 추가 LLM 호출은 없습니다.
+The regenerative function is `finarch.dataset.viewer.reports.review_workbook.build`And, like, take the runway to finish. 5Save in items sheet format. No additional LLM calls.

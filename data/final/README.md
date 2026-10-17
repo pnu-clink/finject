@@ -1,0 +1,37 @@
+# Released FInject dataset
+
+The released files are in `finject-20261007/`. This guide explains their contents, annotations, and use in Evaluation.
+
+There are **1,354 families**: 1,071 FinanceReasoning (`id-0001`–`id-1071`) and 283 TAT-QA (`id-1072`–`id-1354`). Each family contains one original and seven variants: 9,478 variants and 10,832 total original/variant items. Counts are family/item counts, not Evaluation requests.
+
+Provenance paths are repository-relative; historical construction paths may identify artifacts excluded from this release. Annotators are identified as `Annotator 1` and `Annotator 2`. The manifest records hashes of the distributed files; each item's content hash separately binds its question and context.
+
+## Files and reading order
+
+1. [manifest.json](finject-20261007/manifest.json): release format, source counts, construction/human-selection policy, file hashes, and saved provenance.
+2. [dataset.jsonl](finject-20261007/dataset.jsonl): one family per line, including `source_input`, `original`, `variants`, production-selection metadata, actual Q/C, and content hashes.
+3. [dataset.schema.json](finject-20261007/dataset.schema.json): record contract. [events.jsonl](finject-20261007/events.jsonl): saved release assembly/check events.
+4. [Connection table](finject-20261007-connection-table.csv): links each final ID to the source dataset/run/case/file/line. These are provenance references; excluded historical folders are not prerequisites for reading the released JSONL.
+5. [EA_INVERSE_REVIEW.jsonl](finject-20261007/EA_INVERSE_REVIEW.jsonl) and [its schema](finject-20261007/EA_INVERSE_REVIEW.schema.json): separate saved EA inverse-recoverability annotations described below.
+
+The seven variants are IC-VALUE before/after, IC-SOURCE Type 1/2, IC-RELATION, and EA-01/02. Use the saved identifiers rather than inferring type from the order of arbitrary files. Final IDs and item IDs were assigned during publication; original IDs remain in saved publication metadata/connection records. Do not assume that an original reference answer is the answer to a perturbed question.
+
+## Meaning of approval and missing annotations
+
+The release selection requires the saved construction-selection criteria and confirmed APPROVED decisions from both annotators for all seven variants. Released `annotation` objects expose only `status: PASS`; individual rating details are not distributed in that field. The original's PASS represents construction checks, not an additional human rating of the original. Automated validation, publication selection, and human annotation are distinct.
+
+The EA inverse file contains 1,354 rows and 2,708 EA entries. Its saved counts are:
+
+| Source | EA entries | Inverse possible | Inverse not possible | Call failed | Not recorded |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| FinanceReasoning | 2,142 | 413 | 86 | 1 | 1,642 |
+| TAT-QA | 566 | 485 | 77 | 4 | 0 |
+| Total | 2,708 | 898 | 163 | 5 | 1,642 |
+
+Only 1,061 completed reviews have true/false `inverse_possible`. Failed and missing records have null; missing is not false. Saved `review_record` and evidence-display checks are preserved, not rerun. These are LLM judgments from the remaining Q/C, not independently certified answer/evidence gold and not target-model Evaluation results.
+
+## Use in Evaluation and view examples
+
+The existing generated-data loader accepts this release directly. The [reviewer smoke configuration](../../config/experiments/reviewer-smoke.toml) selects one family. Follow the [Evaluation guide](../../src/finarch/experiments/01-evaluation/README.md) to freeze eight inputs and 32 requests without API keys, then the [experiment viewer guide](../../viewer/experiments/README.md) to inspect the actual original and variants.
+
+The [Dataset viewer](../../viewer/dataset/README.md) reads construction run artifacts. Saved source paths and `viewer_url` values identify the original provenance; those construction folders are not needed to read this release or prepare Evaluation. Use the experiment-viewer route above to browse the supplied examples.

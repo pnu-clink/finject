@@ -37,10 +37,10 @@ function env(){
   button:(label,fn,cls)=>{const node=el('button',cls,label);node.onclick=fn;return node;},filePathLabel:p=>el('span','source-file-path',p),
   fetch:async(url,options={})=>{requests.push({url,options});return handler(url,options);},
   finalGenerationCounts:()=>{},pipelineRoundSummary:()=>{},externalKnowledgeModel:()=>({tags:[]}),appendFeedbackBadge:()=>{},stageFeedbackState:()=>null,
-  renderMenuGuide:parent=>parent.append(el('section','guide','이 단계에서 하는 일')),
+  renderMenuGuide:parent=>parent.append(el('section','guide','\uc774 \ub2e8\uacc4\uc5d0\uc11c \ud558\ub294 \uc77c')),
   renderPreparationContent:parent=>parent.append(el('div','content','Preparation actual verdict')),
   renderGenerationContent:parent=>parent.append(el('div','content','Generation actual verdict')),decorateExternalKnowledge:()=>{},
-  renderStageFiles:parent=>parent.append(el('div','files','결과 파일'))});
+  renderStageFiles:parent=>parent.append(el('div','files','\uacb0\uacfc \ud30c\uc77c'))});
  for(const file of ['common/disclosure.js','common/failure-analysis.js','menu.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),ctx);
  return {ctx,document,el,requests,storage,handle(fn){handler=fn;},mount(fn){const node=el('div');document.body.append(node);fn(node);return node;}};
 }
@@ -56,10 +56,10 @@ const checks=[];async function check(name,fn){if(analysisOnly&&menuChecks.has(na
  await check('Generation labels stay short; only variants without artifacts are disabled',()=>{
   const e=env(),row={sample:{id:'test-0001'},status:'FAIL',run:{artifacts:{'run.json':{status:'FAIL'}},generation:{[variant+'/run.json']:{status:'FAIL'},[otherVariant+'/02-generate-text/02-raw-response.json']:{text:'error'},'05-ic-relation/run.json':{status:'ERROR'}}}};
   const node=e.mount(n=>e.ctx.renderPreparationDetail(n,row)),gen=find(node,'phase-generation')[0];
-  for(const label of ['IC-VALUE 앞','IC-VALUE 뒤','IC-RELATION'])assert.equal(named(gen,label).disabled,false);
+  for(const label of ['IC-VALUE \uc55e','IC-VALUE \ub4a4','IC-RELATION'])assert.equal(named(gen,label).disabled,false);
   for(const label of ['IC-SOURCE Type 1','IC-SOURCE Type 2','EA 01','EA 02'])assert.equal(named(gen,label).disabled,true);
-  assert(buttons(gen).every(b=>!b.textContent.includes('미실행')));
-  for(const phase of ['preparation','generation']){const group=find(node,'phase-'+phase)[0],items=buttons(group),i=items.findIndex(b=>b.textContent.startsWith('실패건 재검토'));assert(items[i-1].className.includes('failure-analysis-button'));}
+  assert(buttons(gen).every(b=>!b.textContent.includes('\ubbf8\uc2e4\ud589')));
+  for(const phase of ['preparation','generation']){const group=find(node,'phase-'+phase)[0],items=buttons(group),i=items.findIndex(b=>b.textContent.startsWith('\uc2e4\ud328\uac74 \uc7ac\uac80\ud1a0'));assert(items[i-1].className.includes('failure-analysis-button'));}
   assert(node.children.indexOf(find(node,'preparation-overview')[0])<node.children.indexOf(find(node,'failure-analysis-overview')[0]));
   assert(node.children.indexOf(find(node,'failure-analysis-overview')[0])<node.children.indexOf(find(node,'problem-selection')[0]));
   assert.equal(e.requests.length,0);
@@ -67,21 +67,21 @@ const checks=[];async function check(name,fn){if(analysisOnly&&menuChecks.has(na
  await check('Latest jobs stay phase scoped, older snapshots persist, and reads do not mutate DATA',()=>{
   const e=env();e.ctx.DATA.batch.failure_analysis.jobs=[job({id:'analysis-2'}),job({id:'analysis-10',status:'RUNNING',planned:3,completed:1,results:[result({stale:true})]}),job({id:'analysis-9',phase:'generation',status:'ERROR',error:'worker stopped',results:[result({variant,error:'schema invalid',analysis:null})]})];
   const before=JSON.stringify(e.ctx.DATA),node=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n)),prep=find(node,'failure-analysis-preparation')[0];
-  assert(prep.textContent.indexOf('analysis-10')<prep.textContent.indexOf('analysis-2'));assert.match(prep.textContent,/1\/3건/);assert.match(prep.textContent,/부분 결과/);assert.match(node.textContent,/worker stopped/);assert.match(node.textContent,/schema invalid/);assert.match(node.textContent,/이전 자료 기준/);
+  assert(prep.textContent.indexOf('analysis-10')<prep.textContent.indexOf('analysis-2'));assert.match(prep.textContent,/1\/3\uac74/);assert.match(prep.textContent,/\ubd80\ubd84 \uacb0\uacfc/);assert.match(node.textContent,/worker stopped/);assert.match(node.textContent,/schema invalid/);assert.match(node.textContent,/\uc774\uc804 \uc790\ub8cc \uae30\uc900/);
   assert.equal(find(node,'failure-analysis-overview')[0].children[0].open,false);
-  assert(node.querySelectorAll('details').some(d=>d.children[0].textContent==='이전 해석 기록 1개'&&!d.open));
+  assert(node.querySelectorAll('details').some(d=>d.children[0].textContent==='\uc774\uc804 \ud574\uc11d \uae30\ub85d 1\uac1c'&&!d.open));
   assert.equal(JSON.stringify(e.ctx.DATA),before);assert.equal(e.requests.length,0);
  });
  await check('Translated fields, original fallback, evidence IDs and safe stage links are displayed',()=>{
-  const e=env(),r=result({display_ko:{rejection_summary:'저장 거절 사유',observations:[{statement:'확인된 내용',evidence_ids:['E1','MISSING'],kind:'FACT'}],assessment:'검토 필요',rationale:'근거 차이',recommended_action:'입력 확인',target_step:'계산',limitations:'재실행 안 함'}});
-  const node=e.mount(n=>e.ctx.renderFailureAnalysisTable(n,job({results:[r]})));assert.match(node.textContent,/저장 거절 사유/);assert.match(node.textContent,/확인된 내용/);assert.match(node.textContent,/연결 근거 없음/);assert.match(node.textContent,/abc123/);assert.doesNotMatch(node.textContent,/Saved rejection/);
+  const e=env(),r=result({display_ko:{rejection_summary:'\uc800\uc7a5 \uac70\uc808 \uc0ac\uc720',observations:[{statement:'\ud655\uc778\ub41c \ub0b4\uc6a9',evidence_ids:['E1','MISSING'],kind:'FACT'}],assessment:'\uac80\ud1a0 \ud544\uc694',rationale:'\uadfc\uac70 \ucc28\uc774',recommended_action:'\uc785\ub825 \ud655\uc778',target_step:'\uacc4\uc0b0',limitations:'\uc7ac\uc2e4\ud589 \uc548 \ud568'}});
+  const node=e.mount(n=>e.ctx.renderFailureAnalysisTable(n,job({results:[r]})));assert.match(node.textContent,/\uc800\uc7a5 \uac70\uc808 \uc0ac\uc720/);assert.match(node.textContent,/\ud655\uc778\ub41c \ub0b4\uc6a9/);assert.match(node.textContent,/\uc5f0\uacb0 \uadfc\uac70 \uc5c6\uc74c/);assert.match(node.textContent,/abc123/);assert.doesNotMatch(node.textContent,/Saved rejection/);
   const evidence=node.querySelectorAll('a').find(a=>a.textContent==='E1'),files=node.querySelector('details');assert.equal(!!files.open,false);evidence.click();assert.equal(files.open,true);assert(all(node).some(n=>'#'+n.id===evidence.href));
-  const link=node.querySelectorAll('a').find(a=>a.textContent.includes('단계·파일 목록')),query=new URLSearchParams(link.href.slice(1));assert.equal(query.get('run'),'run A');assert.equal(query.get('stage'),'03-calculation');assert.equal(query.get('round'),'01-round');
+  const link=node.querySelectorAll('a').find(a=>a.textContent.includes('\ub2e8\uacc4·\ud30c\uc77c \ubaa9\ub85d')),query=new URLSearchParams(link.href.slice(1));assert.equal(query.get('run'),'run A');assert.equal(query.get('stage'),'03-calculation');assert.equal(query.get('round'),'01-round');
   assert.equal(e.ctx.failureAnalysisArtifactLink(r,'preparation',{path:'javascript:alert(1)'}),null);
   assert.equal(e.ctx.failureAnalysisArtifactLink(r,'preparation',{path:'reports/run/other/01-preparation/test-0001/03-calculation/file.json'}),null);
   assert(e.ctx.failureAnalysisArtifactLink(r,'preparation',{path:'01-preparation/test-0001/03-calculation/file.json'}));
   const prepEvidence=e.ctx.failureAnalysisArtifactLink({...r,variant},'generation',{path:'01-preparation/test-0001/03-calculation/file.json'});assert.equal(new URLSearchParams(prepEvidence.href.slice(1)).get('variant'),null);
-  const raw=e.mount(n=>e.ctx.renderFailureAnalysisTable(n,job()));assert.match(raw.textContent,/한국어 표시 없음/);assert.match(raw.textContent,/Recorded fact/);
+  const raw=e.mount(n=>e.ctx.renderFailureAnalysisTable(n,job()));assert.match(raw.textContent,/\ud55c\uad6d\uc5b4 \ud45c\uc2dc \uc5c6\uc74c/);assert.match(raw.textContent,/Recorded fact/);
  });
  await check('Analysis text is inert; evidence identities are unique across duplicated displays',()=>{
   const e=env(),r=result();r.analysis.rejection_summary='<img src=x onerror=alert(1)>';
@@ -101,20 +101,20 @@ const checks=[];async function check(name,fn){if(analysisOnly&&menuChecks.has(na
  });
  await check('Older per-case results are explicitly snapshots when newest phase job has no match',()=>{
   const e=env();e.ctx.DATA.batch.failure_analysis.jobs=[job({id:'2',status:'RUNNING',results:[]}),job({id:'1'})];
-  const node=e.mount(n=>e.ctx.renderSelectedFailureAnalysis(n,{sample:{id:'test-0001'}},null,'07-human-review'));assert.match(node.textContent,/이전 작업의 해석/);
-  const overview=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n));assert.match(overview.textContent,/저장된 해석 결과를 기다리고/);
+  const node=e.mount(n=>e.ctx.renderSelectedFailureAnalysis(n,{sample:{id:'test-0001'}},null,'07-human-review'));assert.match(node.textContent,/\uc774\uc804 \uc791\uc5c5\uc758 \ud574\uc11d/);
+  const overview=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n));assert.match(overview.textContent,/\uc800\uc7a5\ub41c \ud574\uc11d \uacb0\uacfc\ub97c \uae30\ub2e4\ub9ac\uace0/);
  });
  await check('No, Escape and native close each cancel without POST; unknown cost is explicit',async()=>{
   for(const action of ['no','escape','close']){
    const e=env();e.handle(async()=>response(preview()));const b=e.ctx.failureAnalysisButton('preparation');e.document.body.append(b);const task=b.click();await tick();
-   const dialog=e.document.body.querySelector('dialog');assert(dialog.open);assert.match(dialog.textContent,/gpt-6-luna/);assert.match(dialog.textContent,/max/);assert.match(dialog.textContent,/최대 호출: 4회/);assert.match(dialog.textContent,/무료를 뜻하지/);assert.match(dialog.textContent,/해석 1회 \+ 한국어 표시 번역 1회/);assert.match(dialog.textContent,/Token volume unavailable/);assert.match(dialog.textContent,/실제 청구액이 아닙니다/);assert.equal(e.document.activeElement.textContent,'No · 취소');
-   if(action==='no')named(dialog,'No · 취소').click();else if(action==='escape')dialog.emit('cancel',{preventDefault(){}});else dialog.close();await task;
+   const dialog=e.document.body.querySelector('dialog');assert(dialog.open);assert.match(dialog.textContent,/gpt-6-luna/);assert.match(dialog.textContent,/max/);assert.match(dialog.textContent,/\ucd5c\ub300 \ud638\ucd9c: 4\ud68c/);assert.match(dialog.textContent,/\ubb34\ub8cc\ub97c \ub73b\ud558\uc9c0/);assert.match(dialog.textContent,/\ud574\uc11d 1\ud68c \+ \ud55c\uad6d\uc5b4 \ud45c\uc2dc \ubc88\uc5ed 1\ud68c/);assert.match(dialog.textContent,/Token volume unavailable/);assert.match(dialog.textContent,/\uc2e4\uc81c \uccad\uad6c\uc561\uc774 \uc544\ub2d9\ub2c8\ub2e4/);assert.equal(e.document.activeElement.textContent,'No · \ucde8\uc18c');
+   if(action==='no')named(dialog,'No · \ucde8\uc18c').click();else if(action==='escape')dialog.emit('cancel',{preventDefault(){}});else dialog.close();await task;
    assert.equal(e.requests.length,1);assert(e.requests[0].url.startsWith('/api/failure-analysis/preview?'));assert.equal(b.disabled,false);assert.equal(dialog.isConnected,false);
   }
  });
  await check('Yes alone sends the exact preview snapshot, entire-phase scope and no verdict mutation',async()=>{
   const e=env(),before=JSON.stringify(e.ctx.DATA);e.handle(async(url,options)=>response(options.method==='POST'?{ok:true}:preview({phase:'generation',estimated_cost_usd:0.012345})));
-  const b=e.ctx.failureAnalysisButton('generation');e.document.body.append(b);const task=b.click();await tick();const dialog=e.document.body.querySelector('dialog');assert.match(dialog.textContent,/US\$ 0.012345/);assert.match(dialog.textContent,/Generation 전체/);named(dialog,'Yes · 실패 해석 시작').click();await task;
+  const b=e.ctx.failureAnalysisButton('generation');e.document.body.append(b);const task=b.click();await tick();const dialog=e.document.body.querySelector('dialog');assert.match(dialog.textContent,/US\$ 0.012345/);assert.match(dialog.textContent,/Generation \uc804\uccb4/);named(dialog,'Yes · \uc2e4\ud328 \ud574\uc11d \uc2dc\uc791').click();await task;
   assert.equal(e.requests.length,2);assert.equal(e.requests[0].url,'/api/failure-analysis/preview?name=run%20A&phase=generation');
   assert.equal(e.requests[1].url,'/api/failure-analysis');assert.deepEqual(JSON.parse(e.requests[1].options.body),{run:'run A',phase:'generation',preview_id:'snapshot 123'});assert.equal(JSON.stringify(e.ctx.DATA),before);assert.equal(b.disabled,true);
   e.ctx.DATA.batch.failure_analysis.jobs=[job({id:'fresh'})];e.ctx.failureAnalysisSync();assert.equal(b.disabled,false);
@@ -123,29 +123,29 @@ const checks=[];async function check(name,fn){if(analysisOnly&&menuChecks.has(na
   const e=env();e.handle(async()=>response(preview({planned:8,calls:16,analysis_calls:8,translation_calls:8,estimated_cost_usd:1.164288,
    cost_breakdown:{input_token_budget:167232,output_token_budget:32768,total_token_budget:200000,input_per_million:0.2,output_per_million:1.2,per_call_usd:0.072768,analysis_usd:0.582144,translation_usd:0.582144}})));
   const b=e.ctx.failureAnalysisButton('preparation');e.document.body.append(b);const task=b.click();await tick();
-  const dialog=e.document.body.querySelector('dialog');assert.match(dialog.textContent,/167,232 \+ 출력 32,768 = 총 200,000/);assert.match(dialog.textContent,/실패 분석: US\$ 0.072768 × 8건 = US\$ 0.582144/);assert.match(dialog.textContent,/한국어 번역 별도: US\$ 0.072768 × 8건 = US\$ 0.582144/);
-  named(dialog,'No · 취소').click();await task;assert.equal(e.requests.length,1);
+  const dialog=e.document.body.querySelector('dialog');assert.match(dialog.textContent,/167,232 \+ \ucd9c\ub825 32,768 = \ucd1d 200,000/);assert.match(dialog.textContent,/\uc2e4\ud328 \ubd84\uc11d: US\$ 0.072768 × 8\uac74 = US\$ 0.582144/);assert.match(dialog.textContent,/\ud55c\uad6d\uc5b4 \ubc88\uc5ed \ubcc4\ub3c4: US\$ 0.072768 × 8\uac74 = US\$ 0.582144/);
+  named(dialog,'No · \ucde8\uc18c').click();await task;assert.equal(e.requests.length,1);
  });
  await check('Concurrent rerendered buttons cannot duplicate preview or accepted start requests',async()=>{
   const e=env();let release;e.handle(()=>new Promise(resolve=>{release=resolve;}));const first=e.ctx.failureAnalysisButton('preparation');e.document.body.append(first);const task=first.click();
   const second=e.ctx.failureAnalysisButton('generation');e.document.body.append(second);assert.equal(second.disabled,true);second.click();assert.equal(e.requests.length,1);
-  release(response(preview()));await tick();const replacement=e.ctx.failureAnalysisButton('preparation');assert.equal(replacement.disabled,true);named(e.document.body.querySelector('dialog'),'No · 취소').click();await task;
+  release(response(preview()));await tick();const replacement=e.ctx.failureAnalysisButton('preparation');assert.equal(replacement.disabled,true);named(e.document.body.querySelector('dialog'),'No · \ucde8\uc18c').click();await task;
  });
  await check('Returning an existing completed job clears pending state without waiting for a new job',async()=>{
   const e=env(),completed=job({preview_id:'snapshot 123'});e.ctx.DATA.batch.failure_analysis.jobs=[completed];const before=JSON.stringify(e.ctx.DATA);
   e.handle(async(url,options)=>response(options.method==='POST'?completed:preview()));const node=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n)),b=e.ctx.failureAnalysisButton('preparation');e.document.body.append(b);
-  const task=b.click();await tick();named(e.document.body.querySelector('dialog'),'Yes · 실패 해석 시작').click();await task;
-  assert.equal(e.requests.length,2);assert.equal(b.disabled,false);assert.equal(e.ctx.failureAnalysisButton('preparation').disabled,false);assert.match(node.textContent,/추가 유료 호출은 없습니다/);assert.equal(JSON.stringify(e.ctx.DATA),before);
+  const task=b.click();await tick();named(e.document.body.querySelector('dialog'),'Yes · \uc2e4\ud328 \ud574\uc11d \uc2dc\uc791').click();await task;
+  assert.equal(e.requests.length,2);assert.equal(b.disabled,false);assert.equal(e.ctx.failureAnalysisButton('preparation').disabled,false);assert.match(node.textContent,/\ucd94\uac00 \uc720\ub8cc \ud638\ucd9c\uc740 \uc5c6\uc2b5\ub2c8\ub2e4/);assert.equal(JSON.stringify(e.ctx.DATA),before);
  });
  await check('Translation-only failures keep the interpretation and completed usage totals separate',()=>{
   const e=env(),r=result({status:'PARTIAL',translation_error:'Translation schema invalid'}),j=job({status:'PARTIAL',results:[r],usage:{calls:2,token_totals_known:{total_tokens:1234},estimated_cost_usd_known:0.023,missing_usage_calls:1,missing_cost_calls:1}});
-  const before=JSON.stringify(j),node=e.mount(n=>e.ctx.renderFailureAnalysisJob(n,j));assert.match(node.textContent,/Saved rejection/);assert.match(node.textContent,/Recorded fact/);assert.match(node.textContent,/한국어 표시 번역 오류: Translation schema invalid/);assert.match(node.textContent,/총 토큰 1234/);assert.match(node.textContent,/US\$ 0.023/);assert.match(node.textContent,/실제 청구액 아님/);assert.match(node.textContent,/비용 산정 누락 1회/);assert.equal(JSON.stringify(j),before);
+  const before=JSON.stringify(j),node=e.mount(n=>e.ctx.renderFailureAnalysisJob(n,j));assert.match(node.textContent,/Saved rejection/);assert.match(node.textContent,/Recorded fact/);assert.match(node.textContent,/\ud55c\uad6d\uc5b4 \ud45c\uc2dc \ubc88\uc5ed \uc624\ub958: Translation schema invalid/);assert.match(node.textContent,/\ucd1d \ud1a0\ud070 1234/);assert.match(node.textContent,/US\$ 0.023/);assert.match(node.textContent,/\uc2e4\uc81c \uccad\uad6c\uc561 \uc544\ub2d8/);assert.match(node.textContent,/\ube44\uc6a9 \uc0b0\uc815 \ub204\ub77d 1\ud68c/);assert.equal(JSON.stringify(j),before);
  });
  await check('Run changes invalidate both pending preview and confirmed launch',async()=>{
   for(const point of ['preview','confirm']){
    const e=env();let release;e.handle(()=>point==='preview'?new Promise(resolve=>{release=resolve;}):Promise.resolve(response(preview())));
    const b=e.ctx.failureAnalysisButton('preparation');e.document.body.append(b);const task=b.click();if(point==='confirm')await tick();e.ctx.DATA.batch.name='different';
-   if(point==='preview')release(response(preview()));else named(e.document.body.querySelector('dialog'),'Yes · 실패 해석 시작').click();await task;assert.equal(e.requests.length,1);assert.equal(e.document.body.querySelector('dialog'),null);
+   if(point==='preview')release(response(preview()));else named(e.document.body.querySelector('dialog'),'Yes · \uc2e4\ud328 \ud574\uc11d \uc2dc\uc791').click();await task;assert.equal(e.requests.length,1);assert.equal(e.document.body.querySelector('dialog'),null);
   }
  });
  await check('Preview errors, invalid contract and zero targets never reach a start call',async()=>{
@@ -155,12 +155,12 @@ const checks=[];async function check(name,fn){if(analysisOnly&&menuChecks.has(na
  });
  await check('Stale preview POST errors preserve saved jobs and require a new explicit request',async()=>{
   const e=env();e.ctx.DATA.batch.failure_analysis.jobs=[job()];const before=JSON.stringify(e.ctx.DATA);e.handle(async(url,options)=>response(options.method==='POST'?{error:'PREVIEW_STALE'}:preview(),options.method!=='POST'));
-  const node=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n)),b=e.ctx.failureAnalysisButton('preparation');e.document.body.append(b);const task=b.click();await tick();named(e.document.body.querySelector('dialog'),'Yes · 실패 해석 시작').click();await task;assert.equal(e.requests.length,2);assert.match(node.textContent,/PREVIEW_STALE/);assert.equal(b.disabled,false);assert.equal(JSON.stringify(e.ctx.DATA),before);
+  const node=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n)),b=e.ctx.failureAnalysisButton('preparation');e.document.body.append(b);const task=b.click();await tick();named(e.document.body.querySelector('dialog'),'Yes · \uc2e4\ud328 \ud574\uc11d \uc2dc\uc791').click();await task;assert.equal(e.requests.length,2);assert.match(node.textContent,/PREVIEW_STALE/);assert.equal(b.disabled,false);assert.equal(JSON.stringify(e.ctx.DATA),before);
  });
  await check('Empty data, zero targets and server busy disable execution without affecting saved views',()=>{
   const e=env();delete e.ctx.DATA.batch.failure_analysis;assert.equal(e.ctx.failureAnalysisButton('preparation').disabled,true);const empty=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n));assert.equal(empty.children.length,0);
   e.ctx.DATA.batch.failure_analysis={jobs:[job()],busy:true,preparation:1,generation:0};assert.equal(e.ctx.failureAnalysisButton('preparation').disabled,true);assert.equal(e.ctx.failureAnalysisButton('generation').disabled,true);
-  const node=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n));assert.match(node.textContent,/Saved rejection/);assert.match(node.textContent,/진행 중/);
+  const node=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n));assert.match(node.textContent,/Saved rejection/);assert.match(node.textContent,/\uc9c4\ud589 \uc911/);
  });
  await check('Collapse state is kept per run across refreshes',()=>{
   const e=env(),first=e.mount(n=>e.ctx.renderFailureAnalysisOverview(n)),d=find(first,'failure-analysis-overview')[0].children[0];d.open=true;d.emit('toggle');

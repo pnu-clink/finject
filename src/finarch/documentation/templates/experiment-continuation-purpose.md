@@ -1,20 +1,20 @@
-# {{run_id}} · 의도 대응과 반복 관찰
+# {{run_id}} · Intentional response and repetitive observation
 
 {{stage}}
 
-질문에 숫자 답을 내는 행동과, 제공된 근거로 그 답을 정당화할 수 있는지 판단하는 행동을 구분합니다. 기존과 같은 원문 100개·변형 700개를 사용하며 원문은 P0×추론 두 조건, 변형은 P0/P1×추론 두 조건으로 총 3,000요청입니다.
+It's the behavior of giving a numerical answer to a question, and the behavior of judging whether you can justify that answer on the basis of the evidence provided. 100· variants 700The first two terms are P0x, the second two terms are the derivative P0/P1x. 3,000request.
 
-|조건|실제로 요청하는 행동|
+|Condition|The actual actions that you ask for.|
 |---|---|
-|P0 기본 풀이|주어진 질문과 문맥으로 풀이합니다. 충돌·유보 판단을 추가로 안내하지 않습니다.|
-|P1 의도 대응 안내|수치의 역할·대상·기간과 질문을 연결하고, 충돌이나 필수 근거 부재를 살펴 단일 답이 정당화되는지 판단합니다. 조건부 계산은 질문의 최종 값까지 연결합니다.|
-|공통 출력|같은 JSON 필드·자료형을 사용합니다. 근거 → 짧은 설명 → 최종 답 → 부호·단위 순서를 실제 API 전송 바이트에 보존합니다.|
-|R-off/R-on|동일 Luna 모델의 none/medium 설정입니다. 추론량이 같은 다른 모델과 비교한 실험은 아닙니다.|
+|P0 is the base root.|It's a question and context solution, and it doesn't add to the conflict and the bias.|
+|P1 intent response guidance|It connects the role, response, duration of the numbers to the question, and it looks at the absence of conflict or essential evidence to determine whether a single answer is justified.|
+|Common output|It uses the same JSON field-free format, which stores the base → short description → final answer → index and phase order in the actual API transfer bytes.|
+|R-off/R-on|It's the none/medium setting of the same Luna model, not a test compared to other models with the same logic.|
 
-실제 수집 수·실패·미실행은 화면과 `state.json`·`summary.json`을 따릅니다. 형식 통과, 원문 참조 숫자 일치, 변형의 의미 정답, 같은 조건 반복 일치는 별개의 관찰입니다. null 증가를 적절한 유보 증가로 단정하지 않습니다. 실험 입력·원응답·당시 점수는 보존합니다.
+The actual collection of numbers, failures, missile operations, the screen and the `state.json`·`summary.json`Following the format pass, the matching of the reference numbers of the source items, the meaning of the transformation, the repetition of the same condition are separate observations. The null increment is not determined by the appropriate ebo increment.
 
-앞선 실패를 보고 개선한 개발 집단이므로 독립 확인 성능으로 보고하지 않습니다. 반복 비교는 별도 run의 실제 HTTP 요청 바이트와 모델명이 같은 경우에만 수행하며, 두 번의 관찰을 장기간 신뢰도로 확대하지 않습니다. 추가 의미 평가 모델은 호출하지 않습니다.
+It's an improved development group that sees failures in the lead up, so it doesn't report as an independent verification performance. Repeat comparisons are only done in the same cases as the actual HTTP request byte of a separate run and model name, and don't extend the two observations to long-term reliability. Additional meaning assessment models don't call.
 
-[현재 진행·분석 보고서](../../run/20260923-experiment-improvement/README.md) · [정의와 요구사항](../../../docs/02-experiments/01_evaluation/02_request/README.md) · [실행·분석 계획](../../run/20260923-experiment-improvement/03-research/continuation-plan.json)
+[Current progress and analysis report](../../run/20260923-experiment-improvement/README.md) · [Justice and requirements](../../../docs/02-experiments/01_evaluation/02_request/README.md) · [Action and analysis plan](../../run/20260923-experiment-improvement/03-research/continuation-plan.json)
 
-이 문서는 `src/finarch/documentation/templates/experiment-continuation-purpose.md`에서 생성한 표시용 안내입니다. 동결된 실험 입력을 변경하지 않습니다.
+This document is `src/finarch/documentation/templates/experiment-continuation-purpose.md`This is a guide to display generated from.

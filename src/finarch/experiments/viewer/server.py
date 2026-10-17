@@ -11,7 +11,7 @@ def main():
         'node', path=os.pathsep.join(('/opt/homebrew/bin', '/usr/local/bin'))
     )
     if not node:
-        raise SystemExit('실험 뷰어를 실행하려면 Node.js가 필요합니다.')
+        raise SystemExit('To run the experimental viewer, you need Node.js.')
     os.execv(node, [node, str(Path(__file__).with_suffix('.mjs')), *sys.argv[1:]])
 
 

@@ -63,10 +63,10 @@ def build():
                 verification['browser_checks'] = previous['browser_checks']
     path.write_text(json.dumps(verification, ensure_ascii=False, indent=2) + '\n')
     template = Path(__file__).with_name('response-v5-readme-template.md').read_text()
-    checks = (f"Python {python_count}개와 뷰어 {viewer_count}개 로컬 검사 통과. "
-              f"기존 핵심 기록 {len(preserved)}개 파일의 수정 전후 해시 일치. "
-              + ('에이전트의 실제 브라우저 표시 확인 완료.' if verification['browser_verified']
-                 else '브라우저 표시 확인은 아직 완료하지 않았습니다.'))
+    checks = (f"Python {python_count}items and Viewer. {viewer_count}Pass the items local exam. "
+              f"The existing core record {len(preserved)}The items file is a correction of the pre-harness matching. "
+              + ('Completed verification of the agent\'s actual browser display.' if verification['browser_verified']
+                 else 'The browser display verification is not complete yet.'))
     (output / 'README.md').write_text(template.replace('{{date}}', '2026-09-22')
         .replace('{{schema}}', json.dumps(schema, ensure_ascii=False, indent=2))
         .replace('{{checks}}', checks))

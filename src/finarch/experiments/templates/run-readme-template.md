@@ -1,32 +1,32 @@
 # {run_id}
 
-풀이 수집 상태: **{status}** · 원문 {originals}건 · 자동 검사 통과 변형 {variants}건. FINISHED는 풀이 수집의 종료이며 내용 분석·연구 검토 완료와 구분합니다.
+Grass collection: **{status}** · The original {originals}The automatic inspection passing transformation {variants}Finished is the end of grass collection and the end of content analysis and research review.
 
-`CACHE_POLICY_BLOCKED`는 캐시 차단 기능이 확인되지 않아 호출 전에 멈췄다는 뜻입니다. 계획 건수를 실제 응답 수로 읽지 마세요. `REPORT.md`와 모델별 `cache-preflight.json`에서 사유·시도 수를 확인합니다. 최신 실행 정책은 캐시 읽기·쓰기와 다른 실행의 응답 재사용을 금지하며, 이전 실행의 원기록은 당시 상태로 보존합니다. 미호출과 캐시 미사용 검증 완료는 서로 다릅니다.
+`CACHE_POLICY_BLOCKED`This means that the cache blocking function is not verified and stopped before the call. Don't read the plan dry as the actual response number. `REPORT.md`And by model. `cache-preflight.json`The latest execution policy prohibits the reuse of response read-write and other executions, and the original records of previous executions are kept as they were.
 
-`CACHE-AUDIT.md`가 있으면 이전 실행의 실제 캐시 사용량, 입력·프롬프트 동일성, 차단 원인과 미실행 대안을 먼저 읽습니다.
+`CACHE-AUDIT.md`If you have, you'll first read the actual cache usage of the previous execution, the input-prompt identification, the blocking cause and the default alternatives.
 
-## 읽는 순서
+## Reading order
 
-1. `REPORT.md`: 모델별 실행 현황, 결과 해석, 사용량·비용.
-2. `plan.json`, `config.json`: 호출 수와 고정된 설정.
-3. 모델별 `01-requests/manifest.jsonl`: 문항 연결·실험 조건·풀이 입력·prompt·schema를 담은 실행 기준. 선정 순서·규칙·제외 사유·출처 확인은 `events.jsonl`의 `INPUT_SELECTION`에 기록합니다.
-4. 모델별 `03-results/summary.json`, `results.jsonl`: 조건별 분모·응답·검사 결과.
-5. 모델별 `calls/<문항>/<유형>/<문항>-P0-R-off.json`: 실제 요청·응답·검사·사용량을 한 파일로 읽습니다. 해당 유형의 `_records/<해시>/attempt-xxx`에 재시도별 원기록을 보존합니다.
-6. `events.jsonl`, `state.json`: 재개할 때 확인할 진행 기록.
-7. `layout/README.md`: 이전 폴더를 옮긴 실행의 경로 대응표·원기록 해시·검증 결과입니다.
-8. Codex 모델 폴더의 `resources.jsonl`, `resources-latest.json`: 2초 간격 시스템 CPU·메모리, 동시 처리 한도, 진행 중 요청 수입니다. Codex 실행에서만 생성됩니다.
-9. Native Batch 실행의 `<model>/02-batches`: 전송 파일·Batch ID·제공자 원출력·실제 사용량입니다.
-10. 내용 검토를 수행한 run의 `02_analysis/01_response_review/README.md` → `02_analysis/02_comparison/summary.json`: 입력·응답의 LLM 판정, 재검토, 미평가를 포함한 비교입니다. 뷰어의 02 Analysis에서 읽습니다.
+1. `REPORT.md`: Model-by-model execution situation, result interpretation, use and cost.
+2. `plan.json`, `config.json`: Call number and set fixed.
+3. By model. `01-requests/manifest.jsonl`Examples of the following: case connection; test conditions; full input; prompt; schema; execution criteria. Selection order; rules; external private sources; verification `events.jsonl` `INPUT_SELECTION`I'm going to write it down.
+4. By model. `03-results/summary.json`, `results.jsonl`: Conditional denominator · Answering · Exam results.
+5. By model. `Calls/<Help>/<type>/<Helping>-P0-R-off.json`It reads the actual request, response, query, usage volume as one file. `I'm going to try to get a copy of this.`It preserves the original record of the case.
+6. `events.jsonl`, `state.json`Re-opened: Check the progress record.
+7. `layout/README.md`It's the result of a hash and verification of the path correspondence of the execution that moved the previous folder.
+8. The Codex model folder is `resources.jsonl`, `resources-latest.json`: 2The CPU memory of the short-range system, the simultaneous processing limit, the number of requests in progress, is generated only when the Codex is running.
+9. Native Batch running `<model>/02-batches`It's the transfer file, the batch ID, the manufacturer's output, the actual usage.
+10. Running through the content review `02_analysis/01_response_review/README.md` → `02_analysis/02_comparison/summary.json`It's a comparison of input and response, including LLM judgments, reviews, and reviews. 02 I read it in Analysis.
 
-실행 당시 형식은 `00-definition/response.schema.json`과 모델별 manifest를 확인합니다. 새 입력의 `public.jsonl`에는 풀이용 Q/C와 `answer_format.decimal_places`를 함께 저장하며, LLM에게 보낼 문제 내용은 public만 읽습니다. `private.jsonl`은 정답·제작 근거를 이용한 평가 전용입니다. 요청 시 private에서 자릿수나 다른 정보를 보충하지 않습니다. 문항 ID·원문·변형·조건 연결은 모델별 요청 manifest로 통합하며 새 실행에 별도 `input-selection.json`을 만들지 않습니다. 문항 수는 요청 행 수가 아니라 manifest의 고유 item_id로 집계합니다. 최상위 `manifest.json`은 파일 해시 목록으로 용도가 다릅니다. 이전 run의 public에 자릿수가 없다면 원본을 수정하지 않고 dataset에서 새 입력을 준비해야 합니다. 과거 응답과 동결 요청은 당시 정의로 읽습니다. `00-definition`의 프롬프트·스키마·README 템플릿은 실행 당시 사본으로 보존합니다.
+The format was running. `00-definition/response.schema.json`And check the model-by-model manifest. `public.jsonl`There's a free Q/C and a free `answer_format.decimal_places`And we're going to save them together and send them to the LLM and read them publicly. `private.jsonl`It's an evaluation tool that uses the correct answer and the generated basis. It doesn't replenish digits or other information from private when requested. `input-selection.json`The number of cases is not the requested row count, but the sum of the individual item_id of the manifest. `manifest.json`If there's no digit in the public of the previous run, you have to modify the original and prepare new entries in the dataset, so past responses and syntax requests read as then defined. `00-definition`The prompt schema readme template is saved as a copy at runtime.
 
-실험 결과 안내는 Markdown 문서로 관리합니다. 공통 `viewer/experiments`가 이 실행의 실제 저장 결과를 읽으며, 결과 폴더마다 별도 HTML을 생성하지 않습니다. 원응답·사용량·검사 기록은 JSON/JSONL로 보존합니다.
+And we're running it as a Markdown document that doesn't show up in the experiment. `viewer/experiments`It reads the actual storage results of this execution, and doesn't generate any HTML for each resulting folder. It stores the raw response, usage, and scan records in JSON/JSONL.
 
-재개: `PYTHONPATH=src .venv/bin/python -m finarch.experiments.01-evaluation.pipeline run --run "{run_path}"`
+Re-opened: `PYTHONPATH=src .venv/bin/python -m finarch.experiments.01-evaluation.pipeline run --run "{run_path}"`
 
-한도 복구 후 재개할 때만 `--resume-limits`를 붙입니다. 실패·미실행을 정상 응답이나 유보로 계산하지 않습니다. 의미 판정은 실제 내용 검토 파일이 있는 응답만 대상으로 하며, 분석 LLM의 잠정값을 gold나 사람 승인으로 해석하지 않습니다.
+Only when you reopen after the end of the restoration. `--resume-limits`The semantic assessment only applies to responses with actual content review files, and does not interpret the default value of the analytical LLM as gold or human approval.
 
-3차 개발 실험의 재개·분석·논문 갱신은 `finarch.experiments.90-operations.three_rounds tick`이 담당합니다. 차수 사이 공통 입력 판정의 사용과 실제 개선 결정은 연결된 종합 기록을 읽습니다. 이전 방식의 `ANALYSIS.md`·`analysis/README.md`·`CASE-STUDIES.md`는 해당 파일이 생성된 run에만 존재합니다.
+3The re-creation, the analysis, the debate, the renewal of the experimental development of the car. `finarch.experiments.90-operations.three_rounds tick`This is responsible for the use of common input judgments between variables and the actual improvement decisions. `ANALYSIS.md`·`analysis/README.md`·`CASE-STUDIES.md`The file is only in the run that it was created.
 
-현행 V6는 부호 있는 `answer`와 `answer_meta.negative`·`answer_meta.scale`의 일관성을 검사하며 P0/P1이 같은 JSON 구조를 사용합니다. 숫자 답 없음은 유보 타당성 판정과 구분합니다. 기존 V2·V3·V4·V5 원응답은 당시 계약으로 읽고 소급 변환하지 않습니다.
+The current V6 is a non-zero-sum `answer`and `answer_meta.negative`·`answer_meta.scale`It checks for consistency and uses the same JSON structure as P0/P1. The absence of a numerical answer distinguishes it from a Ubo validity judgment.

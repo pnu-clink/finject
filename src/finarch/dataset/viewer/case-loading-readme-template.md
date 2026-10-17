@@ -1,32 +1,32 @@
-# 문제별 조회 성능 확인
+# Check the performance of the problem-by-problem inspection
 
-실행 `{run}` · 선택 차수 `03-round`. 저장된 결과를 읽는 검사이며 LLM 호출과 제작 데이터 변경은 없습니다.
+Run `{run}` · Selection of the variable `03-round`. . . . read the stored results and no LLM calls and production data changes.
 
-## 읽는 순서
+## Reading order
 
-1. `measurement.json`: 같은 실행에 대한 HTTP 시간, 전송 크기, 반환 문항 수.
-2. `checks.log`: 문항 분리·차수 유지·캐시 무효화·오래된 응답 차단 검사.
-   `profile-before.txt`는 수정 전 함수별 누적 처리 시간입니다. 프로파일러 자체의 비용이 포함되어 HTTP 시간과 직접 비교하지 않습니다.
-3. [공통 뷰어](http://127.0.0.1:8893/?run={run}&round=03-round&case=test-2028): 검색으로 번호를 바꾸어 개별 로딩을 확인합니다.
+1. `measurement.json`: same HTTP time for execution, transmission size, number of cases returned.
+2. `checks.log`: case separation; cross-continuation; cache invalidation; past response blocking inspection.
+   `profile-before.txt`The cost of the profile itself is not directly compared to HTTP time.
+3. [Custom Viewer](http://127.0.0.1:8893/?run={run}&round=03-round&case=test-2028): Change the number to search and check the individual loading.
 
-기존 상세 응답은 2,050건·62,349,147바이트이며 선택 문항 한 건만 완전한 상세였습니다. 나머지는 요약이어서 전체 상세를 캐시에 넣고 화면만 바꿀 수 있는 형태가 아니었습니다.
+The detailed response is 2,050entries ·62,349,147Only one byte and one selection was complete detail, and the rest was a summary, so it wasn't a form that could only be stored in a cache and changed to a screen.
 
-수정 후 첫 요청은 목록·검색 정보와 선택 문항 상세를 읽습니다. 문항 전환 요청은 한 건만 읽고, 브라우저는 이미 받은 목록을 유지합니다. 이전 문항 상세는 요약으로 되돌리므로 방문한 문항 수에 비례해 상세 자료가 누적되지 않습니다. 질문·본문 검색과 ER/ED·mismatch·사람 판정 표시는 유지합니다.
+The first request after modification reads the list; search information and the list of selected cases. The request to change cases reads only one, and the browser keeps the list already received. The previous case details are returned to the summary, so no detailed data is accumulated in proportion to the number of cases visited. The question-text search and the ER/ED-mismatch-person judgement tags remain.
 
 {measurements}
 
-시간은 이 컴퓨터의 이번 측정값입니다. OS 파일 캐시를 비우지 않았으며 다른 작업의 부하가 영향을 줄 수 있습니다. 원래 상세 요청은 비압축, 수정 후는 브라우저와 같은 gzip 요청이므로 데이터 크기는 압축 전 JSON끼리 비교합니다. 서버 처리·전송 시간이며 화면 그리기 시간까지 포함하지 않습니다.
+The time is this measurement of this computer. The OS file cache is not empty, and the load of other tasks may be affected. The original detailed request is non-compressed, and after modification is a gzip request, like a browser, so the data size is compared between JSONs before compression. The server processing and transmission time and does not include screen time.
 
-서버는 중복 실패 집계를 공유하고 큰 Generation summary의 `latest` 객체 생성을 피합니다. 저장된 Preparation 점검 결과도 입력 선정·문항 상태·승인 근거·검증 판정 파일이 그대로일 때만 읽고, 변경·삭제 시 기존 검증을 수행합니다. 완료 보고서는 근거 파일의 변경·삭제와 gate 변경을 검사한 뒤 재사용합니다. 진행 중에는 원본에서 집계합니다. 상태 캐시는 파일 식별자·크기·수정/변경 시각이 바뀌면 무효화하며, 상태·이유만 최대 20,000항목 / 직렬화 8MiB로 제한합니다. Python 객체의 실제 메모리 크기는 이 수치와 다릅니다.
+The server shares a set of overlays and a large generation summary of the `latest` Prepare to avoid the creation of objects. The stored Preparation check results read the input selection, problem state, authentication basis, verification judgment file only when it is the same, and perform the existing verification when it is changed and deleted. The completed report is reused after checking the change, deleted and gate changes of the base file. During the process, the state cache is compiled from the original. The file identifier, key, correction/conversion view is invalidated if changed, and the state-report only is up to a maximum of 20,000Item / Inline 8MiBThe actual memory size of a Python object is different from this.
 
-[구현과 파일별 책임](../../docs/55-viewer-speed-and-phi-two.md#2026-09-17-문제별-상세-조회)
+[Responsibility for the recording and file-sharing](../../docs/55-viewer-speed-and-phi-two.md#2026-09-17-%EB%AC%B8%EC%A0%9C%EB%B3%84-%EC%83%81%EC%84%B8-%EC%A1%B0%ED%9A%8C)
 
-## 후속 실행 003 확인
+## Follow-up execution 003 Check
 
-`measurement-003.json`은 `20260917-003`의 실제 HTTP 응답과 브라우저 이동 확인 결과입니다. `checks-003.log`는 후속 검사 기록입니다. [003 공통 뷰어](http://127.0.0.1:8893/?run=20260917-003&case=test-0001)에서 같은 기능을 확인할 수 있습니다.
+`measurement-003.json` `20260917-003`It's the actual HTTP response and the result of the browser navigation check. `checks-003.log`And that's the record of the follow-up.003 Common Viewer](http://127.0.0.1:8893/?run=20260917-003&case=test-0001)You can check the same function in.
 
-코드는 실행 번호별로 나뉘지 않습니다. 003도 처음에 717개 목록과 상세 1건을 받고, 문항 전환에는 상세 1건만 받습니다. 브라우저에서 test-0002 → test-0003 이동 시 목록 717건을 유지하며 개별 기록 읽기를 완료했습니다. 이 UI 확인은 자동화·표시 확인 시간을 포함해 1.381초였습니다.
+The code is not broken down by execution number. 003And at first, 717List of items and details 1I'm getting a message, and I'm going to change the case in detail. 1I'm just getting a test.0002 → test-0003 List of cities to move 717I kept the tab and finished reading the individual records. 1.381It was a second.
 
 {measurements_003}
 
-003의 Generation은 확인 당시 진행 중이므로 완료 보고서 재사용 대신 전체 통계를 집계했습니다. 시작하지 않은 차수의 파일 조회는 공통 코드에서 생략했으며 NOT_RUN 판정은 유지합니다. 최초 요청은 변경 전 9.393초, 변경 후 15.081초로 지연과 편차가 남아 있습니다. 이 작은 변경이 첫 로딩까지 빨라졌다는 근거로 해석하지 않습니다. 진행 중인 제작과 다른 뷰어 요청, 파일 캐시 상태가 달라 동일 부하에서의 성능 비교는 아닙니다.
+003The Generation is in progress at the time of verification so the complete report reused the entire statistics instead of the restart. 9.393Second, after the change. 15.081There's still a bit of delay and discrepancy, and this little change doesn't necessarily mean that it's accelerated until the first load, and it's not a performance comparison on the same load, but different from other viewer requests in progress.

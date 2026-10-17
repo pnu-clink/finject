@@ -2,22 +2,22 @@
 
 {change_description}
 
-동일 입력 확인: {same_input}. 원문 {input_count}건이며 입력 파일 해시와 문항 목록을 비교했습니다.
+Identical input verification: {same_input}The original. {input_count}And I compared the input file hash to the phrase list.
 
 {summary}
 
-위 통과·실패는 자동 검사 결과입니다. 상위 단계 제외, 미생성, 미평가는 통과로 세지 않습니다. 차수 사이에는 같은 실행에서 통과한 결과를 유지하며 실패한 유형과 그 의존 결과만 다시 검사했습니다. 비교 실행은 코드부터 새로 호출했습니다.
+Overpass-fail is an automatic test result. Except for the top step, the microclimate and miscalculation are not counted as a pass. Between the parameters, we keep the results that we passed from the same run, and we re-check only the failed type and its dependent results. The comparison run is called from the code.
 
-같은 변형 대상: {same_target_count}개. 변형 대상 변경: {different_target_count}개. 새 코드가 다른 수치를 선택한 경우 동일 조건 비교와 구분합니다. {evaluation_note} 같은 원문을 사용한 개발 비교이며 별도 데이터의 일반화 결과가 아닙니다.
+The same object of modification: {same_target_count}Changes to the object of transformation: {different_target_count}items. If the new code chooses a different number, it's the same condition compared. {evaluation_note} It's a developmental comparison using the same principles, not a generalization of any data.
 
-## 읽는 순서
+## Reading order
 
-1. `input-selection.json`: 원문 목록과 해시.
-2. `initial-feedback.json`, `feedback/`: 처음부터 적용한 지침과 출처.
-3. `comparison-report.json`: 문항·유형별 차수 결과, 원인, 새 실패와 해결, 호출·토큰 집계.
-4. 각 차수의 `05-text/03-final-validator/03-result.json`: 최종 반복 여부.
-5. 문항별 번호 폴더: 실제 요청, 원응답, 검사와 적용 결과. 원응답을 수정하지 않았습니다.
+1. `input-selection.json`: The original list and the hash.
+2. `initial-feedback.json`, `feedback/`From the beginning, the guidelines and the sources.
+3. `comparison-report.json`: phrases; type-specific variables results, causes, new failures and solutions, call; token accumulation.
+4. The number of each of the charts `05-text/03-final-validator/03-result.json`: Final repetition or not.
+5. The number of phrases in the folder: actual request, raw response, test and application results.
 
-[뷰어에서 비교 실행 열기](http://127.0.0.1:8893/?run={comparison_run}&round=01-round&case=test-0001&tab=dtt). 차수 표시 다음의 **{title}** 버튼에서 전체 표를 볼 수 있습니다.
+[Open comparison run in the viewer](http://127.0.0.1:8893/?run={comparison_run}&round=01-round&case=test-0001&tab=dtt)Let's see. **{title}** You can see the entire table from the button.
 
-로그는 `log/run/{comparison_run}`의 같은 차수·문항·단계 경로에 있습니다. `default.log`에는 모든 기록이 시간순으로 모이며 각 행은 JSON입니다.
+Logs: `log/run/{comparison_run}`It's on the same path as the problem-stage path. `default.log`In this, all records are in chronological order, and each row is JSON.

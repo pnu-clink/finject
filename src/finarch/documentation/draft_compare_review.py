@@ -28,7 +28,7 @@ def _read_proposal(repository, sid):
 
 def _check_version(proposal, payload):
     if payload.get('proposal_revision') != proposal_revision(proposal):
-        raise ComparisonConflict('다른 선택이나 수정문이 먼저 저장되었습니다. 새로고침해 최신 비교안을 불러와 주세요.')
+        raise ComparisonConflict('Other options or tweaks are saved first, so please update and bring the latest comparison.')
 
 
 def _normalise_paragraph(raw, block_tag='p'):
@@ -36,12 +36,12 @@ def _normalise_paragraph(raw, block_tag='p'):
     from finarch.documentation.draft_editor import clean_html
 
     if block_tag not in ['p', 'li'] or not isinstance(raw, str) or len(raw) > 100_000:
-        raise ValueError('수정 문단의 내용을 확인해 주세요.')
+        raise ValueError('Please check the text of the amendments.')
     document = BeautifulSoup(clean_html(raw), 'html.parser')
     for comment in document.find_all(string=lambda value: isinstance(value, Comment)):
         comment.extract()
     if document.select('figure, table, img, h1, h2, h3, h4, ul, ol'):
-        raise ValueError('수정채택에서는 문단 본문만 수정해 주세요.')
+        raise ValueError('In the modification room, please edit the text of the text.')
     # Enter and pasted paragraph breaks stay inside this one reviewed paragraph.
     for block in list(document.find_all(['p', 'div', 'li'])):
         if block.parent is None:
@@ -53,7 +53,7 @@ def _normalise_paragraph(raw, block_tag='p'):
     for node in list(document.contents):
         paragraph.append(node.extract())
     if not paragraph_text(str(paragraph)):
-        raise ValueError('빈 문단은 저장할 수 없습니다.')
+        raise ValueError('You can\'t save empty documents.')
     return str(paragraph)
 
 
@@ -70,7 +70,7 @@ def save_decision(repository, payload):
             raise KeyError(payload.get('paragraph_id'))
         decision = payload.get('decision')
         if decision not in ['original', 'accept', 'edited', 'remove']:
-            raise ValueError('원본 유지 / 채택 / 수정채택 / 제거 중 하나를 선택해 주세요.')
+            raise ValueError('Please select one of the original retaining/adopting/correcting/removing options.')
         if decision == 'edited':
             paragraph['edited_html'] = _normalise_paragraph(
                 payload.get('edited_html', paragraph.get('edited_html', paragraph['revised_html'])),
@@ -130,7 +130,7 @@ def apply_decisions(repository, payload):
         }
         for sid, digest in sources.items():
             if hashlib.sha256(current[sid]['kohtml'].encode()).hexdigest() != digest:
-                raise ComparisonConflict('Draft 원문이 변경되어 적용할 수 없습니다. 현재 원문을 기준으로 비교안을 갱신해 주세요.')
+                raise ComparisonConflict('The draft rule cannot be changed and applied, so please update the comparison to the current rule.')
 
         groups = {}
         for paragraph in proposal['paragraphs']:
@@ -148,7 +148,7 @@ def apply_decisions(repository, payload):
             for paragraph in paragraphs:
                 block_tag = paragraph.get('block_tag', 'p')
                 if block_tag not in ['p', 'li']:
-                    raise ValueError('문단 형식을 확인해 주세요: ' + paragraph['label'])
+                    raise ValueError('Please check the format of the ladder: ' + paragraph['label'])
                 expected = paragraph.get('applied_html', paragraph['original_html'])
                 marker = 'draft-compare-removed:' + hashlib.sha256(paragraph['id'].encode()).hexdigest()
                 expected = marker if expected == '' else str(BeautifulSoup(expected, 'html.parser').find(block_tag))
@@ -157,7 +157,7 @@ def apply_decisions(repository, payload):
                     None,
                 )
                 if index is None:
-                    raise ComparisonConflict('문단 위치가 변경되어 적용할 수 없습니다: ' + paragraph['label'])
+                    raise ComparisonConflict('The position of the ladder can\'t be changed and applied: ' + paragraph['label'])
                 decision = paragraph.get('decision', 'original')
                 if decision == 'remove':
                     available[index].replace_with(Comment(marker))
@@ -171,14 +171,14 @@ def apply_decisions(repository, payload):
                     selected = paragraph['revised_html']
                 elif decision == 'edited':
                     if not paragraph.get('edited_html'):
-                        raise ValueError('수정 문단을 먼저 저장해 주세요: ' + paragraph['label'])
+                        raise ValueError('First, save the correction chart: ' + paragraph['label'])
                     selected = paragraph['edited_html']
                 else:
-                    raise ValueError('문단의 채택 상태를 확인해 주세요.')
+                    raise ValueError('Please check the status of the adoption of the document.')
                 replacement = BeautifulSoup(selected, 'html.parser')
                 children = [node for node in replacement.contents if getattr(node, 'name', None)]
                 if len(children) != 1 or children[0].name != block_tag:
-                    raise ValueError('문단 형식을 확인해 주세요: ' + paragraph['label'])
+                    raise ValueError('Please check the format of the ladder: ' + paragraph['label'])
                 available[index].replace_with(children[0])
                 paragraph['applied_html'] = str(children[0])
                 paragraph['applied_decision'] = decision
@@ -193,8 +193,8 @@ def apply_decisions(repository, payload):
                 changed_sections.append(sid)
 
         markdown_before = repository.markdown.read_text()
-        compressed_path = repository.directory / 'draft 압축.md'
-        compressed_before = compressed_path.read_text() if compressed_path.exists() else '# draft 압축\n\n'
+        compressed_path = repository.directory / 'Draft compression.md'
+        compressed_before = compressed_path.read_text() if compressed_path.exists() else '# Draft compression\n\n'
         markdown_after, compressed_after = markdown_before, compressed_before
         for sid in groups:
             _, body_start, end = repository.markdown_bounds(markdown_before, json.loads(source_before), sid)
@@ -222,14 +222,14 @@ def apply_decisions(repository, payload):
             for path in repository.previews:
                 before[path] = path.read_text()
                 if len(EMBEDDED.findall(before[path])) != 1:
-                    raise ValueError('Draft HTML의 원문 위치를 확인할 수 없습니다.')
+                    raise ValueError('I can\'t find the source code in the draft HTML.')
                 updates[path] = EMBEDDED.sub(lambda m: m[1] + embedded + m[3], before[path], count=1)
         if compressed_after != compressed_before:
             before[compressed_path] = compressed_before if compressed_path.exists() else None
             updates[compressed_path] = compressed_after
         for path, content in before.items():
             if (path.read_text() if path.exists() else None) != content:
-                raise ComparisonConflict('적용 중 원고가 변경되었습니다. 최신 내용을 불러와 다시 적용해 주세요.')
+                raise ComparisonConflict('The application file has been changed, so please call the latest information and apply it again.')
         stamp = dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
         backup = repository.directory / 'backup/editor' / (stamp + '-compare-apply')
         backup.mkdir(parents=True, exist_ok=False)

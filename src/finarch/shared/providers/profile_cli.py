@@ -17,17 +17,7 @@ Journal = __import__('finarch.shared.run_logging.logging', fromlist=['Journal'])
 from finarch.dataset.schemas.registry import require_llm_schema
 from finarch.dataset.schemas.validation import parse_json, validate
 
-README = '''# Codex 프로필 실행: {profile}
-
-상태: {status}. 실제 모델 지원 여부는 dry-run/mock으로 검증되지 않습니다.
-
-읽는 순서: `profile-plan.json` (프로필·최종 명령·응답 스키마) →
-`02-calculation/profile-call/` 또는 `05-text/profile-call/`의 `01-input.json` (실제 호출 시 프롬프트) → `02-raw-response/cli-execution.json` (원본 CLI 출력·시간) →
-`02-raw-response.json` → `03-result/schema-check.json` → `run.json`.
-`events.jsonl`은 기존 단계 로그 형식입니다. dry-run에는 실제 응답·호출 파일이 없습니다.
-뷰어에서 실행 `{batch}`를 선택하여 단계 로그 또는 순차 기록을 확인하세요.
-형식 검사 PASS는 의미 검사 PASS나 사람 승인이 아닙니다. 재시도는 없습니다.
-'''
+README = '# Codex profile execution: {profile}\n\nStatus: {status}. Dry-run/mock checks do not verify live model support.\n\nReading order: `profile-plan.json` (profile, final command, response schema) →\n`02-calculation/profile-call/` or `05-text/profile-call/`, then `01-input.json` (prompt for an actual call) → `02-raw-response/cli-execution.json` (original CLI output and timing) →\n`02-raw-response.json` → `03-result/schema-check.json` → `run.json`.\n`events.jsonl` uses the existing stage-log format. Dry runs contain no actual response or execution artifacts. Select run `{batch}` in the viewer to inspect stage logs or sequential records. Format PASS does not establish semantic PASS or human approval. No retry is performed.\n'
 
 
 def main(argv=None):

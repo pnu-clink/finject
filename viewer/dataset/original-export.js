@@ -2,7 +2,7 @@
 async function showOriginalExport(){
  const run=DATA.batch?.name;
  if(!run)return;
- const view={lang:globalThis.FinarchI18n?.language||'ko',case:rows.find(r=>r.id===selected)?.sample.id,
+ const view={lang:globalThis.FinarchI18n?.language||'en',case:rows.find(r=>r.id===selected)?.sample.id,
   variant:window.preparationVariant||null,preparationStage:window.preparationStage,generationStage:window.generationStage};
  const {body}=showSchemaDialog('원본 Export',run+'의 최종 통과 결과를 기존 제작 뷰어 형태로 내보냅니다. 선택 차수·화면 필터와 무관하며 실패·미완료와 과거 차수의 상세 이력은 제외합니다.');
  const status=el('p','','Python·수식·그래프와 최종 단계 자료를 모으고 있습니다…');body.append(status);

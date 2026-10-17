@@ -79,13 +79,13 @@ test('NOT_APPLICABLE remains visible and filters keep the planned denominator an
   const empty=groundingSummary({metadata:{},pairs:[]}); assert.deepEqual(empty.groups,[]);
 });
 test('wrong original, prompt, source, saved combined result or shrinking N is rejected', () => {
-  let f=fixture(); f.snap.privateItems.get(f.pairs[0].variant_item_id).original_item_id='another-parent'; assert.throws(f.read,/실제 부모/);
-  f=fixture(); f.snap.rows[0].prompt_condition='guided'; assert.throws(f.read,/다른 원본 또는 조건/);
-  f=fixture(); f.pairs[0].source_type='TAT-QA'; assert.throws(f.read,/데이터 출처/);
-  f=fixture(); f.snap.responseAssessments.byResponse.get('luna:test-0008:variant:off').adaptation_success=true; assert.throws(f.read,/결합 규칙/);
-  f=fixture(); f.summary.types[0].planned_pairs=5; assert.throws(f.read,/전체 분모/);
-  f=fixture(); f.pairs.pop(); assert.throws(f.read,/빠진 요청/);
-  f=fixture(); f.pairs[3].quadrant=1; assert.throws(f.read,/현재 A02 판정/);
+  let f=fixture(); f.snap.privateItems.get(f.pairs[0].variant_item_id).original_item_id='another-parent'; assert.throws(f.read,/\uc2e4\uc81c \ubd80\ubaa8/);
+  f=fixture(); f.snap.rows[0].prompt_condition='guided'; assert.throws(f.read,/\ub2e4\ub978 \uc6d0\ubcf8 \ub610\ub294 \uc870\uac74/);
+  f=fixture(); f.pairs[0].source_type='TAT-QA'; assert.throws(f.read,/\ub370\uc774\ud130 \ucd9c\ucc98/);
+  f=fixture(); f.snap.responseAssessments.byResponse.get('luna:test-0008:variant:off').adaptation_success=true; assert.throws(f.read,/\uacb0\ud569 \uaddc\uce59/);
+  f=fixture(); f.summary.types[0].planned_pairs=5; assert.throws(f.read,/\uc804\uccb4 \ubd84\ubaa8/);
+  f=fixture(); f.pairs.pop(); assert.throws(f.read,/\ube60\uc9c4 \uc694\uccad/);
+  f=fixture(); f.pairs[3].quadrant=1; assert.throws(f.read,/\ud604\uc7ac A02 \ud310\uc815/);
 });
 test('list filters and pagination retain exact response IDs and a fixed denominator', () => {
   const data=fixture().read(); data.pairs=Array.from({length:45},(_,i)=>({...data.pairs[3],case:`test-${i}`,pair_id:String(i)}));
@@ -94,7 +94,7 @@ test('list filters and pagination retain exact response IDs and a fixed denomina
   assert.equal(groundingPage(data,{case:'test-8'}).planned_pairs,45);
   const end=groundingPage(data,{offset:'99'}); assert.equal(end.offset,45); assert.deepEqual(end.pairs,[]);
   for (const filters of [{quadrant:'0'},{decision:'UNRESOLVED'},{review:'VALID'},{offset:'-1'}]) assert.throws(()=>groundingPage(data,filters));
-  assert.throws(()=>groundingSummary(data,{abstention:'UNRESOLVED'}),/필터/);
+  assert.throws(()=>groundingSummary(data,{abstention:'UNRESOLVED'}),/\ud544\ud130/);
 });
 test('source and variant selection keep the seven types and the four condition groups separate', () => {
   const data=groundingSummary(fixture().read());
@@ -116,7 +116,7 @@ test('a missing pair artifact is explicit; changed input bytes cannot silently r
   const snap={id:'run',root:folder,responseAssessments:{}};
   const missing=await readGroundingPairs(snap,{readJSON:async()=>null}); assert.equal(missing.metadata.status,'NOT_PREPARED'); assert.equal(missing.metadata.assessments_available,true);
   await writeFile(path.join(folder,'input.json'),'changed');
-  await assert.rejects(()=>readGroundingPairs(snap,{readJSON:async()=>({source_hashes:{'input.json':createHash('sha256').update('original').digest('hex')}}), safePath:async(root,file)=>path.join(root,file),fail}),/원자료가 pair 집계 후 바뀌/);
+  await assert.rejects(()=>readGroundingPairs(snap,{readJSON:async()=>({source_hashes:{'input.json':createHash('sha256').update('original').digest('hex')}}), safePath:async(root,file)=>path.join(root,file),fail}),/\uc6d0\uc790\ub8cc\uac00 pair \uc9d1\uacc4 \ud6c4 \ubc14\ub00c/);
 });
 
 test('Original filter includes unknowns only in all and keeps A02 distributions and planned N explicit', () => {
@@ -133,7 +133,7 @@ test('Original filter includes unknowns only in all and keeps A02 distributions 
   const page=groundingPage(data,{original:'correct'});
   assert.equal(page.planned_pairs,11); assert.equal(page.total,8);
   assert.ok(page.pairs.every(row=>row.original_correctness===true));
-  assert.throws(()=>groundingSummary(data,{original:'unknown'}),/필터/);
+  assert.throws(()=>groundingSummary(data,{original:'unknown'}),/\ud544\ud130/);
 });
 
 test('verdict drilldown selects the exact condition and clears unrelated verdict intersections', () => {

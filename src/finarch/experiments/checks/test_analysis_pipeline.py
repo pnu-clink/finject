@@ -46,7 +46,7 @@ def fake_response(req):
         'interpretation_ids': [req['input']['interpretations'][0]['id']],
         'display_ko': {k:v for k,v in finding.items() if k != 'id'}}],
         'discussion': [{'id': 'D1', 'proposal': 'Discuss next step.', 'reason': 'More data needed.',
-            'status': 'NOT_EXECUTED', 'display_ko': {'proposal': '검토', 'reason': '추가 근거'}}]}
+            'status': 'NOT_EXECUTED', 'display_ko': {'proposal': '\uac80\ud1a0', 'reason': '\ucd94\uac00 \uadfc\uac70'}}]}
 
 
 class ResponseAssessmentContractTest(unittest.TestCase):

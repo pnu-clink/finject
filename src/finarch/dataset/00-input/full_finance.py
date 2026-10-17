@@ -15,13 +15,13 @@ from finarch.dataset.shared.calculation.python_graph import FUNCTIONS
 
 
 SYNTAX_LABELS = {
-    'for_loop': 'for 반복문',
-    'while_loop': 'while 반복문',
-    'block_if': '블록형 if/else',
-    'comprehension': '리스트·집합·사전·제너레이터 축약식',
-    'non_math_import': 'math 외 모듈 import',
-    'unsupported_numeric_call': '그래프 미지원 수치·집계 호출',
-    'helper_function': '추가·중첩 함수 정의',
+    'for_loop': 'for loop',
+    'while_loop': 'while loop',
+    'block_if': 'Block if/else',
+    'comprehension': 'List/set/dictionary comprehensions and generator expressions',
+    'non_math_import': 'Imports other than math',
+    'unsupported_numeric_call': 'Numeric/aggregation calls unsupported by the graph',
+    'helper_function': 'Additional/nested function definitions',
 }
 
 

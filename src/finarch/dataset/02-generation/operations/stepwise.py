@@ -44,7 +44,7 @@ def normalize_annotations(code):
 
 @traced('python')
 def name_constants(program):
-    # [PS01] docs/02-architecture.md#PS01 — 생성 원본은 보존하고 수식의 숫자만 고유 변수로 꺼낸다.
+    # [PS01] docs/02-architecture.md#PS01 The calcium-producing prototype is preserved and the number of digits is excluded as a unique variable.
     result=copy.deepcopy(program);original_code=program['code'];code,annotation_changes=normalize_annotations(original_code);tree=ast.parse(code)
     names={n.id for n in ast.walk(tree) if isinstance(n,ast.Name)}
     lines=code.splitlines(keepends=True); changes=[]

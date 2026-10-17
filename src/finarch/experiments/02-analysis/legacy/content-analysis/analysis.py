@@ -42,8 +42,8 @@ def main(root):
         entries = rows(root / name / '03-results/results.jsonl')
         assert len(entries) == 3000 and len({x['trial_id'] for x in entries}) == 3000
         models[name] = entries
-        failure_lines = [f'# {name} 실패 응답 전수 기록', '',
-            '원문 질문·컨텍스트·반환 답변·검사 사유를 보존한 분석용 사본입니다. 형식 오류는 오답 판정이 아닙니다. 진단 태그는 중복될 수 있습니다.', '']
+        failure_lines = [f'# {name} Failed response record', '',
+            'It\'s a copy of the original question, context, half-response, and check file, and the form error is not a misjudgment.', '']
         for row in entries:
             result = read(root / row['result_path'])
             response = result.get('response')
@@ -92,48 +92,48 @@ def main(root):
                                       for p in c.get('content', {}).get('parts', []) if not p.get('thought'))
                 failure_lines += [f"## {row['trial_id']}", '',
                     f"{row['case']} / {row['variant']} / {row['prompt_condition']} / {row['reasoning']} / {row['status']}", '',
-                    '진단: ' + ', '.join(sorted(tags)), '',
-                    f"[호출 JSON](../{row['call_path']}) · [원응답](../{PurePosixPath(row['result_path']).parent}/raw-response.json)", '',
-                    '**질문 및 컨텍스트**', '', '```json', json.dumps(public[row['item_id']], ensure_ascii=False, indent=2), '```', '',
-                    '**반환 응답**', '', '```json', json.dumps(response, ensure_ascii=False, indent=2) if response is not None else (rawtext or '(본문 없음)'), '```', '',
-                    '**검사 사유**', '', '```json', json.dumps(diag['schema_errors'], ensure_ascii=False, indent=2), '```', '']
+                    'Diagnosis: ' + ', '.join(sorted(tags)), '',
+                    f"[JSON extract]{row['call_path']}I\x27m not sure what I\x27m saying.{PurePosixPath(row['result_path']).parent}/raw-response.json)", '',
+                    '**Questions and Context**', '', '```json', json.dumps(public[row['item_id']], ensure_ascii=False, indent=2), '```', '',
+                    '**Returns reply**', '', '```json', json.dumps(response, ensure_ascii=False, indent=2) if response is not None else (rawtext or '(Laughter)'), '```', '',
+                    '**The inspector\'s report.**', '', '```json', json.dumps(diag['schema_errors'], ensure_ascii=False, indent=2), '```', '']
         write_text(output / f'{name}-failures.md', '\n'.join(failure_lines))
     write_rows(output / 'response-diagnostics.jsonl', diagnostics)
     ds = {m: [d for d in diagnostics if d['model'] == m] for m in models}
-    lines = ['# 실험 1·2 응답 및 실패 분석', '', f"실행: {root.name} · 분석 갱신: {now()}", '',
-        '**6,000건 수집 완료. API 요청 실패 0건. 형식 오류 488건과 출력 잘림 37건은 계산 오답과 구분합니다.**', '',
-        '7종 모두 PASS인 후보 1,080개 중 앞 100개를 사용했습니다. 원문 100개 × 2조건 = 200건, 변형 700개 × 4조건 = 2,800건으로 모델당 3,000건입니다. 조건·입력은 두 모델 간 동일합니다. 재호출 없이 저장된 6,000개 응답 전부를 검사했습니다. 의미 정답률·유보 정확도는 이 보고서에서 확정하지 않습니다.', '',
-        '## 1. 수집·형식·비용', '']
-    lines += table(['모델','요청','형식 통과','형식 오류','출력 잘림','형식 통과율','입력 토큰','출력+추론 토큰','추정 USD'],
+    lines = ['♪ The experiment 1·2 Analysis of responses and failures', '', f"Running: {root.name} · Analysis updates: {now()}", '',
+        '**6,000The API request failed. 0The format error. 488Dry and cut off power. 37So that\'s the difference between the right and the wrong.**', '',
+        '7All species are PASS candidates. 1,080of, first 100I used items. 100× 2The condition is equal to 200entries, variants 700× 4The condition is equal to 2,800One by one model. 3,000The condition and input are the same between the two models. 6,000We\'ve checked all the items responses, meaning the accuracy of the response rate and the job accuracy is not confirmed in this report.', '',
+        '## 1Collecting, forming and spending', '']
+    lines += table(['Model','Request','Format valid','Format error','Output truncated','Form-pass rate','Input tokens','Output + reasoning tokens','Estimated USD'],
         [[m['model'],m['planned'],m['statuses'].get('VALID',0),m['statuses'].get('INVALID_RESPONSE',0),m['statuses'].get('OUTPUT_TRUNCATED',0),
           f"{m['statuses'].get('VALID',0)/m['planned']:.2%}",m['input_tokens'],m['output_tokens_including_thinking'],f"{m['paid_batch_usage_cost_estimate_usd']:.6f}"] for m in summary['models']])
-    lines += ['비용은 반환 사용량 × 모델별 Batch 단가입니다. 실제 청구서는 조회하지 않았습니다. 입력은 Flash $0.15 / Lite $0.05, 출력·추론은 Flash $1.25 / Lite $0.20(각 백만 토큰당)입니다. 모든 요청은 유료 Batch 경로이며, 과거 무료·Claude 실행의 비용을 합치지 않았습니다.', '',
-        '## 2. 실패 원인 전수 분류', '',
-        '아래 태그는 중복될 수 있으므로 합산하면 실패 응답 수가 되지 않습니다. 숫자 답변·null·누락 여부는 실제 파싱 결과에서 확인했습니다. 스키마가 요청에 포함되었는데도 해당 형식을 어긴 응답이 반환되었습니다. 제공자 내부에서 왜 강제되지 않았는지는 이 자료로 확인할 수 없습니다.', '']
+    lines += ['The cost is the return usage times the batch unit per model.0.15 / Lite $0.05The output is flash $1.25 / Lite $0.20All requests are paid batch routes, not including the cost of free Claude running in the past.', '',
+        '## 2The failure factor classification', '',
+        'The tag below can be duplicated, so adding up doesn\'t give you a failure response number. The number of responses, zero, or none, was verified in the actual parsing results. Although the schema was included in the request, the response that violated the format was returned. We can\'t verify why it wasn\'t enforced from within the provider with this data.', '']
     tag_order = ['ANSWER_NUMERIC_NOT_STRING','ANSWER_NULL','ANSWER_MISSING','SCHEMA_TYPE','SCHEMA_REQUIRED','SCHEMA_ADDITIONALPROPERTIES','JSON_PARSE_OR_TOP_LEVEL_TYPE','OUTPUT_TRUNCATED']
-    explanations = ['answer가 숫자: 문자열 계약 위반','answer가 null: 문자열 계약 위반','answer 필드 자체가 없음','필드 타입 위반','필수 필드 누락','허용하지 않은 필드 추가','JSON 파싱 또는 최상위 타입 문제','MAX_TOKENS로 출력 잘림']
-    lines += table(['원인',*models], [[desc,*[sum(tag in d['tags'] and d['status']!='VALID' for d in ds[m]) for m in models]] for tag,desc in zip(tag_order,explanations)])
-    lines += ['### 조건별 실패 집중도', '']
-    lines += table(['모델','프롬프트','추론','요청','형식 오류','출력 잘림','null 답변'],
+    explanations = ['The answer is number: breach of the string agreement.','Answer is null: String contract violation','There\'s no answer field.','Field type violation','Missing required field','Added unallowed fields','JSON pacing or top type problem','Cutting power with MAX_TOKENS']
+    lines += table(['Causes',*models], [[desc,*[sum(tag in d['tags'] and d['status']!='VALID' for d in ds[m]) for m in models]] for tag,desc in zip(tag_order,explanations)])
+    lines += ['#### I\'m not focused on failure', '']
+    lines += table(['Model','Prompt','Inference','Request','Format error','Output truncated','null answer'],
         [[m,p,t,len(z),sum(d['status']=='INVALID_RESPONSE' for d in z),sum(d['status']=='OUTPUT_TRUNCATED' for d in z),sum('ANSWER_NULL' in d['tags'] for d in z)]
          for m in models for p in ['P0','P1'] for t in ['off','on'] if (z:=[d for d in ds[m] if d['prompt_condition']==p and d['reasoning']==t])])
-    lines += ['P0에는 실험 1의 100건이 추가되어 각 800건, P1은 각 700건입니다. 분모가 다른 행의 실패 개수만 비교하지 않아야 합니다.', '',
-              '## 3. 실험 1: 숫자 비교와 채점기 한계', '',
-              '기존 추출기가 `-$35`를 `35`로 읽는 오류를 수정했습니다. 원응답은 변경하지 않았고 수정 전 집계는 analysis/before-currency-sign-fix에 보존했습니다. 아래는 수정 후 값입니다. 숫자가 하나만 추출되는 유효 응답만 비교하며, 단위·배율·답의 의미는 별도입니다.', '']
-    lines += table(['모델','추론','전체','형식 통과','숫자 비교 가능','숫자 일치','숫자 불일치','유효하지만 미평가'],
+    lines += ['P0 is the experiment. 1 100And then you add that to each of them. 800entries; each P1 condition 700So the denominator should not just compare the number of failures of other rows.', '',
+              '## 3The experiment. 1: Number comparison and the printing limit', '',
+              'The existing extractor. `-$35` `35`The raw response was unchanged, and the pre-corrected statistics were saved to the analysis/before-currency-sign-fix. Below is the post-correction value.', '']
+    lines += table(['Model','Inference','All','Format valid','Numbers are comparable.','Numeric match','Numeric mismatch','It\'s valid, but underrated.'],
         [[m,t,len(z),sum(d['status']=='VALID' for d in z),sum(d['numeric_comparison'] is not None for d in z),sum('NUMERIC_MATCH' in d['tags'] for d in z),sum('NUMERIC_MISMATCH' in d['tags'] for d in z),sum('BASELINE_NOT_NUMERICALLY_EVALUATED' in d['tags'] for d in z)]
          for m in models for t in ['off','on'] if (z:=[d for d in ds[m] if d['experiment']==1 and d['reasoning']==t])])
-    lines += ['예를 들어 답이 “2011년의 합계는 $86 million”이면 연도와 금액 두 숫자가 추출되어 미평가됩니다. 그러므로 Flash의 숫자 일치가 낮다는 사실만으로 Lite보다 풀이력이 낮다고 결론낼 수 없습니다.', '',
-              '### 두 모델 모두 숫자 비교가 가능한 동일 문항', '']
+    lines += ['For example, the answer is zero.2011The sum of years is $86 If you take a millionth of a second, you subtract the numbers of the year and the amount, and you underestimate them, so the fact that the number matches Flash is low doesn\'t make it less soluble than Lite.', '',
+              'Both models are the same case where you can compare numbers', '']
     names=list(models)
     pair_data=[]
     for t in ['off','on']:
         maps=[{d['case']:d for d in ds[m] if d['experiment']==1 and d['reasoning']==t and d['numeric_comparison'] is not None} for m in names]
         ids=set(maps[0])&set(maps[1]);counts=Counter((maps[0][i]['numeric_comparison']['matches'],maps[1][i]['numeric_comparison']['matches']) for i in ids)
         pair_data.append([t,len(ids),counts[True,True],counts[True,False],counts[False,True],counts[False,False]])
-    lines += table(['추론','공통 비교 문항','둘 다 숫자 일치','Flash만 일치','Lite만 일치','둘 다 불일치'],pair_data)
-    lines += ['## 4. 실험 2: 유보 표현과 형식 실패의 관계', '',
-        '각 행의 분모는 동일하게 100건입니다. 엄격 탐지는 형식 통과 응답의 answer 필드만 검사합니다. 확장 탐지는 형식 실패도 포함하여 파싱된 전체 응답 문자열에서 같은 정규식 표현을 찾습니다. 확장 탐지는 explanation·인용문에도 반응하므로 유보 정확도나 최종 유보 건수로 사용하면 안 됩니다. null만으로도 유보라고 단정하지 않습니다.', '']
+    lines += table(['Inference','Shared comparison cases','Both numbers match.','Flash only matches.','Just a little match.','They\'re both inconsistent.'],pair_data)
+    lines += ['## 4The experiment. 2: The relationship between Ubo expression and form failure', '',
+        'The denominator of each row is the same. 100It\'s true. Strict detection only checks the answer fields of the formatting pass response. Extensive detection finds the same regular expression in the entire response string that has been parsed, including the formatting failure. Extensible detection also responds to explanation and user language, so you can\'t use it as a reference accuracy or final reference dry.', '']
     variant_rows=[]
     for v in list(VARIANT_ORDER)[1:]:
         for p in ['P0','P1']:
@@ -143,37 +143,37 @@ def main(root):
                     z=[x for x in ds[m] if x['variant']==v and x['prompt_condition']==p and x['reasoning']==t]
                     values += [sum(d['status']=='VALID' for d in z),sum(d['strict_answer_marker'] for d in z),sum(d['response_text_marker'] for d in z),sum('ANSWER_NULL' in d['tags'] for d in z)]
                 variant_rows.append(values)
-    lines += table(['유형','조건',*sum(([m+' 유효',m+' 엄격 탐지',m+' 전체문자열 탐지',m+' null'] for m in models),[])],variant_rows)
-    lines += ['### 프롬프트 변경 시 동일 문항의 엄격 탐지 변화', '',
-              '실험 2에서 P0와 P1 모두 형식 통과한 문항만 연결했습니다. 여전히 표현 탐지이며 의미 판정은 아닙니다.', '']
+    lines += table(['Type','Condition',*sum(([m+' Valid',m+' Strict detection.',m+' The full alphabet detector.',m+' null'] for m in models),[])],variant_rows)
+    lines += ['Changes in the same case when the prompt changes', '',
+              'Experiment 2So both P0 and P1 are just cases that have passed through the form.', '']
     pair=[]
     for m in models:
         for t in ['off','on']:
             maps=[{(d['case'],d['variant']):d for d in ds[m] if d['experiment']==2 and d['reasoning']==t and d['prompt_condition']==p and d['status']=='VALID'} for p in ['P0','P1']]
             ids=set(maps[0])&set(maps[1]);c=Counter((maps[0][i]['strict_answer_marker'],maps[1][i]['strict_answer_marker']) for i in ids)
             pair.append([m,t,len(ids),c[False,True],c[True,False],c[True,True],c[False,False]])
-    lines += table(['모델','추론','공통 유효','P1에서 새 탐지','P1에서 사라짐','둘 다 탐지','둘 다 없음'],pair)
-    lines += ['## 5. 근거 인용·입력 동질성', '']
-    lines += table(['모델','유효 응답','근거 빈 배열','인용문 하나 이상 불일치'],[[m,len(z),sum('EMPTY_EVIDENCE' in d['tags'] for d in z),sum('QUOTE_NOT_EXACT_SUBSTRING' in d['tags'] for d in z)] for m in models if (z:=[d for d in ds[m] if d['status']=='VALID'])])
-    lines += ['인용문 불일치는 문맥에 문자열 그대로 없다는 뜻이며 곧바로 환각을 의미하지 않습니다. 반대로 정확한 인용문도 계산·논리를 보장하지 않습니다.', '',
-        '변형 700개 중 350개(원문 50개)에 대해 제작 기준 Q/C와 실험 1 원문 Q/C가 문자열 수준에서 다릅니다. test-0006은 앞 문장의 대소문자·공백·구두점 정리 차이가 확인됩니다. 모든 50개가 의미상 동등하다고 판정한 것은 아닙니다. 두 모델 사이에는 동일 입력을 사용했지만, 실험 1→2 변화에는 변형 이외의 본문 정리 효과가 섞일 수 있습니다.', '',
-        'IC-source 200개는 각각 대응하는 IC-value 부모가 하나씩 기록되어 있습니다. 현재 표의 before/after는 연결된 value 부모 위치입니다. 원래 A/B는 출처를 부여한 주장 구분이며 그 ID를 보존합니다. 위치와 출처 효과를 동일하게 해석하지 않습니다. 모든 변형의 자동 PASS는 최종 텍스트 검사 통과이며 의미적 비정답 가능성/답변 불가능성의 완전한 증명이 아닙니다.', '',
-        '## 6. 원응답 사례와 조치', '',
-        '[사례별 검토](CASE-STUDIES.md)를 읽으십시오. 실패 전체는 아래 모델별 문서에 보존했습니다.', '',
-        *[f'- [{m} 실패 전수 기록](analysis/{m}-failures.md)' for m in models], '',
-        '1. 채점기 통화기호 앞 음수 부호 누락: 수정·재집계 완료. 원응답 및 이전 결과 보존.',
-        '2. 문자열 대신 숫자, null, 필수 필드 누락: 반환 형식 문제와 내용 문제를 분리. 원응답을 자동으로 정상 응답으로 바꾸지 않음.',
-        '3. 다중 숫자 답변: 연도·중간값·최종값을 구분하는 후속 추출 개선이 필요. 이번에는 미평가 유지.',
-        '4. 출력 잘림 37건: 최종 답이 완성되지 않았으므로 오답/유보로 강제 판정하지 않음. 재호출하지 않음.',
-        '5. 유보 표현: 설명에만 유보가 있거나 null을 반환한 사례 때문에 기존 answer-only 탐지가 누락. 확장 관찰치를 함께 제공하지만 정확도로 사용하지 않음.',
-        '6. 의미 평가와 입력 동질성: 50개 원문 차이와 실제 답변 가능 여부를 검토하기 전 강한 모델 우열·유보 성공률 주장은 보류.', '',
-        '## 재현 및 범위', '',
+    lines += table(['Model','Inference','Common valid','New probe from P1.','Disappearing from P1.','Both are detectives.','They don\'t have either.'],pair)
+    lines += ['## 5Based citation and input isotope', '']
+    lines += table(['Model','Valid responses','Based on empty array','More than one quote is inconsistent.'],[[m,len(z),sum('EMPTY_EVIDENCE' in d['tags'] for d in z),sum('QUOTE_NOT_EXACT_SUBSTRING' in d['tags'] for d in z)] for m in models if (z:=[d for d in ds[m] if d['status']=='VALID'])])
+    lines += ['A quotation mismatch means the exact string is absent from the context; it does not by itself establish hallucination. Conversely, an exact quotation does not guarantee correct calculation or reasoning.', '',
+        'Variant 700of 350The answer is: 50Q/C and experimentation on the production criteria for items. 1 The Q/C is different at the string level.0006The difference in the prefix, the spacetime, and the dot sequence of the front sentence is verified. 50It\'s not that items are equals in meaning. 1→2 Change can mix the effects of the text with other than the transformations.', '',
+        'IC-source 200The parent before/after of the current table is the parent position of the connected value. The original A/B distinguishes the claim that assigned the source and retains its ID. The position and the source effect are not interpreted the same. The automatic PASS of all variations passes the final text check and is not a complete proof of the meaningful improbability/impossibility of an improbable answer.', '',
+        '## 6. raw response cases and measures', '',
+        '[Case by case review](CASE-STUDIES.md)Read the entire failure saved in the model-by-model document below.', '',
+        *[f'- [{m} The failure of the algorithm.{m}-failures.md)' for m in models], '',
+        '1.Printing call sign front negative sign missing: correction; recollection completed. raw response and previous result preservation.',
+        '2.Number, null, required field absence instead of string: return format problems and separate content problems. Do not automatically convert raw response to normal response.',
+        '3Multi-digit answer: We need to improve the subsequent extraction to distinguish between the annular, intermediate, and maximum values. This time, keep the undervalued.',
+        '4Cut the power. 37The final answer is not complete, so I don\'t judge it with a negative/obvious response.',
+        '5.Ubo Expression: Existing answer-only detection is missing due to instances where only descriptions have a ubo or nulls are returned. Expanded observations are provided together but not used accurately.',
+        '6. Meaning evaluation and input homogeneity: 50The strong model of the Uey-Yabo success rate argument is in place before reviewing whether there is a fundamental difference and whether there is any real answer.', '',
+        '## Reproduction and scope', '',
         '`PYTHONPATH=src .venv/bin/python -m finarch.experiments.02-analysis.legacy.content-analysis.analysis --run reports/experiments-run/20260920-exp-003`', '',
-        '이 분석 프로그램은 API를 호출하지 않습니다. 진단 6,000행과 실패 전수 기록을 생성합니다. 대표 사례의 내용 검토는 CASE-STUDIES.md에 별도 기록하며, 전수 의미 채점을 수행했다고 주장하지 않습니다. 루브릭 작업은 계속 중단 상태입니다.', '']
+        'This analytics program does not call the API. 6,000The content review of the representative case records the entire case in CASE-STUDIES.md, and does not claim to have performed the numerical significance check.', '']
     build_cases = __import__('finarch.experiments.02-analysis.legacy.content-analysis.case_studies', fromlist=['build']).build
     build_cases(root)
     write_text(root / 'ANALYSIS.md', '\n'.join(lines))
-    write_text(output / 'README.md', '# 분석 산출물 안내\n\n1. ../ANALYSIS.md: 집계·비교·해석 범위.\n2. ../CASE-STUDIES.md: 근거를 대조한 대표 응답 사례.\n3. 모델명-failures.md: 실패 응답 전수와 실제 Q/C·응답·검사 사유.\n4. response-diagnostics.jsonl: 6,000개 응답의 재현 가능한 진단.\n5. before-currency-sign-fix/: 숫자 추출 수정 전 집계.\n\nanalysis.py가 집계와 안내 문서를 생성합니다. HTML은 생성하지 않습니다.\n')
+    write_text(output / 'README.md', '# The analysis of the results\n\n1. ../ANALYSIS.md: The range of the statistics, the analysis and the analysis.\n2. ../CASE-STUDIES.md: Representative response case against the basis.\nModel name-failures.md: Failure response prime and actual Q/C response.\n4. response-diagnostics.jsonl: 6,000Reproductive diagnosis of the items response.\n5. before-currency-sign-fix/: Number extract and correct the previous set.\n\nanalysis.py generates compilation and guidance documents, but HTML doesn\'t.\n')
     event(root,'RESPONSE_ANALYSIS_COMPLETED',responses=len(diagnostics),failures=sum(d['status']!='VALID' for d in diagnostics),new_model_calls=0)
     print(json.dumps({'responses':len(diagnostics),'failures':sum(d['status']!='VALID' for d in diagnostics)}))
 

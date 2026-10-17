@@ -157,7 +157,7 @@ export async function startViewer({ port = 8894, root = defaultRoot, browser = f
   }
   if (browser) {
     try { await launch(url); log({ event: 'BROWSER_OPENED', url }); }
-    catch (error) { log({ event: 'BROWSER_OPEN_ERROR', url, message: `브라우저를 열지 못했습니다. 이 주소를 직접 열어 주세요: ${error.message}` }); }
+    catch (error) { log({ event: 'BROWSER_OPEN_ERROR', url, message: `Could not open the browser. Open this address manually: ${error.message}` }); }
   }
   return { server: reused ? null : server, url, reused };
 }

@@ -49,7 +49,7 @@ def checked_value(value):
 
 @traced('python')
 def evaluate(graph):
-    # [DG02] docs/02-architecture.md#DG02 — 저장 그래프의 연결·순환을 검사하고 Python 수치 타입으로 계산한다.
+    # [DG02] docs/02-architecture.md#DG02 It checks the connection-circuits of the string storage graph and calculates them as a Python numerical type.
     nodes=graph['nodes'];by_id={n['id']:n for n in nodes}
     if len(nodes)!=len(by_id):raise ValueError('DUPLICATE_NODE_ID')
     expected=Counter((p,n['id'],i) for n in nodes for i,p in enumerate(n['inputs']))
@@ -137,7 +137,7 @@ def evaluate(graph):
 
 @traced('python')
 def compile_structure(program, *, missing_facts=()):
-    # [DG01] docs/02-architecture.md#DG01 — 새 LLM 호출 없이 동일 코드 AST에서 근거·상수·연산·변수를 분리한다.
+    # [DG01] docs/02-architecture.md#DG01 Separates base, sum, mix, and variable from the same code AST without calling a new LLM.
     prepared,audit,rules=prepare_numeric_values(program)
     if audit['status']!='PASS':raise ValueError('NUMBER_NORMALIZATION_FAILED')
     facts=validate_facts(prepared,rules);code=program['code'];tree=ast.parse(code)

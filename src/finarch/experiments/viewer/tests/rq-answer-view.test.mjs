@@ -65,7 +65,7 @@ test('RQ details link only saved pairs and retain why a pair cannot be compared'
   assert.deepEqual(unavailable.pairs.map(row => row.reason),
     ['형식 실패·미완료', '응답 미기록', 'scale 다름']);
   assert.throws(() => rqAnswerPage(synthetic, { model: 'luna-api', variant: '../EA_01',
-    prompt: 'guided', reasoning: 'on' }), /선택값/);
+    prompt: 'guided', reasoning: 'on' }), /\uc120\ud0dd\uac12/);
 });
 
 test('RQ source subset changes the graph denominator and keeps pair links in that subset', () => {
@@ -111,7 +111,7 @@ test('RQ1 original row separates correctness, unassessed, failed and absent reco
     prompt: 'guided', reasoning: 'on', category: 'missing' });
   assert.deepEqual([missing.category_total, missing.linked_total, missing.unrecorded], [2, 1, 1]);
   assert.throws(() => rqAnswerPage(source, { model: 'luna-api', variant: 'ORIGINAL',
-    prompt: 'guided', reasoning: 'on', category: 'numeric_different' }), /선택값/);
+    prompt: 'guided', reasoning: 'on', category: 'numeric_different' }), /\uc120\ud0dd\uac12/);
 });
 
 test('RQ summary is available in A03 while full responses stay behind case detail', async () => {

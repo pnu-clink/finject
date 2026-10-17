@@ -234,7 +234,7 @@ def finish_postprocessing(root):
         current['analysis'] = {**current.get('analysis', {}), **result, 'status': 'COMPLETE',
                                'completed_at': store.now()}
         store.write(root / 'state.json', current)
-        a01.render(root, 'analysis', source=root.name, status='A01·A02·A03 및 Python 응답 분류 완료 · A04 생략')
+        a01.render(root, 'analysis', source=root.name, status='A01·A02·A03 and Python response sorting completed · A04 Excluded')
         store.event(root, 'ANALYSIS_PYTHON_FINALIZATION_COMPLETED', a04_status='SKIPPED_BY_USER', new_model_calls=0)
         timing.refresh(root, force=True)
         return result

@@ -72,7 +72,7 @@ def collect(run_path, *, allow_partial=False, artifact_filter=None):
     return {"path": str(root), "snapshot_sha256": fingerprint, "artifacts": artifacts, "decisions": decisions, "stage_flow":stage_flow,"artifact_aliases":artifact_aliases}
 
 
-# [BI07] docs/02-architecture.md#BI07 — 기존 문제별 실행 결과를 모아 비교 HTML을 만듭니다. 별도 내보내기 용도입니다. 기본 뷰어는 server.py가 실제 기록을 읽습니다.
+# [BI07] docs/02-architecture.md#BI07 So we're going to combine the actual problem-by-problem execution results and we're creating a comparison HTML, which is a star-export utility, and the default viewer is server.py, which reads the actual record.
 def build(run_paths, output):
     roots = set()
     for value in run_paths:
@@ -92,8 +92,8 @@ def build(run_paths, output):
 
 
 
-# [H01] docs/02-architecture.md#H01 — 내보낸 사람 판정을 최신 snapshot과 대조해 새 이력에 반영하며 동결하지 않습니다.
-# [R01] docs/02-architecture.md#R01 — 거절 판정도 같은 import_decisions 경로에서 새 이력으로 저장합니다.
+# [H01] docs/02-architecture.md#H01 The person who sent the shots doesn't judge the latest snapshot, and they don't reflect the new momentum.
+# [R01] docs/02-architecture.md#R01 Save the refusal parameter as new input in the same import_decisions path.
 def import_decisions(run_path, decision_path):
     """Import explicit human decisions only against the unchanged snapshot."""
     return record_decisions(run_path,json.loads(Path(decision_path).read_text()))

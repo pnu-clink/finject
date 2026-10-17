@@ -37,7 +37,7 @@ def parse_json_object(text):
     return result
 
 
-# [SC06] docs/02-architecture.md#SC06 — 스키마 원정의로 엄격히 검사하고 보정 없이 원래 값을 반환합니다.
+# [SC06] docs/02-architecture.md#SC06 It's rigorously checked by the Qin Schema method and returns the original value without correction.
 @traced("python")
 def validate(schema_id, value):
     schema_id = resolve_schema_id(schema_id)

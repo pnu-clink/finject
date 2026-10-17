@@ -2,7 +2,7 @@ function renderFinancePreflight(report){
  document.querySelector('.filter-panel').hidden=true;
  $('metrics').replaceChildren();$('rows').replaceChildren();$('detail').replaceChildren();
  $('count').textContent=report.summary.selected+'건 · 입력 준비 완료 · LLM 미실행';
- const root=$('detail'),head=el('section','panel'),totals=report.summary,number=value=>Number(value).toLocaleString('ko-KR');
+ const root=$('detail'),head=el('section','panel'),totals=report.summary,number=value=>Number(value).toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US');
  head.append(el('h2','','FinanceReasoning 전체 Preparation 실행 전 정리'),el('p','',`${number(totals.total)}건 중 본문 없음 ${number(totals.empty_context)}건, boolean 정답 ${number(totals.boolean_answer)}건, Q·C 중복 ${number(totals.duplicate_qc)}건을 제외했습니다. 최종 ${number(totals.selected)}건입니다.`),el('p','small','원천 파일 보존 · 기존 LLM 응답 재사용 없음 · 새 API 호출 0회'));
  root.append(head);
  function table(parent,headers,rows){const t=el('table','events'),h=el('tr');for(const x of headers)h.append(el('th','',x));const th=el('thead');th.append(h);t.append(th);const b=el('tbody');for(const row of rows){const tr=el('tr');for(const x of row)tr.append(el('td','',x));b.append(tr);}t.append(b);parent.append(t);}

@@ -1,20 +1,20 @@
-# 새 public/private 입력 예시 — 모델 호출 없음
+# New public/private input example
 
-[작업 기록](../README.md) · [E01 입력 분리](../../../../docs/02-experiments/01_evaluation/01_preparation/README.md) · [E02 요청](../../../../docs/02-experiments/01_evaluation/02_request/README.md)
+[Operating records](../README.md) · [E01 Input separation](../../../../docs/02-experiments/01_evaluation/01_preparation/README.md) · [E02 Request](../../../../docs/02-experiments/01_evaluation/02_request/README.md)
 
-저장된 dataset `20260917-002/results`에서 선정 조건을 충족한 원문 1개와 7변형을 읽어 **현재 준비 코드로 만든 자료**입니다. Luna의 P0/P1·추론 OFF/ON 조합으로 30개 요청을 준비했으며 대상 LLM 호출은 없습니다.
+The stored dataset `20260917-002/results`The original text that met the selection criteria 1and 7Read the variation. **The data is now in the ready code.**So this is Luna's P0/P1 -- the OFF/ON combination. 30items requests are prepared and no LLM calls are subject to.
 
-**풀이 LLM에 보내는 문제 데이터는 public의 질문(Q)·본문(C)·precision뿐입니다.** `item_id`는 제외합니다. 문항 연결·실험 조건·prompt·schema는 모델별 요청 manifest에서 확인합니다. 이전 예시의 `input-selection.json`은 제거하고 선정 경위를 기존 방식의 `events.jsonl`로 옮겼습니다.
+**The problem data that we send to the LLM is just questions from the public, Q, C, Precision.** `item_id`Excluding case connection, test condition, prompt scheme, is verified in the model request manifest. `input-selection.json`Remove the silver and select the races of the existing way `events.jsonl`I moved it to the right.
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[public.jsonl](public.jsonl)|모델이 문제를 풀 때 사용할 Q/C와 `answer_format.decimal_places`. item_id는 연결용|
-|[private.jsonl](private.jsonl)|응답 평가용 정답·유형·제작 근거·원문/변형 연결|
-|[luna-api/01-requests/manifest.jsonl](luna-api/01-requests/manifest.jsonl)|실행 기준: 문항 연결·모델·P0/P1·추론 조건·prompt·schema·input. 30행, 고유 문항 8개|
-|[events.jsonl](events.jsonl)|INPUT_SELECTION: 선정 순서·규칙·제외 사유·출처 확인. 실행 대상을 복원하는 별도 입력으로 쓰지 않음|
-|[request-inputs.jsonl](request-inputs.jsonl)|public에서 item_id를 제외한 실제 전송 입력. private 참조 없음|
-|[checks.json](checks.json)|8개 public/request 입력 일치·자릿수 포함·출처 파일 해시 보존 확인|
+|[public.jsonl](public.jsonl)|Q/Cs that the model will use to solve problems. `answer_format.decimal_places`.item_id is for connecting|
+|[private.jsonl](private.jsonl)|Answer evaluation, type, base of the product, source and variable connection|
+|[luna-api/01-requests/manifest.jsonl](luna-api/01-requests/manifest.jsonl)|Execution criteria: case connection; model; P0/P1; reference conditions; prompt; schema; input. 30Line, specific case 8items|
+|[events.jsonl](events.jsonl)|INPUT_SELECTION: Select order, rules, private sources, verify. Do not write the run as a separate input to restore the object|
+|[request-inputs.jsonl](request-inputs.jsonl)|Real transmission input except for item_id from public. No private reference|
+|[checks.json](checks.json)|8items public/request input matches; digit content; source file hash preservation verified|
 
-precision은 입력 분리 시 dataset 원자료에서 public에 담습니다. private의 reference_precision은 평가 참조로 유지하지만 요청 작성에서는 읽지 않습니다. public에 precision이 없으면 private로 보충하지 않고 준비를 중단합니다.
+Precision is stored in the public from the raw data set when the input is separated. Private's reference_precision is kept as an evaluation reference but not read in the request writing. If public has no precision, it stops preparing and is not replenished with private.
 
-이 README는 템플릿에서 생성합니다. 상세 원자료 해시와 처리 수량은 checks에, 수행 이력은 상위 events에 남깁니다.
+This README generates from the template, leaving detailed raw material hashes and processing quantities in the checks, and execution power in the top events.

@@ -14,8 +14,7 @@ CLASSIFICATIONS = ('ANSWERABLE', 'CONFLICT', 'INSUFFICIENT_EVIDENCE', 'UNRESOLVE
 LEGACY_DECLARATION = re.compile(
     r'^Classification: (ANSWERABLE|CONFLICT|INSUFFICIENT_EVIDENCE|UNRESOLVED); Response: (ANSWER|CONDITIONAL|ABSTAIN)\.')
 BEHAVIOR_WORDS = re.compile(
-    r'\babstain\w*|\bwithhold\w*|\bconflict\w*|\binsufficient\b|\bmissing information\b|'
-    r'\bconditional\b|\bunderdetermined\b|유보|충돌|정보 부족', re.I)
+    '\\babstain\\w*|\\bwithhold\\w*|\\bconflict\\w*|\\binsufficient\\b|\\bmissing information\\b|\\bconditional\\b|\\bunderdetermined\\b|\uc720\ubcf4|\ucda9\ub3cc|\uc815\ubcf4 \ubd80\uc871', re.I)
 
 
 def validate_request(request):

@@ -1,10 +1,10 @@
-# 프로젝트 현황 조회 코드
+# Project status check code
 
-[대시보드 실행 흐름](../../../../docs/03-dashboard/README.md) · [화면](../../../../viewer/dashboard/03-project/README.md)
+[Deskboard running flow](../../../../docs/03-dashboard/README.md) · [Figure](../../../../viewer/dashboard/03-project/README.md)
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[monitor.py](monitor.py)|로컬 Codex 세션 DB와 저장된 문서·실행 상태를 읽어 현재 현황 JSON을 조립합니다. 기록을 수정하지 않습니다.|
-|[session-map.json](session-map.json)|확인한 주요 세션 ID를 업무 묶음에 연결합니다. 부모·자식 관계의 근거로 사용하지 않습니다.|
+|[monitor.py](monitor.py)|Read the local Codex session DB and the stored document/actions status, and build the current status JSON.|
+|[session-map.json](session-map.json)|It connects the identified main session ID to the task group, and it's not used as a basis for parent-child relationships.|
 
-`load_project_data()`는 프로젝트 경로와 Codex 기록 경로를 받아 세션, 실행, 미완료, 서버 상태를 반환합니다. 예를 들어 분석 run에 `BLOCKED`가 저장되어 있으면 해당 run의 `state.json`을 근거로 `차단` 항목을 만듭니다. 세션 DB가 없으면 세션을 0건으로 돌려주고 경고를 남깁니다. 화면의 실제 부모·자식은 `thread_spawn_edges`에 있는 생성 관계에서만 읽습니다. 조회 중 모델 호출이나 테스트 실행은 없습니다.
+`load_project_data()`The codex records the path of the project and takes the path of a session, runs, unfinished, returns the server state. `BLOCKED`If it's stored, then the run is `state.json`Based on `Block it.` It creates an item. 0And then it turns it back on the screen and leaves a warning. `thread_spawn_edges`There's no model call or test run during the observation.

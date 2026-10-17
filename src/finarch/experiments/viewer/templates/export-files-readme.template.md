@@ -1,17 +1,17 @@
-# 회차별 실험 결과 HTML
+# Experiment-result HTML files by run
 
-`src/finarch/experiments/viewer/templates/export-files-readme.template.md`와 검증 기록에서 자동 생성한 목록입니다.
+This list is generated from `src/finarch/experiments/viewer/templates/export-files-readme.template.md` and saved verification records.
 
-각 파일은 **한 회차의 전체 자료**를 담고 있습니다. HTML을 브라우저에서 열면 검색·필터·탭·문항 비교를 사용할 수 있도록 구성되어 있습니다. 별도 서버나 데이터 폴더를 함께 옮길 필요가 없습니다. 분석자용 원문 정답도 들어 있으며, 생성 이후의 실험 변화는 반영되지 않습니다.
+Each file contains **one complete run**. Open it in a browser to search, filter, switch tabs, and compare cases. No separate server or data folder is required. Analyst-only original reference answers are included. Later experiment changes are not reflected in an existing export.
 
-|회차|요청 수|문항 수|HTML 크기|원파일 한도 초과|
-|---|---:|---:|---:|---:|
+| Run | Requests | Cases | HTML size | Files over the source limit |
+| --- | ---: | ---: | ---: | ---: |
 {{export_file_rows}}
 
-**읽는 순서:** 조건별 비교 → 문항 선택 → 원응답·요청 → 보고서·이력. 현재 사본은 조건별 비교 화면으로 시작합니다. 다른 회차는 해당 회차 HTML을 엽니다.
+**Reading order:** condition comparison → case selection → raw responses/requests → reports/history. These copies start in the condition-comparison view. Open another run's HTML to inspect that run.
 
-8MB를 넘는 원파일은 온라인 뷰어와 같은 제한을 표시합니다. exp-001/002의 `label-migration/originals.zip`이 이에 해당합니다. 화면에 나타나는 문항별 입력·응답·원기록과 보고서는 포함했습니다. 비용·실행의 이벤트는 최근 저장 100개까지입니다.
+Files larger than 8 MB show the same exclusion message as the online viewer; this includes `label-migration/originals.zip` in exp-001/002. Displayed case inputs, responses, raw records, and reports are included. Cost/execution events are limited to the latest 100 saved events.
 
-{{export_verified_at}}에 저장 자료와 대조했습니다. 직접 파일 열기의 브라우저 화면 확인은 도구의 URL 정책으로 수행하지 못했습니다. [검증 범위·로그](../../log/viewer-experiments-html-export/README.md)에서 실제 확인 범위를 보실 수 있습니다.
+The exports were compared with saved data at {{export_verified_at}}. Direct-file browser verification was unavailable under the tool's URL policy. See the [verification scope and logs](../../log/viewer-experiments-html-export/README.md) for the recorded scope.
 
-이후 자료로 다시 만들려면 [실험 뷰어](http://127.0.0.1:8894)의 **회차 HTML Export ↓**를 사용하세요. [실행·코드 안내](../../viewer/experiments/README.md)
+To export later data, use **Export run HTML ↓** in the [experiment viewer](http://127.0.0.1:8894). See the [execution and code guide](../../viewer/experiments/README.md).

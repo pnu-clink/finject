@@ -1,5 +1,5 @@
-# 스키마 JSON 색인
+# The scheme is JSON color.
 
-`index.json`에서 단계 ID와 파일명을 확인한 뒤 해당 schema.json을 읽습니다. 파일명에서 `.schema.json`을 뺀 값이 schema_id입니다. 원정의는 상위 registry.py와 모델 파일에 있으며 JSON은 자동 내보내기 산출물입니다.
+`index.json`Check the step ID and the file name, and then read the schema.json. `.schema.json`The schema_id is the schema_id. The output is on the top of the registry.py and the model file, and JSON is the automatic output output.
 
-변경·호환·검증 기록: [단계별 스키마 ID](../../../../../docs/01-dataset/90-operations/02-model-calls.md).
+Change, case, verification record: [stage by stage scheme ID](../../../../../docs/01-dataset/90-operations/02-model-calls.md).

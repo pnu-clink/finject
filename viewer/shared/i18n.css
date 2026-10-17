@@ -8,3 +8,5 @@ html[lang="en"] .shortcut-key span{font-size:10px}
 html[lang="en"] .result-research-toggle::after{content:'Expand ↓'}
 html[lang="en"] .result-research-group[open] .result-research-toggle::after{content:'Collapse ↑'}
 @media print{.viewer-language{display:none}}
+
+html[lang="en"] .reading.ko,html[lang="en"] .paired-line .translation{display:none}

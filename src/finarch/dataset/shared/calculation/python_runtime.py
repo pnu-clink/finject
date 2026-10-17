@@ -37,7 +37,7 @@ def validate_facts(program, rules=None):
 
 @traced()
 def execute(program, *, save=None):
-    # [NN03] docs/02-architecture.md#NN03 — 실행 전 규칙 적용·기록·원문 대조를 순서대로 수행한다.
+    # [NN03] docs/02-architecture.md#NN03 The application of the rules before the execution of the document and the counter-instruction in order.
     program,normalization,rules=prepare_numeric_values(program)
     if save:save('number-normalization.json',normalization)
     if normalization['status']!='PASS':

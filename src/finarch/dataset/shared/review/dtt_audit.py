@@ -166,18 +166,18 @@ def evaluate_saved(request, response, report):
     raise ValueError('UNSUPPORTED_AUDIT_VERSION')
 
 
-README='''# 17번 완성 문장 의미 검사 — {label}
+README='''# 17Once completed sentence meaning check {label}
 
-이번 범위 상태: **{status}**. 입력된 최종 문장에 대한 단일 모델의 감사이며 역산·우회는 보류입니다. EA는 삭제 사실까지만 검사하며 전체 답변 불가능을 확정하지 않습니다. 18번 호출·사람 승인은 하지 않았습니다.
+This is the range state: **{status}**The audit of a single model for the final sentence entered and the feedback-computing system is a backup. EA only checks the deletion fact and does not confirm the complete answer impossibility. 18The call-man did not approve.
 
-읽는 순서:
-1. `01-input/check.json` → `01-input.json`: 최신 생성 본문·계획 연결과 실제 감사 입력.
-2. `audit/01-input.json`: 프롬프트·모델·전송 응답 스키마.
-3. `audit/02-raw-response.json` → `audit/03-result/schema-check.json`: 실제 원응답과 동일 스키마 검사.
-4. `03-result.json`: 세 가지 판정·실패/보류 이유·audit_version=3. 실패 시 `03-result/failure.json`.
+In order of reading:
+1. `01-input/check.json` → `01-input.json`: latest generated text; plan connection and actual audit input.
+2. `audit/01-input.json`: Prompt model: transmission response scheme.
+3. `audit/02-raw-response.json` → `audit/03-result/schema-check.json`: real raw response and the same scheme test.
+4. `03-result.json`Three reasons: judgment, failure, and retention.3When you fail. `03-result/failure.json`.
 
-문항 루트 `events.jsonl`에 실행/파일 로그, `audit/03-result/usage.json`에 사용량이 있습니다.
-뷰어에서 해당 유형의 5번 문장과 답변 하단에 **17번 의미 검사**가 표시됩니다. 예전 본문에 대한 결과는 최신 본문의 판정으로 사용하지 않습니다.
+The root of the case `events.jsonl`Run/log file to, `audit/03-result/usage.json`So there's a lot of use.
+The same type of thing in the viewer. 5The bottom of the sentence and the answer **17The meaning of the test**The results of the old text are not used as the judgments of the latest text.
 '''
 
 
@@ -290,9 +290,9 @@ def run(case_dir,config,revision='v1',include_counterexamples=False,labels=None,
     summary={'results':results,'counterexamples':checks,'usage':usage,
              'pipeline_status':'COMPLETED','scope':'FINAL_TEXT_ONLY','stage18':'NOT_RUN','recovery_review':'DEFERRED_BY_USER'}
     ctx.save(family+'/review.json',summary)
-    ctx.save_text(family+'/README.md','# 17번 실행 안내\n\n`plan.json` → 유형별 `audit_ref/README.md` → `review.json` 순서로 읽습니다.\n'
-        '본문은 수정하지 않습니다. 통과·실패·판정 불가를 그대로 보관하며, 검사 사례는 데이터 후보에 등록하지 않습니다.\n'
-        '5번 문장과 답변 하단에서 세 가지 판정·실패/보류 이유·전송/수신 기록을 확인합니다. 역산·18번·사람 승인은 미실행입니다.\n')
+    ctx.save_text(family+'/README.md','# 17Running the bar.\n\n`plan.json` → Type by type `audit_ref/README.md` → `review.json` in this order.\n'
+        'The text does not amend, it keeps the pass, fail, and fail statements intact, and the test cases are not registered to the data candidate.\n'
+        '5In the sentence and answer section, check the three records of judgment, failure, reason for storage, transfer, and delivery.18The approval of the people is a misconduct.\n')
     return summary
 
 

@@ -16,21 +16,22 @@ function runtime({ href = 'file:///review.html', saved, unavailable = false, con
 }
 let checks = 0;
 function check(name, fn) { fn(); checks++; console.log('PASS: ' + name); }
-check('Korean default and explicit English URL preference', () => {
-  assert.equal(runtime().locale.language, 'ko');
+check('English default and explicit language URL preference', () => {
+  assert.equal(runtime().locale.language, 'en');
+  assert.equal(runtime({ href: 'http://localhost/?lang=ko' }).locale.language, 'ko');
   assert.equal(runtime({ href: 'http://localhost/?lang=en', saved: 'ko' }).locale.language, 'en');
   assert.equal(runtime({ href: 'file:///review.html?lang=en', unavailable: true }).locale.language, 'en');
 });
 check('Stored choice, invalid preference and offline storage failure', () => {
   assert.equal(runtime({ saved: 'en' }).locale.language, 'en');
-  assert.equal(runtime({ saved: 'invalid' }).locale.language, 'ko');
+  assert.equal(runtime({ saved: 'invalid' }).locale.language, 'en');
   const { locale, document } = runtime({ unavailable: true });
   locale.setLanguage('en'); assert.equal(document.documentElement.lang, 'en');
   locale.setLanguage('ko'); assert.equal(locale.language, 'ko');
 });
 check('Language choice persists without changing form values or source objects', () => {
   const { locale, storage } = runtime();
-  const record = { question: '검사 통과', context: '실패 해석', answer: '-35', decision: 'REJECTED' };
+  const record = { question: '\uac80\uc0ac \ud1b5\uacfc', context: '\uc2e4\ud328 \ud574\uc11d', answer: '-35', decision: 'REJECTED' };
   const before = JSON.stringify(record);
   locale.setLanguage('en'); assert.equal(storage.get('finarch.viewer.language'), 'en');
   assert.equal(JSON.stringify(record), before);
@@ -39,61 +40,61 @@ check('Language choice persists without changing form values or source objects',
 check('Complete UI sentences and dynamic counters render without mixed languages', () => {
   const { locale } = runtime();
   const cases = {
-    '판정 저장 (x key)': 'Save decision (x key)',
-    '78 / 100개 문항 · 78개 유형 기록': '78 / 100 cases · 78 variant records',
-    '해석에 사용한 근거 파일 79개': '79 evidence files used in analysis',
-    '원문 1,080개 · 변형 7,560개 · 1개 모델의 저장된 결과': '1,080 originals · 7,560 variants · saved results from 1 models',
-    '소요시간 0시간 26분 34초 · 동시처리 한도 200문항': 'Elapsed 0h 26m 34s · concurrency limit 200 cases'
+    '\ud310\uc815 \uc800\uc7a5 (x key)': 'Save decision (x key)',
+    '78 / 100\uac1c \ubb38\ud56d · 78\uac1c \uc720\ud615 \uae30\ub85d': '78 / 100 cases · 78 variant records',
+    '\ud574\uc11d\uc5d0 \uc0ac\uc6a9\ud55c \uadfc\uac70 \ud30c\uc77c 79\uac1c': '79 evidence files used in analysis',
+    '\uc6d0\ubb38 1,080\uac1c · \ubcc0\ud615 7,560\uac1c · 1\uac1c \ubaa8\ub378\uc758 \uc800\uc7a5\ub41c \uacb0\uacfc': '1,080 originals · 7,560 variants · saved results from 1 models',
+    '\uc18c\uc694\uc2dc\uac04 0\uc2dc\uac04 26\ubd84 34\ucd08 · \ub3d9\uc2dc\ucc98\ub9ac \ud55c\ub3c4 200\ubb38\ud56d': 'Elapsed 0h 26m 34s · concurrency limit 200 cases'
   };
   for (const [ko, en] of Object.entries(cases)) { assert.equal(locale.translate(ko, 'en'), en); assert.equal(locale.translate(ko, 'ko'), ko); }
 });
 check('Untranslated source text is not rewritten into a partial translation', () => {
   const { locale } = runtime();
-  const text = '이 문항은 아직 연구자가 작성한 한국어 설명입니다.';
+  const text = '\uc774 \ubb38\ud56d\uc740 \uc544\uc9c1 \uc5f0\uad6c\uc790\uac00 \uc791\uc131\ud55c \ud55c\uad6d\uc5b4 \uc124\uba85\uc785\ub2c8\ub2e4.';
   assert.equal(locale.translate(text, 'en'), text);
 });
 check('Portable reviewer labels, import errors and dynamic messages are fully English', () => {
   const { locale } = runtime();
   const labels = [
-    '데이터 평가 · 20261003-concat-002', '문제별', '유형별', '변경 문장과 근거',
-    '원문 맥락', '초록: 추가 · 취소선: 삭제 · 분홍/빨강: 출처', '전체 보기',
-    '… 4252자 생략 · 펼치기', '문장·수식·노드를 선택하면 연결 계산이 강조됩니다.',
-    '주석 (선택) · N으로 입력 · Enter로 저장 · Shift+Enter 줄바꿈', '판정 후 다음 미평가',
-    '1·2·3 판정 · Q/E 필터된 문제 이전·다음 · A/D 유형 이전·다음 · v 다음 유보·실패 / Shift+V 이전 · N 주석',
-    '● 초록 통과 · ● 빨강 실패 · ● 노랑 유보', '변경 1 · 추가', '변경 2 · 교체',
-    '12 / 8820 완료 · 통과 8 · 실패 2 · 유보 2', '목록 1260 / 1260문항',
-    'test-0007 · IC-VALUE 앞 통과 저장됨 · 이 실행의 평가를 모두 마쳤습니다.',
-    '판정 저장 1 / 1260 · IC-VALUE 앞', '문장 배치: 원래 주장 뒤',
-    'test-0007 · IC-VALUE 앞의 기존 상세 화면',
-    '20261003-concat-002 · 임시 JSON 다운로드를 시작했습니다.',
-    '평가자 이름을 입력해 주세요.', '이 HTML에서 저장한 평가 파일이 아닙니다.',
-    '파일을 읽지 못했습니다: 평가자 이름이 올바르지 않습니다.',
-    '간략 그래프를 표시하지 못했습니다: 입력 노드 기록이 없습니다: n3',
-    'A · 최종 답 = 계산 불가\n노드 n3, n4', '20261003-concat-002 · test-0007 · HTML 내장 자료'
+    '\ub370\uc774\ud130 \ud3c9\uac00 · 20261003-concat-002', '\ubb38\uc81c\ubcc4', '\uc720\ud615\ubcc4', '\ubcc0\uacbd \ubb38\uc7a5\uacfc \uadfc\uac70',
+    '\uc6d0\ubb38 \ub9e5\ub77d', '\ucd08\ub85d: \ucd94\uac00 · \ucde8\uc18c\uc120: \uc0ad\uc81c · \ubd84\ud64d/\ube68\uac15: \ucd9c\ucc98', '\uc804\uccb4 \ubcf4\uae30',
+    '… 4252\uc790 \uc0dd\ub7b5 · \ud3bc\uce58\uae30', '\ubb38\uc7a5·\uc218\uc2dd·\ub178\ub4dc\ub97c \uc120\ud0dd\ud558\uba74 \uc5f0\uacb0 \uacc4\uc0b0\uc774 \uac15\uc870\ub429\ub2c8\ub2e4.',
+    '\uc8fc\uc11d (\uc120\ud0dd) · N\uc73c\ub85c \uc785\ub825 · Enter\ub85c \uc800\uc7a5 · Shift+Enter \uc904\ubc14\uafc8', '\ud310\uc815 \ud6c4 \ub2e4\uc74c \ubbf8\ud3c9\uac00',
+    '1·2·3 \ud310\uc815 · Q/E \ud544\ud130\ub41c \ubb38\uc81c \uc774\uc804·\ub2e4\uc74c · A/D \uc720\ud615 \uc774\uc804·\ub2e4\uc74c · v \ub2e4\uc74c \uc720\ubcf4·\uc2e4\ud328 / Shift+V \uc774\uc804 · N \uc8fc\uc11d',
+    '● \ucd08\ub85d \ud1b5\uacfc · ● \ube68\uac15 \uc2e4\ud328 · ● \ub178\ub791 \uc720\ubcf4', '\ubcc0\uacbd 1 · \ucd94\uac00', '\ubcc0\uacbd 2 · \uad50\uccb4',
+    '12 / 8820 \uc644\ub8cc · \ud1b5\uacfc 8 · \uc2e4\ud328 2 · \uc720\ubcf4 2', '\ubaa9\ub85d 1260 / 1260\ubb38\ud56d',
+    'test-0007 · IC-VALUE \uc55e \ud1b5\uacfc \uc800\uc7a5\ub428 · \uc774 \uc2e4\ud589\uc758 \ud3c9\uac00\ub97c \ubaa8\ub450 \ub9c8\ucce4\uc2b5\ub2c8\ub2e4.',
+    '\ud310\uc815 \uc800\uc7a5 1 / 1260 · IC-VALUE \uc55e', '\ubb38\uc7a5 \ubc30\uce58: \uc6d0\ub798 \uc8fc\uc7a5 \ub4a4',
+    'test-0007 · IC-VALUE \uc55e\uc758 \uae30\uc874 \uc0c1\uc138 \ud654\uba74',
+    '20261003-concat-002 · \uc784\uc2dc JSON \ub2e4\uc6b4\ub85c\ub4dc\ub97c \uc2dc\uc791\ud588\uc2b5\ub2c8\ub2e4.',
+    '\ud3c9\uac00\uc790 \uc774\ub984\uc744 \uc785\ub825\ud574 \uc8fc\uc138\uc694.', '\uc774 HTML\uc5d0\uc11c \uc800\uc7a5\ud55c \ud3c9\uac00 \ud30c\uc77c\uc774 \uc544\ub2d9\ub2c8\ub2e4.',
+    '\ud30c\uc77c\uc744 \uc77d\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4: \ud3c9\uac00\uc790 \uc774\ub984\uc774 \uc62c\ubc14\ub974\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.',
+    '\uac04\ub7b5 \uadf8\ub798\ud504\ub97c \ud45c\uc2dc\ud558\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4: \uc785\ub825 \ub178\ub4dc \uae30\ub85d\uc774 \uc5c6\uc2b5\ub2c8\ub2e4: n3',
+    'A · \ucd5c\uc885 \ub2f5 = \uacc4\uc0b0 \ubd88\uac00\n\ub178\ub4dc n3, n4', '20261003-concat-002 · test-0007 · HTML \ub0b4\uc7a5 \uc790\ub8cc'
   ];
   for (const ko of labels) {
     assert(!/[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]/.test(locale.translate(ko, 'en')), ko);
     assert.equal(locale.translate(ko, 'ko'), ko);
   }
-  assert.equal(locale.translate('… 4252자 생략 · 펼치기', 'en'), '… 4252 characters hidden · Expand');
+  assert.equal(locale.translate('… 4252\uc790 \uc0dd\ub7b5 · \ud3bc\uce58\uae30', 'en'), '… 4252 characters hidden · Expand');
 });
 check('Reported dataset headings, graph labels and live counters have no Korean', () => {
   const { locale } = runtime();
   const labels = [
-    '03-calculation · 계산과 정답', '외부지식 요구 문구·태그·공식 정의',
-    '코드·실행 결과·정답 비교', '모델이 지정한 원문 위치',
-    '색이 있는 원문 숫자, 변수 표, 코드 줄에 마우스를 올리거나 클릭하면 연결된 부분을 강조합니다. 색상은 근거와 코드의 참조 연결이며, 실행 성공은 아래 실제 결과에서 확인합니다.',
-    '선택한 코드 22번째 줄', 'appliances_2018 = 계산 불가 · 코드 2행',
-    '변수 · answer', 'IC-VALUE · 앞 — 문장 생성 메뉴에서 위치를 비교합니다. 이 앞/뒤 쌍은 동일한 A/B 계산 그래프를 공유합니다.',
-    '소요시간 0시간 20분 11초 · 동시처리 한도 200문항',
-    '선택한 실행: 20261003-003 · 717개 문항 기록 · 읽기 완료 후 10초마다 변경 확인 · 최근 확인 오후 11:16:11'
+    '03-calculation · \uacc4\uc0b0\uacfc \uc815\ub2f5', '\uc678\ubd80\uc9c0\uc2dd \uc694\uad6c \ubb38\uad6c·\ud0dc\uadf8·\uacf5\uc2dd \uc815\uc758',
+    '\ucf54\ub4dc·\uc2e4\ud589 \uacb0\uacfc·\uc815\ub2f5 \ube44\uad50', '\ubaa8\ub378\uc774 \uc9c0\uc815\ud55c \uc6d0\ubb38 \uc704\uce58',
+    '\uc0c9\uc774 \uc788\ub294 \uc6d0\ubb38 \uc22b\uc790, \ubcc0\uc218 \ud45c, \ucf54\ub4dc \uc904\uc5d0 \ub9c8\uc6b0\uc2a4\ub97c \uc62c\ub9ac\uac70\ub098 \ud074\ub9ad\ud558\uba74 \uc5f0\uacb0\ub41c \ubd80\ubd84\uc744 \uac15\uc870\ud569\ub2c8\ub2e4. \uc0c9\uc0c1\uc740 \uadfc\uac70\uc640 \ucf54\ub4dc\uc758 \ucc38\uc870 \uc5f0\uacb0\uc774\uba70, \uc2e4\ud589 \uc131\uacf5\uc740 \uc544\ub798 \uc2e4\uc81c \uacb0\uacfc\uc5d0\uc11c \ud655\uc778\ud569\ub2c8\ub2e4.',
+    '\uc120\ud0dd\ud55c \ucf54\ub4dc 22\ubc88\uc9f8 \uc904', 'appliances_2018 = \uacc4\uc0b0 \ubd88\uac00 · \ucf54\ub4dc 2\ud589',
+    '\ubcc0\uc218 · answer', 'IC-VALUE · \uc55e — \ubb38\uc7a5 \uc0dd\uc131 \uba54\ub274\uc5d0\uc11c \uc704\uce58\ub97c \ube44\uad50\ud569\ub2c8\ub2e4. \uc774 \uc55e/\ub4a4 \uc30d\uc740 \ub3d9\uc77c\ud55c A/B \uacc4\uc0b0 \uadf8\ub798\ud504\ub97c \uacf5\uc720\ud569\ub2c8\ub2e4.',
+    '\uc18c\uc694\uc2dc\uac04 0\uc2dc\uac04 20\ubd84 11\ucd08 · \ub3d9\uc2dc\ucc98\ub9ac \ud55c\ub3c4 200\ubb38\ud56d',
+    '\uc120\ud0dd\ud55c \uc2e4\ud589: 20261003-003 · 717\uac1c \ubb38\ud56d \uae30\ub85d · \uc77d\uae30 \uc644\ub8cc \ud6c4 10\ucd08\ub9c8\ub2e4 \ubcc0\uacbd \ud655\uc778 · \ucd5c\uadfc \ud655\uc778 \uc624\ud6c4 11:16:11'
   ];
   const hangul = /[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]/;
   for (const label of labels) {
     assert(!hangul.test(locale.translate(label, 'en')), label);
     assert.equal(locale.translate(label, 'ko'), label);
   }
-  assert.equal(locale.translate('undefined (1차 수정)', 'en'), 'undefined (revision 1)');
+  assert.equal(locale.translate('undefined (1\ucc28 \uc218\uc815)', 'en'), 'undefined (revision 1)');
   assert.equal(locale.translate('A: -12.6 / B: -11.4', 'en'), 'A: -12.6 / B: -11.4');
 });
 function element(tag, attrs = {}, ...children) {
@@ -122,52 +123,52 @@ function mockWalker(root, flags, filter) {
 }
 check('Reviewer context expansion translates inside opaque source without rewriting it', () => {
   const { locale, document } = runtime();
-  const raw = textNode('원문 맥락은 한국어 원본 그대로 보존합니다.');
-  const gap = element('button', { 'data-i18n-ui': '' }, textNode('… 4252자 생략 · 펼치기'));
-  const note = element('textarea', { placeholder: '주석 (선택) · N으로 입력 · Enter로 저장 · Shift+Enter 줄바꿈' });
-  note.value = '검토자가 작성한 한국어 의견';
+  const raw = textNode('\uc6d0\ubb38 \ub9e5\ub77d\uc740 \ud55c\uad6d\uc5b4 \uc6d0\ubcf8 \uadf8\ub300\ub85c \ubcf4\uc874\ud569\ub2c8\ub2e4.');
+  const gap = element('button', { 'data-i18n-ui': '' }, textNode('… 4252\uc790 \uc0dd\ub7b5 · \ud3bc\uce58\uae30'));
+  const note = element('textarea', { placeholder: '\uc8fc\uc11d (\uc120\ud0dd) · N\uc73c\ub85c \uc785\ub825 · Enter\ub85c \uc800\uc7a5 · Shift+Enter \uc904\ubc14\uafc8' });
+  note.value = '\uac80\ud1a0\uc790\uac00 \uc791\uc131\ud55c \ud55c\uad6d\uc5b4 \uc758\uacac';
   document.body = element('body', {}, element('div', { class: 'prose' }, raw, gap), note);
   document.createTreeWalker = mockWalker;
   locale.setLanguage('en');
   assert.equal(gap.childNodes[0].nodeValue, '… 4252 characters hidden · Expand');
-  assert.equal(raw.nodeValue, '원문 맥락은 한국어 원본 그대로 보존합니다.');
-  assert.equal(note.value, '검토자가 작성한 한국어 의견');
+  assert.equal(raw.nodeValue, '\uc6d0\ubb38 \ub9e5\ub77d\uc740 \ud55c\uad6d\uc5b4 \uc6d0\ubcf8 \uadf8\ub300\ub85c \ubcf4\uc874\ud569\ub2c8\ub2e4.');
+  assert.equal(note.value, '\uac80\ud1a0\uc790\uac00 \uc791\uc131\ud55c \ud55c\uad6d\uc5b4 \uc758\uacac');
   assert.equal(note.getAttribute('placeholder'), 'Comment (optional) · N to edit · Enter to save · Shift+Enter for a new line');
   locale.setLanguage('ko');
-  assert.equal(gap.childNodes[0].nodeValue, '… 4252자 생략 · 펼치기');
-  assert.equal(note.value, '검토자가 작성한 한국어 의견');
+  assert.equal(gap.childNodes[0].nodeValue, '… 4252\uc790 \uc0dd\ub7b5 · \ud3bc\uce58\uae30');
+  assert.equal(note.value, '\uac80\ud1a0\uc790\uac00 \uc791\uc131\ud55c \ud55c\uad6d\uc5b4 \uc758\uacac');
   assert(fs.readFileSync('viewer/dataset/evaluation/review.js', 'utf8').includes("gap.setAttribute('data-i18n-ui','')"));
 });
 check('Opaque source text keeps UI tooltips, portable paths and status labels reversible', () => {
   const { locale, document } = runtime();
-  const source = textNode('질문과 원문은 그대로 보존합니다.');
-  const tooltip = element('button', { 'aria-label': 'other_2019 원문 근거 44.1' }, textNode('44.1'));
+  const source = textNode('\uc9c8\ubb38\uacfc \uc6d0\ubb38\uc740 \uadf8\ub300\ub85c \ubcf4\uc874\ud569\ub2c8\ub2e4.');
+  const tooltip = element('button', { 'aria-label': 'other_2019 \uc6d0\ubb38 \uadfc\uac70 44.1' }, textNode('44.1'));
   const question = element('div', { class: 'prose' }, source, tooltip);
-  const rawPath = '/Volumes/EX400U/workspace/논문/fin-arch/reports/run/20261003-003/01-preparation/test-0001/01-round/run.json';
+  const rawPath = '/Volumes/EX400U/workspace/\u1102\u1169\u11ab\u1106\u116e\u11ab/fin-arch/reports/run/20261003-003/01-preparation/test-0001/01-round/run.json';
   const path = element('span', { class: 'file-path', 'data-copy': rawPath }, textNode(rawPath));
-  const status = element('div', { class: 'prose', 'data-i18n-ui': '' }, textNode('원래 주장 앞'));
-  const codeText = textNode('# 원본 코드 주석\nanswer = 1');
+  const status = element('div', { class: 'prose', 'data-i18n-ui': '' }, textNode('\uc6d0\ub798 \uc8fc\uc7a5 \uc55e'));
+  const codeText = textNode('# \uc6d0\ubcf8 \ucf54\ub4dc \uc8fc\uc11d\nanswer = 1');
   const code = element('pre', {}, codeText);
-  const comment = textNode('사용자가 입력한 주석');
-  const textarea = element('textarea', { placeholder: '판정 이유' }, comment);
-  textarea.value = '작성 중인 판정 이유';
+  const comment = textNode('\uc0ac\uc6a9\uc790\uac00 \uc785\ub825\ud55c \uc8fc\uc11d');
+  const textarea = element('textarea', { placeholder: '\ud310\uc815 \uc774\uc720' }, comment);
+  textarea.value = '\uc791\uc131 \uc911\uc778 \ud310\uc815 \uc774\uc720';
   document.body = element('body', {}, question, path, status, code, textarea);
   document.createTreeWalker = mockWalker;
   locale.setLanguage('en');
-  assert.equal(source.nodeValue, '질문과 원문은 그대로 보존합니다.');
-  assert.equal(codeText.nodeValue, '# 원본 코드 주석\nanswer = 1');
+  assert.equal(source.nodeValue, '\uc9c8\ubb38\uacfc \uc6d0\ubb38\uc740 \uadf8\ub300\ub85c \ubcf4\uc874\ud569\ub2c8\ub2e4.');
+  assert.equal(codeText.nodeValue, '# \uc6d0\ubcf8 \ucf54\ub4dc \uc8fc\uc11d\nanswer = 1');
   assert.equal(tooltip.getAttribute('aria-label'), 'other_2019 Source evidence 44.1');
   assert.equal(path.childNodes[0].nodeValue, 'reports/run/20261003-003/01-preparation/test-0001/01-round/run.json');
   assert.equal(path.getAttribute('data-copy'), rawPath);
   assert.equal(locale.originalText(path), rawPath);
   assert.equal(status.childNodes[0].nodeValue, 'Before the original claim');
   assert.equal(textarea.getAttribute('placeholder'), 'Decision reason');
-  assert.equal(textarea.value, '작성 중인 판정 이유');
-  assert.equal(comment.nodeValue, '사용자가 입력한 주석');
+  assert.equal(textarea.value, '\uc791\uc131 \uc911\uc778 \ud310\uc815 \uc774\uc720');
+  assert.equal(comment.nodeValue, '\uc0ac\uc6a9\uc790\uac00 \uc785\ub825\ud55c \uc8fc\uc11d');
   locale.setLanguage('ko');
   assert.equal(path.childNodes[0].nodeValue, rawPath);
-  assert.equal(status.childNodes[0].nodeValue, '원래 주장 앞');
-  assert.equal(tooltip.getAttribute('aria-label'), 'other_2019 원문 근거 44.1');
+  assert.equal(status.childNodes[0].nodeValue, '\uc6d0\ub798 \uc8fc\uc7a5 \uc55e');
+  assert.equal(tooltip.getAttribute('aria-label'), 'other_2019 \uc6d0\ubb38 \uadfc\uac70 44.1');
 });
 check('Confirmation text is localized without changing the user answer', () => {
   let message;
@@ -175,16 +176,16 @@ check('Confirmation text is localized without changing the user answer', () => {
   const sandbox = { URL, location: { href: 'file:///review.html?lang=en' }, localStorage: { getItem() {} },
     confirm: text => { message = text; return false; } };
   vm.runInNewContext(source, sandbox);
-  assert.equal(sandbox.confirm('판정 저장'), false);
+  assert.equal(sandbox.confirm('\ud310\uc815 \uc800\uc7a5'), false);
   assert.equal(message, 'Save decision');
 });
 check('Saved bilingual findings switch, with an exact original fallback', () => {
-  const { locale } = runtime();
+  const { locale } = runtime({ href: 'file:///review.html?lang=ko' });
   const node = { isConnected: true, setAttribute(name, value) { this[name] = value; } };
-  locale.bindText(node, '판단 근거 원문입니다.', 'The rejection was too strict.');
-  assert.equal(node.textContent, '판단 근거 원문입니다.');
+  locale.bindText(node, '\ud310\ub2e8 \uadfc\uac70 \uc6d0\ubb38\uc785\ub2c8\ub2e4.', 'The rejection was too strict.');
+  assert.equal(node.textContent, '\ud310\ub2e8 \uadfc\uac70 \uc6d0\ubb38\uc785\ub2c8\ub2e4.');
   locale.setLanguage('en'); assert.equal(node.textContent, 'The rejection was too strict.');
-  locale.setLanguage('ko'); assert.equal(node.textContent, '판단 근거 원문입니다.');
+  locale.setLanguage('ko'); assert.equal(node.textContent, '\ud310\ub2e8 \uadfc\uac70 \uc6d0\ubb38\uc785\ub2c8\ub2e4.');
   locale.bindText(node, undefined, 'Original only'); assert.equal(node.textContent, 'Original only');
   assert.equal(node['data-i18n-skip'], '');
 });

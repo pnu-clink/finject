@@ -1,18 +1,18 @@
 # {model}
 
-호출 경로: `{transport}` · 계획 {planned}건 · 형식 검사 통과 {valid}건
+Calling path: `{transport}` • Planning {planned}Pass the format validation {valid}entries
 
-`cache-preflight.json`이 있으면 먼저 확인합니다. 상태가 `CACHE_POLICY_BLOCKED`일 때는 캐시를 끄는 기능을 확인하지 못해 호출을 시작하지 않은 상태입니다. `cache_verification.status=NOT_CALLED`는 미호출이며 캐시 미사용 실험 완료가 아닙니다.
+`cache-preflight.json`If you have this, check first. `CACHE_POLICY_BLOCKED`Sometimes, you can't check the cache off function and you can' t start the call. `cache_verification.status=NOT_CALLED`And the CASE misuse experiment is not complete.
 
-1. `calls/<문항 ID>/<유형>/<문항 ID>-P0-R-off.json`: 해당 조건의 질문·본문·프롬프트·스키마·응답·검사·사용량을 한 파일에서 확인합니다.
-2. 같은 유형 폴더의 다른 JSON: P0/P1(기본/유보 유도)와 R-off/R-on(추론 설정)을 비교합니다. 원본은 P0 두 조건, 변형은 네 조건입니다.
-3. `03-results/summary.json`, `results.jsonl`: 조건별 집계와 모든 결과 목록. `call_path`는 읽기용 JSON, `result_path`는 실제 시도 검사 파일입니다.
-4. `01-requests/manifest.jsonl`: 실행 당시 고정된 요청과 고유 ID.
-5. `calls/<문항 ID>/<유형>/_records/<해시>/attempt-xxx`: 재시도별 요청·원응답·검사 원기록.
-6. Codex 실행의 `resources.jsonl`, `resources-latest.json`: 2초 간격 CPU·메모리·동시 한도·진행 중 요청 수. 한도와 실제 진행 중 수는 서로 다릅니다.
+1. `Calls/<port ID>/<type>/<port id>-P0-R-off.json`I'm going to check the question, the text, the prompt, the schematics, the answers, the scans, the usage of the terms in a file.
+2. Compare the different JSONs in the same type of folder: P0/P1 and R-off/R-on. The source is two conditions P0 and the transformation is four conditions.
+3. `03-results/summary.json`, `results.jsonl`: Conditional statistics and list of all results. `call_path`It's a JSON for reading, `result_path`It's a real test file.
+4. `01-requests/manifest.jsonl`: Fixed request and unique ID at runtime.
+5. `Calls/<problem ID>/<type>/_records/<description>/attempt-xxx`Request for a response: raw response:
+6. The codex execution `resources.jsonl`, `resources-latest.json`: 2The number of requests during a secondary CPU memory, simultaneous CPU movement, and the actual running time are different.
 
-유형 순서: `00-Original`, `01-IC-value-before`, `02-IC-value-after`, `03-IC-source-before`, `04-IC-source-after`, `05-IC-relation`, `06-EA-01`, `07-EA-02`입니다. Source before/after는 연결된 value 부모의 위치이며, 원래 유형 ID `IC_SOURCE_A_ONLY/B_ONLY`도 JSON에 보존합니다.
+Type order: `00-Original`, `01-IC-value-before`, `02-IC-value-after`, `03-IC-source-before`, `04-IC-source-after`, `05-IC-relation`, `06-EA-01`, `07-EA-02`So the source before/after is the location of the parent of the connected value, and the original type ID is the source before and after. `IC_SOURCE_A_ONLY/B_ONLY`And it's stored in JSON.
 
-읽기용 JSON의 `request`가 실제 요청, `response`가 파싱한 응답, `response_text`가 저장된 출력 본문, `result`가 상태·형식 오류·사용량입니다. `records`의 경로는 실험 실행 폴더 기준입니다. 시도하지 않은 조건은 호출 JSON을 만들지 않으며 결과 목록에 NOT_RUN으로 남깁니다.
+It's a JSON for reading. `request`Go to the real request, `response`The answer is a parsing. `response_text`The output text that was saved, `result`It's the state, the form, the error, the usage. `records`The path of the experiment is the run-folder standard. Untryed conditions do not create a call JSON and leave it as NOT_RUN on the result list.
 
-원응답을 덮어쓰지 않습니다. 한도 초과 후 재개하면 같은 요청 ID 아래 새 시도를 기록하며, 성공한 응답을 다시 호출하지 않습니다. 사용 토큰의 API 환산액과 실제 청구액을 구분합니다.
+It doesn't overwrite the raw response. If you restart after a limit has been exceeded, you record the new attempt under the same request ID, and you don't recall the successful response. It distinguishes the API refund amount of the used token from the actual invoice amount.

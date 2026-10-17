@@ -1,25 +1,25 @@
-# A02 응답 근거 검토 — 설계와 확인 기록
+# A02 Reviews of the evidence of the design and verification of the logs
 
-2026-10-03 사용자 요구에 따라 최신 실험 뷰어와 A02·A03의 현재 저장 계약을 확인하고, 원본 제외 응답의 설명·evidence·답변 결정에 대한 검토 설계를 기록했습니다. **요구사항과 설계 문서이며, 새로운 의미 판정 결과는 없습니다.**
+2026-10-03 The latest experimental viewer and A0 according to user requirements2·A03I have verified the current storage agreement, and recorded a review design for the explanation of the answer, the evidence, and the decision to replace the original. **It's a requirement and design document, and there's no new semantic assessment results.**
 
-## 읽는 순서
+## Reading order
 
-1. [응답 근거 검토 설계](../../../docs/02-experiments/02_analysis/02_comparison/02-response-grounding-review.md): 현재 부족한 부분, 판정 항목, 유형별 분모, 뷰어와 A03 사용 계약.
-2. [A02 관계 비교](../../../docs/02-experiments/02_analysis/02_comparison/README.md) → [A03 연구 해석](../../../docs/02-experiments/02_analysis/03_research/README.md): 현행 구현과 추가 요구의 구분.
-3. [확인한 소스와 상태](design-review.json) → [검사 기록](validation.json) → [작업 로그](events.jsonl).
+1. [Response based review design](../../../docs/02-experiments/02_analysis/02_comparison/02-response-grounding-review.md): Current missing parts, judgment items, type by denominator, viewer and A03 Use contract.
+2. [A02 Relationship comparison](../../../docs/02-experiments/02_analysis/02_comparison/README.md) → [A03 Research interpretation](../../../docs/02-experiments/02_analysis/03_research/README.md): Distinguishing current implementation from additional requirements.
+3. [Confirmed source and condition](design-review.json) → [Record of the investigation](validation.json) → [Operating log](events.jsonl).
 
-[기존 통합 문서 뷰어에서 보기](http://127.0.0.1:8893/?run=20261003-analysis-response-grounding-design&doc=docs%2F02-experiments%2F02_analysis%2F02_comparison%2F02-response-grounding-review.md)
+[See the Document Viewer for the existence of the unified document](http://127.0.0.1:8893/?run=20261003-analysis-response-grounding-design&doc=docs%2F02-experiments%2F02_analysis%2F02_comparison%2F02-response-grounding-review.md)
 
-현재 확인에서는 문서 API가 본문을 반환하지만 화면이 최신 데이터셋으로 이동하는 문제가 있습니다. `[viewer-experiments]`에 수정을 전달했습니다. 표시 확인 상태는 `validation.json`을 기준으로 보며, 수정 전에는 위 읽는 순서의 설계 문서 파일을 직접 확인해 주세요.
+In the current verification, the document API returns the text, but there's a problem with the screen moving to the latest dataset. `[viewer-experiments]`The check state is shown in the `validation.json`Look at the basics, and before you edit, check the design document file in the order you read it.
 
-## 파일 역할
+## File responsibilities
 
-|파일|역할|
+|File|Role|
 |---|---|
-|`design-review.json`|읽은 현재 소스·해시·확인 사실, 요구 반영 범위와 미구현 항목|
-|`validation.json`|문서 연결·README 템플릿·소스 보존·뷰어 확인 범위|
-|`events.jsonl`|이 작업의 변경·확인·전달 이력|
-|`documentation.json`, `summary.json`|기존 통합 뷰어가 읽는 문서 색인과 설계 상태|
-|`migration.json`|문서 뷰어의 공통 형식. 이번 작업의 이관 대상은 없어 빈 목록|
+|`design-review.json`|Currently read source: explanation: verification fact, reflecting demand range and miyu-show item|
+|`validation.json`|Document connection.README template. Source conservation. Viewer verification range|
+|`events.jsonl`|Change, verify, and transmit this task.|
+|`documentation.json`, `summary.json`|The existing integrated viewer reads the document color and design status|
+|`migration.json`|The common format of the document viewer.|
 
-README는 `src/finarch/documentation/templates/research/analysis-response-grounding-design-readme.md`에서 생성합니다. 별도 뷰어 HTML을 만들지 않습니다. 현재 실험 코드·풀이 프롬프트·응답 스키마·기존 실험 산출물은 변경하지 않으며, 모델 호출·중지 해제는 수행하지 않습니다. 문서 검사는 의미 판정 실행이나 사용자 검토 완료를 뜻하지 않습니다.
+ReadME is a `src/finarch/documentation/templates/research/analysis-response-grounding-design-readme.md`No star viewer HTML is created. The current experimental code-filled prompt-response scheme-existence experiment output is not changed, and the model call-centered decompression is not performed. Document testing does not mean running semantic assessment or completing user review.

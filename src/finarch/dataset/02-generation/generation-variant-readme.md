@@ -1,16 +1,16 @@
-# Generation 단계별 기록
+# Generation by Generation
 
-`01-perturbation` 그래프 변경·계산 확인 → `02-generate-text` 실제 요청·응답·편집 검사 → `03-validation` 고정 의미 검사 → `04-human-review` 최종 사람 검토 순서입니다.
+`01-perturbation` Change the graph. Check the calculation `02-generate-text` The actual request, the response, the edit check `03-validation` Fixed meanings check `04-human-review` It's the final person review sequence.
 
-실패한 유형과 변경된 의존 유형만 다음 차수에 재시도합니다. 이전 차수의 통과 기록은 출처를 유지합니다. IC-SOURCE Type 1은 검증된 IC-VALUE 앞, Type 2는 뒤를 사용합니다. IC-VALUE 앞·뒤는 같은 생성 문장을 배치한 조건 쌍입니다.
+Only the failed type and the changed dependent type are shown in the next graph. The previous graph's pass record keeps the source. 1The verified IC-VALUE front, Type 2The IC-VALUE is a condition pair that places the same generated phrase in front and back.
 
-보완 지침은 각 차수의 `문항/유형/feedback`에 따로 저장하고 다음 차수의 같은 문항·유형 생성 호출에만 추가합니다. `00-evidence.json`은 실패 근거, `02-result.json`은 보완 내용, 다음 차수의 `feedback/01-applied.json`은 실제 적용 출처와 해시입니다. 검사 프롬프트는 재시도 중 변경하지 않습니다. `final-validator.json`은 재시도 여부와 원인을 기록합니다. 자동 통과는 사람 승인이 아닙니다.
+The supplementary instructions are for each of the variables `Article/type/feedback`Save separately and add only the same case-type generating call of the next variable. `00-evidence.json`The basis for failure, `02-result.json`The complementary content of the next graph `feedback/01-applied.json`The actual application source and hash is the check prompt does not change during the hash. `final-validator.json`The silver jacket records the cause and whether it is.
 
-공통 뷰어에서 런·차수·문항·유형·단계를 선택하면 실제 저장된 파일을 읽습니다. 빈 단계는 미실행입니다. 실행 명령·시작과 종료·소요 시간은 timing.json 및 같은 구조의 로그에 남습니다.
+In the common viewer, if you select run, factor, problem, pattern, step, you read the actual saved file. The empty step is a misspoke. Run command, start, finish, search time is left in logs of timing.json and similar structures.
 
-QI01 정책은 기본 off입니다. 새 실행에서 `ea_recovery_policy.enabled=true`이면 계획의 `recovery_preview`와 최종 본문의 `03-validation/05-recovery-screen.json`을 함께 읽습니다. 최종 파일에는 검사 본문 해시·대상 식별 정보·복원식·인용 위치가 있습니다. RECOVERABLE/UNKNOWN은 별도 Python 품질 gate를 막고 LLM handler 재시도를 하지 않습니다. audit v3의 기존 PASS와 전체 EA 미평가는 보존합니다. 현재 두 등록 grammar 이외의 관계는 UNKNOWN이며, 대상 재선정은 아직 하지 않습니다. 결과 파일 트리에서 sidecar를 읽을 수 있으며 별도 뷰어 화면을 만들지 않습니다.
+QI01 The policy is basically off. `ea_recovery_policy.enabled=true`The plan is to `recovery_preview`And the final chapter of the `03-validation/05-recovery-screen.json`The final file contains the check text hash, event identification information, recovery mode, and user location. RECOVERABLE/UNKNOWN blocks any Python quality gate and does not re-interview the LLM handler. The existing PASS and the entire EA review of audit v3 are preserved. Currently, the relationship between the two registered grammar is UNKNOWN, and the subject accounting is not yet done. The resulting file tree can read sidecar and does not create any viewer screen.
 
-## 병렬 처리 기록
-Preparation은 config.json의 parallelism.preparation(최대 10), Generation은 parallelism.generation(최대 2)로 문항 수를 제한합니다. Generation 선행 다섯 유형 후 Source 두 유형을 실행하며 Source 종료까지 문항 자리를 유지합니다. VALUE 앞·뒤는 동일한 추가 문장을 공유합니다. queue.json에서 현재 상태, queue.jsonl에서 변경 이력, progress.json 및 각 유형 run.json에서 결과를 읽으세요. 뷰어의 차수 요약 위에 대기열 상태가 표시됩니다.
+## Parallel processing record
+Preparation is the parallelism.preparation of config.json 10), Generation is parallelism. 2The next generation type runs two types of Source and maintains the case position until the end of Source. The VALUE front and back share the same additional phrases. Current state in queue.json, change dynamics in queue .jsonl, progress.json and results in each type run.json. The standby state is displayed above the viewer's variable summary.
 
-문항·유형별 피드백 생성은 parallelism.feedback(최대 3)으로 병렬 처리합니다. 같은 문항·유형의 중복 입력은 거절하고 완료된 피드백은 재사용합니다. Generation 문항 병렬 상한 2는 유지합니다.
+Article: Feedback generation by type parallelism.feedback 3The same case/type of duplicate input is rejected and the completed feedback is reused. 2And keep it that way.

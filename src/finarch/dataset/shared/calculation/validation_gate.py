@@ -9,7 +9,7 @@ StepStopped = __import__('finarch.dataset.90-operations.staging', fromlist=['Ste
 
 @traced('python')
 def record_gate(ctx, comparison, program):
-    # [PG01] docs/02-architecture.md#PG01 — 정답 대조 실패는 보존하되 후속 제작 대상에서 제외한다.
+    # [PG01] docs/02-architecture.md#PG01 The failure of the correct answer is preserved, but excluded from subsequent production.
     passed = comparison.get('matches') is True
     decision = {
         'status': 'PASS' if passed else 'FAIL',
@@ -31,7 +31,7 @@ def record_gate(ctx, comparison, program):
 
 @traced('python')
 def require_eligible(decision, program):
-    # [PG02] docs/02-architecture.md#PG02 — FAIL·제외·누락·변경된 코드는 다음 단계 호출 전에 막는다.
+    # [PG02] docs/02-architecture.md#PG02 FAIL. External. Close. Modified code blocks before the next step calls.
     if (decision.get('status') != 'PASS' or decision.get('disposition') != 'ELIGIBLE'
             or decision.get('allow_next_stage') is not True
             or decision.get('code_sha256') != hashlib.sha256(program['code'].encode()).hexdigest()

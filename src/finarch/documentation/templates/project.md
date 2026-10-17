@@ -1,158 +1,143 @@
-# fin-arch
+# FInject
 
-This project constructs datasets with value conflicts, source constraints, relational contradictions, and missing required evidence in financial source material. Dataset construction and target-model experiments are separate workflows.
+## 1. FInject overview
 
-## Dataset Construction
+FInject (Finance Inject) evaluates whether a financial question-answering model's **numeric answer or abstention is supported by the supplied context**. Seven controlled variants introduce conflicting values or relationships, change source attribution, or remove information from verified original questions.
 
-Follow this order: **source dataset → adapter integration → 00-input → 01-preparation → 02-generation**. Run the commands below from the repository root and replace `PATH_TO_...` with actual paths. Use new input and output folders, and pass the run created by stage 01 directly to stage 02. This section describes the common workflow; source-specific commands and dataset settings are collected under [Additional Notes and Specific Cases](#additional-notes-and-specific-cases).
+![Figure 1. FInject connects contextual evidence, explanations, and numeric-answer or abstention decisions.](paper/asset/figures/v2/Figure1-v2-context-evidence.png)
 
-### 1. Prepare a source dataset
+**Figure 1 — Illustration of FInject.** Contextual evidence must support the model's explanation, and the explanation must justify its final decision. A correct number or an abstention alone does not establish that the decision is supported.
 
-Place source files containing the original question (Q), context (C), and answer (A) in [data/raw](data/raw/README.md). Preserve the originals and record each file's path, SHA-256 hash, source URL, version (commit), and adapter name in the source catalog. The source files and catalog are inputs to stage 00. Do not use outputs from previous LLM generation as source data.
+This repository provides:
 
-### 2. Create and integrate an adapter if needed
+- **Data:** 1,354 originals and 9,478 linked variants, plus a small source sample and file/schema descriptions. See the [released dataset](data/final/README.md).
+- **Reusable pipelines:** input adapters, Dataset construction, target-model Evaluation, and Analysis of saved responses and their evidence.
+- **Viewers:** construction evidence in the Dataset viewer, and model inputs, responses, and Analysis in the experiment viewer. An optional [macOS app](apps/README.md) starts these servers.
 
-Use an existing adapter for a supported source format. For a new format, implement an adapter that converts its Q/C/A records to the common input schema, and connect it through [adapters.py](src/finarch/dataset/00-input/adapters.py). **The current filename is `adapters.py`, not `adapter.py`.** Register the new adapter name in both the catalog and the dispatch logic of the stage 00 entry point.
+## 2. User guide
 
-Adapters construct the context through [content.py](src/finarch/dataset/00-input/content.py). JSON contexts are converted to tabular form by [json_context.py](src/finarch/dataset/00-input/json_context.py). This stage standardizes the input structure without modifying the answers.
-
-### 3. Run 00-input: convert sources to the common input format
-
-Given the source catalog and selection scope, this stage verifies source hashes, selects or excludes records, applies adapters, and validates the input schema. Choose an entry point suited to the source and selection method from the existing [00-input entry point guide](src/finarch/dataset/00-input/README.md).
-
-Use the common [cli.py prepare](src/finarch/cli.py) entry point to sample records from each source. Below, `COUNT_PER_SOURCE` is the number of records to select per source, and `SELECTION_SEED` makes the selection order reproducible.
-
-```shell
-# Sample each source in the catalog and create common input records.
-PYTHONPATH=src .venv/bin/python -B -m finarch.cli prepare \
-  --sources PATH_TO_SOURCE_CATALOG_JSON \
-  --output PATH_TO_NEW_INPUT_FOLDER \
-  --per-source COUNT_PER_SOURCE \
-  --seed SELECTION_SEED
+```mermaid
+flowchart LR
+    P["Set up once"] --> D["Dataset<br/>Use supplied data or construct variants"]
+    D --> E["Evaluation<br/>Collect model responses"]
+    E --> A["Analysis<br/>Inspect results and evidence"]
 ```
 
-To select all records or restrict selection to a particular source, use the arguments of the source-specific entry point. See [Additional Notes and Specific Cases](#additional-notes-and-specific-cases) for the relevant commands and settings.
+For a first pass, check the two source examples in [Dataset](#4-dataset), then use one supplied, completed family for [Evaluation](#5-evaluation) and [Analysis](#6-analysis). Reconstructing the full dataset is not required. Each section gives the sample command, what to check, and a link to details.
 
-Read the outputs in this order: the output folder's `README.md` → logs and manifests documenting selection, exclusions, and source provenance → `input.json`, which is the next stage's input. Keep `provider-records.json` in the same folder. **Stage 00 makes no LLM calls.**
+Source conversion, planning, request preparation, and viewing saved files need **no API key**. Live construction and Evaluation use your own credentials and incur provider charges. The Analysis example aggregates saved responses locally; model-assisted assessment has the compatibility requirement described in Section 6.
 
-### 4. Run 01-preparation: solve the original items and verify calculations and graphs
+<a id="installation-and-credentials"></a>
 
-The entry point is [prepare_schedule.py](src/finarch/dataset/01-preparation/prepare_schedule.py). Pass the `input.json` produced by stage 00.
+## 3. Prerequisites
 
-```shell
-# Source review → LLM-generated Python solution → execution and answer comparison → computation graph → verification.
-PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.01-preparation.prepare_schedule \
-  --input PATH_TO_NEW_INPUT_FOLDER/input.json \
-  --config PATH_TO_LLM_CONFIG_JSON
-```
-
-Specify the run settings, `profiles_path`, and `hyperparameter_path` in `config.json`. The model and reasoning effort are selected through the profiles and hyperparameters; specify versioned models and profiles when reproducing a particular version. Concurrency and the maximum number of rounds are also supplied through the hyperparameters. The command above processes the full input and does not require `--cases-file`.
-
-A new run is created automatically under `reports/run/YYYYMMDD-NNN`. The `run` value in the final output is the path to pass to the next stage. Artifacts are stored in that run's `01-preparation` folder. Read them in this order: the run's `README.md` → `01-preparation/summary.json` → each item's `run.json` and the source, Python, graph, and verification records for its active round. Select the same run in the shared [dataset viewer](viewer/dataset/README.md). Passing automated verification and receiving a human review decision are distinct outcomes.
-
-### 5. Run 02-generation: generate seven variants within the same run
-
-The entry point is [generate_schedule.py](src/finarch/dataset/02-generation/generate_schedule.py). Pass the same run after stage 01 has completed.
-
-```shell
-# Check Preparation eligibility → plan changes → generate text → validate completed text and retry.
-PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.02-generation.generate_schedule \
-  --run PATH_TO_RUN_FROM_PREPARATION
-```
-
-The current entry checks use each Preparation item's `run.json` status and required artifacts. All selected items must have finished processing, and required artifacts must be valid. Only items with an automated PASS proceed to Generation. FAIL/ERROR items are excluded; unfinished processing or invalid artifacts block entry.
-
-Using the same run's `config.json`, hyperparameters, and profiles, this stage generates IC-VALUE before/after, IC-SOURCE Type 1/2, IC-RELATION, and EA-01/02 variants. Failures are routed to `04-exception-handler`; subsequent rounds process only failure types eligible for retry. Results are saved in `02-generation`, with materials for human inspection provided through `05-human-review`. This command does not include Evaluation or Analysis.
-
-Start with the run's `README.md` and `02-generation/README.md`, then select a round, item, and variant type in the shared viewer. Dataset-specific run records are listed under [Additional Notes and Specific Cases](#additional-notes-and-specific-cases).
-
-After all Generation processing finishes, the original Q/C and the actual Q/C for all seven variants are collected automatically in `data/generated/<run-id>/dataset.jsonl`. This record preserves failures and rejections as well. Items meeting the existing selection criteria of passing all seven types with no rejections are marked separately. For the reading order and annotation links, see the combined output folder's template-generated README and the [release guide](docs/01-dataset/03-release/README.md). The shared viewer's **Generated dataset archive** button displays the saved records.
-
-## Running Target-Model Experiments
-
-Follow these steps from the project root. The dataset pipeline handles data generation; the experiments pipeline handles target-model Evaluation and Analysis.
-
-1. Set `evaluation.schedule.dataset.generated_path` in `config/experiments/config.toml` to `data/generated/<construction-run-id>`, and check the model and inference settings.
-2. Inspect the settings with `config`, then freeze the experiment inputs and requests with `prepare`. Neither command calls a model. `prepare` prints the new run path.
-3. Execute `run --evaluation-only` with that run path. This submits, polls, and collects Native Batch jobs, performs E04 validation, and stops before Analysis.
-4. Select the run in the experiment viewer and inspect the E03 cost/execution Python logs or the progress dashboard.
-5. Once the analysis metadata is ready and you have decided to run Analysis, freeze the Analysis settings and execute `run` for the same run.
+Requirements: **Python 3.11+**, **Node.js** for the experiment viewer, and a POSIX shell. Open a terminal at the repository root and run:
 
 ```sh
-PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline config --config config/experiments/config.toml
-PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline prepare --config config/experiments/config.toml
-RUN_PATH=reports/experiments-run/20261003-exp-004-tatqa-luna
-PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline run --evaluation-only --run "$RUN_PATH"
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e '.[viewer]'
+python -m pip check
+export PYTHONPATH="$PWD/src"
 ```
 
-The `RUN_PATH` above is an actual TAT-QA run example. For a new `prepare` invocation, replace it with the newly printed path. That selection contained 291 original items and 2,037 variants; applying four conditions produced 9,312 requests. Do not treat this as a fixed request count for other datasets.
+Keep this terminal for the pipeline commands below. In a new terminal, activate `.venv` and set `PYTHONPATH` again.
+
+For live model calls, create `.env` if it does not already exist:
 
 ```sh
-tail -f "$RUN_PATH/pipeline.log"
+if [ ! -f .env ]; then cp .env.example .env; fi
 ```
 
-`pipeline.log` records the actual Python commands, stages, and Batch processing counts; `events.jsonl` records the detailed history. Do not start a duplicate instance while the same pipeline is running. When resuming an existing experiment, running `prepare` again creates a different experiment folder.
+Open `.env` and set `OPENAI_API_KEY=your-key`. Keep it private. Your account must support the configured models. See [credentials and configuration](config/README.md) for provider options and model settings.
 
-[Experiment source guide](src/finarch/experiments/README.md) · [Stage documentation](docs/02-experiments/README.md) · [Configuration guide](config/experiments/README.md) · [Experiment viewer](http://127.0.0.1:8894/)
+## 4. Dataset
 
-## Documentation Reading Order
+### Sample command
 
-1. [Overall workflow](docs/README.md)
-2. [01 Dataset construction pipeline](docs/01-dataset/README.md): Input → Preparation → Generation → Release
-3. Read each stage folder's README for user requirements, detailed steps, actual code, and failure paths.
-4. [Stage-specific open issues](docs/01-dataset/99-open-issues.md)
-5. [02 Experiment documentation](docs/02-experiments/README.md): Input → Evaluation → Analysis
+Convert the two supplied source examples into common pipeline inputs and validate their format. These commands make no model calls:
 
-File and folder numbers follow the actual run order rather than the order of requests. Update descriptions in the documentation for the relevant stage, and keep past executions, settings, and outcomes in their corresponding run records.
+```sh
+python -B -m finarch.cli prepare \
+  --sources data/sample/source-catalog.json \
+  --output data/prepared/reviewer-sample \
+  --per-source 1 --seed reviewer-sample-v1
 
-## Data, Run Records, and Viewers
-
-- Sources: [data/raw](data/raw/README.md) · Prepared inputs: [data/prepared](data/prepared/README.md)
-- Construction run records: [reports/run](reports/run) · Target-model experiment records: [reports/experiments-run](reports/experiments-run)
-- Shared construction viewer: [viewer/dataset](viewer/dataset/README.md) · Experiment viewer: [viewer/experiments](viewer/experiments/README.md)
-- [Project dashboard](viewer/dashboard/03-project/README.md): sessions, task hierarchy, recent requests, unfinished work, and saved run status. The [two quantitative views](viewer/dashboard/README.md) cover the experiment overview and item-level analysis.
-- [Server widget](apps/server-widget/README.md): check status, start or stop the four viewer servers, and open their pages from the menu bar.
-
-The viewers read saved artifacts. Documentation that confirms implementation is distinct from evidence of actual execution or semantic validation. This README does not claim that any particular historical run is currently running.
-
-## Working Guidelines and Earlier Documentation
-
-Follow the user-defined principles in [AGENTS.md](AGENTS.md) and the [agreement record](handoff/understanding-check.md). Earlier versions of the README and docs are kept in the [2026-09-23 archive](archive/20260923-documentation-reorganization/README.md). The newer documents listed above are the current starting points.
-
-For the code layout, read the [source structure and pipeline mapping](docs/01-dataset/90-operations/05-source-layout.md). To launch the viewers, read the [four-server guide](viewer/README.md).
-
-## Additional Notes and Specific Cases
-
-The following notes apply to particular sources and historical runs. Refer to them when using those sources or selection methods with the common workflow above.
-
-### Preparing the full FinanceReasoning input
-
-The entry point is [full_finance.py](src/finarch/dataset/00-input/full_finance.py). The [existing catalog example](data/prepared/finance-reasoning/source-catalog.json) specifies three sources in this order: `finance-easy`, `finance-medium`, and `finance-hard`.
-
-```shell
-# Verify FinanceReasoning sources, apply exclusions, and create the full common input.
-PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.00-input.full_finance \
-  --catalog PATH_TO_FINANCE_CATALOG_JSON \
-  --output PATH_TO_NEW_INPUT_FOLDER
+python -B -m finarch.dataset.schemas.validation \
+  --schema 01-preparation.01-source.prepared-input \
+  --input data/prepared/reviewer-sample/input.json
 ```
 
-This program writes the selection log to `selection-log.json` and the manifest to `selection-manifest.json`. For other sources, such as the full original TAT-QA dataset, use the corresponding entry point in the [00-input entry point guide](src/finarch/dataset/00-input/README.md).
+Use a new `--output` folder if you run source conversion again.
 
-### Restricting selection to CodeTAT-QA and preserving existing item IDs
+### What to check
 
-Select CodeTAT-QA from the FinanceReasoning sources above. Add the following argument to the same `full_finance.py` command.
+`data/prepared/reviewer-sample/preparation-result.json` should report **PASS**, **two inputs**, and **zero model calls**. Read `input.json` for the selected questions and contexts. These are source inputs; the seven variants are created during Preparation and Generation.
 
-```shell
-# Apply the source filter, item ID mapping, and expected count from the hyperparameters.
-PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.00-input.full_finance \
-  --catalog PATH_TO_FINANCE_CATALOG_JSON \
-  --output PATH_TO_NEW_INPUT_FOLDER \
-  --hyperparameter PATH_TO_HYPERPARAMETER_JSON
+To construct fresh variants, follow [Preparation and Generation](src/finarch/dataset/README.md). Inspect its plan before live calls. Construction evidence goes to `reports/run/<run-id>/`; completed consolidation writes `data/generated/<run-id>/dataset.jsonl`.
+
+For construction screens, start the server in a separate terminal:
+
+```sh
+PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.viewer.server --open
 ```
 
-Set the hyperparameter `input.source_prefix` to `CodeTAT-QA-`. To preserve existing item IDs, point `input.id_map_path` to the existing `input.json`, and use `input.expected_count` to check the expected count. See the [288-item CodeTAT-QA run record](reports/run/20261003-001-CodeTAT-QA-0917-002/README.md) for the detailed 00 → 01 → 02 commands, logs, settings, and results. Use a new input folder and run for a new execution.
+Open the [Dataset viewer](http://127.0.0.1:8893/?lang=en), select the construction run, round, case, and variant. Source conversion alone does not create a viewer run. Section 5 provides the route for viewing supplied final examples.
 
-### Historical work records
+**Details:** [Sample files](data/sample/README.md) · [Construction steps](src/finarch/dataset/README.md) · [Write an adapter](src/finarch/dataset/00-input/README.md) · [Dataset viewer](viewer/dataset/README.md)
 
-- [Luna experiment improvement record](reports/run/20260923-experiment-improvement/README.md): prior results, response contracts, limited runs, and comparison reports.
-- [Documentation reorganization record](reports/run/20260923-dataset-documentation/README.md): consolidation, original hashes, migration mapping, and viewer checks.
+## 5. Evaluation
+
+### Sample command
+
+Prepare one family from the supplied final dataset: **one original + seven variants**, with two prompt conditions and two reasoning modes (**32 requests**). Preparation makes no model calls and saves the run path in `EVAL_RUN`:
+
+```sh
+EVAL_RUN=$(python -B -m finarch.experiments.pipeline prepare \
+  --config config/experiments/reviewer-smoke.toml)
+printf '%s\n' "$EVAL_RUN"
+```
+
+With your API key configured, execute those requests:
+
+```sh
+python -u -B -m finarch.experiments.pipeline run \
+  --evaluation-only --run "$EVAL_RUN"
+```
+
+This uses the configured Batch transport and can take time to finish. Keep the printed run path; reuse it to resume rather than preparing another run. This example uses the **supplied release**, independently of the source-conversion check in Section 4. To evaluate fresh generated data, follow the [input configuration guide](src/finarch/experiments/01-evaluation/README.md#1-choose-an-input-and-inspect-the-configuration).
+
+### What to check
+
+Start the experiment viewer in another terminal:
+
+```sh
+PYTHONPATH=src .venv/bin/python -B -m finarch.experiments.viewer.server --open
+```
+
+Open the [experiment viewer](http://127.0.0.1:8894/?lang=en), select your run in **Run records**, then **Browse cases → Case comparison**. Compare the original and variants, prompt conditions, Reasoning OFF/ON, and actual responses. Before execution, **Not run** is expected.
+
+Outputs remain in the printed `reports/experiments-run/<run-id>/` folder. Check `state.json` and `01_evaluation/04_validation/summary.json`. Continue to Analysis only when every selected model is **FINISHED**; failed or uncollected requests are not accuracy results.
+
+**Details:** [Evaluation steps and resumption](src/finarch/experiments/01-evaluation/README.md) · [Sample configuration](config/experiments/reviewer-smoke.toml) · [Experiment viewer](viewer/experiments/README.md)
+
+## 6. Analysis
+
+### Sample command
+
+After Evaluation finishes, use the **same `EVAL_RUN`** to aggregate its saved responses without new model calls:
+
+```sh
+python -B -m finarch.experiments.pipeline analysis \
+  --aggregate-only --run "$EVAL_RUN"
+```
+
+### What to check
+
+The command should report **AGGREGATES_REFRESHED** and `new_model_calls: 0`. Outputs include `02_analysis/01_results/responses.jsonl` and `02_analysis/02_comparison/comparisons.json`. If Evaluation is unfinished, the command reports **WAITING / WAIT_EVALUATION**.
+
+In the same experiment viewer, select **02 Analysis** and inspect the available result/comparison views. Local aggregation does not create semantic assessments or research findings. Those require model-assisted Analysis; their views remain incomplete until the corresponding records exist.
+
+**Model-assisted Analysis:** the supplied API profile and Codex CLI backend are currently rejected by the pipeline's cache policy (`CACHE_POLICY_BLOCKED`). Adding an API key alone does not resolve this requirement. Follow the [Analysis guide](src/finarch/experiments/02-analysis/README.md) for the full assessment stages, configuration compatibility, and evidence inspection.
+
+**Details:** [Analysis steps and outputs](src/finarch/experiments/02-analysis/README.md) · [Analysis configuration](config/README.md) · [Read the Analysis screens](viewer/experiments/README.md#read-the-screens)

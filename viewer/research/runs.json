@@ -1,7 +1,7 @@
 [
   {
     "id": "20261003-felix-english-comparison",
-    "title": "2026-10-03 · Felix Draft · 영문 나란히 비교"
+    "title": "2026-10-03 · Felix Draft · English parallel comparison"
   },
   {
     "id": "20261003-academic-writing-felix",
@@ -9,39 +9,39 @@
   },
   {
     "id": "20261003-review-applied",
-    "title": "2026-10-03 · 리뷰 적용 · 한·영 Draft와 로컬 PDF"
+    "title": "2026-10-03 · Review Application · Han-ing Draft and local PDF"
   },
   {
     "id": "20261003-paper-local-sync",
-    "title": "2026-10-03 · 수치·그림 동기화 · 로컬 LaTeX 미리보기"
+    "title": "2026-10-03 · Numerical image synchronization · Local LaTeX preview"
   },
   {
     "id": "20261003-english-manuscript-review",
-    "title": "2026-10-03 · 영문 원고 리뷰 · 주장·문체·표·그림"
+    "title": "2026-10-03 · English language manuscript review · claims · text · signs · pictures"
   },
   {
     "id": "20261003-construction-revision",
-    "title": "2026-10-03 · 3장 재구성 · 제작·평가와 상세 부록"
+    "title": "2026-10-03 · 3The reorganization of the plant; production; evaluation and detailed annexes"
   },
   {
     "id": "20261003-overleaf-related-works",
-    "title": "2026-10-03 · Overleaf Related Works · 표별 페이지 분리"
+    "title": "2026-10-03 · Overleaf Related Works · Separation of the page"
   },
   {
     "id": "20261003-paper-revision-draft",
-    "title": "2026-10-03 · 논문 전체 한·영 Revision Draft · Related Works"
+    "title": "2026-10-03 · Full text of the paper; Revision Draft · Related Works"
   },
   {
     "id": "20261003-overleaf-introduction",
-    "title": "2026-10-03 · Overleaf 서론과 Figure 1 반영"
+    "title": "2026-10-03 · Overleaf Discourse and Figure 1 Reflect"
   },
   {
     "id": "20261002-intro-figure-0034",
-    "title": "2026-10-02 · 서론 그림 · 0034 충돌과 근거 제시"
+    "title": "2026-10-02 · Scenes from the Scenes 0034 Conflict and justification"
   },
   {
     "id": "20261002-overleaf-abstention-update",
-    "title": "2026-10-02 · Overleaf 백업 및 Abstention 원고 반영"
+    "title": "2026-10-02 · Overleaf Backup and Abstention Reflections"
   },
   {
     "id": "20261002-abstention-paper-en",
@@ -49,46 +49,46 @@
   },
   {
     "id": "20261002-abstention-paper-draft",
-    "title": "2026-10-02 · Abstention 중심 논문 · 사용자 목차 1–5장"
+    "title": "2026-10-02 · Abstention centered paper · user carriage 1–5John."
   },
   {
     "id": "20261002-naacl-overleaf",
-    "title": "2026-10-02 · NAACL/ARR 영문 Overleaf 원고"
+    "title": "2026-10-02 · NAACL/ARR English Overleaf file"
   },
   {
     "id": "20261001-qwen27-financial-reasoning",
-    "title": "2026-10-01 · Qwen 27B · 금융 계산·추론 재조사"
+    "title": "2026-10-01 · Qwen 27B • Financial calculation and re-investigation of claims"
   },
   {
     "id": "20261001-finance-model-survey",
-    "title": "2026-10-01 · 금융 소형 모델 · A100·vLLM 실행 후보"
+    "title": "2026-10-01 · Financial modelling of small business · A100·VLLM run candidate"
   },
   {
     "id": "20261001-meeting-paper-draft",
-    "title": "2026-10-01 · 회의록 기반 논문 MD 초안"
+    "title": "2026-10-01 • Conference paper based on MD draft"
   },
   {
     "id": "20260928-analysis-quadrant-map",
-    "title": "2026-09-28 · Analysis 사분면 맵 · Luna·Haiku와 23개 항목"
+    "title": "2026-09-28 · Analysis of the square map · Luna; Haiku and 23items"
   },
   {
     "id": "20260928-finject-quick-guide",
-    "title": "2026-09-28 · FInject 실험·평가와 실제 리뷰 4건"
+    "title": "2026-09-28 · FInject experimentation; evaluation and actual review 4entries"
   },
   {
     "id": "20260924-paper-draft",
-    "title": "2026-09-28 · 한글 논문 초안 v0.27 · 제작 전체 로직 부록"
+    "title": "2026-09-28 · Hanging paper draft v0.27 · The entire logical addition of the production"
   },
   {
     "id": "20260926-research-redesign",
-    "title": "2026-09-26 · 원논문 → 현재 연구 · 개선 방향과 실험 비교"
+    "title": "2026-09-26 · Conversations → Current research · Directions of improvement and comparison of experiments"
   },
   {
     "id": "20260926-finject-section-guide",
-    "title": "2026-09-26 · FInject 원논문 단원별 상세 해설"
+    "title": "2026-09-26 · Detailed explanation of the FInject single-discussion"
   },
   {
     "id": "20260924-research-direction",
-    "title": "2026-09-24 · 전체 회의록 기반 연구 방향"
+    "title": "2026-09-24 · The overall conference record-based research direction"
   }
 ]

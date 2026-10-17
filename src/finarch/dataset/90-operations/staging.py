@@ -105,8 +105,8 @@ class PreparedInputs:
     """Read and verify a canonical collection once; select individual inputs by ID."""
     @traced("python")
     def __init__(self, input_path: Path):
-        # [DP14] docs/02-architecture.md#DP14 — 준비 완료 PASS·manifest 해시·기록된 스키마 식별자를 검사합니다.
-        # [BI01] docs/02-architecture.md#BI01 — 통합 입력 무결성 확인의 기존 번호입니다. DP14·DP15에서 이어집니다.
+        # [DP14] docs/02-architecture.md#DP14 Check the PASS manifest hashed schema identifier that is registered.
+        # [BI01] docs/02-architecture.md#BI01 The current number for the integrated input integrity check is DP1.4·DP15And then it goes on.
         self.path = Path(input_path).resolve()
         root = self.path.parent
         result_path = root / "preparation-result.json"
@@ -127,8 +127,8 @@ class PreparedInputs:
             current = describe(recorded_id)
             if any(recorded_schema.get(k) != current[k] for k in ("schema_id", "version", "sha256")):
                 raise ValueError("PREPARATION_SCHEMA_VERSION_MISMATCH")
-        # [DP15] docs/02-architecture.md#DP15 — 통합 입력을 한 번 읽어 해시·스키마·ID·원천을 확인하고 메모리에 둡니다.
-        # [BI02] docs/02-architecture.md#BI02 — 전체 입력 1회 읽기의 기존 번호입니다.
+        # [DP15] docs/02-architecture.md#DP15 Read the hash-schema-ID source once and save it to memory.
+        # [BI02] docs/02-architecture.md#BI02 Full input 1It's the current number of the reading cycle.
         input_bytes = self.path.read_bytes()
         provider_bytes = (root / "provider-records.json").read_bytes()
         if hashlib.sha256(input_bytes).hexdigest() != manifest["input_file_sha256"]:
@@ -161,11 +161,11 @@ class PreparedInputs:
 
     @traced("python")
     def case(self, case_id: str) -> dict:
-        # [DP16] docs/02-architecture.md#DP16 — 없는 ID를 거절합니다. 무결성 오류는 DP14·DP15의 각 검사에서 거절합니다.
-        # [BI04] docs/02-architecture.md#BI04 — 없는 ID 거절의 기존 번호이며 다른 무결성 오류는 DP14·DP15에 있습니다.
+        # [DP16] docs/02-architecture.md#DP16 I'm rejecting the unmarked ID.4·DP15I refuse every exam.
+        # [BI04] docs/02-architecture.md#BI04 The existing number for the ID denial without a stamp and another integrity error is DP1.4·DP15is the location.
         if case_id not in self.samples:
             raise ValueError("UNKNOWN_INPUT_ID")
-        # [BI03] docs/02-architecture.md#BI03 — 선택한 문제·private 원천·비교 정보를 깊은 복사로 반환합니다.
+        # [BI03] docs/02-architecture.md#BI03 It returns the selected problem, private source, and inter-site information in a deep copy.
         sample = self.samples[case_id]
         provider = self.providers[sample["raw_id"]]
         comparison = {
@@ -248,7 +248,7 @@ class RunContext:
 
     def _invoke(self, stage: str, step: str, hook: str, payload: dict,
                 local: Handler | LLMHandler | None = None) -> dict:
-        # [SC12] docs/02-architecture.md#SC12 — 단계 요청을 저장하고 고정 LLM 역할·허용 Python hook을 구분합니다.
+        # [SC12] docs/02-architecture.md#SC12 Save the step request and separate the fixed LLM role and license Python hook.
         self.current_stage = stage
         self.save(f"{stage}/{step}/" + ("01-input/handler-input.json" if hook in LLM_ROLES else "01-input.json"), payload)
         handler = local if local is not None else self.handlers.get(hook)
@@ -257,11 +257,11 @@ class RunContext:
             definition = None
             if hook in LLM_ROLES:
                 definition = require_llm_schema(hook)
-                # [SC13] docs/02-architecture.md#SC13 — 응답 정의를 저장하고 LLM handler에 keyword response_schema를 전달합니다.
+                # [SC13] docs/02-architecture.md#SC13 Save the response definition and pass the keyword response_schema to the LLM handler.
                 self.save(f"{stage}/{step}/01-input/handler-schema.json", definition)
             elif hook not in PYTHON_HOOKS:
                 raise SchemaContractError("UNREGISTERED_STAGE_HOOK")
-            # [SC14] docs/02-architecture.md#SC14 — 미연결은 NOT_IMPLEMENTED, 스키마·미등록 hook 오류는 아래 except에서 FAIL로 기록합니다.
+            # [SC14] docs/02-architecture.md#SC14 The uncertainty is NOT_IMPLEMENTED, and the schema-my-list hook error is recorded as FAIL in the except below.
             if handler is None:
                 result = StepResult("NOT_IMPLEMENTED", f"Handler not connected: {hook}")
             elif definition is not None:
@@ -277,7 +277,7 @@ class RunContext:
                 raise TypeError("INVALID_STEP_RESULT")
             json_bytes(asdict(result))
             if definition is not None:
-                # [SC10] docs/02-architecture.md#SC10 — 유효한 LLM StepResult 원본을 보존하고 모든 LLM PASS 데이터를 재검사합니다.
+                # [SC10] docs/02-architecture.md#SC10 We preserve the valid LLM StepResult copy and re-examine all LLM PASS data.
                 self.save(f"{stage}/{step}/03-result/handler-response.json", asdict(result))
                 if result.status == "PASS":
                     try:
@@ -297,11 +297,11 @@ class RunContext:
             result = StepResult("FAIL", error.reason)
         except Exception as error:
             result = StepResult("FAIL", f"{type(error).__name__}: {error}")
-        # [L01] docs/02-architecture.md#L01 — 결과를 저장하고 공통 로그의 종료 상태·산출물 경로를 연결합니다.
+        # [L01] docs/02-architecture.md#L01 Save the output results and connect the output path to the end state of the common log.
         self.save(f"{stage}/{step}/03-result.json", asdict(result))
         self.trace.update(status=result.status, reason=result.reason,
                           artifacts=[f"{stage}/{step}/01-input.json", f"{stage}/{step}/03-result.json"])
-        # [SC11] docs/02-architecture.md#SC11 — PASS만 data를 반환하고 나머지는 StepStopped로 해당 경로를 중단합니다.
+        # [SC11] docs/02-architecture.md#SC11 The rest of the data is returned to StepStopped and the corresponding path is stopped.
         if result.status != "PASS":
             raise StepStopped(stage, step, result)
         return result.data
@@ -311,7 +311,7 @@ class RunContext:
                            local=lambda value: StepResult("PASS" if (condition() if callable(condition) else condition) else "FAIL", reason, value))
 
 
-# [T02] docs/02-architecture.md#T02 — 원문·Unicode 위치·겹침·매핑을 검사하고 뒤쪽부터 patch를 적용합니다.
+# [T02] docs/02-architecture.md#T02 Check the Unicode location, overlay, mapping, and apply the patch from the back.
 @traced("python")
 def apply_patches(context: str, patches: list[dict]) -> str:
     """All offsets are Unicode character offsets into the unchanged original C."""

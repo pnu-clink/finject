@@ -75,7 +75,7 @@ check('Next disagreement preserves controls and wraps within the existing filter
 });
 check('Physical V shortcut keeps the disagreement filter with a Korean key value', () => {
   let prevented=false,stopped=false;
-  context.handleShortcut({code:'KeyV',key:'ㅍ',target:{closest:()=>null},preventDefault(){prevented=true;},stopImmediatePropagation(){stopped=true;}});
+  context.handleShortcut({code:'KeyV',key:'\u314d',target:{closest:()=>null},preventDefault(){prevented=true;},stopImmediatePropagation(){stopped=true;}});
   assert.equal(context.currentCase().case,'test-0002');assert(prevented);assert(stopped);
   assert.equal(elements.filter.value,'DISAGREE');assert.equal(elements.search.value,'test-000');assert.equal(context.calls.list,0);
 });

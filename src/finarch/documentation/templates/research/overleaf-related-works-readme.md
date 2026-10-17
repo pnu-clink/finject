@@ -1,27 +1,27 @@
-# Overleaf Related Works 반영
+# Overleaf Related Works reflected
 
-이 README는 문서 템플릿에서 생성합니다.
+This README is generated from a document template.
 
-## 읽는 순서
+## Reading order
 
-1. [반영 결과](RESEARCH-DIRECTION.md): 표 배치와 화면 확인 결과.
-2. [최종 PDF](evidence/overleaf-final.pdf): Overleaf에서 직접 내려받은 21쪽 문서.
-3. [수정 본문](revised/revision-20261002-body.tex): 업로드한 파일. revised 폴더는 로컬 조판용 프로젝트이며 원격에서 다운로드한 최종 전체 프로젝트가 아닙니다.
-4. [수정 전 본문](backup/revision-20261002-body.tex), [수정 전 main](backup/main.tex): 원격 편집기 내용과 공백 제외 해시를 대조한 보관본.
-5. [검증 기록](verification.json), [작업 로그](events.jsonl), [해시](manifest.json).
+1. [Results from the negative](RESEARCH-DIRECTION.md): table layout and screen check results.
+2. [PDF](evidence/overleaf-final.pdf)It's a direct download from Overleaf. 21The other document.
+3. [Recorded text](revised/revision-20261002-body.tex)The revised folder is a local sub-project, not the final complete project that you downloaded remotely.
+4. [Previous reading](backup/revision-20261002-body.tex)[Repaired before main](backup/main.tex): Remote editor content and blank exclusion hash.
+5. [Record of the verification](verification.json)[Operating log](events.jsonl)[Sighs](manifest.json).
 
-[공통 연구 뷰어](http://127.0.0.1:8896/viewer/research/)에서 **2026-10-03 · Overleaf Related Works · 표별 페이지 분리**를 선택합니다. 실행 폴더에 별도 HTML 뷰어는 만들지 않습니다.
+[Public research viewer](http://127.0.0.1:8896/viewer/research/)in **2026-10-03 · Overleaf Related Works · Separation of the page**It doesn't create any HTML viewer in the run folder.
 
-## 갱신 흐름
+## The flow of renewal
 
 ```mermaid
 flowchart TD
- A["1. 기존 한영 검토본 및 수정 전 TeX"] --> B["2. prepare_related_overleaf.py: Related Works와 표 설명 변환"]
- B --> C["3. revised 본문: 표 배치와 부록"]
- C --> D["4. 로컬 조판과 페이지 확인"]
- D --> E["5. Overleaf 업로드와 컴파일"]
- E --> F["6. PDF 다운로드, 내용 대조, 3·4쪽 화면 확인"]
- F --> G["7. README·로그·공통 뷰어"]
+ A["1External one-week review copy and correction of pre-TeX"] --> B["2. prepare_related_overleaf.py: Related Works and Table description Transform"]
+ B --> C["3.Revised text: Table layout and annex"]
+ C --> D["4Local sub-plate and page check."]
+ D --> E["5Overleaf upload and compile."]
+ E --> F["6Download PDFs, contrast content, and 3·4Check the screen."]
+ F --> G["7Readme log-public viewer"]
 ```
 
-모델 호출은 없습니다. 원격 소스·PDF 대조와 조판 검증은 연구 결과 검증을 의미하지 않습니다. 변환 실패 시 업로드하지 않고, 원격 실패 시 성공으로 기록하지 않습니다.
+No model calls. Remote source PDF contrast and sub-platform verification does not mean verification of the results of the study. It does not upload when the conversion fails, and it does not record as successful when the remote fails.

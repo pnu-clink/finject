@@ -6,7 +6,7 @@
       "kind": "remove_adjacent_currency_prefix",
       "enabled": true,
       "symbol": "$",
-      "description": "원문의 숫자 바로 앞에도 달러가 있고, 인용문과 지정 위치의 차이가 그 달러 하나뿐이면 계산용 인용문에서 제거한다."
+      "description": "If the source number has an immediately adjacent dollar sign and that sign is the only difference between the quoted text and its specified source location, remove it from the computation-only quotation."
     }
   ],
   "rules": [
@@ -28,7 +28,7 @@
     {
       "id": "strip_percent_unit_suffix",
       "kind": "regex_replace",
-      "description": "숫자 뒤 퍼센트 기호를 값에서만 제거한다. 25%는 퍼센트 단위의 25이며 0.25로 바꾸지 않는다.",
+      "description": "Remove a trailing percent sign from the computation value only. 25% represents 25 in percentage units; do not convert it to 0.25.",
       "enabled": true,
       "match": "[+-]?(?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d+)?%",
       "pattern": "%$",
@@ -37,7 +37,7 @@
     {
       "id": "remove_thousands_commas",
       "kind": "regex_replace",
-      "description": "천 단위 구분 쉼표만 계산용 값에서 제거한다. 원문·원응답은 보존한다.",
+      "description": "Remove thousands-separator commas from computation values only. Preserve source text and raw model responses.",
       "enabled": true,
       "match": "[+-]?\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?",
       "pattern": ",",

@@ -33,7 +33,7 @@ def run(bundle):
         path=bundle/name
         if path.exists():path.rename(archive/name)
     write(archive/'retry.json',{'reason':'Native control verification refreshed; no previous model call was started.','human_decisions_reused':False})
-    (archive/'README.md').write_text('호출 전 차단된 기록을 보존합니다. 모델 호출·사람 판정이 없음을 확인한 뒤 같은 실행에서 처음부터 재시도했습니다. 현재 결과는 런의 01-preparation에서 확인합니다.\n')
+    (archive/'README.md').write_text('It preserves the record blocked before the call. The model calls and people judgement were not verified and then re-scan from the beginning in the same run. 01- Check it out at preparation.\n')
     with measure(bundle,'preparation'):
         result=prepare_batch(bundle,PreparedInputs(Path(selection['input_path'])),selection['cases'],config)
         write(bundle/'summary.json',result)

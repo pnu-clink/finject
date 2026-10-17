@@ -19,11 +19,11 @@ def table(headers, rows):
 
 
 def percent(value, total):
-    return f'{100 * value / total:.2f}%' if total else '미평가'
+    return f'{100 * value / total:.2f}%' if total else 'Not evaluated'
 
 
 def duration(seconds):
-    return f'{int(seconds // 3600)}시간 {int(seconds % 3600 // 60)}분 {int(seconds % 60)}초'
+    return f'{int(seconds // 3600)}Time {int(seconds % 3600 // 60)}minutes {int(seconds % 60)}Seconds.'
 
 
 def timing(latencies):
@@ -132,28 +132,28 @@ def summarize(root, source_stage=None):
     store.write(root / 'recovered-summary.json', summary)
     store.write_rows(layout.validation(root) / 'failure-details.jsonl', failures)
     condition_table = table(
-        ['풀이 방식', '추론', '응답', '원격 스키마 통과', '로컬 전체 계약 통과', '잘림', '원본 숫자 일치/계획', '원본 숫자 일치/비교'],
+        ['The way weed is made.', 'Inference', 'Response', 'Pass through remote schemes', 'Pass the entire local contract', 'Truncated', 'Original number matching/plan', 'Original number matches/byte'],
         [(layout.prompt_label(row['prompt']), row['reasoning'].upper(), row['planned'], row['remote_schema_valid'],
           f"{row.get('VALID', 0)} ({percent(row.get('VALID', 0), row['planned'])})", row.get('OUTPUT_TRUNCATED', 0),
           f"{row['original_numeric_match']}/{row['original_planned']} ({percent(row['original_numeric_match'], row['original_planned'])})",
           f"{row['original_numeric_match']}/{row['original_compared']} ({percent(row['original_numeric_match'], row['original_compared'])})")
          for row in conditions_out])
-    classification_table = table(['조건', '유효 응답의 classification 분포'], [
+    classification_table = table(['Condition', 'The classification of the valid response distribution'], [
         (layout.prompt_label(row['prompt']) + '/' + row['reasoning'].upper(),
          ', '.join(f'{key}: {value}' for key, value in row['classifications_valid_only'].items())) for row in conditions_out])
     ordered_conditions = sorted(conditions)
-    type_table = table(['입력 유형', *[layout.prompt_label(p) + '/' + r.upper() for p, r in ordered_conditions]], [
+    type_table = table(['Type of input', *[layout.prompt_label(p) + '/' + r.upper() for p, r in ordered_conditions]], [
         (name, *[f"{types[(name, p, r)]['VALID']}/{types[(name, p, r)]['planned']} "
                  f"({percent(types[(name, p, r)]['VALID'], types[(name, p, r)]['planned'])})"
                  for p, r in ordered_conditions]) for name in sorted({key[0] for key in types})])
-    null_table = table(['입력 유형', *[layout.prompt_label(p) + '/' + r.upper() for p, r in ordered_conditions]], [
+    null_table = table(['Type of input', *[layout.prompt_label(p) + '/' + r.upper() for p, r in ordered_conditions]], [
         (name, *[f"{types[(name, p, r)]['answer_null_valid']}/{types[(name, p, r)]['VALID']} "
                  f"({percent(types[(name, p, r)]['answer_null_valid'], types[(name, p, r)]['VALID'])})"
                  for p, r in ordered_conditions]) for name in sorted({key[0] for key in types})])
-    failure_table = table(['실패 규칙', '발생 수'], failure_reasons.most_common())
-    latency_table = table(['조건', '평균', '중앙값', '95백분위', '최대'], [
+    failure_table = table(['The rules of failure', 'The number of occurrences'], failure_reasons.most_common())
+    latency_table = table(['Condition', 'Mean', 'Median', '95One hundredth of a second.', 'Maximum'], [
         (layout.prompt_label(row['prompt']) + '/' + row['reasoning'].upper(),
-         *[f"{row['latency'][key]:.2f}초" for key in ('mean_seconds', 'median_seconds', 'p95_seconds', 'max_seconds')])
+         *[f"{row['latency'][key]:.2f}Seconds." for key in ('mean_seconds', 'median_seconds', 'p95_seconds', 'max_seconds')])
         for row in conditions_out])
     template = Template((store.PROJECT / 'src/finarch/experiments/templates/a100-recovered-results.md').read_text())
     store.write_text(root / 'RESULTS.md', template.substitute(
@@ -173,13 +173,13 @@ def render_index(values, output):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     store.write(output / 'comparison.json', {'runs': values, 'model_calls': 0})
-    comparison = table(['모델', '수집', '원격 스키마 통과', '로컬 전체 계약 통과', '잘림', '평가 경과', '건당 평균 응답 시간'], [
+    comparison = table(['Model', 'Collecting', 'Pass through remote schemes', 'Pass the entire local contract', 'Truncated', 'The evaluation of the', 'Average response time per day'], [
         (row['model'], row['responses'], row['remote_schema_statuses'].get('VALID', 0),
          f"{row['statuses'].get('VALID', 0)} ({percent(row['statuses'].get('VALID', 0), row['responses'])})",
          row['statuses'].get('OUTPUT_TRUNCATED', 0), duration(row['timing']['evaluation_wall_seconds']),
-         f"{row['timing']['request_latency']['mean_seconds']:.2f}초") for row in values])
-    links = '\n'.join(f"- [{row['model']} 결과](../../experiments-run/{row['run']}/RESULTS.md) · "
-                      f"[뷰어](http://127.0.0.1:8894/?run={row['run']}&tab=overview)" for row in values)
+         f"{row['timing']['request_latency']['mean_seconds']:.2f}Seconds.") for row in values])
+    links = '\n'.join(f"- [{row['model']} So, what\x27s the result?{row['run']}/RESULTS.md) · "
+                      f"[Blower]http://127.0.0.1:8894/?run={row['run']}&tab=overview)" for row in values)
     template = Template((store.PROJECT / 'src/finarch/experiments/templates/a100-recovery-index.md').read_text())
     store.write_text(output / 'README.md', template.substitute(comparison=comparison, links=links))
     print(comparison)

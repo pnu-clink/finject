@@ -34,7 +34,7 @@ def prepare(output):
     manifest={'families':len(samples),'sources':[{**provenance,'path':str(source)}],'ids':[{'id':s['id'],'raw_id':s['raw_id']} for s in samples],'input_schema':{k:v for k,v in describe('01-preparation.01-source.prepared-input').items() if k!='schema'},'input_file_sha256':sha256((output/'input.json').read_bytes()).hexdigest(),'provider_file_sha256':sha256((output/'provider-records.json').read_bytes()).hexdigest(),'selection_policy':'All arithmetic questions; exact question/context duplicates removed; different questions sharing context retained.','exclusions':excluded}
     write('selection-manifest.json',manifest)
     write('preparation-result.json',{'status':'PASS','manifest_sha256':sha256((output/'selection-manifest.json').read_bytes()).hexdigest(),'model_calls':0})
-    (output/'README.md').write_text(f'# TAT-QA 전체 산술형 입력\n\n원천: {source}\n대상 {len(samples)}질문, 제외 {len(excluded)}질문. 비산술형 및 질문·본문이 모두 같은 중복만 제외합니다.\n\ninput.json → selection-manifest.json → selection-log.json 순으로 확인합니다. provider-records.json은 원천 보존 자료입니다. 이 단계는 입력 무결성 확인이며 의미 검증은 Preparation에서 수행합니다.\n')
+    (output/'README.md').write_text(f'# TAT-QA full math input\n\nSources: {source}\nTarget {len(samples)}Questions, excluded {len(excluded)}Questions. Both non-surgical and question-and-type are excluding the same translations.\n\nThe input.json → selection-manifest.json→ selection-log.json sequence is verified. provider-records.json is the source preservation data. This step is the input integrity verification and the meaning verification is performed in Preparation.\n')
     return output/'input.json'
 
 if __name__=='__main__':

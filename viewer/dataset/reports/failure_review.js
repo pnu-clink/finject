@@ -30,7 +30,7 @@ function renderFailureReviewFlow(report){
     ||failed!==summary.generation_failed||notEvaluated!==summary.generation_not_evaluated){
   return el('p','banner','저장된 문항 수와 유형별 결과 수가 맞지 않아 흐름 집계를 표시할 수 없습니다.');
  }
- const fmt=value=>value.toLocaleString('ko-KR');
+ const fmt=value=>value.toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US');
  const stat=(value,label,kind)=>{const box=el('div','failure-flow-stat '+kind);box.append(el('strong','',fmt(value)),el('span','',label));return box;};
  const phase=(title,input,inputLabel,left,leftLabel,leftKind,right,rightLabel,rightKind)=>{
   const card=el('section','failure-flow-phase');card.append(el('h3','',title));

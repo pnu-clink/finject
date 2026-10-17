@@ -44,8 +44,8 @@ check('Renumbered IC-relation facts merge by meaning, not AST node IDs',()=>{
 check('EA missing values never become zero or the original value',()=>{
  const plan=plans[3],model=ctx.evaluationMergeGraphs(ctx.evaluationCompactGraph(plan.original_graph),ctx.evaluationCompactGraph(plan.graph),plan.target);
  const missing=model.nodes.find(n=>n.evaluation?.state==='MISSING');
- assert.equal(ctx.evaluationNodeValue(missing),'근거 없음');assert.equal(missing.computed,undefined);
- assert.equal(ctx.evaluationNodeValue(model.nodes.find(n=>n.id===model.outputs.B)),'계산 불가');
+ assert.equal(ctx.evaluationNodeValue(missing),'\uadfc\uac70 \uc5c6\uc74c');assert.equal(missing.computed,undefined);
+ assert.equal(ctx.evaluationNodeValue(model.nodes.find(n=>n.id===model.outputs.B)),'\uacc4\uc0b0 \ubd88\uac00');
  assert(model.nodes.some(n=>n.target&&n.sides.join('')==='A'));
 });
 check('Different external provenance is not merged',()=>{

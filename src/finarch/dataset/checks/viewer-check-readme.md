@@ -1,14 +1,14 @@
 # {title}
 
-이 안내는 `src/finarch/dataset/checks/viewer-check-readme.md` 템플릿에서 생성했습니다.
+This is not the place. `src/finarch/dataset/checks/viewer-check-readme.md` I created it in a template.
 
-## 파일 역할과 읽는 순서
+## File roles and reading order
 
-1. [{report}]({report}): 실제 검사 결과, 사용한 로그, 코드 해시와 화면 확인 범위.
-2. `{source}`: 사람이 읽기 쉽게 표시한 원본 로그입니다. 이 파일은 수정하지 않았습니다.
-3. [뷰어 사용 안내](../../../../viewer/README.md): 공통 뷰어의 조작 방법.
+1. [{report}]({report})The actual test results, logs used, code hashes and screen check scope.
+2. `{source}`It's a human-readable source log. This file hasn't been edited.
+3. [Bloodle user guide](../../../../viewer/README.md): How to manipulate the common viewer.
 
-## 화면에서 확인
+## Check it on the screen.
 
 {viewer_steps}
 

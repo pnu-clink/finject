@@ -1,107 +1,100 @@
-# 실험 결과 전용 뷰어 · viewer-exp v1
+# Experiment-result viewer · viewer-exp v1
 
-**[브라우저에서 열기](http://127.0.0.1:8894/?run={{latest_run}}&tab=overview)**
+**[Open in a browser](http://127.0.0.1:8894/?run={{latest_run}}&tab=overview)**
 
-기존 data viewer의 실행 선택·문항 목록·상세 패널을 참고한 브라운 테마의 별도 뷰어입니다.
-실제 `reports/experiments-run` 파일을 읽습니다. **회차 HTML Export**를 누르면 선택한 회차를 별도 파일로 내려받습니다. 결과 폴더마다 HTML을 자동 생성하지 않습니다.
+This separate brown-themed viewer follows the existing data viewer's run selection, case list, and detail panels. It reads actual `reports/experiments-run` files. **Export run HTML** downloads the selected run as a separate file; HTML is not automatically generated in every result folder.
 
-## 실행
+## Start the viewer
 
-프로젝트 루트에서 다음 명령을 실행하세요. Node.js 20 이상, 추가 패키지는 필요 없습니다. 이번 확인 환경: `{{node_version}}`.
+Run from the repository root. Node.js 20 or newer is required; no additional packages are needed. Recorded verification environment: `{{node_version}}`.
 
 ```bash
 node src/finarch/experiments/viewer/server.mjs
 ```
 
-기본 주소는 `http://127.0.0.1:8894`입니다. 다른 포트는 `--port 8904`, 별도 실험 결과 묶음은 `--root /absolute/experiments-run`으로 지정할 수 있습니다.
-macOS에서는 같은 폴더의 `start.command`로 시작할 수 있습니다. 소스 `index.html`을 직접 열면 시작 안내만 표시됩니다. **내보낸 HTML은 서버 없이 읽는 별도 사본**입니다.
+The default address is `http://127.0.0.1:8894`. Use `--port 8904` for another port or `--root /absolute/experiments-run` for a different result collection. On macOS, use `start.command` in the corresponding viewer folder. Opening source `index.html` directly shows startup guidance. **Exported HTML is a separate copy that works without a server.**
 
-## 처음 읽는 순서
+## First reading order
 
-1. **전체 결과**: 실행 선택 후 원문·변형·요청 수, 반환 상태와 숫자 비교의 분모를 봅니다.
-2. **조건별 비교**: 모델별 Unguided Solving / Criteria-Guided Solving × Reasoning OFF / Reasoning ON 표의 숫자를 선택합니다.
-3. **실패 분석**: 고유 요청 수와 중복 가능한 진단 사유를 구분하고 문항을 엽니다.
-4. **문항 비교**: 같은 Q/C와 조건의 모델 응답, 근거, 정확한 요청·스키마·원응답을 읽습니다. **모델에 전달한 입력** 제목 줄을 누르면 질문·본문·분석자 정보 전체를 접거나 펼칠 수 있습니다. 처음에는 펼쳐져 있으며, 근거를 누르면 자동으로 펼쳐 입력을 강조합니다. 영문 원응답은 그대로 표시합니다.
-5. **비용·실행 / 보고서·이력**: 실행 전체의 저장 토큰·비용·자원, Markdown 분석과 보존된 이전 보고서를 봅니다.
+1. **Overview:** select a run and inspect original/variant/request counts, collection states, and numeric-comparison denominators.
+2. **Condition comparison:** select numbers in the model's Unguided Solving / Criteria-Guided Solving × Reasoning OFF / Reasoning ON table.
+3. **Failure analysis:** distinguish unique request counts from potentially overlapping diagnostic reasons, then open a case.
+4. **Case comparison:** inspect responses, evidence, exact requests, schemas, and raw outputs for the same Q/C and conditions. Select the **Input sent to the model** heading to collapse/expand the question, context, and analyst information. It starts expanded. Selecting evidence expands it and highlights the input. Original English responses are displayed unchanged.
+5. **Cost and execution / Reports and history:** inspect run-wide saved tokens, costs, resources, Markdown analyses, and preserved earlier reports.
 
-검색·실행·필터·문항·화면은 URL에 남습니다. **새로 읽기**는 파일 변경을 확인하며 같은 상세에서 펼친 이력을 유지합니다.
-**표 내려받기**는 현재 필터의 집계와 문항 ID를 Markdown으로 저장합니다.
+Search, run, filters, case, and view are stored in the URL. **Refresh** checks file changes and preserves expanded history in the current detail. **Download table** saves the filtered aggregates and case IDs as Markdown.
 
-## 회차 HTML Export
+## Export run HTML
 
-1. 상단의 **회차 HTML Export ↓**를 누릅니다.
-2. 실행 회차를 고르고 **HTML 파일 만들기 ↓**를 누릅니다.
-3. 내려받은 `<실행 ID>-experiments.html`을 브라우저에서 엽니다.
+1. Select **Export run HTML ↓** at the top.
+2. Choose a run, then **Create HTML file ↓**.
+3. Open the downloaded `<run-id>-experiments.html` in a browser.
 
-회차 하나당 HTML 하나입니다. 현재 탭·필터로 시작하되 **회차 전체**를 포함하므로 필터를 초기화하면 모든 문항을 볼 수 있습니다. 다른 회차를 골라 내보내면 전체 결과 탭으로 시작합니다. 여섯 화면, 검색·조건 변경·문항 비교, 영문 원응답·정확한 요청·응답 스키마·원기록, 보고서와 실행 내부 링크가 들어갑니다. CSS·JavaScript·압축 자료를 모두 담으며 외부 연결은 차단합니다.
+There is one HTML file per run. It starts with the current tab/filters but contains the **entire run**; reset filters to inspect all cases. Exporting a different run starts at Overview. The export includes six views, search, condition changes, case comparison, English raw responses, exact requests, schemas, original records, reports, and internal links. CSS, JavaScript, and compressed data are embedded; external connections are blocked.
 
-자료는 내보낸 시점에 고정됩니다. 분석자용 원문 정답도 포함합니다. 이벤트는 화면과 같은 최근 저장 100개 범위이며, 실행 밖의 제작 기준본과 기존 원파일 보기 한도인 8MB를 넘는 파일은 포함하지 않습니다. 큰 파일 제외 수는 HTML 상단에 표시하고, 해당 링크에서도 이유를 표시합니다. 파일 작성 중 변경이 감지되거나 정확한 요청이 없으면 오류를 표시하며 미완성 HTML을 다운로드하지 않습니다.
+Data are frozen at export time. Analyst-only original reference answers are included. Events use the same latest-100 limit as the viewer. Construction references outside the run and source files over the existing 8 MB limit are excluded. The header and affected links identify excluded large files. File changes during export or missing exact requests cause an error; incomplete HTML is not downloaded.
 
-압축 해제를 지원하는 최신 브라우저가 필요합니다. 한 번에 HTML 하나를 만듭니다. 창을 닫으면 진행 중인 생성을 취소할 수 있습니다.
-
-브라우저 버튼 없이도 지정한 경로로 만들 수 있습니다. 기존 출력 파일을 덮어쓰지 않습니다.
+Use a recent browser with decompression support. One export is built at a time; closing the export dialog can cancel an active build. The CLI can also write to an explicit path without overwriting an existing file:
 
 ```bash
 node src/finarch/experiments/viewer/scripts/export-html.mjs 20260920-exp-004 /absolute/path/20260920-exp-004-experiments.html
 ```
 
-[검증하면서 만든 회차별 HTML 목록](../../outputs/experiment-exports/README.md) · [HTML Export 확인 기록](../../log/viewer-experiments-html-export/README.md)
+[Exported files from recorded verification](../../outputs/experiment-exports/README.md) · [HTML export verification records](../../log/viewer-experiments-html-export/README.md)
 
-## 파일 역할
+## File responsibilities
 
-|파일|역할|
-|---|---|
-|`index.html`|실행 선택·목록·필터·본문·원파일 창의 기본 틀|
-|`styles.css`|브라운 테마와 작은 화면 배치|
-|`app.js`|여섯 화면·URL·비교·근거 강조·안전한 Markdown 표시|
-|`repository.mjs`|실험 폴더 경계·파일 읽기·부분 저장 처리·정확한 응답 연결|
-|`model.mjs`|온라인/오프라인 공통 집계·필터·문항 선택·표 내보내기|
-|`export-html.mjs`|회차 전체 자료 확인·문항별 압축·단일 HTML 구성|
-|`offline.mjs`|내장 자료 해제·동일 화면 조회, 네트워크 요청 없음|
-|`server.mjs`|별도 로컬 GET 서버, 기본 8894 포트|
-|`tests/repository.test.mjs`|집계·실패 본문·경로 제한·부분 저장·읽기 전용 검사|
-|`tests/export-html.test.mjs`|온라인/오프라인 대조·원응답·HTML 안전성·변경/취소/누락 처리|
-|`scripts/verify.mjs`|실제 네 실행 대조·문서/원응답 연결·입력/결과 해시 보존 확인|
-|`scripts/export-html.mjs`|명시한 회차·출력 경로로 단일 HTML 저장|
-|`scripts/verify-export.mjs`|지정한 실제 회차의 HTML 생성·원본과 대조·로그 저장|
-|`scripts/build-readme.mjs`|이 템플릿과 검증 기록으로 README 자동 생성|
-|`HANDOFF.md`|이전 세션의 인계 출처와 최신 요구|
+| File | Role |
+| --- | --- |
+| `index.html` | Run selection, list, filters, content, and source-file panel shell. |
+| `styles.css` | Brown theme and responsive layout. |
+| `app.js` | Six views, URL state, comparisons, evidence highlighting, and safe Markdown display. |
+| `repository.mjs` | Experiment-folder boundaries, reads, partial-save handling, and exact response links. |
+| `model.mjs` | Shared online/offline aggregation, filters, case selection, and table export. |
+| `export-html.mjs` | Verify full-run data, compress cases, and assemble a single HTML. |
+| `offline.mjs` | Decompress embedded data and serve the same views without network requests. |
+| `server.mjs` | Local GET server on port 8894 by default. |
+| `tests/repository.test.mjs` | Aggregates, failure bodies, path restrictions, partial saves, and read-only checks. |
+| `tests/export-html.test.mjs` | Online/offline equivalence, raw responses, HTML safety, changes, cancellation, and missing files. |
+| `scripts/verify.mjs` | Compare four actual runs, document/response links, and input/result hashes. |
+| `scripts/export-html.mjs` | Save a single HTML for an explicit run/output path. |
+| `scripts/verify-export.mjs` | Export an actual run, compare it with the source, and save logs. |
+| `scripts/build-readme.mjs` | Generate README from templates and saved verification records. |
+| `HANDOFF.md` | Earlier handoff sources and latest requirements. |
 
-## 확인 기록
+## Recorded verification
 
-- 검증 시각: {{verified_at}}
-- 자동 로컬 검사: {{tests}}개 통과. 실험 결과 {{run_count}}개 실행을 실제 파일과 대조했습니다.
-- 추가 LLM 호출: **0회**. 실험 입력·요청 manifest·결과 파일의 전후 SHA-256이 같습니다.
-- [검증 결과](../../log/viewer-experiments-v1/verification.json) · [검사 로그](../../log/viewer-experiments-v1/tests.log) · [브라우저 확인 기록](../../log/viewer-experiments-v1/browser-checks.md)
-- [파일 책임·구현 흐름도](../../docs/viewer-experiments.md) · [인계 기록](HANDOFF.md)
-- [문항 입력 접기·펼치기 확인 기록](../../log/viewer-experiments-input-collapse/README.md)
+- Verification time: {{verified_at}}.
+- {{tests}} automated local checks passed; {{run_count}} result runs were compared with actual files.
+- **0 additional LLM calls.** Experiment input, request-manifest, and result SHA-256 hashes were unchanged.
+- [Verification result](../../log/viewer-experiments-v1/verification.json) · [test log](../../log/viewer-experiments-v1/tests.log) · [browser record](../../log/viewer-experiments-v1/browser-checks.md).
+- [File responsibilities and implementation flow](../../docs/viewer-experiments.md) · [handoff](HANDOFF.md).
+- [Case-input collapse/expand checks](../../log/viewer-experiments-input-collapse/README.md).
 
-HTML Export 추가 확인: **{{export_tests}}개 로컬 검사 통과**, exp-001~005의 **{{export_run_count}}개 사본**에 대해 실제 파일과 집계·응답·보고서·활동 및 전후 해시를 대조했습니다. 브라우저에서 exp-004 다운로드와 실제 다운로드 파일 생성을 확인했습니다. `file://` 직접 열기는 브라우저 도구 URL 정책에 의해 차단되어 화면 확인을 완료하지 못했습니다. [확인 범위](../../log/viewer-experiments-html-export/browser-checks.md)를 참고해 주세요.
+Additional HTML export verification: **{{export_tests}} local checks passed**. **{{export_run_count}} copies** of exp-001–005 were compared against actual files for aggregates, responses, reports, activity, and before/after hashes. The browser confirmed exp-004 download and creation of the downloaded file. Direct `file://` opening was blocked by the browser tool's URL policy, so that screen verification was not completed. See the [recorded scope](../../log/viewer-experiments-html-export/browser-checks.md).
 
-검증은 에이전트의 로컬·화면 확인입니다. 사용자 검토 완료를 뜻하지 않습니다.
+These are agent local/screen checks, not completed user review.
 
-## 표시의 범위
+## Display scope
 
-- VALID는 형식·일관성 통과입니다. 의미 정답이나 유보 정확도가 아닙니다.
-- 숫자 비교는 저장된 원본 검사만 사용합니다. 변형 숫자 비교는 해당 없음입니다.
-- 문항 상세는 같은 조건의 모델들을 비교하므로 목록의 상태·진단 필터와 다른 상대 모델 응답도 함께 표시할 수 있습니다.
-- 비용·이력·문서는 실행 전체 범위입니다. 응답 필터로 비용을 다시 계산하지 않습니다.
-- 원문 정답은 분석자용 접기 영역입니다. 제작 기준 본문 사본이 실행 안에 없으면 파일 미포함으로 표시합니다.
-- 파일 작성 중에는 마지막 정상 자료와 갱신 경고를 표시합니다. 최초 읽기 오류는 오류로 표시합니다.
-- 주기 자동 갱신, 여러 실행의 통합 비교, 새로운 의미 채점, 사람 판정 저장은 첫 버전에 없습니다.
+- VALID means format/consistency passed, not semantic correctness or abstention accuracy.
+- Numeric comparisons use saved original-answer checks. Perturbed numeric comparison is not applicable.
+- Case detail compares models under the same condition and may include counterpart responses outside the list's status/diagnostic filter.
+- Costs, history, and documents cover the entire run; response filters do not recompute costs.
+- Original reference answers are in an analyst-only collapsible area. A construction reference absent from the run is marked not included.
+- During partial writes, the viewer retains the last valid data with an update warning. An initial read failure displays an error.
+- The first version did not provide periodic auto-refresh, cross-run comparison, new semantic scoring, or saved human ratings.
 
-이 파일은 `templates/README.template.md`에서 생성했습니다. 다시 생성하려면 `node src/finarch/experiments/viewer/scripts/build-readme.mjs`를 실행하세요.
+This file is generated from `templates/README.template.md`. Run `node src/finarch/experiments/viewer/scripts/build-readme.mjs` to regenerate the guide.
 
-## 실험 목적부터 확인하기 · 2026-09-22
+## Read the experiment purpose first · 2026-09-22
 
-전체 결과 화면은 선택한 실행의 `EXPERIMENT-PURPOSE.md`를 결과 숫자보다 먼저 표시합니다. 목적·비교 조건·실제 구현의 차이를 확인한 뒤 결과를 읽습니다. 문서가 없는 실행은 미등록 안내를 표시하며 다른 실행의 목적을 대신 쓰지 않습니다. 보고서·이력에서도 이 문서를 먼저 엽니다. EXP-006은 유보 안내 없음/있음 비교의 한계를 함께 기록했습니다.
+Overview displays the selected run's `EXPERIMENT-PURPOSE.md` before result numbers. Read the purpose, comparison conditions, and actual implementation differences first. Missing documents are marked unregistered; another run's purpose is not substituted. Reports/history opens this document first. EXP-006 records limitations of comparing runs with/without abstention guidance.
 
+## Collapse/expand the purpose
 
-## 목적 영역 접기·펼치기
+Select **What does this experiment examine?** to collapse or expand the purpose. It starts expanded and reads the existing run's purpose document unchanged.
 
-전체 결과의 “이 실험은 무엇을 확인하나요?” 제목을 누르면 목적 내용을 접거나 펼칩니다. 처음에는 펼쳐져 있습니다. 기존 실행의 목적 문서를 그대로 읽습니다.
+## V5 response format
 
-
-## V5 응답 형식
-
-V5에는 status가 없습니다. 저장된 검사에서 숫자 답 없음을 별도로 보여주며 유보 여부·적절성은 미평가입니다. 미평가를 0건으로 표시하지 않습니다. EXP-006 실제 결과는 V4 그대로이며 보고서·이력의 revision-v5/README.md는 이후 수정 검토 자료입니다.
+V5 has no status field. Saved checks display missing numeric answers separately; abstention status and appropriateness remain unevaluated. Unevaluated is not displayed as zero. The actual EXP-006 results remain V4; `revision-v5/README.md` in Reports/history contains later revision-review material.

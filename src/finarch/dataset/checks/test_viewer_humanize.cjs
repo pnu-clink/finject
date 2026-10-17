@@ -38,32 +38,32 @@ const fixture='reports/run/first-10-pot-validated-v3/test-0001/05-text/stage17-v
 const raw=fs.readFileSync(fixture,'utf8');
 await check('real CLI stdout unfolds seven events and eight findings, two FAIL',()=>{
  const root=render(raw);assert.equal(klass(root,'human-event').length,7);assert.equal(klass(root,'human-finding').length,8);assert.equal(klass(root,'human-finding-fail').length,2);
- assert.match(root.textContent,/실행 정보/);assert.match(root.textContent,/한국 시간/);assert.match(root.textContent,/의도한 변경/);assert.match(root.textContent,/대상·기간·단위/);assert.match(root.textContent,/In the past quarter/);
+ assert.match(root.textContent,/\uc2e4\ud589 \uc815\ubcf4/);assert.match(root.textContent,/\ud55c\uad6d \uc2dc\uac04/);assert.match(root.textContent,/\uc758\ub3c4\ud55c \ubcc0\uacbd/);assert.match(root.textContent,/\ub300\uc0c1·\uae30\uac04·\ub2e8\uc704/);assert.match(root.textContent,/In the past quarter/);
  const events=klass(root,'human-event');assert.equal(events[5].open,true);assert.equal(events[1].open,false);events[6].open=true;events[6].emit('toggle');assert.match(root.textContent,/8,861/);
  assert.equal(fs.readFileSync(fixture,'utf8'),raw);
 });
 await check('large integers, duplicate fields, exponent and false/null retain meaning',()=>{
  const decoded=ctx.humanDecode('{"n":90071992547409931234,"n":2,"e":1e+04,"ok":false,"elapsed_seconds":null}');
  assert.equal(decoded.children[0].value,'90071992547409931234');assert.equal(decoded.children[1].value,'2');
- const root=render('{"n":90071992547409931234,"n":2,"e":1e+04,"ok":false,"elapsed_seconds":null}');assert.match(root.textContent,/90071992547409931234/);assert.match(root.textContent,/1e\+04/);assert.match(root.textContent,/아니요/);assert.match(root.textContent,/값 없음/);assert.doesNotMatch(root.textContent,/null초/);
+ const root=render('{"n":90071992547409931234,"n":2,"e":1e+04,"ok":false,"elapsed_seconds":null}');assert.match(root.textContent,/90071992547409931234/);assert.match(root.textContent,/1e\+04/);assert.match(root.textContent,/\uc544\ub2c8\uc694/);assert.match(root.textContent,/\uac12 \uc5c6\uc74c/);assert.doesNotMatch(root.textContent,/null\ucd08/);
  const dup=render('{"findings":[{"criterion":"scope","judgment":"FAIL","evidence":[{"field":"context","quote":"one","quote":"two"}]}]}');assert.match(dup.textContent,/one/);assert.match(dup.textContent,/two/);
 });
 await check('escaped Unicode and multiline strings remain text, never executable HTML',()=>{
- const root=render(JSON.stringify({text:'한글 😀\n<img src=x onerror=alert(1)>',payload:JSON.stringify({text:'두 번째\n문장'})}));
- assert.match(root.textContent,/두 번째\n문장/);assert.match(root.textContent,/<img src=x onerror=alert\(1\)>/);assert.equal(all(root,n=>n.tagName==='img').length,0);
+ const root=render(JSON.stringify({text:'\ud55c\uae00 😀\n<img src=x onerror=alert(1)>',payload:JSON.stringify({text:'\ub450 \ubc88\uc9f8\n\ubb38\uc7a5'})}));
+ assert.match(root.textContent,/\ub450 \ubc88\uc9f8\n\ubb38\uc7a5/);assert.match(root.textContent,/<img src=x onerror=alert\(1\)>/);assert.equal(all(root,n=>n.tagName==='img').length,0);
 });
 await check('malformed JSONL keeps raw lines in source order',()=>{
  const raw='bad first\n{"type":"turn.started"}\n\nBROKEN\n{"type":"turn.completed"}';const n=ctx.humanDecode(raw);assert.equal(n.kind,'jsonl');assert.equal(n.children.map(e=>e.line).join(','),'1,2,4,5');const root=render(raw);assert.match(root.textContent,/bad first/);assert.match(root.textContent,/BROKEN/);assert.equal(klass(root,'human-event').length,4);
 });
 await check('large lists page without omitting records; deep content falls back explicitly',()=>{
- const raw=JSON.stringify(Array.from({length:53},(_,i)=>({message:'entry-'+i})));const root=render(raw);assert.equal(klass(root,'human-array-item').length,25);btn(root,'다음 항목').click();assert.equal(klass(root,'human-array-item').length,25);btn(root,'다음 항목').click();assert.equal(klass(root,'human-array-item').length,3);assert.match(root.textContent,/entry-52/);
- const deep=ctx.humanDecode('['.repeat(100)+'0'+']'.repeat(100));let n=deep;while(n.children)n=n.children[0];assert.equal(n.kind,'text');assert.match(n.note,/한도/);
- const big=render('x'.repeat(2000001));assert.match(big.textContent,/처음 24,000자/);btn(big,'전체 2,000,001자 표시').click();assert.match(big.textContent,/x{24001}/);
+ const raw=JSON.stringify(Array.from({length:53},(_,i)=>({message:'entry-'+i})));const root=render(raw);assert.equal(klass(root,'human-array-item').length,25);btn(root,'\ub2e4\uc74c \ud56d\ubaa9').click();assert.equal(klass(root,'human-array-item').length,25);btn(root,'\ub2e4\uc74c \ud56d\ubaa9').click();assert.equal(klass(root,'human-array-item').length,3);assert.match(root.textContent,/entry-52/);
+ const deep=ctx.humanDecode('['.repeat(100)+'0'+']'.repeat(100));let n=deep;while(n.children)n=n.children[0];assert.equal(n.kind,'text');assert.match(n.note,/\ud55c\ub3c4/);
+ const big=render('x'.repeat(2000001));assert.match(big.textContent,/\ucc98\uc74c 24,000\uc790/);btn(big,'\uc804\uccb4 2,000,001\uc790 \ud45c\uc2dc').click();assert.match(big.textContent,/x{24001}/);
 });
 await check('Humanize opens separate modal; original copy and Escape restore source view',async()=>{
  const source=ctx.jsonViewer(raw,'02-raw-response/cli-execution.json');document.body.append(source);const opener=btn(source,'Humanize');opener.focus();opener.click();const dialog=klass(document.body,'humanize-modal')[0];assert.equal(dialog.open,true);assert.equal(klass(dialog,'human-finding').length,8);
- await btn(dialog,'원본 복사').click();assert.equal(copied,raw);
- const original=all(dialog,n=>n.tagName==='details'&&n.children[0].textContent==='원본 그대로 보기')[0];original.open=true;original.emit('toggle');assert.equal(klass(original,'json-viewer').length,1);assert.equal(btn(original,'Humanize'),undefined);
+ await btn(dialog,'\uc6d0\ubcf8 \ubcf5\uc0ac').click();assert.equal(copied,raw);
+ const original=all(dialog,n=>n.tagName==='details'&&n.children[0].textContent==='\uc6d0\ubcf8 \uadf8\ub300\ub85c \ubcf4\uae30')[0];original.open=true;original.emit('toggle');assert.equal(klass(original,'json-viewer').length,1);assert.equal(btn(original,'Humanize'),undefined);
  let prevented=false;dialog.emit('cancel',{preventDefault(){prevented=true;}});assert.equal(prevented,true);assert.equal(dialog.isConnected,false);assert.equal(document.activeElement,opener);assert.equal(source.isConnected,true);
 });
 console.log(results.length+' checks passed; no LLM calls');

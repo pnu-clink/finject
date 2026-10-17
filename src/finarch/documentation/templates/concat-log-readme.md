@@ -1,14 +1,14 @@
-# {output_name} · 작업 로그
+# {output_name} · Work log
 
-데이터셋 화면은 [공통 viewer](http://127.0.0.1:8893/?run={output_name})에서 확인합니다. 여기서는 취합 근거만 보존합니다.
+The data set screen is [common viewer](http://127.0.0.1:8893/?run={output_name})I'll check in. I'll just keep the merging basis here.
 
-1. `concat-summary.json`: 전후 수량·증가/감소 ID.
-2. `case-map.json`: 문항별 원천 run·교체 여부.
-3. `question-revisions.json`: Preparation 후 저장된 질문의 표현 차이.
-4. `concat-log.json`, `terminal.log`: 원천 해시·교체 작업.
-5. `history-copy.json`, `full-view-validation.json`: 실제 단계 기록 복제·독립 파일 확인·원천 해시·7유형 통과 ID의 일치 검사.
-6. `validation.json`: 파일 해시·정렬·상태 검사. 의미 검증이나 사람 승인은 아닙니다.
-7. `export-check/`가 있으면 `validation.json` → `export-list.png` → `evaluation-sample.html` 순서로 평가자 Export의 목록·검사 범위·실제 배포 화면을 확인합니다. 샘플 HTML은 전체 데이터셋 Export가 아닙니다.
-8. `export-seven-check/`가 있으면 `validation.json` → `export-policy.png` → `evaluation-sample.html` 순서로 7유형 전부 PASS·Reject 없음의 문항 단위 Export를 확인합니다. 한 유형이라도 실패·미평가·누락·Reject이면 문항 전체가 제외됩니다. `export-policy-check/`는 잘못 적용했던 유형별 선정의 과거 검사 기록이며 현재 기준이 아닙니다. 검사 범위와 전체 대상 수는 로그에 구분하여 기록합니다.
+1. `concat-summary.json`After the war, the ID of the quantity increases/decreases.
+2. `case-map.json`: Article by article source run· teacher or not.
+3. `question-revisions.json`: The expression difference of the questions saved after preparation.
+4. `concat-log.json`, `terminal.log`: Source hashing and transitioning.
+5. `history-copy.json`, `full-view-validation.json`The following steps are used: actual step record copy; independent file verification; source hash;7Check the match of the type pass ID.
+6. `validation.json`File hash: parity: status check. It's not meaning verification or human approval.
+7. `export-check/`If you're going. `validation.json` → `export-list.png` → `evaluation-sample.html` Check the list, scope of the scan, actual distribution screen of the evaluator Export in order.
+8. `export-seven-check/`If you're going. `validation.json` → `export-policy.png` → `evaluation-sample.html` In order. 7Check the Export of the entire type of case unit without PASS.Reject. If any type fails, is undervalued, is rejected, the entire case is excluded. `export-policy-check/`The past inspection records of misapplied type-specific determinations, not the current standards, are recorded separately by logs of the scope of inspection and the total number of subjects.
 
-LLM 호출은 없습니다. 이전 보고서 화면의 캡처·검사 기록은 과거 확인 자료이며 최신 화면의 근거가 아닙니다.
+No LLM calls. The capture and inspection records of the previous report screen are past verification data and not the basis for the latest screen.

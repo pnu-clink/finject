@@ -115,11 +115,11 @@ class Controller:
         store.write(folder / 'scheduler.json', value)
         template = (store.PROJECT / 'src/finarch/experiments/templates/analysis-scheduler-template.md').read_text()
         sample = self.sample or {}
-        cpu = '측정 대기' if sample.get('cpu_percent') is None else f"{sample['cpu_percent']:.1f}%"
+        cpu = 'Measuring the atmosphere' if sample.get('cpu_percent') is None else f"{sample['cpu_percent']:.1f}%"
         store.write_text(folder / 'scheduler.md', template.format(**value, cpu=cpu,
-            **({'deferred_failure_count': '미기록'} if 'deferred_failure_count' not in value else {}),
+            **({'deferred_failure_count': 'Not recorded'} if 'deferred_failure_count' not in value else {}),
             interval=self.policy['adaptive']['interval_seconds'],
             threshold=self.policy['adaptive']['cpu_threshold_percent'],
             growth=self.policy['adaptive']['growth_percent'],
-            mode='자동 증가' if self.policy['adaptive']['enabled'] else '고정'))
+            mode='Automatic increase' if self.policy['adaptive']['enabled'] else 'Fixed'))
         return value

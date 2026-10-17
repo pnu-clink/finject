@@ -174,23 +174,23 @@ def summarize_run(run_dir, output_dir=None):
     }
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir/'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2)+'\n')
-    fmt = lambda v: '미확인' if v is None else f'{v:,.6f}' if isinstance(v, float) else f'{v:,}'
-    lines = ['# API 사용량 집계', '', f'원본 실행: `{run_dir}`', '',
-             '읽는 순서: 이 README → summary.json의 total/by_purpose/by_role → calls의 usage_path 원본.', '',
-             '입력 평균은 실제 API 입력 토큰 평균입니다. 출력에는 추론 토큰이 포함됩니다.',
-             '실패·재시도 호출도 포함하며 response_id가 같은 복제 산출물은 한 번만 집계합니다.',
-             '비용은 호출 당시 공개 단가의 추정값이며 실제 청구액이 아닙니다. 미확인은 0이 아닙니다.', '',
-             '| 용도 | 호출 | 평균 입력 | 평균 출력 | 평균 추론 | 총 토큰(확인분) | 비용 USD(확인분) | usage 누락 | 비용 누락 |',
+    fmt = lambda v: 'Unconfirmed' if v is None else f'{v:,.6f}' if isinstance(v, float) else f'{v:,}'
+    lines = ['# The API usage estimate', '', f'Original run: `{run_dir}`', '',
+             'Readings: This is a complete/by_purpose/by_role → call usage_path copy of README → summary.json.', '',
+             'The average input is the average of the actual API input tokens. The output includes the inference tokens.',
+             'It includes failures, incidents, and calls, and the response_id only compute the same duplicate output once.',
+             'The cost is the estimate of the public key at the time of the call, and it\'s not the actual charge. 0is not.', '',
+             'Usage call average input average output average inference total token verifier cost USD verifier use zero cost',
              '|---|---:|---:|---:|---:|---:|---:|---:|---:|']
-    for purpose, item in list(summary['by_purpose'].items()) + [('전체', summary['total'])]:
+    for purpose, item in list(summary['by_purpose'].items()) + [('All', summary['total'])]:
         a = item['token_averages_known']
         values = [item['calls'], a['input_tokens'], a['output_tokens'], a['reasoning_tokens'],
                   item['token_totals_known']['total_tokens'], item['estimated_cost_usd_known'],
                   item['missing_usage_calls'], item['missing_cost_calls']]
         lines.append('| '+purpose+' | '+' | '.join(fmt(v) for v in values)+' |')
-    lines += ['', f"중복 {len(duplicates)}건, 읽기 오류 {len(errors)}건, 과거 ID 미기록 {len(unverified)}건.",
-              'summary.json의 calls.price_basis에 호출 당시 단가·공식 출처·스냅샷 해시가 보존됩니다.',
-              '후속 스키마/의미 검증 실패 여부는 해당 문항의 검증 산출물을 확인하십시오. completed는 API 응답 상태입니다.']
+    lines += ['', f"Duplicates {len(duplicates)}That\x27s a reading error. {len(errors)}That\x27s a past ID. {len(unverified)}That one.",
+              'The single source and snapshot hash is saved when you call on summary.json\'s calls.price_basis.',
+              'Check the verification output of the following statement for the following schema/response failure: completed is the API response state.']
     (output_dir/'README.md').write_text('\n'.join(lines)+'\n')
     return summary
 

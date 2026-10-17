@@ -45,7 +45,7 @@
         "model": "gpt-6-luna",
         "transport": "openai_batch",
         "key_variable": "OPENAI_API_KEY",
-        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "key_file": ".env",
         "reasoning_efforts": {
           "off": "none",
           "on": "medium"
@@ -103,7 +103,7 @@
       "planned_solver_calls_per_round": 3000,
       "prompt_revision": "P1_OUTPUT_ALIGNMENT_20260927",
       "previous_run": "20260927-exp-002",
-      "review_of_previous_round": "2차의 충돌 탐지 개선을 유지하며, 조건별 최종값을 모두 계산할 수 있으면 CONDITIONAL로 표현하고 선언·answer/null·설명·precision을 최종 대조합니다. 과도한 유보 증가, 답 선언과 null의 모순, 조건부 분기의 계산·자릿수 오류가 개선 근거입니다. 동일 입력·common·P0·schema·분석 기준은 고정합니다."
+      "review_of_previous_round": "Retain the conflict-detection improvements from round 2. When final values for all conditions can be calculated, use CONDITIONAL, then cross-check the declaration, answer/null, explanation, and precision. The changes address excessive abstention, contradictions between answer declarations and null, and calculation/precision errors in conditional branches. Keep the inputs, common instructions, P0, schema, and analysis criteria fixed."
     }
   }
 }

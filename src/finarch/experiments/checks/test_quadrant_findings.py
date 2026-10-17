@@ -18,10 +18,10 @@ def grouped_response(request):
         eligible = [f for f in members if condition in f['cited_conditions']]
         profiles.append({'condition': condition, 'finding_ids': [f['id'] for f in eligible],
             'analysis': 'Shared recorded finding.' if eligible else 'No cited findings.',
-            'display_ko': {'analysis': '저장된 발견 공유.' if eligible else '인용 발견 없음.'},
+            'display_ko': {'analysis': '\uc800\uc7a5\ub41c \ubc1c\uacac \uacf5\uc720.' if eligible else '\uc778\uc6a9 \ubc1c\uacac \uc5c6\uc74c.'},
             'citations': [{'finding_id': eligible[0]['id'], 'field': 'claim', 'quote': eligible[0]['claim']}] if eligible else []})
     return {'run': request['input']['run'], 'groups': [{'id': 'G01', 'title': 'Shared topic',
-        'summary': 'Saved findings only.', 'display_ko': {'title': '공통 주제', 'summary': '저장된 발견만.'},
+        'summary': 'Saved findings only.', 'display_ko': {'title': '\uacf5\ud1b5 \uc8fc\uc81c', 'summary': '\uc800\uc7a5\ub41c \ubc1c\uacac\ub9cc.'},
         'finding_ids': [f['id'] for f in members], 'condition_profiles': profiles}]}
 
 

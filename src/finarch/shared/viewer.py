@@ -25,12 +25,12 @@ def serve(handler, *, name, port, landing='/', argv=None):
             if existing.get('project') != str(PROJECT) or existing.get('viewer') != name:
                 raise ValueError('VIEWER_IDENTITY_MISMATCH')
         except (OSError, URLError, ValueError):
-            raise SystemExit(f'{name}: 포트를 사용할 수 없습니다. --port로 다른 포트를 지정하세요. ({error})') from error
+            raise SystemExit(f'{name}--port is another port.{error})') from error
         if args.open:
             webbrowser.open(address + landing)
         return
     address = f'http://127.0.0.1:{server.server_port}'
-    print(f'fin-arch {name}: {address}{landing}\n종료: Ctrl+C', flush=True)
+    print(f'fin-arch {name}: {address}{landing}\nEnd: Ctrl + C', flush=True)
     if args.open:
         webbrowser.open(address + landing)
     try:

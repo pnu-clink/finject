@@ -1,32 +1,32 @@
-# 실험 뷰어 — 키보드 이동·조합 선택
+# Experiment Viewer Keyboard Move-Combination Selection
 
-이 문서는 당시 W/S의 문항번호·Q/C 위치 이동을 확인한 기록입니다. 현재 W/S는 모든 화면에서 반 화면씩 위/아래로 스크롤합니다. [현행 동작 확인](../viewer-experiments-scroll-shortcut/README.md)을 먼저 확인해 주세요.
+This document is a record of the W/S's phrase number, Q/C position shift, and now W/S scrolls up and down halfway across all the screens.](../viewer-experiments-scroll-shortcut/README.md)Check first.
 
-## 읽는 순서
+## Reading order
 
-1. [문항 비교](http://127.0.0.1:8894/?run=20260923-exp-007&tab=case&case=test-0006&variant=IC_VALUE_01_AFTER)에서 **키보드 단축키**를 펼칩니다. 데이터셋 뷰어와 같은 키보드 배열로 문항은 파랑, 유형은 주황, 조건은 보라, 화면·본문 위치는 초록으로 표시합니다.
-2. **Q/E**로 이전/다음 문항, **A/D 또는 B**로 원본부터 EA-02까지 유형을 이동합니다. 이 기록 작성 당시 **W/S**는 문항번호/Q·C 위치였으며, **1–6**은 전체 결과부터 보고서·이력까지 상단 화면입니다. 문항 이동은 현재 필터 범위에서 25개 목록 페이지를 이어 이동하며 양 끝에서 멈춥니다.
-3. 조건 줄 앞에 **(Unguided Solving, 끔), (Unguided Solving, 켬), (Criteria-Guided Solving, 끔), (Criteria-Guided Solving, 켬)**이 있습니다. **Z/C로 이 네 조합에 도착하면 즉시 선택**됩니다. 뒤쪽 Unguided Solving/Criteria-Guided Solving·Reasoning OFF/Reasoning ON 버튼은 Z/C로 초점을 옮긴 후 **Space/Enter**로 선택합니다. Tab/Shift+Tab도 사용합니다. 앞/뒤 선택 표시는 서로 동기화되며 선택색의 브라운 농도와 초점 테두리를 구분합니다.
-4. 각 조합 아래에서 해당 문항·유형·모델의 **저장된 최종 시도 시간**을 읽습니다. 여러 모델은 각각 표시하며 시간 미기록·읽기 오류·요청 없음과 실제 0초를 구분합니다. 원본의 Criteria-Guided Solving은 계획되지 않아 선택할 수 없습니다.
-5. [확인 기록](checks.json), [검사 로그](tests.log), [동작·파일별 책임·순서도](../../docs/02-experiments/README.md)를 봅니다.
+1. [Compare the problems](http://127.0.0.1:8894/?run=20260923-exp-007&tab=case&case=test-0006&variant=IC_VALUE_01_AFTER)in **Keyboard shortcuts**In a keyboard layout like the Dataset Viewer, the cases are blue, the type is orange, the conditions are blue, and the screen and text are in green.
+2. **Q/E**The previous/next case, **A/D or B**From the original to the EA-02Move the type up to the type. **W/S**And the key is the number of phrases/Q·C position. **1–6**The top screen is from the full result to the report power. 25It moves along the items list page and stops at the end of the pack.
+3. In front of the condition line. **(Unguided Solving, ) (Unguid Solving,) (Criteria-Guided Solving) (Cryeria-Guidated Solving, ??)**Here's the thing. **When you get to this four combination with Z/C, select immediately**The rear Unuided Solving/Criteria-Guided Solving-Reasoning OFF/Reasoning ON button is on the back, and then the focus is on Z/C. **Space/Enter**We use Tab/Shift+Tab, and the front/back selection tabs synchronize with each other, and we distinguish the brown concentration of the selected color from the focused threshold.
+4. Below each combination, the corresponding case, type, model, **The last time of the trial is saved**The multiple models each show time-out, read error, no request and actual 0Criteria-Guided Solving in the original is not planned, and you can't choose.
+5. [Confirmation of the record](checks.json)[Examining logs](tests.log)[Company: file-by-file responsibility: also](../../docs/02-experiments/README.md)inspect
 
-입력란·선택 상자 사용 중 또는 팝업이 열린 동안 이동 단축키는 작동하지 않습니다. Ctrl/Alt/Meta 조합·한글 조합 입력·키 반복도 제외합니다. 1 전체 결과는 클릭과 같이 조회 필터를 초기화합니다. 이후 만드는 단일 HTML Export에도 동일한 기능을 포함합니다.
+The Move Shortcut is not working when using the Input/Options box or when the pop-up is open, except for Ctrl/Alt/Meta combination; and the Hanks combination input key. 1 The whole result is initializing the view filter like a click, and then it's going to include the same functionality in a single HTML Export that you're going to create.
 
-## 파일 역할
+## File responsibilities
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[model.mjs](../../viewer/experiments/model.mjs)|필터 후 전체 문항의 이웃·페이지, 4개 조합, 시간 값과 누락 상태|
-|[repository.mjs](../../src/finarch/experiments/viewer/repository.mjs)|저장 result/call의 시간 읽기. 다른 조합의 손상 파일을 현재 응답 조회와 분리|
-|[app.js](../../viewer/experiments/app.js)|단축키·입력 보호, 버튼 동기화·시간 표시·화면 갱신 후 초점 복원|
-|[index.html](../../viewer/experiments/index.html) / [styles.css](../../viewer/experiments/styles.css)|키보드 모양, 기능별 안내색, 조합/개별 선택색·초점 테두리|
-|[offline.mjs](../../viewer/experiments/offline.mjs)|단일 HTML에서도 같은 문항·조합·시간 선택|
-|[checks.json](checks.json)|실제 브라우저 확인·회귀 검사 결과·변경 파일 해시|
-|[tests.log](tests.log)|문항 페이지·필터 이동, 시간 누락/오류/0초, 오프라인 자료 일치와 기존 뷰어 회귀 검사|
-|[tests-sandbox.log](tests-sandbox.log)|최초 39개 검사 중 HTTP 2개가 localhost 권한 제한으로 중단된 기록. 이후 검사를 추가한 최종 결과는 tests.log|
-|[server.log](server.log)|변경한 뷰어 서버의 읽기 로그|
-|[documentation-refresh.log](documentation-refresh.log) / [documentation-validate.log](documentation-validate.log)|중앙 템플릿 생성과 문서 연결·보관 원본 해시 검사|
+|[model.mjs](../../viewer/experiments/model.mjs)|The neighboring page of the entire case after the filter, 4The combination of the items, the time value and the missing state|
+|[repository.mjs](../../src/finarch/experiments/viewer/repository.mjs)|Save the time reading of the result/call. Separate the damaged files from the current response monitoring of other combinations|
+|[app.js](../../viewer/experiments/app.js)|Shortcut key, input protection, button sync, time sign, focus recovery after screen refresh|
+|[index.html](../../viewer/experiments/index.html) / [styles.css](../../viewer/experiments/styles.css)|Keyboard shape, functional guidance color, combination/individual selection color, starting point thedry|
+|[offline.mjs](../../viewer/experiments/offline.mjs)|Select the same case, syntax, time in a single HTML.|
+|[checks.json](checks.json)|Actual browser verification, return check results, change file hash|
+|[tests.log](tests.log)|Article page filter move, time drop/down/0Second, offline data match and existing viewer return checks|
+|[tests-sandbox.log](tests-sandbox.log)|The first one. 39HTTP is in items testing. 2The items stopped recording with localhost permission restrictions.|
+|[server.log](server.log)|The read log of the changed Viewer server|
+|[documentation-refresh.log](documentation-refresh.log) / [documentation-validate.log](documentation-validate.log)|Central template creation and document linkage; custodial source hashing|
 
-처리 시간은 재시도 합계·화면 로딩 시간이 아닙니다. `result.elapsed_seconds`를 먼저 읽고 없으면 `call.result.elapsed_seconds`를 확인합니다. 저장 결과와 원응답을 바꾸거나 모델을 추가 호출하지 않습니다. 브라우저 확인은 에이전트의 확인이며 사용자 검토 완료를 뜻하지 않습니다.
+Processing time is not the time to re-load or re-load. `result.elapsed_seconds`If you don't read it first, `call.result.elapsed_seconds`Verify. Do not change the raw response and save results or call the model add. Browser verification is an agent verification and does not mean the user has completed the review.
 
-이 README는 `src/finarch/documentation/templates/viewer-experiments-keyboard.md`에서 `python3 src/finarch/documentation/manage.py refresh`로 생성합니다.
+This README is a `src/finarch/documentation/templates/viewer-experiments-keyboard.md`in `python3 src/finarch/documentation/manage.py refresh`So we're going to generate a

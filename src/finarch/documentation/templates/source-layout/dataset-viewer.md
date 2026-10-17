@@ -1,68 +1,68 @@
-# 데이터셋 뷰어 서버·화면 조립
+# Data set viewer server screen assembly
 
-[전체 소스 구조](../../../../docs/01-dataset/90-operations/05-source-layout.md) · [브라우저 자산](../../../../viewer/dataset/README.md)
+[The whole source structure](../../../../docs/01-dataset/90-operations/05-source-layout.md) · [Browser assets](../../../../viewer/dataset/README.md)
 
-`assets.py`는 브라우저 소스를 조립하고, `server.py`는 8893 서버에서 저장된 자료를 제공합니다. 대시보드는 별도 서버(8895)입니다.
+`assets.py`And then we're going to build a browser source, `server.py` 8893 It provides data stored on the server.8895).
 
-## 화면 코드 읽는 순서
+## The order in which the screen code is read.
 
-이 문서는 `src/finarch/documentation/templates/source-layout/dataset-viewer.md`에서 자동 생성합니다.
+This document is generated from `src/finarch/documentation/templates/source-layout/dataset-viewer.md`.
 
-1. `menu.js`: Preparation 7개 / Generation 5개 메뉴와 화면 선택.
-2. `common/stage-guide.js`: 맨 위의 단계 설명·실제 파일 미리보기, 맨 아래의 결과 파일 트리.
-3. `prepare/answer/01-source`부터 `07-human-review`: Preparation 메뉴별 비교 화면.
-4. `prepare/generation/IC-value`, `IC-source`, `IC-relation`, `EA`: 유형별 그래프·문장 표시.
-5. `prepare/generation/common/01-perturbation`부터 `05-human-review`: 네 유형의 공통 비교·검증·판정 화면. 012의 그래프 비교·색상·검사 근거 표시를 공유하며 선택한 실행의 자료만 사용합니다.
-6. `common/saved-calls.js`: 현재 CLI/API의 요청·원응답·응답 검사 연결. `common/raw-exchange.js`: 원문을 펼쳐 표시.
-7. `reports/dataset_survey.js`: 데이터셋 조사 결과의 문서 목록·표·출처와 저장 원문. `summary.kind=DATASET_SURVEY`만 표시합니다. 실험 설계 문서 화면은 사용자 요청으로 제거했습니다.
-8. `reports/documentation.js`: 현재 파이프라인 문서의 계층 탐색·본문·Mermaid 표시. 생성된 `index.html`을 직접 고치지 않고 이 소스를 수정합니다.
-9. `shell.html`: 공통 필터·실행 선택·기존 형식 지원과 위 파일의 포함 위치. `server.py` / `build.py`: 저장 자료 조회.
+1. `menu.js`: Preparation 7items / Generation 5items menu and screen selection.
+2. `common/stage-guide.js`Explain the steps above: Preview of the actual file, result file tree below.
+3. `prepare/answer/01-source`through `07-human-review`: Preparation comparison screen by menu.
+4. `prepare/generation/IC-value`, `IC-source`, `IC-relation`, `EA`: Type-by-type graphs; field indication.
+5. `prepare/generation/common/01-perturbation`through `05-human-review`Four types of common comparison, verification, judgment screen. 012We share the graph comparison, color, and analysis basis markers and we only use the selected execution data.
+6. `common/saved-calls.js`: Current CLI/API requests; raw response ·response check connection. `common/raw-exchange.js`: Expand the printing mark.
+7. `reports/dataset_survey.js`: List of documents from data set survey results; source and storage of source. `summary.kind=DATASET_SURVEY`The experimental design document screen was removed at user's request.
+8. `reports/documentation.js`: Currently, the pipeline document has a layered search; script; Mermaid display. `index.html`I'm not fixing it myself, I'm fixing this sauce.
+9. `shell.html`: Common filters; action selections; exist format support and inclusion location of the above files. `server.py` / `build.py`: Storage data consultation.
 
-각 메뉴는 **처리 설명 → 비교·검토 화면 → 결과 파일** 순서입니다. 설명 자체는 실행 완료 증거가 아닙니다. 파일이 없으면 저장 기록 없음으로 표시합니다. 자동 검사는 사람 승인과 구분합니다.
+Each menu is **Processing description → comparison; screenshot → result file** It's in order. The description itself is not proof of completion. Without the files, it's shown as no storage record.
 
-## 차수와 실제 파일 경로
+## The chart and the actual file path.
 
-`preparation_paths.py`는 문항 바로 아래 `NN-round`를 찾고, 선택 차수의 파일만 읽도록 연결합니다. 재실행하지 않은 문항은 실제 이전 차수를 표시합니다. `build.py`의 메모리 별칭은 과거 renderer 호환용이며 디스크 파일을 복제·수정하지 않습니다. 코드 `.py`, 요청·원응답·verification 판정·feedback-ref를 실제 경로와 함께 표시합니다. `reports/completion_report.py`는 각 차수의 `run.json`으로 처리 건수를 집계합니다.
+`preparation_paths.py`The following case is `NN-round`So you can find the selected variable and connect it to read only the file of the chosen variable. `build.py`The memory designation is past renderer compatible and does not copy-correct the disk file. `.py`Request, raw response, verification judgment, feedback-ref, along with the actual path. `reports/completion_report.py`is the number of each `run.json`And then we calculate the drainage.
 
-최종 취합본이 있는 실행은 `server.py`가 `results/manifest.json`의 해시를 확인하고 `00-input.json`의 `external_knowledge` 두 필드를 읽습니다. `menu.js`는 문제번호 옆에 확인된 외부사용 유형 또는 "외부사용 조건 미충족"을 표시합니다. 이 표시는 최종 취합 기준이며 현재 화면에서 선택한 과거 차수의 새 판정이 아닙니다. 미충족은 비사용의 증명이 아닙니다.
+The execution with the final copy is the `server.py` `results/manifest.json`Check the chart of the `00-input.json` `external_knowledge` I read two fields. `menu.js`This indicates the external use type or "external use condition insufficiency" that is identified next to the problem number. This indicates a final fit criterion and is not a new judgement of the past variable selected on the screen.
 
-## 화면 갱신
+## The screen is updated.
 
-### 명시적 문서 링크 · VW.DOC
+### Explanatory document links to VW.DOC
 
-`?run=<문서 기록>&doc=<등록된 문서>`를 열면 데이터셋 실행 목록에서 제외된 문서 전용 기록도 공통 문서 화면으로 읽습니다. 데이터셋 선택 목록에는 문서 run을 추가하지 않으며, 문서 열람 중임을 알리는 선택 안내만 표시합니다. 존재하지 않는 문서·문서 기록이 아닌 run은 오류로 표시합니다. 데이터셋을 선택하면 doc 경로를 지우고 일반 문항 화면으로 돌아갑니다.
+`Run=<text sub="clublinks" start="1058.066" dur="0.067"> and document=<text> is included.`When you open the Open Access Access, you will also read the dedicated document record that is not included in the data set execution list as a common document screen. The Data Set selection list does not add a document run, but only shows the selection instructions that indicate that the document is loaded. A run that is not an existing document/text record is shown as an error. Selecting the data set will delete the doc path and return to the normal case screen.
 
-|번호|실제 파일|책임|
+|ID|Actual file|Responsibility|
 |---|---|---|
-|VW.DOC.01|`server.py list_batches()`|데이터셋 목록만 반환. 문서 전용 기록 제외 유지|
-|VW.DOC.02|`viewer/dataset/shell.html`의 live controller|명시적 run/doc 유지·직접 run 조회·문서 등록 확인·데이터셋 선택으로 복귀|
-|VW.DOC.03|`server.py batch_data()` → `reports/documentation.py view()`|문서 run을 직접 읽고 등록 목록·내용·해시 전달|
-|VW.DOC.04|`viewer/dataset/reports/documentation.js`|공통 문서 선택·Markdown·흐름도·원문/해시 표시|
-|VW.DOC.05|`assets.py render()`|저장 자료를 읽지 않고 shell과 공통 소스로 단일 index.html 조립|
+|VW.DOC.01|`server.py list_batches()`|Returns only the list of the dataset.|
+|VW.DOC.02|`viewer/dataset/shell.html`The live controller|Keep the explicit run/doc; direct run check; check the mail registration; return to the dataset option|
+|VW.DOC.03|`server.py batch_data()` → `reports/documentation.py view()`|Read the document run directly and register the list, input, and output|
+|VW.DOC.04|`viewer/dataset/reports/documentation.js`|Common document selection Markdown flow also source/reference|
+|VW.DOC.05|`assets.py render()`|Collect a single index.html as a common source without reading the stored data|
 
 ```mermaid
 flowchart LR
  subgraph shell["viewer/dataset/shell.html"]
-  Q["VW.DOC.02 · 명시적 run/doc 확인"]
-  V["등록 문서 경로 확인"]
-  X["문서 조회 오류 표시"]
-  R["데이터셋 선택 → doc 해제"]
+  Q["VW.DOC.02 · Explained run/doc verification"]
+  V["Check the registration document path"]
+  X["Document view error is displayed"]
+  R["Select the dataset → undo the doc"]
  end
  subgraph server["server.py"]
-  L["VW.DOC.01 · /api/runs 데이터셋 목록"]
-  B["VW.DOC.03 · /api/run 직접 조회"]
+  L["VW.DOC.01 · List of /api/runs dataset"]
+  B["VW.DOC.03 • /api/run direct access"]
  end
  subgraph reader["reports/documentation.py"]
-  D["view · 등록 문서와 실제 해시 읽기"]
+  D["View · Registering documents and actual hash reading"]
  end
  subgraph browser["reports/documentation.js"]
-  H["VW.DOC.04 · 기존 공통 문서 화면"]
+  H["VW.DOC.04 · Existing common document screen"]
  end
  Q --> L
  Q --> B --> D --> V
- V -->|등록 문서| H
- B -->|조회 실패| X
- V -->|문서 없음| X
+ V -->|Registered documents| H
+ B -->|The visit failed.| X
+ V -->|No records.| X
  H --> R --> L
  classDef file fill:#eceff1,stroke:#607d8b;
  classDef local fill:#e3f2fd,stroke:#1565c0;
@@ -70,30 +70,30 @@ flowchart LR
  class Q,V,X,R,L,B,H local;
 ```
 
-회색은 파일 조회, 파랑은 Python 서버 또는 브라우저 처리입니다. 분홍색 확장 노드는 없습니다. 조회 실패 후 다음 갱신은 자료만 다시 읽으며 모델 호출·run 재실행을 하지 않습니다. [로컬 검사와 실제 브라우저 확인](../../../../log/viewer-response-grounding-contract-20261003/README.md).
+The gray is file browsing, the blue is Python server or browser processing. There are no pink extension nodes. After the browsing failure, the next update reads the data and does not re-run the model call-run.](../../../../log/viewer-response-grounding-contract-20261003/README.md).
 
-2026-09-17: 첫 조회는 목록·검색용 요약과 선택 문항 상세를 읽고, 번호 전환은 해당 문항 한 건만 요청합니다. 브라우저는 목록을 유지하고 이전 상세는 요약으로 되돌립니다. 전체 집계 갱신 중에도 개별 요청을 시작하며, 늦게 도착한 이전 번호의 응답은 적용하지 않습니다. [구조와 확인 기록](../../../../archive/20260923-documentation-reorganization/docs/55-viewer-speed-and-phi-two.md#2026-09-17-문제별-상세-조회)을 참고하세요.
+2026-09-17First consultation: list: Search summary and select phrase readings, and number switching only requests one case. The browser keeps the list and returns the previous details to the summary. It starts individual requests during the entire statistical update, and the response to the previous number that arrived late does not apply.](../../../../archive/20260923-documentation-reorganization/docs/55-viewer-speed-and-phi-two.md#2026-09-17-%EB%AC%B8%EC%A0%9C%EB%B3%84-%EC%83%81%EC%84%B8-%EC%A1%B0%ED%9A%8C)And I want you to look at this.
 
-실행 선택 목록은 서버의 `reports/run` 실제 하위 폴더를 응답 완료 후 10초마다 다시 읽습니다. 선택한 폴더가 사라지면 이전 상세·차수를 비우고 남은 실행을 엽니다. 폴더가 하나도 없으면 빈 화면을 표시합니다. 서버에 연결하지 못한 경우에는 연결 오류와 마지막 자료임을 표시합니다. [실행 목록 조회·삭제 반영](../../../../archive/20260923-documentation-reorganization/docs/62-viewer-menu-layout.md#실행-목록-조회삭제-반영)을 참고하세요.
+The list of execution options is the list of the `reports/run` After completing the response to the actual subfolder 10It reads every second. When the selected folder disappears, it empties the previous detail bar and opens the remaining execution. If there's no folder, it shows the blank screen. If you're not connected to the server, it shows a connection error and the last data.](../../../../archive/20260923-documentation-reorganization/docs/62-viewer-menu-layout.md#%EC%8B%A4%ED%96%89-%EB%AA%A9%EB%A1%9D-%EC%A1%B0%ED%9A%8C%EC%82%AD%EC%A0%9C-%EB%B0%98%EC%98%81)And I want you to look at this.
 
-서버·조회 코드는 이 폴더, 브라우저 소스는 `viewer/dataset`에서 수정합니다. 프로젝트 루트에서 다음 명령을 실행하면 공통 `viewer/dataset/index.html`과 이 README가 갱신됩니다.
+The server-side code is this folder, the browser source, `viewer/dataset`If you run the following command from the project root, you can run the common command from the root. `viewer/dataset/index.html`And this README is updated.
 
 ```sh
 PYTHONPATH=src .venv/bin/python -m finarch.dataset.viewer.assets
 ```
 
-브라우저를 새로고침하면 변경이 표시됩니다. 결과 폴더별 HTML은 만들지 않으며 원천·생성·판정 파일도 수정하지 않습니다. 화면 조립은 LLM을 호출하지 않습니다.
+When you re-click your browser, you see changes. The result is that you don't create a folder-by-folder HTML, you don's edit the source, the bios, the judgment files, and the screen assembly doesn't call for an LLM.
 
-## 확인
+## Check
 
 ```sh
 node src/finarch/dataset/checks/test_viewer_menu.cjs
 PYTHONPATH=src .venv/bin/python -m unittest finarch.dataset.checks.test_viewer_server
 ```
 
-[변경·검사 기록](../../../../outputs/viewer-menu-20260915/README.md)에서 실제 확인 범위와 한계를 읽습니다.
+[Transformation and inspection records](../../../../outputs/viewer-menu-20260915/README.md)Read the actual verification range and limits.
 
-## 메뉴별 실제 소스
+## The actual source for each menu.
 
 - [common/disclosure.js](../../../../viewer/dataset/common/disclosure.js)
 - [common/failure-analysis.js](../../../../viewer/dataset/common/failure-analysis.js)
@@ -155,154 +155,154 @@ PYTHONPATH=src .venv/bin/python -m unittest finarch.dataset.checks.test_viewer_s
 - [reports/source_pair_review.js](../../../../viewer/dataset/reports/source_pair_review.js)
 - [vendor/mermaid.min.js](../../../../viewer/dataset/vendor/mermaid.min.js)
 
-## 04-graph 외부 정보·edge 분류
+## 04-graph external information edge classification
 
-`prepare/answer/04-graph/evidence.js` → `view.js` → `shell.html`의 그래프 그리기 순서로 읽습니다. 외부 정보는 사각형이며 세 근거 분류 밖의 edge는 오류로 표시합니다. 기존 미분류 기록을 추정하여 채우지는 않습니다. [동작과 현재 범위](../../../../archive/20260923-documentation-reorganization/docs/62-viewer-menu-layout.md#ge01-그래프-외부-근거-표시), 검사 로그 `log/viewer-graph-evidence-20260915.log`를 참고하세요.
+`prepare/answer/04-graph/evidence.js` → `view.js` → `shell.html`The outer information is square and the edge outside the three base classifications is shown as an error.](../../../../archive/20260923-documentation-reorganization/docs/62-viewer-menu-layout.md#ge01-%EA%B7%B8%EB%9E%98%ED%94%84-%EC%99%B8%EB%B6%80-%EA%B7%BC%EA%B1%B0-%ED%91%9C%EC%8B%9C)- Check the logs. `log/viewer-graph-evidence-20260915.log`So, look at this.
 
-## Preparation 안내 접기
+## Preparation lead folding
 
-실제 차수·최종 생성 개수 표·처리 현황·차수별 실행 결과 표를 **Preparation 차수 안내** 하나로 접습니다. `menu.js`가 두 표를 같은 내용 영역에 넣고 `common/disclosure.js`가 기존 `preparation-round` 키로 상태를 저장합니다. 다른 문제·실행·새로고침에도 유지합니다. 별도 처리 현황 접기 버튼은 없습니다.
+The actual parameters, the maximum generated parameters, processing conditions, the parameters, and the results of the execution are shown in the table. **Preparation rounds** It folds into one. `menu.js`Put the two tabs in the same content area. `common/disclosure.js`Go to the old one. `preparation-round` It keeps the status key, and other issues, actions, and new information, and no process fold button.
 
-차수별 실행 결과의 Preparation·Generation 제목 오른쪽에는 소요시간과 동시처리 문항 한도, 실행 중이면 현재 처리 문항 수를 표시합니다. `reports/completion_report.py`가 해당 실행의 `timing.json`과 `queue.json`을 읽고 `shell.html`이 표시합니다. 현재 설정으로 과거 실행을 추정하지 않으며 기록이 없으면 `기록 없음`입니다. Generation 동시처리도 LLM 호출 수가 아닌 문항 단위입니다.
+The Preparation·Generation heading of the variable-specific execution results shows the time and synchronized execution phrase limit, and the number of current execution phrases if running. `reports/completion_report.py`The execution of the `timing.json`and `queue.json`Read the article `shell.html`This shows that the current setting does not estimate past execution and that there is no record of `No record`Generation synchronization is a phrase unit, not an LLM call number.
 
-## 계산 화면 표시
+## Calculate the display of the screen
 
-03-calculation은 중복된 검증 전 POT·LLM 안내 상자를 표시하지 않습니다. 보존 파일은 하단 결과 파일에서 읽습니다. 기본 코드는 계산 본문이며 전체 실행 코드 보기·복사는 유지합니다. 근거별 원문·표·코드 토큰은 같은 고유 색으로 강조하고 중간 계산 줄은 노란색을 유지합니다. 검사 로그: `log/viewer-calculation-display-20260915.log`.
+03-calculation doesn't show the POT;LLM guide box before the overwritten verification. The preserve file is read in the bottom result file. The base code is the calculation text and the entire run code is maintained. The base-by-base font mark-code tokens are highlighted in the same unique color and the middle calculation line is maintained in yellow. Check log: `log/viewer-calculation-display-20260915.log`.
 
-## 화면 영역 테두리
+## The screen area thedros
 
-`menu.js`는 차수 안내 제목·전체 내용을 `div.preparation-overview`에, 문제번호·오류 개수·유형 선택·단계 메뉴를 `div.problem-selection`에 담습니다. `shell.html`의 `.viewer-group`이 흰 배경과 테두리를 표시합니다. 차수별 결과도 흰 배경이며 기존 접힘 상태는 유지합니다.
+`menu.js`The headings and the full text of the chart `div.preparation-overview`E, the problem number, the number of rows, the type selection, the stage menu. `div.problem-selection`is saved in `shell.html` `.viewer-group`This white background and the timeline, the result of the differential equation, is a white background, and the existing folding state is maintained.
 
-## 단계 안내·필터 접기
+## Step guide and filter fold
 
-`common/stage-guide.js`의 단계 설명 전체와 `shell.html`의 필터 패널을 각각 접을 수 있습니다. `common/disclosure.js`의 `stage-guide`, `filters` 키로 상태를 따로 저장하며 문제·단계 변경과 새로고침에도 유지합니다. 필터를 접어도 선택 조건은 그대로 적용됩니다.
+`common/stage-guide.js`The full step description of the `shell.html`You can fold the filter panels individually. `common/disclosure.js` `stage-guide`, `filters` It saves the key state separately, and keeps it up to the problem, the step change and the new entry.
 
-## 원본 검토 화면
+## The original screen review
 
-02-review 비교 화면은 원본 검토 결과와 보정 비교를 표시합니다. 중복된 프롬프트 버튼·현재 차수 결과 JSON·Q/C/A 입력 JSON 및 경로 줄은 제거했습니다. 저장 파일은 단계 설명의 미리보기와 하단 결과 파일에서 확인합니다.
+02-review comparison screen displays the original review results and correction comparisons. The duplicate prompt button and the current parameter result removed JSON, Q/C/A input JSON and path rows. The saved file is verified in the preview of the step description and the result file below.
 
-## LLM 단계 안내·호출 보기
+## See the LLM step guide.
 
-`common/stage-guide.js`는 LLM 처리 설명을 보라색으로 표시하고 안내 아래에 현재 단계의 저장 프롬프트·입출력 보기 버튼을 제공합니다. `common/saved-calls.js`가 단계 범위 내 원기록을 연결하며 호출 기록이 없으면 없음을 알립니다. 재사용 문장 생성은 저장된 원호출 연결을 따릅니다. 05-verification의 중복 JSON 목록은 제거하고 호출 버튼을 안내 아래로 이동했습니다. 실제 파일은 하단 결과 파일에서 읽습니다.
+`common/stage-guide.js`The LLM processing description is displayed in purple and provides a save prompt output view button for the current step below the guide. `common/saved-calls.js`It connects the routing logs within the step range, and it tells you that if there's no call log, there's none. 05The JSON list of the verification duplicates is removed and moved down the call button to the guide. The actual file is read from the result file below.
 
-LLM 호출 보기 버튼은 보라색입니다. `common/raw-exchange.js`의 Response는 `jsonViewer`로 표시하여 JSON 문법 색상·접기·펼치기를 지원합니다. 원문 문자열을 그대로 전달하므로 원문 복사는 보존되며 잘못된 JSON은 원문으로 표시합니다.
+The LLM call view button is purple. `common/raw-exchange.js`The answer is `jsonViewer`It supports JSON syntax coloring, rendering, and rendering, so the original text is preserved and the wrong JSON is displayed as the original.
 
 
-## 그래프 수식과 사람 판정 기본 선택 (2026-09-15)
+## Graphing and human judgement basic selection2026-09-15)
 
-`prepare/answer/04-graph/view.js`는 저장된 그래프에서 원본 계산식과 값 대입식을 읽어 node 출처 안내 바로 아래에 표시합니다. `prepare/answer/07-human-review/view.js`와 `prepare/generation/common/05-human-review/view.js`는 판정 선택과 저장을 분리합니다. 저장된 판정을 우선 선택하며 미저장 Preparation은 Accept, Generation은 Pending입니다. 화면의 기본 선택만으로 판정이 저장되지는 않으며 기존 승인 조건을 유지합니다.
+`prepare/answer/04-graph/view.js`The source node is shown just below the source guide to read the original calculation and value input from the stored graph. `prepare/answer/07-human-review/view.js`and `prepare/generation/common/05-human-review/view.js`Select the saved judgment first, and under the Preparation is Accept, and Generation is Pending. The default screen selection alone does not save the judgment and maintains the existing approval conditions.
 
 ```mermaid
 flowchart LR
- G[저장 그래프] --> F[출처 안내 아래 원본식·값 대입]
- R[저장된 사람 판정 확인] --> S{저장 판정 있음}
- S -->|있음| K[저장 판정 선택]
- S -->|없음| D[Preparation Accept / Generation Pending]
- K --> U[사용자 판정 저장]
+ G[Save the graph] --> F[Source code: the source code.]
+ R[Reserved person judgment verified] --> S{I have a storage judgment.}
+ S -->|Present| K[Save the judgment selection]
+ S -->|None| D[Preparation Accept / Generation Pending]
+ K --> U[Save the user's judgment]
  D --> U
- U --> C[기존 승인 조건 확인 후 저장]
+ U --> C[Save after verifying the existing approval conditions]
 ```
 
-04-graph의 `prepare/answer/04-graph/view.js` 표시 순서: 질문 → 출처 안내·수식 → 그래프 → 원본 정답·골드 → Python 코드·선택 노드 상세. 골드 값은 저장된 원본 정답을 그대로 표시합니다.
+04- The graph. `prepare/answer/04-graph/view.js` The display order: question → source guide; formula → graph → original answer; gold → Python code; select node details. Gold values represent the exact answer to the original stored.
 
-사람 검토 메뉴는 저장 판정 또는 오류 여부를 반영한 기본 선택을 읽어 Pending은 노랑, APPROVED는 하늘색, REJECTED는 빨강으로 표시합니다. `menu.js`에서 상태 클래스를 지정하고 `shell.html`에서 활성 탭에도 같은 색상을 유지합니다. 입력 기본 선택은 저장 판정과 구분합니다.
+The person review menu reads the default selection reflecting whether the saved judgment or error is Pending is shown yellow, APPROVED is sky color, and REJECTED is shown red. `menu.js`Set the state class in `shell.html`In the active tab, the same color is maintained.
 
-기본 판정 보정: 저장 판정을 우선하며, 미저장 Preparation은 현재 run 상태 FAIL/ERROR이면 Reject, PASS이고 승인 차단 사유가 없을 때만 Accept, 그 외 Pending입니다. Generation은 자동 검사 FAIL/ERROR이면 Reject, 그 외 Pending입니다. 이전 실패 파일을 일괄 검색하지 않고 현재 판정을 사용합니다.
+Basic judgment correction: Save judgment prioritizes, and subfolder Preparation is Reject if the current run is FAIL/ERROR, PASS if there is no Accept, etc. Pending if there is No authorization blocking. Generation is automatically checking FAIL/ErrOR if Reject, etc. It uses the current judgment without searching the previous failure file.
 
-그래프 연결 강조: `04-graph/view.js`는 원본식·값 대입 토큰에 저장 node ID를 연결합니다. `shell.html`의 drawLinkedGraph는 노드·코드·수식의 hover/focus → 입력 의존성 추적 → 그래프 경로·원본식·해당 코드 줄 강조를 수행합니다. 클릭은 선택을 유지하고 마우스가 벗어나면 유지한 선택으로 복원합니다. 변수는 기존 고유 색상, 연산식 토큰은 노랑으로 표시합니다.
+Graph link highlight: `04-graph/view.js`The node ID is connected to the source-value input token. `shell.html`The drawLinkedGraph emphasizes the node-code hover/focus → input dependence tracking → graph path, source language, and line of code per share. The click keeps the choice and restores it to the option kept when the mouse leaves. The variable is the existing unique color, and the activated token is displayed in yellow.
 
-`menu.js`의 reviewDefaultDecision을 메뉴와 판정 화면이 함께 사용합니다. 선택 변경 → updateReviewTabColor → 탭 배경 갱신으로 연결하며, 저장 전 선택에도 같은 색상을 표시합니다. 사람 검토 탭에는 일반 실패 테두리 클래스를 중복 적용하지 않습니다.
+`menu.js`The reviewDefaultDecision uses the menu and the judgement screen together. Select Change → updateReviewTabColor → Tap to update the background, and display the same color as the pre-save selection.
 
-## 완료 문항 목록
+## Finished case list
 
-문제번호 옆 숫자는 Preparation 통과 차수이며 ER/ED 배지는 완료 POT에 기록된 외부 공식/외부 데이터입니다. 출처와 통과 차수 체크박스로 검색할 수 있습니다. [표시 기준](../../../../archive/20260923-documentation-reorganization/docs/71-node-provenance.md#vl02-완료-문항의-목록-표시와-필터)을 참고하세요.
+The number next to the problem number is the Preparation Pass Pass, and the ER/ED badge is the external official/external data recorded in the completed POT. You can search for the source and pass pass pass in the checkbox.](../../../../archive/20260923-documentation-reorganization/docs/71-node-provenance.md#vl02-%EC%99%84%EB%A3%8C-%EB%AC%B8%ED%95%AD%EC%9D%98-%EB%AA%A9%EB%A1%9D-%ED%91%9C%EC%8B%9C%EC%99%80-%ED%95%84%ED%84%B0)And I want you to look at this.
 
-외부지식 문항은 선택 영역과 Q/C의 저장된 요구 문구를 강조하며, 계산 수식 위에 외부 공식과 출처를 표시합니다. Accept의 이유는 선택, Reject/Pending의 이유는 필수입니다.
+The external knowledge clause emphasizes the selected area and the stored requirements clause of Q/C, and shows the external formula and source above the calculation formula. The reason for accepting is the reason for selecting, the reason for Reject/Pending is the reason.
 
-2026-09-16: shell.html의 외부지식 문항 선택 영역과 외부지식 안내 영역은 옅은 회색 배경(#f5f6f7), 회색 테두리(#cbd2d8)를 사용합니다. 안내 글씨 색상은 유지합니다.
+2026-09-16The external-facing case selection area of shell.html and the external-faced guidance area use the gray background#f5f6f7), the gray threshold#cbd2d8.
 
-## 실제 feedback 표시 기준 (2026-09-16)
+## The actual feedback indicator is2026-09-16)
 
-`common/saved-calls.js`는 호출의 feedback-ref, 해시가 일치하는 원본 guidance, 저장된 실제 요청의 instructions(CLI는 prompt), 응답/전송 기록을 확인합니다. 원본 guidance 전체가 실제 요청에 포함된 경우만 초록 `피드백 사용`입니다. 자료가 부족하거나 참조 해시가 다르면 `피드백 전달 미확인`입니다. 차수 번호와 파일 존재만으로 사용을 판정하지 않습니다. `run.json.reused_steps` 및 차수 재사용 기록은 회색으로 표시합니다.
+`common/saved-calls.js`The feedback-ref of the call, the hash matches the original guidance, the instructions of the actual request stored, the response/transmission record is checked. `Feedback used`If there's a lack of data or a different reference bar, `Feedback delivery unconfirmed`It doesn't just determine the number of variables and the file presence. `run.json.reused_steps` And the reuse record of the variable is shown in gray.
 
-`menu.js` 단계 버튼 → `common/stage-guide.js` 개별 LLM 작업 → `common/raw-exchange.js` Request 영역으로 연결합니다. Request 영역은 적용한 guidance, feedback-ref 경로/원본, 실제 전송에 포함된 문장을 보여줍니다. Generation 호출은 자체 피드백 자료만 사용하며 미확인 자료를 Preparation 기록으로 대신하지 않습니다.
+`menu.js` Step button → `common/stage-guide.js` Individual LLM work → `common/raw-exchange.js` The Request area shows the applied guidance, feedback-ref path/source, the sentences included in the actual transmission. Generation calls only use their own feedback data and do not replace inaccurate data with Preparation records.
 
 ```mermaid
 flowchart LR
- R[단계의 재사용 기록] -->|재사용| G[회색 이전 차수 재사용]
- R -->|현재 호출| C[참조 원본 해시·guidance 확인]
- C --> T[실제 요청 포함 여부와 전송 기록 확인]
- T -->|모두 확인| U[초록 피드백 사용]
- T -->|자료 부족 또는 불일치| X[피드백 전달 미확인]
- U --> V[Request 영역 원본 경로와 전달 문장]
+ R[Reuse record of the steps] -->|Recycling| G[Reuse of the previous gray]
+ R -->|Current call| C[Reference to the original hash. Guidance verified]
+ C --> T[Check whether the actual request includes and the transmission record]
+ T -->|All of you.| U[Use the green feedback]
+ T -->|Lack of data or inconsistency| X[Feedback delivery unconfirmed]
+ U --> V[Request area source path and delivery phrase]
 ```
 
 
-동일 run 실패건 재검토: docs/12-pipeline-code-guide.md의 동일 run 실패건 재검토 절을 따릅니다. 실패 대상 snapshot·기존 schedule 호출·stage-history 보존·재검토 별도 집계·Preparation 주황/Generation 빨강 UI를 적용했습니다.
+The same run failed to re-examine: docs/12It follows the same run-failure review section of pipeline-code-guide.md. It applies the failed snapshot object, the presence schedule call, the stage-history preservation, the review star array, the Preparation contour/Generation red UI.
 
-재검토 대상별 결과의 펼침 상태는 실행 이름·Preparation/Generation·재검토 작업 ID를 키로 저장합니다. shell.html의 pipelineRoundSummary → common/disclosure.js의 viewerDisclosure → 메모리/localStorage 저장·복원 순서로 자동 갱신과 페이지 재로딩에도 유지합니다. 최초 상태는 접힘이며 서로 다른 작업은 독립적으로 유지됩니다.
+The unfolded state of the re-examination subject-by-object results stores the run name, preparation, generation, re-exam task ID in the key. The viewerDisclosure → memory, local storage, and recovery sequences of the pipelineRoundSummary → common/disclosure.js in shell.html are also maintained for automatic updating and page reloading. The initial state is folding, and the different tasks are kept independent.
 
-실패건 재검토: menu.js의 failedRecheckButton → confirmFailedRecheck(실행·영역·건수·비용 안내) → Yes일 때만 POST /api/recheck. No·Escape·닫기는 요청 없이 취소하며 기본 포커스는 No입니다. Preparation과 Generation에 공통 적용합니다.
+Recheck or fail: menu.js's failedRecheckButton → confirmFailedRecheck (POST /api/recheck) → Yes only when POST /api /recheck. No·Escape: Cancel without request and the default focus is No. It is commonly applied to Preparation and Generation.
 
-그래프 범례: evidence.js의 graphNodeShape/renderGraphLegend를 기본 그래프와 변경 비교 그래프에서 공유합니다. 문맥 입력은 원, 외부 규칙은 파란 사각형, 외부 데이터는 빨간 사각형, 계산 변수·연산·상수는 육각형입니다. 직접 변경한 노드는 우선하여 보라색 오각형으로 표시하며 단순 후속 값 변화와 구분합니다. 혼합 외부 유형은 외부 데이터 색상을 우선합니다.
+Graph category: evidence.js's graphNodeShape/renderGraphLegend is shared in the basic graph and the change comparison graph. Context input is round, external rules are blue squares, external data is red squares, calculation variables are mixed. The direct nodes are hexagonal. The directly changed nodes are shown in a purple rectangle, which distinguishes them from simple subsequent value changes.
 
-사람 검토: 자동 검사 오류가 있어도 검토자가 Accept를 선택하고 검토 항목을 확인하면 판정을 저장할 수 있습니다. 자동 오류는 보존되며 다음 제작 단계의 검증은 별도로 적용됩니다.
+Person review: Even if there are automatic checking errors, the reviewer can save the judgement by selecting Accept and checking the review item. The automatic error is preserved and the next manufacturing step of verification is applied separately.
 
-실패 해석 표는 문제 번호의 숫자 오름차순으로 표시합니다. 같은 문제는 유형·차수 순으로 정렬하며, 진행 중 부분 결과와 이전 해석에도 동일하게 적용합니다. 저장된 원본 결과 배열은 변경하지 않습니다.
+Failure interpretation tables show the problem number in numerical order. The same problem is sorted by type/number order, and the same applies to the ongoing partial results as the previous interpretation. The stored original result array does not change.
 
-계산 그래프 위의 **크게 보기**를 누르면 브라우저 화면 크기의 팝업으로 볼 수 있습니다. 팝업에서도 범례·확대·축소·전체 맞춤·이동을 사용할 수 있으며 **닫기** 또는 Escape로 돌아옵니다.
+So, on the calculation graph, **Enlarge**You can click on this and you can see a browser screen size popup, and you can also use the size, extension, shortcut, and full customization, and you'll see the popup. **Close** Or go back to Escape.
 
-Generation에서는 왼쪽 ‘prep 탈락건 포함’이 기본 해제됩니다. 체크하면 탈락 문항도 다시 보이며 Preparation으로 돌아오면 기본 체크됩니다. 목록의 오렌지는 Preparation 탈락, 빨강은 Generation 실패입니다. 크게 보기에서 지정한 확대 배율은 유지되며, 변경 노드는 원본 가까이에 배치됩니다.
+In Generation, the left-handed pre-prep exit or containment is deleted by default. When you check, you see the exit clause again, and when you return to Preparation, it's checked by default. The orange on the list is Preparation exit, the red is Generation failure. The magnification allowance set in the main view is maintained, and the change nodes are placed near the original.
 
-변경 그래프에서는 보라색 perturb 노드를 원본 노드 가까이에 표시합니다. Generation 안내는 실제 폴더·파일명과 설명으로 표시하며, 현재 유형과 중복되는 단일 후보 선택 메뉴는 표시하지 않습니다.
+In the change graph, the purple perturb node is shown near the original node. It is shown as the actual folder name and description in the Generation, and the single candidate selection menu that overlaps with the current type is not shown.
 
-Generation 하단 결과 파일은 단계 폴더를 펼치는 트리로 제공합니다. JSON 제목 옆에는 원본 파일 경로를 표시하고, 파일 내부 일부를 표시할 때는 JSON 위치도 함께 표시합니다.
+The resulting file under Generation provides a tree that unfolds the step folder, alongside the JSON title, which shows the original file path, and alongside the location of the JSON when you show some of the files inside.
 
-IC-relation은 원본 계산과 관계 적용 계산의 수식을 나란히 보여 줍니다. 수식·그래프·Python 코드를 가리키거나 선택하면 연결된 계산을 강조합니다. 아래 그래프는 좌우 보기(기본)와 위아래 보기를 전환할 수 있습니다.
+IC-relation shows the geometry of the original calculation and the relationship application calculation sequentially. Pointing to or selecting the geometric graph Python code highlights the connected calculation. You can switch the graph below to the left and the top-down view.
 
-IC-relation 수식은 원본 아래에 관계 적용 계산을 표시합니다. Generation의 오류 유형 버튼은 선택 여부와 관계없이 굵은 빨간 테두리로 표시합니다.
+The IC-relation formula shows the relationship application calculation below the original. The error type button in Generation shows the red thumb, regardless of whether it's selected.
 
-뷰어 로딩: JSON 경로는 현재 화면의 객체를 한 번 색인하여 찾습니다. 문항·화면 교체 시 색인을 초기화합니다. 자동 확인은 응답 완료 후 10초 간격이며 숨겨진 화면에서는 멈춥니다. 문항·차수 변경 중 도착한 이전 응답은 적용하지 않습니다. 서버는 여전히 선택 문항의 전체 유형 상세와 실행 요약을 반환하므로 큰 실행의 최초 로딩 비용은 남아 있습니다.
+Viewer Loading: The JSON path is to find the object on the current screen by coloring it once. It initializes the color when you replace the case. 10The previous response that arrived during the case-variable change does not apply. The server still returns the full type of detail and execution summary of the selected case, so the initial loading cost of a large execution remains.
 
-EA 그래프는 원본 계산과 근거 삭제 후 계산을 좌우로 표시하며 위아래 보기로 전환할 수 있습니다. 삭제 근거 문단 안에서는 저장된 원문 위치로 대상 표현만 강조합니다. 동일한 fact_id의 양쪽 노드는 빨간 테두리로 표시하고, 근거·노드의 마우스/키보드 초점/클릭을 함께 강조합니다. 위치나 대응 노드가 없으면 미확인 안내를 표시합니다.
+EA graphs show the calculation to the left and then delete the base. In the delete base bar, the object is only represented as the stored base position. Both nodes of the same fact_id are shown in red, and the mouse/keyboard focus/click of the base node is highlighted together. If there is no location or corresponding node, it shows an unknown guide.
 
-키보드 단축키 안내는 기본 접힘 상태이며 제목을 눌러 펼칩니다. 안내를 접어도 단축키는 그대로 작동합니다.
+The keyboard shortcut is in the default folding state, and you open the title by pressing the guide, and the shortcut works the same way.
 
-사람 판정 단축키: 1 Accept 승인, 2 Reject 제외, 3 Pending 검토 대기 선택. X는 판정 저장입니다. 숫자 키는 선택만 변경하며, 저장 필수 조건과 입력란·대화상자 보호를 유지합니다. Preparation과 Generation에 동일하게 적용합니다. menu.js가 각 판정 라디오 선택 이벤트를 호출합니다.
+The shortcut to "Human Judgment": 1 Accept the approval, 2 Except for the Reject, 3 Pending review state selection. X is the judgment store. The numeric key changes the selection only, maintains the storage requirements and input and variable protection. Applies the same to Preparation and Generation. menu.js calls each judgment radio selection event.
 
-Generation 단계별 표시: 02 문장 생성은 문장 비교를 표시하며 프롬프트 버튼은 단계 안내 안에서 제공합니다. 03 검증은 문장 비교를 중복 표시하지 않고 의미 검사 결과를 표시합니다. 05 사람 검토는 문장 비교·의미 검사·검증 원문 버튼을 중복 표시하지 않고 판정 양식을 제공합니다. common/menu.js에서 단계별 표시 함수를 분리하며 결과 파일 트리는 유지합니다.
+Generation by step: 02 The phrase generator shows the comparison of phrases, and the prompt button is provided in the step guide. 03 The verification does not show the sentence comparison overwriting, but shows the meaning test results. 05 The person review provides a judgment format without duplicating the phrase comparison, meaning check, verification font buttons. It separates the step-by-step display function from common/menu.js and maintains the resulting file tree.
 
-문항 이동 속도: 같은 실행·차수에서 문항을 바꾸면 detail_only=1로 상세와 목록만 요청합니다. 실행 전체 통계는 기존 값을 유지하고 10초 자동 확인에서 갱신합니다. 판정 저장 후·실행/차수 변경·첫 로딩은 전체 응답을 사용합니다. 문항 상세를 누적 캐시하지 않습니다. server.py의 batch_data는 빠른 요청에서 전체 실패 해석·완료 보고·게이트 집계를 건너뛰며, shell.html은 현재 실행 통계와 새 문항 자료를 합칩니다.
+case movement speed: change the case from the same run-particle to detail_only=1Just ask for details and lists. Run the entire statistic and keep the existing value. 10Updates from second automatic verification. Judgment save after; action/variable change; first loading uses the full response. It does not cache the case upstream. Batch_data on server.py skips the full failure interpretation; complete reporting; gate estimate in quick requests, and shell.html combines current execution statistics with new case data.
 
-문제 목록 앞의 저장 판정: ✅ 승인, ❌ 제외, 🟡 검토 대기. 구간에 관계없이 문제의 Preparation·Generation 저장 판정을 모아 표시합니다. 서로 다른 판정은 이모지를 함께 표시하고, 각 이모지의 툴팁에서 해당 유형을 확인합니다. 미저장 기본값은 표시하지 않습니다. shell.html의 savedNavigationDecisions가 저장 파일/유형별 목록 요약에서 판정을 읽습니다.
+The storage judgments in front of the problem list: ✅ Approve, excluding, excluding and wait for review. Regardless of the interval, the problem Preparation·Generation save judgments are collected and displayed. The different judgments display the emoji together, and each emoji's tooltip identifies the type. The default subfolder does not display. SaveNavigationDecisions in shell.html read the judgments from the summary of the saved file/mobile list.
 
-07/05 사람 검토의 전체 판정 저장 (X)은 현재 선택한 판정·검토자·이유·확인 항목을 7개 Generation 유형에 저장합니다. 소문자 x는 현재 판정만 저장합니다. 7개 검토 자료가 모두 있어야 활성화하며 각 유형의 실제 차수·스냅샷으로 기존 저장 API를 호출합니다. 중간 오류는 완료 건수와 중단 이유를 표시합니다. Preparation 자체 판정은 별도입니다. menu.js의 appendBulkReview가 공통 처리를 담당합니다.
+07/05 The entire judgment of the person review (X) is stored in the currently selected judgment, examiner, e-review, verification item. 7The minor x only stores the current judgment. 7All of the items review data should be activated, and each type calls the existing storage API with actual parameters and snapshots. The intermediate error indicates the completion of the dry run and the reason for the interruption. Preparation itself is an abstract judgment.
 
-v 키는 현재 Generation 유형의 05-human-review로 바로 이동합니다. Preparation에서는 첫 사용 가능한 Generation 유형으로 이동합니다. 생성 자료가 없거나 입력란 작성·대화상자 표시 중이면 이동하지 않습니다.
+v is the current generation type 05In Preparation, you go to the first available Generation type, and you don't go if there's no generated data or if you're in the write/write dialog.
 
-QI05 quality run: `quality_scope.json`이 있는 실행은 저장된 624건 보고서를 읽기 전용 표로 표시합니다. `reports/quality_report.py`는 저장 JSON·manifest만 읽고, `reports/quality_report.js`는 감사 3축·승인 출처·독립 검토 기록·EA 상태를 분리합니다. 원본 링크는 manifest에 등록된 경로와 해시가 맞을 때만 `/api/quality-source`로 읽습니다. GET에서 분석·승인·모델 호출을 하지 않습니다. 기존 QI01은 새 quality run의 관련 결과 링크로 연결하며 수정하지 않습니다.
+QI05 quality run: `quality_scope.json`This is the execution that's stored. 624It's a dedicated report reading tab. `reports/quality_report.py`And I'm just reading the JSON manifest and I'm not going to save it. `reports/quality_report.js`Thank You 3It separates the axis, the source of the conquest, the independent review record, the EA status. `/api/quality-source`I don't call the analysis, the alignment, the model in GET.1The link to the relevant results of the new quality run is not corrected.
 
-QI06 읽기 전용 보고서는 `reports/response_screen.py`와 `reports/response_screen.js`가 저장된 `response_screen.json`을 표시합니다. 공통 실행 선택에서 `20260916-review-v2`를 선택합니다. 실행 상태·독립 cue·UNRESOLVED·원자료 hash 링크를 제공하며 GET에서 분석/쓰기/API 호출을 하지 않습니다.
+QI06 Read the report. `reports/response_screen.py`and `reports/response_screen.js`The data is stored `response_screen.json`In the common run option `20260916-review-v2`Select the Running Status, Independent cue, UNRESOLVED resource hash links and do not make analysis/write/API calls from GET.
 
-QI02 `reports/original_baseline.py`/`.js`는 `private/originals.json`을 연구자용으로 읽습니다. 실행 선택 `20260916-original-baseline-v1`: 원문92·변형624·실행보류·NOT_REVIEWED와 hash 근거를 표시합니다. public 모델 입력과 구분합니다.
+QI02 `reports/original_baseline.py`/`.js` `private/originals.json`Read for the researcher. `20260916-original-baseline-v1`: source text92· Variable624·Executive_REVIEWED and hash basis. It distinguishes from public model input.
 
-QI03 `reports/source_pair_review.py`/`.js`는 `pair_manifest.json`의 SOURCE176·정확 매칭·양쪽 상태·cue·미평가를 읽습니다. 실행 선택 `20260916-source-pairs-v1`에서 확인하며 분석/쓰기 없이 hash 근거만 연결합니다.
+QI03 `reports/source_pair_review.py`/`.js` `pair_manifest.json`The SOURCE176·Read the exact match, the western state,cue, review. `20260916-source-pairs-v1`I'm just going to check and connect the hash base without analyzing/writing.
 
-QI04 `reports/coefficient_policy.py`/`.js`는 `coefficient-policy.json`의 실제 program계획8건·선택계수/SHA/거절·지원제한을 읽습니다. 공통 실행 `20260916-coefficients-v1`; GET에서 프로그램 실행이나 모델 호출을 하지 않습니다.
+QI04 `reports/coefficient_policy.py`/`.js` `coefficient-policy.json`The actual programming of8I read the SHA/SHA/Signal/Signals. `20260916-coefficients-v1`GET does not run programs or call models.
 
-`reports/quality_api_check.py`/`.js`는 `quality-api-check.json`의 실제4호출·감사/EA차단·비용 및 prompt/schema/raw/usage hash 링크를 읽습니다. 실행 `20260916-luna-low-quality-v2`; GET에서 API를 호출하지 않습니다.
+`reports/quality_api_check.py`/`.js` `quality-api-check.json`The reality of4Read the call/thank you/EA difference/cost and prompt/schema/raw/usage hash links. Run `20260916-luna-low-quality-v2`It doesn't call the API in GET.
 
-Preparation 단축키 보정: Q/E 문항 이동 시 Preparation과 현재 단계를 유지합니다. V는 Preparation 07, Generation 05 사람 검토로 이동합니다. 문자 단축키는 물리 키 위치로 판별하여 한글 자판에서도 동일하게 작동합니다. 입력 중·대화상자 보호는 유지합니다.
+Preparation shortcut key correction: Q/E paragraphs move to Preparation and maintain the current step. 07, Generation 05 It goes to the person review, the character shortcut is assigned to the physical key position, and it works the same way on the hangar sub-tab, and the input and variable protection is maintained.
 
-## Annotation 관리자
+## Annotation manager
 
-[공통 관리자 화면](http://127.0.0.1:8893/annotation/)은 `annotation/YYYYMMDD/`의 JSON을 읽습니다. [Annotation 코드](annotation)에서 원본 보존·확정 가능한 형식 보완·현재 로그/요약 저장·유형별 Cohen/Fleiss κ를 처리합니다. [화면](../../../../viewer/dataset/annotation/README.md)은 문제별 7행에 n명 판정·주석을 비교하며 기존 키 위치를 재사용합니다. [요구·파일 책임·실제 흐름](../../../../docs/01-dataset/90-operations/04-viewer.md) · [입력 안내](../../../../annotation/README.md).
+[Public Administrator screen](http://127.0.0.1:8893/annotation/) `annotation/YYYYMMDD/`I read the JSON.](annotation)In the original preservation, verifiable format backup, current log/pharmacy storage, and typology, Cohen/Fleiss κ is processed.](../../../../viewer/dataset/annotation/README.md)The Problems 7We compare the n-number determination and the key position on the row and reuse the existing key position.](../../../../docs/01-dataset/90-operations/04-viewer.md) • [Introduction guide](../../../../annotation/README.md).
 
-## 평가자 배포
+## The distribution of ratings
 
-`evaluation_export.py`는 Preparation PASS이며 Generation **7유형 모두 존재하고 자동 검증 PASS, 어느 유형에도 Reject가 없는 문항**만 단일 HTML로 내보냅니다. 한 유형이라도 실패·미평가·누락·Reject이면 문항 전체를 제외하며, Preparation Reject도 제외합니다. 사람의 Accept는 필수가 아니며 미판정·Pending도 자동 PASS이면 포함합니다. 선정 단위는 항상 문항의 7유형 묶음입니다(`ALL_SEVEN_AUTOMATIC_PASS_NO_HUMAN_REJECTION`). Reject 값과 저장 위치는 기존 `03-release/export_policy.py`를 재사용합니다. 화면 필터와 독립된 서버 검사이며 원본 판정을 변경하지 않습니다. 선정 기준의 변경은 사용자 확인 후 적용합니다.
+`evaluation_export.py`Preparation PASS and Generation **7All types exist, and automatic verification PASS, and no type of Reject.**If any type fails, reviews, rejects, excludes the entire case, and excludes the Preparation Reject. The person's Accept is not required, and the person's Unreported Pending is included if it's automatic PASS. 7So this is a type set.`ALL_SEVEN_AUTOMATIC_PASS_NO_HUMAN_REJECTION`Reject values and storage location are the same as the previous `03-release/export_policy.py`It re-uses the screen filter and independent server checks and doesn't change the original validation. Changes to the selection criteria apply after user validation.
 
-`evaluation.js`는 서버 없는 평가·임시 저장·결과 JSON·Import를 담당합니다. Export 목록은 실행 이름 형식으로 제한하지 않습니다. `server.py`의 `/api/runs`가 실제 `01-preparation` 폴더 존재 여부를 `evaluation_exportable`로 전달하고, `shell.html`의 실행 옵션을 통해 `evaluation.js`가 표시합니다. 따라서 `20261003-concat-001`처럼 원본 단계 자료를 포함한 합본도 기존 평가 화면으로 내보냅니다. 결과 합본 파일만 있고 단계 자료가 없는 실행은 제외합니다. [사용 방법·책임·실제 흐름](../../../../docs/01-dataset/90-operations/04-viewer.md).
+`evaluation.js`The JSON Import is responsible for the non-server evaluation, temporary storage and output. Export lists are not limited to the run name format. `server.py` `/api/runs`Go to the real thing. `01-preparation` Whether the folder exists or not. `evaluation_exportable`And then we're going to deliver it. `shell.html`Through the execution option of `evaluation.js`So, we're going to show that `20261003-concat-001`Like the original, the copy, including the step data, is also sent out to the existing evaluation screen, except for the execution that has only the resulting copy file and no step data.](../../../../docs/01-dataset/90-operations/04-viewer.md).
 
 ```mermaid
 flowchart LR
@@ -326,11 +326,11 @@ flowchart LR
  end
 ```
 
-배포 HTML은 평가자 전용 화면입니다. `evaluation/workspace.js`가 문제별·유형별 목차와 판정 bullet, 큰 Q 질문, 원본/변경 수식, 숫자패드 1·2·3 즉시 판정과 다음 미평가 이동을 제공합니다. Q/E는 문제 번호, A/D는 같은 문제의 유형을 이동합니다. **원본 보기**에서 현재 문제·유형의 기존 단계 화면을 같은 HTML 안에 열고, 돌아오면 원래 평가 항목과 주석·판정을 유지합니다. `menu.js`와 기존 단계 표시 함수를 재사용하며 원본 보기의 판정은 읽기 전용입니다. `evaluation/review.js`는 변경 문장·원문 맥락과 출처 색상을, `evaluation/graph.js`는 기존 모양을 유지한 간략 A/B 그래프를 전체 맞춤으로 표시합니다. 단일 변수 전달만 합치고 실제 계산·조건 연결은 보존합니다. 분석 필터·차수 안내·키보드 도움말·결과 파일 트리는 평가 첫 화면에서 제외합니다. 이름·임시 저장·결과 Export·Import는 최상단에 있으며, 제작 판정과 독립된 JSON을 사용하고 상세는 한 문항씩 압축 해제합니다. `evaluation/style.css`는 배포 화면에만 적용합니다.
+The distribution HTML is a screen for evaluators. `evaluation/workspace.js`The problem-specific, type-specific carriage and judgement bullet, large Q questions, original/conversion formula, number pad 1·2·3 It immediately gives you a judgment and then a discount move. Q/E is the problem number, A/D is the same type of problem. **View original**In the current issue-type, the existing step screen opens in the same HTML, and when you return, the original evaluation item and keyword judgment are maintained. `menu.js`And reuse the existing step display function and the original view judgement is read-only. `evaluation/review.js`The text and the source color are changed. `evaluation/graph.js`The A/B graph, which retains its original shape, is displayed as a complete customization. Only a single variable transmission is added and the actual calculation-condition connection is preserved. The analytical filter, the numerical guide, the keyboard help, and the resulting file tree are excluded from the first screen of the evaluation. The name, temporary storage, and export-import results are at the top, using JSON independent of the production decision, and the details are compressed by one case. `evaluation/style.css`It's only applicable to the distribution screen.
 
-`evaluation/graph.js`는 A·B 최종 출력의 수치가 다르면 빨간 안내와 각 최종 노드의 `≠ B` / `≠ A` 표시를 제공합니다. 부동소수점 계산 잡음은 상대 허용 오차 `1e-12`로 비교하며, EA의 근거 없음·계산 불가는 숫자 0이나 수치 불일치로 처리하지 않습니다. 같은 답에는 표시하지 않으며 검증 판정은 변경하지 않습니다.
+`evaluation/graph.js`If the number of final outputs A·B is different, the red guide and the end nodes of each `≠ B` / `≠ A` The noise of the floating point calculation is relative to the permissible oscillation `1e-12`Compared to EA, there's no basis for EA. 0It doesn't treat it as a numerical inconsistency, it doesn't show up in the same answer, and it doesn's not change the validation judgment.
 
-목록 표시(EVL01~04): `evaluation/workspace.js`는 판정 필터·문제 번호 검색·문제별/유형별 선택을 적용한 문항을 중복 없이 모두 표시합니다. 검색창 아래 고정 위치에 실제 표시 수와 배포본 전체 문항 수를 표시하고 앞/다음 목록 버튼은 사용하지 않습니다. `evaluation/style.css`의 목록 영역만 세로 스크롤합니다. 기존 현재 선택 문항 유지 동작으로 필터 밖 문항이 추가 표시될 때는 실제 목록 수와 필터 일치 수를 구분합니다. Import·판정 저장·유형/필터/검색 변경마다 수량을 다시 계산하며 제작 데이터와 Export 선정 기준은 변경하지 않습니다.
+List of characters1~04): `evaluation/workspace.js`All of the cases applied to the query are displayed without overwriting. The actual display number and the entire case number in the distribution are displayed in the fixed position below the search window and the front/next list button is not used. `evaluation/style.css`It only scrolls through the list area. When the existing current selection of phrases is added to the out-of-filter phrases, it distinguishes between the actual list number and the number of filters matched. It recalculates the amount for each import, judgment storage, type/filter/browse change, and the production data and export selection criteria do not change.
 
 ```mermaid
 flowchart LR
@@ -343,14 +343,14 @@ flowchart LR
  end
 ```
 
-## Dataset / Experiments 작업 공간
+## Dataset / Experiments workspace
 
-데이터셋 배포 화면은 `viewer/dataset`, 실험 화면 파일은 `viewer/experiments`에서 관리합니다. `assets.py`와 `build.py`는 `viewer/dataset/index.html`을 기준으로 조립·조회합니다. [폴더 책임·흐름](../../../../viewer/README.md).
+The data set distribution screen is `viewer/dataset`The experimental screen file is `viewer/experiments`I'm managing it. `assets.py`and `build.py` `viewer/dataset/index.html`[Folder Responsibility Flow](../../../../viewer/README.md).
 
-## 화면 언어 · UI-L01~06
+## Screen language · UI-L01~06
 
-[공통 한·영 표시 코드](../../../../viewer/shared/README.md)는 라이브 Dataset과 평가자 HTML에서 같은 사전을 사용합니다. `assets.py`는 `viewer/shared`를 허용된 include 대상으로 조립하고, `evaluation_export.py`는 선택 언어와 자산을 HTML에 포함합니다. `server.py`는 Annotation에 `/i18n.js`, `/i18n.css`만 추가 제공합니다. `annotation/review_export.py`도 자산을 인라인합니다. 질문·본문·원응답·사용자 입력과 제작 파일을 바꾸지 않습니다. [검사 로그](../../../../log/viewer-i18n-20261002/README.md).
+[Common one-wing mark code](../../../../viewer/shared/README.md)It uses the same dictionary in Live Dataset and in evaluator HTML. `assets.py` `viewer/shared`And then we're going to put the incl in the allowed range. `evaluation_export.py`Includes selected language and assets in HTML. `server.py`The Annotation `/i18n.js`, `/i18n.css`It's just an extra. `annotation/review_export.py`It also inlines the assets. Questions, text, raw response, user input and production files don't change.](../../../../log/viewer-i18n-20261002/README.md).
 
-## 최종 합본의 검증 화면
+## The final copy of the verification screen
 
-`03-release/concat_results.py.materialize_pipeline()`은 문항별 원천에 맞는 Preparation·Generation 단계 폴더를 합본 run에 복제합니다. `server.py`, `shell.html`, `menu.js`의 기존 단계 화면을 그대로 사용합니다. 별도의 간략 뷰어는 만들지 않습니다. 복제 파일에 대한 판정 저장은 합본 run에 기록되며 원천 run은 보존됩니다. 데이터셋 목록은 보고서 폴더를 제외하고 run 이름으로 역순 정렬합니다.
+`03-release/concat_results.py.materialize_pipeline()`It's going to copy the Preparation-Generation step folder to the copy run. `server.py`, `shell.html`, `menu.js`It uses the existing step screen as it is. It doesn't create a separate shortcut viewer. The judgment reservation for the copied file is recorded in the copy run and the source run is preserved. The dataset list is reversed by the run name except for the report folder.

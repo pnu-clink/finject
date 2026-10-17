@@ -24,7 +24,7 @@ test('saved source partitions cover the completed Luna run and are available in 
     const report = files.find(file => file.path === item.review_path);
     assert.ok(report, item.review_path);
     const content = (await repository.file(snap, report.id)).content;
-    assert.match(content, /원천 유형별 검토/);
+    assert.match(content, /\uc6d0\ucc9c \uc720\ud615\ubcc4 \uac80\ud1a0/);
     const summary = JSON.parse(await readFile(path.join(folder, item.folder, 'summary.json')));
     assert.equal(summary.case_count, item.case_count);
     assert.equal(summary.response_count, item.response_count);

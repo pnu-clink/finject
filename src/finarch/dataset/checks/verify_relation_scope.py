@@ -70,7 +70,7 @@ def main():
     for step in ('01-perturbation', '02-generate-text', '03-validation'):
         name = f'docs/01-dataset/02-generation/{step}/README.md'
         docs.append({'path': name, 'title': step, 'sha256': digest(ROOT / name), 'group': 'architecture'})
-    write(RUN / 'documentation.json', {'kind': 'PIPELINE_DOCUMENTATION', 'title': 'IC-RELATION 적용 · 로컬 확인',
+    write(RUN / 'documentation.json', {'kind': 'PIPELINE_DOCUMENTATION', 'title': 'IC-RELATION \uc801\uc6a9 · \ub85c\uceec \ud655\uc778',
           'documents': docs, 'model_calls': 0, 'entry_document': docs[0]['path'],
           'reference_files': [str((RUN / name).relative_to(ROOT)) for name in ('02-tests.log', '03-focused-tests.log', 'events.jsonl')]})
     write(RUN / 'migration.json', [])

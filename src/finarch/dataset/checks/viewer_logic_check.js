@@ -21,15 +21,15 @@ const context=vm.createContext({document,console,localStorage:{getItem:key=>stor
 vm.runInContext(script,context);
 let checks=0;function check(fn){fn();checks++;}
 check(()=>assert.equal(elements.rows.children.length,9));
-check(()=>{elements.none.click();assert.equal(elements.rows.children.length,1);assert.match(elements.rows.textContent,/조건에 맞는 항목이 없습니다/)});
+check(()=>{elements.none.click();assert.equal(elements.rows.children.length,1);assert.match(elements.rows.textContent,/\uc870\uac74\uc5d0 \ub9de\ub294 \ud56d\ubaa9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4/)});
 check(()=>{elements.all.click();assert.equal(elements.rows.children.length,9)});
 check(()=>{const cb=elements.filters.querySelectorAll('input').find(n=>n.dataset.field==='axis'&&n.value==='IC_SOURCE');cb.checked=false;cb.onchange();assert.equal(elements.rows.children.length,5)});
 check(()=>{elements.search.value='EA';elements.search.oninput();assert.equal(elements.rows.children.length,1)});
-check(()=>{elements.detail.querySelectorAll('button').find(b=>b.textContent==='4 그래프 변경').click();assert.match(elements.detail.textContent,/원가 근거 삭제/)});
-check(()=>{elements.detail.querySelectorAll('button').find(b=>b.textContent==='5 문장과 답변').click();assert.match(elements.detail.textContent,/아직 응답 기록이 없습니다/);assert.match(elements.detail.textContent,/매출원가는 80/)});
-check(()=>{elements.detail.querySelectorAll('button').find(b=>b.textContent==='6 사람 판정').click();assert.equal(elements.detail.querySelectorAll('button').find(b=>b.textContent==='승인 기록').disabled,true)});
-check(()=>{elements.search.value='';elements.all.click();elements.detail.querySelectorAll('button').find(b=>b.textContent==='2 계산과 정답').click();assert.match(elements.detail.textContent,/100\/3/)});
-check(()=>{const value=vm.runInContext(`marked('😀가나다',[{start:2,end:3,text:'X'}],'after').textContent`,context);assert.equal(value,'😀가X다')});
-check(()=>{const value=vm.runInContext(`marked('😀가나다',[{start:2,end:3,text:'X'}],'before').textContent`,context);assert.equal(value,'😀가나다')});
+check(()=>{elements.detail.querySelectorAll('button').find(b=>b.textContent==='4 \uadf8\ub798\ud504 \ubcc0\uacbd').click();assert.match(elements.detail.textContent,/\uc6d0\uac00 \uadfc\uac70 \uc0ad\uc81c/)});
+check(()=>{elements.detail.querySelectorAll('button').find(b=>b.textContent==='5 \ubb38\uc7a5\uacfc \ub2f5\ubcc0').click();assert.match(elements.detail.textContent,/\uc544\uc9c1 \uc751\ub2f5 \uae30\ub85d\uc774 \uc5c6\uc2b5\ub2c8\ub2e4/);assert.match(elements.detail.textContent,/\ub9e4\ucd9c\uc6d0\uac00\ub294 80/)});
+check(()=>{elements.detail.querySelectorAll('button').find(b=>b.textContent==='6 \uc0ac\ub78c \ud310\uc815').click();assert.equal(elements.detail.querySelectorAll('button').find(b=>b.textContent==='\uc2b9\uc778 \uae30\ub85d').disabled,true)});
+check(()=>{elements.search.value='';elements.all.click();elements.detail.querySelectorAll('button').find(b=>b.textContent==='2 \uacc4\uc0b0\uacfc \uc815\ub2f5').click();assert.match(elements.detail.textContent,/100\/3/)});
+check(()=>{const value=vm.runInContext(`marked('😀\uac00\ub098\ub2e4',[{start:2,end:3,text:'X'}],'after').textContent`,context);assert.equal(value,'😀\uac00X\ub2e4')});
+check(()=>{const value=vm.runInContext(`marked('😀\uac00\ub098\ub2e4',[{start:2,end:3,text:'X'}],'before').textContent`,context);assert.equal(value,'😀\uac00\ub098\ub2e4')});
 check(()=>assert.equal(alerts.length,0));
 console.log(JSON.stringify({checks,passed:checks,browser_rendered:false,scope:'Offline filter/tab/Unicode logic only'}));

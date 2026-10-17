@@ -55,7 +55,7 @@ test('HTTP routes use the configured empty root without reading default results 
   const url = `http://127.0.0.1:${server.address().port}`;
   const response = await fetch(url + '/api/quadrants');
   assert.equal(response.status, 404);
-  assert.match((await response.json()).error, /집계가 아직 저장되지/);
+  assert.match((await response.json()).error, /\uc9d1\uacc4\uac00 \uc544\uc9c1 \uc800\uc7a5\ub418\uc9c0/);
   assert.deepEqual(await fs.readdir(root), []);
   assert.equal((await fetch(url + '/quadrants/' + '0'.repeat(64))).status, 409);
   assert.equal((await fetch(url + '/api/quadrants', { method: 'POST' })).status, 405);

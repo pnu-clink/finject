@@ -22,7 +22,7 @@ class ExecutionTimingTests(unittest.TestCase):
                 events=[{**base,'phase':'USAGE','cli_invocations':1},{**base,'phase':'END','function':'finarch.shared.providers.cli.CLITransport.__call__'}]
                 (case/'events.jsonl').write_text(''.join(json.dumps(e)+'\n' for e in events))
             report=build(root)
-            self.assertEqual([(r['round'],r['llm_calls']) for r in report['rounds']],[(f'Preparation / {i}차',1) for i in (1,2,3)])
+            self.assertEqual([(r['round'],r['llm_calls']) for r in report['rounds']],[(f'Preparation / {i}\ucc28',1) for i in (1,2,3)])
             self.assertEqual(report['total']['llm_calls'],3)
 
     def test_api_usage_without_cli_invocation_is_counted(self):
@@ -40,7 +40,7 @@ class ExecutionTimingTests(unittest.TestCase):
             self.assertEqual(result['total']['llm_calls'],1)
             self.assertEqual(result['total']['llm_call_seconds'],10)
             self.assertEqual(result['total']['reported_tokens'],{'input_tokens':100,'output_tokens':20,'cached_input_tokens':40})
-            self.assertEqual(result['rounds'][0]['round'],'Preparation / 2차')
+            self.assertEqual(result['rounds'][0]['round'],'Preparation / 2\ucc28')
 
     def test_generation_types_separate_parallel_calls(self):
         with tempfile.TemporaryDirectory() as tmp,contextlib.redirect_stdout(io.StringIO()):

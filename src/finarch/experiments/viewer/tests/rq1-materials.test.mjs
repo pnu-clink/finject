@@ -76,16 +76,16 @@ test('Unguided classification null remains unknown; empty OVS retains undetermin
 });
 test('OVS follows its saved parent, never a neighboring value variant or pooled before/after cohort', () => {
   const f = fixture(); f.selection[0].parent_item_id = 'case-2:IC_VALUE_01_BEFORE';
-  assert.throws(f.read, /부모 연결/);
+  assert.throws(f.read, /\ubd80\ubaa8 \uc5f0\uacb0/);
 });
 test('missing planned responses and shrinking the denominator are rejected', () => {
-  const f = fixture(); f.records.splice(2, 1); assert.throws(f.read, /계획 요청/);
-  const changed = fixture(); changed.summary.groups[0].denominator = 2; assert.throws(changed.read, /전체 분모/);
+  const f = fixture(); f.records.splice(2, 1); assert.throws(f.read, /\uacc4\ud68d \uc694\uccad/);
+  const changed = fixture(); changed.summary.groups[0].denominator = 2; assert.throws(changed.read, /\uc804\uccb4 \ubd84\ubaa8/);
 });
 test('wrong rates, missing cohorts and semantic-success substitution are rejected', () => {
-  const rate = fixture(); rate.summary.groups[0].quadrants['1'].ratio_of_planned = 0.5; assert.throws(rate.read, /사분면 분모/);
-  const cohort = fixture(); cohort.summary.groups[4].cohort.undetermined = 0; assert.throws(cohort.read, /OVS의 m/);
-  const basis = fixture(); basis.summary.basis = 'ADAPTATION_SUCCESS'; assert.throws(basis.read, /집계 계약/);
+  const rate = fixture(); rate.summary.groups[0].quadrants['1'].ratio_of_planned = 0.5; assert.throws(rate.read, /\uc0ac\ubd84\uba74 \ubd84\ubaa8/);
+  const cohort = fixture(); cohort.summary.groups[4].cohort.undetermined = 0; assert.throws(cohort.read, /OVS\uc758 m/);
+  const basis = fixture(); basis.summary.basis = 'ADAPTATION_SUCCESS'; assert.throws(basis.read, /\uc9d1\uacc4 \uacc4\uc57d/);
 });
 test('RQ1 selection keeps source/model/variant cohorts separate and preserves TBD', () => {
   const data = fixture().read();
@@ -103,7 +103,7 @@ test('live reader rejects a source changed after Python aggregation', async t =>
     readJSON:async()=>summary, readText:async()=>'', safePath:async(_,relative)=>{
       if(relative === 'results/results.jsonl'){const e=Error();e.code='ENOENT';throw e;} return path.join(root,'source.txt');
     }, artifactPaths:()=>({input:'00_input',request:()=> 'manifest.jsonl', results:()=> 'results'}),fail
-  }), /원자료가 집계 후 갱신/);
+  }), /\uc6d0\uc790\ub8cc\uac00 \uc9d1\uacc4 \ud6c4 \uac31\uc2e0/);
 });
 test('offline route preserves every saved RQ1 count, cohort and unjudged state', async () => {
   const rq1Materials = fixture().read(), data = {id:'run',rq1Materials};

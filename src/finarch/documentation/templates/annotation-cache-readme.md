@@ -1,13 +1,13 @@
-# 내부 읽기·보완 기록
+# Internal reading and supplementary recording
 
-[상위 입력과 읽는 순서](../README.md)를 먼저 확인합니다.
+[Input and read order](../README.md)Let's check first.
 
-1. `summary.json`: 현재 파일·평가자·유형별 κ·일치율·포함/제외 분모.
-   `comparison.json`: 같은 현재 파일을 읽은 전체 문제의 7개 유형·평가자별 판정·주석. 브라우저 다운로드를 사용하지 않아도 로컬에서 읽을 수 있습니다.
-2. `normalization-log.jsonl`: 원본 해시·보완 규칙·변경 전후·적용 버전. 이전 보완 버전의 기록도 보존하므로 전체 로그 줄 수는 현재 보완 건수와 다를 수 있습니다.
-3. `<원본 해시>.json`: 현재 보완 규칙으로 읽은 실제 기록과 입력 계약을 유지한 보완 JSON.
-4. `*-previous-*.json`: 보완 규칙이 바뀌기 전의 내부 기록. 현재 판정·오류 집계의 입력이 아닙니다.
-5. `reviews.json`: 관리자 저장 후 생성되는 독립 확인 상태·문항 메모·유형별 요청·수신자 번호·입력 해시·저장 버전. 새로고침 후에도 유지합니다. 입력 변경 시 이전 기록을 구별합니다.
-6. `review-history.jsonl`: 관리자 확인/주석 저장·수정·목록 제거의 변경 전후. 이전 주석은 이력에 보존됩니다. 원본 평가·κ의 계산 입력이 아닙니다.
+1. `summary.json`Current file: evaluator: type by type κ: unit rate: order / external denominator .
+   `comparison.json`The whole problem is reading the same current file 7items type, rater judgment, keyword. You can read it locally without using a browser download.
+2. `normalization-log.jsonl`Original hash, supplement rules, pre-modification, post-compliance versions. It also preserves records of previous supplement versions, so the total log subtraction may differ from the current supplement subtraction.
+3. `I'm not going to say.`: Currently read as complementary rule, actual record and input contract maintained as complementary JSON.
+4. `*-previous-*.json`Internal records before the supplementary rules changed, not the current input of the judgment-or-current set.
+5. `reviews.json`The administrator save: independent verification status, issue notes, type request, sender number, input hash, cache version, which is generated after the administrator save. It keeps after the new entry. It distinguishes previous records when the input changes.
+6. `review-history.jsonl`The administrator verifies/saves key, corrects, removes the list before the change. The previous key is stored in the input.
 
-원본은 날짜 폴더 최상위에 보존합니다. 내부 파일은 새 annotator 입력으로 세지 않습니다. 실제 최신 결과는 [단일 관리자 화면](http://127.0.0.1:8893/annotation/)에서 날짜를 선택해 확인합니다.
+The original is stored at the top of the date folder. The internal file is not counted as a new annotator input.](http://127.0.0.1:8893/annotation/)Select the date from and check.

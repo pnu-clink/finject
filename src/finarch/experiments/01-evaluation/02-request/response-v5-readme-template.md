@@ -1,46 +1,46 @@
-# 응답 형식 V5 수정 확인 · 새 실험 미실행
+# V5 response format correction verification · new experiment failure
 
-{{date}} 사용자 지시에 따라 다음 실행에 사용할 공통/P0/P1과 응답 스키마를 수정했습니다. 이 폴더는 EXP-006 이후 수정 검토 자료이며, EXP-006에서 실제 전달한 형식은 기존 `00-definition`의 V4입니다.
+{{date}} I modified the common/P0/P1 and response schemes to use in the following execution as per user instructions.006 And then we're going to have to revisit it, and then we'll have to EXP-006In fact, the actual delivery format is the existing `00-definition`It's V4.
 
-## 변경 내용
+## Changes
 
-|대상|이전|수정 후|
+|Target|Previous|After the modification|
 |---|---|---|
-|공통 프롬프트|유보·조건부 답·정밀도 충돌 대응 안내 포함|입력 범위·숫자 표시·근거 인용 등 공통 작성 규칙|
-|P0|일반 풀이 요청|문구 유지. 합쳐진 공통 및 스키마에서 유보 안내 제거|
-|P1|충돌·정보 부족·유보 판단 안내|판단 안내 유지, 공통에서 뺀 유보 작성법·정밀도 충돌 대응 추가|
-|공유 스키마|status와 description이 유보를 직접 안내|status 제거, 모든 description 제거, 두 조건에 동일한 구조|
-|Python 검사·집계|status에 따라 분기|숫자·빈 값 구분. 빈 값을 유보 정답으로 간주하지 않음|
-|다음 로컬 준비 설정|과거 V4 실행 정의를 다시 복사|현재 V5 정의 선택 및 계약 버전 확인|
+|Common Prompt|Includes UBO, condition department response, precision collision response guidance|Common writing rules, such as input range, numerical markings, and round quotations|
+|P0|Common grass request|Keep the sentence. Remove the ubo guide from the combined common and schema|
+|P1|Conflict, lack of information, and e-mail judgement guidance|Keeping the judgement guidance, common to the ubo writing code accuracy collision response additional|
+|Shared scheme|The status and description will be directed to the user.|Remove status, remove all description, the same structure in both conditions|
+|Python testing and compiling|Quarter by status|Number: bin differential. Not considering the bin as a straight answer|
+|Next local setup|Copy the previous V4 run definition back to|Select current V5 definition and verify the contract version|
 
-## 실제 수정된 스키마
+## The actual modified scheme.
 
-다음은 현재 스키마 사본입니다. 답변을 담는 구조만 표시합니다.
+So this is the current copy of the schema, and it's just the structure that's going to answer it.
 
 ```json
 {{schema}}
 ```
 
-`answer`와 부호의 `null` 자료형은 동일한 형식으로 빈 값을 표현할 수 있도록 유지했습니다. 유보 상태 선택지나 행동 설명은 없습니다. 이 구조가 모델 행동에 아무 영향도 주지 않는다고 검증한 것은 아닙니다. 기존 실험과의 차이를 순수한 P1 효과로 소급 해석하지 않습니다.
+`answer`And the name of the `null` The data model has kept the same format to represent the empty values, no euphoric state options or behavior explanations, not verifying that this structure has no effect on model behavior, not interpreting differences from existing experiments as purely P1 effects.
 
-## 읽는 순서와 파일 역할
+## Read order and file role
 
-1. 이 문서: 변경 요약과 실제 스키마.
-2. [수정된 공통](after/common.md), [P0](after/p0-standard.md), [P1](after/p1-abstention-aware.md), [스키마](after/response.schema.json): 다음 로컬 준비에서 사용하는 정의의 확인용 사본.
-3. [이전 공통](before/common.md), [이전 스키마](before/response.schema.json): 수정 전 정의 보존본.
-4. [검증 결과](verification.json), [Python 검사 로그](python-checks.log), [뷰어 검사 로그](viewer-checks.log): 호출 없는 로컬 검사와 보존 해시 확인. 테스트 응답은 합성 데이터이며 모델 실험 결과가 아닙니다.
-5. [변경 diff](definition.diff): 문장별 이동·제거 내역.
+1. This document: Changes to summary and actual schemes.
+2. [Corrected common](after/common.md), [P0](after/p0-standard.md), [P1](after/p1-abstention-aware.md)[Skyma](after/response.schema.json): A verifiable copy of the definition used in the following local preparation.
+3. [Previously common](before/common.md)[Skyma from the past](before/response.schema.json): Correction of the pre-definition preservation.
+4. [Exam results](verification.json)[Python checking log](python-checks.log)[Blood check logs](viewer-checks.log)Local checks and preservation hashes without calls. Test responses are synthetic data, not model test results.
+5. [Diff variation](definition.diff): move by phrase.
 
-## 확인 범위
+## Check the range
 
 {{checks}}
 
-실제 새 LLM 호출은 0회입니다. 새 데이터 배치도 준비·실행하지 않았습니다. 단위 검사는 임시 폴더의 합성 한 문항을 사용했습니다. EXP-006의 기존 입력·원응답·점수는 다시 만들지 않았습니다. 원격 GPU 실험 패키지와 실행 정의는 이 변경으로 갱신하지 않았습니다.
+The real new LLM call is 0The unit test used a synthetic phrase in the temporary folder.006The existing input, raw response scores were not recreated. Remote GPU experimentation packages and execution definitions were not updated with this change.
 
-질문과 소수 자릿수 메타정보의 불일치는 별도 입력 문제로 남아 있습니다. 이번 변경은 기존 질문·정답·자릿수를 바꾸지 않습니다. 유보 의미 분류기·새 루브릭은 만들거나 실행하지 않았습니다.
+The inconsistency between the question and the numeric metadata remains a separate input problem. This change will not change the existing question-and-answer number. The e-sentencing classifier, the new rubric, has not been created or executed.
 
-## 뷰어
+## Viewer
 
-기존 실험 뷰어에서 EXP-006 선택 → 보고서·이력 → `revision-v5/README.md`를 읽습니다. 수정 전·후 링크로 실제 파일을 열 수 있습니다. 결과별 HTML은 생성하지 않습니다. 코드 검증과 에이전트의 화면 확인은 사용자 검토 완료를 뜻하지 않습니다.
+In the existing experimental viewer, the EXP-006 Selection → Reporting and power → `revision-v5/README.md`You can open the actual file with a modified before and after link. HTML doesn't generate results. Code verification and screen verification of the agent don't mean the user review is complete.
 
-이 README는 `src/finarch/experiments/01-evaluation/02-request/response-v5-readme-template.md`에서 생성했습니다.
+This README is a `src/finarch/experiments/01-evaluation/02-request/response-v5-readme-template.md`It's generated from.

@@ -20,8 +20,8 @@ class ComparisonChecks(unittest.TestCase):
         self.assertIn('error',result['source_diff'])
 
     def test_full_raw_record_fields_and_prepared_input_both_retained(self):
-        result=enrich({'00-data-preparation/raw-record.json':{'record':{'context':'원문 100','other':'raw only'}},
-                       '00-data-preparation/01-select-input/01-input.json':{'context':'원문 101'}})
+        result=enrich({'00-data-preparation/raw-record.json':{'record':{'context':'\uc6d0\ubb38 100','other':'raw only'}},
+                       '00-data-preparation/01-select-input/01-input.json':{'context':'\uc6d0\ubb38 101'}})
         self.assertEqual(result['source_diff']['raw']['other'],'raw only')
         self.assertEqual(result['source_diff']['context_rows'][0]['kind'],'replace')
 

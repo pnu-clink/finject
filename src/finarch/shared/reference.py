@@ -23,7 +23,7 @@ class SourceFloat(float):
         return obj
 
 
-# [DP13-1] docs/02-architecture.md#DP13-1 — 원천 JSON 소수 토큰을 보존해 정답 자릿수 추출에 넘깁니다.
+# [DP13-1] docs/02-architecture.md#DP13-1 So we save the JSON source token and move on to the exact digit extraction.
 @traced("python")
 def load_raw(text: str | bytes):
     def reject_constant(value):
@@ -56,7 +56,7 @@ class Reference:
         return asdict(self)
 
 
-# [DP13] docs/02-architecture.md#DP13 — 원천 정답 숫자에서 값·integer/float 타입·정밀도를 추출합니다.
+# [DP13] docs/02-architecture.md#DP13 So we extract the value, integer/float type, accuracy from the exact number of the source.
 @traced("python")
 def extract_reference(value) -> Reference:
     if type(value) is int:
@@ -70,7 +70,7 @@ def extract_reference(value) -> Reference:
     return Reference(format(number, "f"), "float", precision)
 
 
-# [N01] docs/02-architecture.md#N01 — 원천 타입·정밀도에 맞춰 정확값을 절단 또는 ROUND_HALF_UP으로 표시합니다.
+# [N01] docs/02-architecture.md#N01 So, you can show the exact value as a cut or a ROUND_HALF_UP, depending on the source type and accuracy.
 @traced("python")
 def normalize(value: Fraction | str | int, reference: Reference) -> str:
     if isinstance(value, (float, bool)):

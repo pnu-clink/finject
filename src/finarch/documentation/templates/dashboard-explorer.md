@@ -1,20 +1,20 @@
-# 02 · 문항 분석 대시보드
+# 02 • A phrase analysis dashboard
 
-사용자 표시에는 **Unguided Solving / Criteria-Guided Solving**, **Reasoning OFF / Reasoning ON**만 사용합니다. 내부 조건 값은 필터·원기록 연결에 유지합니다.
+The user's mark is **Unguided Solving / Criteria-Guided Solving**, **Reasoning OFF / Reasoning ON**I'm just using the internal condition value to keep the filter and the element log connected.
 
-[상위 안내](../README.md) · [이전: 종합 현황](../01-overview/README.md)
+[High-level guide](../README.md) · [Previous: Complexity of the situation](../01-overview/README.md)
 
-상단의 짧은 필터·주요 수치와 왼쪽 산점도·응답표, 오른쪽 원응답 상세를 한 화면에서 확인합니다. 기본 산점도의 가로축은 **실제 완료 시각**, 세로축은 **응답 시간**입니다. 필요하면 기존의 응답 시간 × 출력 토큰으로 전환합니다. 점을 고르거나 표의 행을 선택한 뒤 질문·본문·최종 답·설명·인용과 같은 문항의 Unguided Solving/Criteria-Guided Solving 응답을 확인합니다. 유형·프롬프트·추론·형식 상태·관찰 태그·문항 검색으로 범위를 줄일 수 있습니다. 종합 현황에서 선택한 `trial`을 URL로 전달하면 그 응답을 바로 엽니다.
+The short filter at the top and the left scoreboard at the top, the right raw response scoreboard at one screen. **Real time completed**So, the tax axis is **Response time**If necessary, it switches to the existing response time × output tokens. Select the point or row of tables, and then check the Unguided Solving/Criteria-Guided Solving response in cases like question, text, latest answer, explanation, usage. You can reduce the range to type, prompt, reference, form, status, check tag, problem search. `trial`You send the URL and it opens the response.
 
-|파일|역할|
+|File|Role|
 |---|---|
-|[index.html](index.html)|조건 필터·응답 산점도·정렬표·원응답 상세|
-|[공통 스타일](../common.css)|종합 현황과 같은 헤더·메뉴·색·폰트·필터·지표·패널|
-|[explorer.css](explorer.css)|문항 분석 고유의 차트·표·상세 분할 배치|
-|[explorer.js](explorer.js)|응답 선택·필터·차트·표·질문/본문 읽기 연결|
+|[index.html](index.html)|Condition filters, response scores, matching tabs, raw response details|
+|[Common style](../common.css)|Header menu, color, font, filter, mark, panel, and so on.|
+|[explorer.css](explorer.css)|Chart-chart-tax distribution of the case|
+|[explorer.js](explorer.js)|Answer selection, filter, chart, tag, query, or text reading connection|
 
-선택한 축의 시각·시간·토큰이 저장되지 않은 응답은 산점도에서 제외한 수를 표시하고 표에 남깁니다. 숫자 0, 명시적 null, 관찰되지 않은 응답을 구분합니다. 토큰·시간으로 답의 정확도나 반복 안정성을 판정하지 않습니다. 기존 점수·원응답은 수정하지 않습니다.
+The response that doesn't have the visual, time, and token of the selected axis is the number that is excluded from the scoreboard and left on the table. 0It's not a token time to determine the accuracy or repeatability of the response, and it's not an existing score; it's a raw response.
 
-[화면 열기](http://127.0.0.1:8895/dashboard/02-explorer/) · [같은 실행의 실험 뷰어](http://127.0.0.1:8894/?run=20260920-exp-006&tab=analysis) · [구현 상세](../../../docs/02-experiments/README.md)
+[Figure opens](http://127.0.0.1:8895/dashboard/02-explorer/) · [Experimental Viewer of such an execution](http://127.0.0.1:8894/?run=20260920-exp-006&tab=analysis) · [Details of the description](../../../docs/02-experiments/README.md)
 
-이 README는 `dashboard-explorer.md` 템플릿으로 생성합니다.
+This README is a `dashboard-explorer.md` It's a template.

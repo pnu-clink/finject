@@ -85,15 +85,15 @@ def build(root):
     output = run_layout.diagnostics(root)
     output.mkdir(parents=True, exist_ok=True)
     diagnostics = []
-    lines = ['# 숫자·부호·배율 응답 분석', '', f"실행 {root.name} · 상태 {summary['status']} · 갱신 {now()}", '',
-             '이 분석은 저장된 응답·Python 검사·원문 숫자 정답을 사용합니다. 형식 오류, 숫자 불일치, 유보 선언과 의미 미평가를 구별합니다. 추가 평가 모델은 호출하지 않습니다.', '']
+    lines = ['# Numerical, sign, and ratio response analysis', '', f"Run {root.name} · The state {summary['status']} • Renewal {now()}", '',
+             'This analysis uses stored response, Python test, and source numbers answers to distinguish form error, numeric inconsistency, e-mail declaration, and meaning misrepresentation. Additional evaluation models do not call.', '']
     for model in summary['models']:
         key = model['model']
         entries = rows(run_layout.validation(root, key) / 'results.jsonl')
         requests = {x['trial_id']: x for x in rows(run_layout.requests(root, key))}
         v5 = all(x['response_schema'].get('title') in answer_contract.STRUCTURAL_TITLES for x in requests.values())
-        failure_lines = [f'# {key} 실패·불일치·원본 유보 응답', '',
-                         '숫자 불일치의 계산 원인과 정답·단위 해석의 타당성을 자동으로 확정하지 않습니다. 실제 질문·응답·검사 사유를 아래에서 대조하십시오.', '']
+        failure_lines = [f'# {key} Failure, inconsistency, original Ubo response', '',
+                         'The calculation causes of numerical inconsistencies and the validity of the correct answer and the group interpretation are not automatically verified. Compare the actual question-answer-exam reasoning below.', '']
         local = []
         error_messages = Counter()
         for row in entries:
@@ -135,16 +135,16 @@ def build(root):
             local.append(diag)
             if row['status'] not in ('VALID', 'NOT_RUN') or 'NUMERIC_MISMATCH' in tags or (row['experiment'] == 1 and 'DECLARED_ABSTENTION' in tags):
                 failure_lines += [f"## {row['case']} · {VARIANT_NAMES.get(row['variant'],row['variant'])} · {row['prompt_condition']}/{row['reasoning']}", '',
-                    f"상태: {row['status']} · 분류: {', '.join(tags)}", '',
-                    f"[요청·응답 JSON]({'../../' if run_layout.ordered(root) else '../'}{row['call_path']})" if row.get('call_path') else '저장된 호출 없음', '',
-                    '**질문:** ' + public[row['item_id']]['question'], '',
-                    '**실제 전달 본문:** ' + public[row['item_id']]['context'], '',
-                    '**원문 숫자 정답:** ' + str(private[row['item_id']]['reference']['reference_answer']) + ' (변형의 의미 정답으로 사용하지 않음)', '',
+                    f"State of play: {row['status']} · Classification: {', '.join(tags)}", '',
+                    f"[Request and Answer JSON]{'../../' if run_layout.ordered(root) else '../'}{row['call_path']})" if row.get('call_path') else 'No saved calls', '',
+                    '**The question is:** ' + public[row['item_id']]['question'], '',
+                    '**The real delivery text:** ' + public[row['item_id']]['context'], '',
+                    '**The source numbers is the right answer:** ' + str(private[row['item_id']]['reference']['reference_answer']) + ' (Not using the meaning of the variable as the correct answer)', '',
                     '```json', json.dumps({'response': response, 'schema_errors': result.get('schema_errors'), 'comparison': comparison, 'diagnostic_comparison_only': relaxed, 'error': result.get('error')}, ensure_ascii=False, indent=2), '```', '']
         diagnostics.extend(local)
         write_text(output / f'{key}-failures.md', '\n'.join(failure_lines))
-        lines += [f'## {key}', '', f"계획 {model['planned']}건 · 시도 {model['attempts']}회 · 상태 {model['statuses']}", '',
-                  f"입력 토큰 {model['input_tokens']:,}, 캐시 입력 {model['cache_read_tokens']:,}, 출력 토큰 {model['output_tokens_including_thinking']:,}입니다. 호출 경로는 `{model['transport']}`이며 Codex 구독 사용량과 유료 API 비용을 구분합니다.", '', '### 원본 문제', '']
+        lines += [f'## {key}', '', f"The plan. {model['planned']}entries · attempts {model['attempts']}Circular state {model['statuses']}", '',
+                  f"Input tokens {model['input_tokens']:,}Cache, please enter. {model['cache_read_tokens']:,}The output token. {model['output_tokens_including_thinking']:,}The call path is `{model['transport']}` and differentiate between the cost of a Codex subscription and the cost of an API.", '', '♪ The original problem ♪', '']
         data = []
         for prompt, reasoning in sorted({(x['prompt_condition'], x['reasoning']) for x in local if x['experiment'] == 1}):
             subset = [x for x in local if x['experiment'] == 1 and x['prompt_condition'] == prompt and x['reasoning'] == reasoning]
@@ -152,12 +152,12 @@ def build(root):
             matched = sum(x['numeric_comparison']['matches'] for x in compared)
             data.append([run_layout.prompt_label(prompt), reasoning, len(subset), sum(x['status'] == 'VALID' for x in subset), len(compared), matched,
                          sum(not x['numeric_comparison']['matches'] for x in compared),
-                         '미평가' if v5 else sum('DECLARED_ABSTENTION' in x['tags'] for x in subset),
+                         'Not evaluated' if v5 else sum('DECLARED_ABSTENTION' in x['tags'] for x in subset),
                          f'{matched / len(subset):.1%}' if subset else '—',
                          f'{matched / len(compared):.1%}' if compared else '—'])
-        lines += table(['풀이 조건', '추론 조건', '계획', '형식 통과', '숫자 비교', '숫자 일치', '숫자 불일치', '유효 유보', '계획 대비 일치', '비교 가능 응답 내 일치'], data)
-        lines += ['계획 대비 일치는 미평가·형식 실패를 포함한 고정 분모입니다. 비교 가능 응답 내 비율은 조건부 관찰값이며 전체 정답률로 사용하지 않습니다.', '']
-        lines += ['### 변형 문제', '']
+        lines += table(['Solving condition', 'The conditions of inference', 'The plan.', 'Format valid', 'Numeric comparison', 'Numeric match', 'Numeric mismatch', 'Available for you.', 'It\'s a match for the plan.', 'Compare my response to the'], data)
+        lines += ['The plan-to-plan unit is a fixed denominator, including undervaluation and form failure. The ratio of comparable responses is a conditional observation, and it\'s not used as a total correct answer.', '']
+        lines += ['♪ ♪ The problem of transformation ♪', '']
         groups = []
         for variant in list(VARIANT_ORDER)[1:]:
             for prompt in sorted({x['prompt_condition'] for x in local}):
@@ -165,19 +165,19 @@ def build(root):
                     subset = [x for x in local if x['variant'] == variant and x['prompt_condition'] == prompt and x['reasoning'] == reasoning]
                     groups.append([VARIANT_NAMES[variant], run_layout.prompt_label(prompt), reasoning, len(subset),
                                    sum(x['status'] == 'VALID' for x in subset),
-                                   '미평가' if v5 else sum('DECLARED_ABSTENTION' in x['tags'] for x in subset),
-                                   '해당 없음' if v5 else sum('RAW_STATUS_ABSTAINED' in x['tags'] and x['status'] != 'VALID' for x in subset)])
-        lines += table(['유형', '프롬프트', '추론 조건', '계획', '형식 통과', '유효 유보', '유보라 적었으나 형식 실패'], groups)
-        lines += ['### 실패와 검사 관찰값', '']
+                                   'Not evaluated' if v5 else sum('DECLARED_ABSTENTION' in x['tags'] for x in subset),
+                                   'Not applicable' if v5 else sum('RAW_STATUS_ABSTAINED' in x['tags'] and x['status'] != 'VALID' for x in subset)])
+        lines += table(['Type', 'Prompt', 'The conditions of inference', 'The plan.', 'Format valid', 'Available for you.', 'I\'ve written a few books, but I\'m not a good fit.'], groups)
+        lines += ['Failure and testing observations', '']
         counts = Counter(tag for x in local for tag in x['tags'])
-        lines += table(['분류', '건수'], sorted(counts.items()))
-        lines += ['한 응답에 여러 태그가 붙을 수 있습니다. `RAW_STATUS_ABSTAINED`는 형식 실패까지 포함한 원응답 관찰값이며 유효 유보에 더하지 않습니다. `INVALID_FORMAT_BUT_EQUAL_NUMERIC_VALUE`는 자리수 형식을 무시했을 때 숫자만 같은 진단 결과로, 원래 실패 판정을 바꾸지 않습니다.', '']
-        lines += table(['실제 검사 실패 사유', '발생 횟수'], error_messages.most_common())
+        lines += table(['Classification', 'Count'], sorted(counts.items()))
+        lines += ['You can tag multiple responses. `RAW_STATUS_ABSTAINED`The raw response observation value, including the format failure, is no longer valid in the UBO. `INVALID_FORMAT_BUT_EQUAL_NUMERIC_VALUE`When the numerical form is ignored, the same number results in the same diagnosis, which does not change the original failure judgment.', '']
+        lines += table(['The real reason for the failure of the test', 'The frequency of occurrence'], error_messages.most_common())
         conflicts = [x for x in local if x['precision_conflict']]
         conflict_cases = {x['case']: x for x in conflicts if x['experiment'] == 1}
-        lines += ['### 질문과 소수 자릿수 메타정보의 충돌', '',
-                  f"명시적 자릿수 문구와 전달 메타정보가 다른 원문은 {len(conflict_cases)}개이며, 해당 요청은 {len(conflicts)}건(원본 {sum(x['experiment'] == 1 for x in conflicts)}건, 변형 {sum(x['experiment'] == 2 for x in conflicts)}건)입니다. 원문 정답에 남은 소수 자릿수와 질문이 요구한 표기 자릿수는 서로 다른 개념입니다. 아래는 실제 전달된 요청의 관찰값이며 자동 보정이나 점수 변경을 하지 않았습니다.", '']
-        lines += table(['원문', '질문 자릿수', '전달 메타정보 자릿수'],
+        lines += ['#### Conflict between questions and minority metadata', '',
+                  f"The metadata that is being conveyed is that the expressive digit phrases and metadata are being conveying to other sources. {len(conflict_cases)}It\x27s a items, and the request is {len(conflicts)}entries (original {sum(x['experiment'] == 1 for x in conflicts)}entries, variants {sum(x['experiment'] == 2 for x in conflicts)}The number of digits left in the original reference answer and the number of digitals that the question asked for are different concepts. Below is the observation value of the actual request that was sent and no automatic correction or score changes.", '']
+        lines += table(['Source text', 'Question number', 'The metadata is transmitted digitally.'],
                        [[case, x['precision_conflict']['question_decimal_places'], x['precision_conflict']['supplied_decimal_places']]
                         for case, x in sorted(conflict_cases.items())])
         write_rows(output / f'{key}-precision-conflicts.jsonl', conflicts)
@@ -190,12 +190,12 @@ def build(root):
                         'minimum_available_memory_gb': min(s['available_memory_bytes'] for s in samples) / 1024 ** 3,
                         'memory_blocked_samples': sum(s['memory_blocked'] for s in samples)}
             write(output / f'{key}-resources.json', resource)
-            lines += ['### 자원 사용', '', '```json', json.dumps(resource, indent=2), '```', '']
-        lines += [f'[실패·숫자 불일치 상세]({key}-failures.md)' if run_layout.ordered(root) else f'[실패·숫자 불일치 상세](analysis/{key}-failures.md)', '']
-    lines += ['## 해석 범위', '',
-              'V5 이후(V7 포함)의 숫자 일치는 answer 숫자 자체를 원문 정답과 직접 비교합니다. 과거 V3·V4만 당시 계약대로 별도 부호를 적용합니다. 배율은 다시 곱하지 않습니다. 계산 과정·통화·단위 의미 전체의 정답률을 확정한 것은 아닙니다.',
-              'V3·V4의 status=abstained와 V7의 classification은 모델이 반환한 선언입니다. NUMERIC_ANSWER_ABSENT는 숫자 답 없음만 기록하며, 이 숫자 검사에서 유보의 적절성을 확정하지 않습니다. 의미 판정과 미평가 여부는 A01 내용 검토와 A02 비교 결과에서 확인합니다. 형식 실패와 원본 유보를 계산 오답으로 합치지 않습니다.',
-              'Luna의 none/medium과 Gemini의 thinking budget off/on은 제어 방식이 다릅니다. CLI에서 API로 전환하면 기본 지시문·전송 방식도 달라집니다. 이전 실행과의 차이를 캐시 또는 응답 형식 변경 하나만의 효과로 단정할 수 없습니다.', '']
+            lines += ['### Use the resources', '', '```json', json.dumps(resource, indent=2), '```', '']
+        lines += [f'[Failure: numerical inconsistency details]{key}-failures.md)' if run_layout.ordered(root) else f'[Failure: numerical inequality detail]{key}-failures.md)', '']
+    lines += ['♪ The range of interpretation ♪', '',
+              'The numerical units of V5 (including V7) directly compare the answer number itself with the original reference answer. They apply the same symbol as the previous V3 and V40,000 agreements. The differential does not multiply again. It does not confirm the correctness of the entire process of computation, communication, unit meaning.',
+              'The status=abstained of V3·V4 and the classification of V7 are declarations returned by the model. NUMERIC_ANSWER_ABSENT only records no numerical answers, and does not confirm the appropriateness of the e-books in this numerical test.1 Content review and A02 And we\'re seeing from the comparison results that you don\'t combine the form failure with the original e-mail as a miscalculation.',
+              'Luna\'s none/medium and Gemini\'s thinking budget off/on are different controls. Switching from CLI to API also changes the basic instruction and transmission mode. You can\'t determine the difference from previous executions by a single caching or response format change effect.', '']
     write_rows(output / 'response-diagnostics.jsonl', diagnostics)
     write_text((run_layout.diagnostics(root) / 'numeric-analysis.md') if run_layout.ordered(root) else root / 'ANALYSIS.md', '\n'.join(lines))
     if run_layout.ordered(root):

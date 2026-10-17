@@ -1,25 +1,25 @@
-# {run} · RQ별 통합 연구 해석
+# {run} · Interpretation of RQ-specific integrated studies
 
-**원본 연구 발견 {original_count}개를 {group_count}개 상위 항목으로 재구성했습니다.** F 번호는 모두 보존했고, 문장 삭제만으로 중복을 없애지 않았습니다. 같은 비교 조건·수치·주장을 되풀이한 부분을 통합하고 다른 조건·반례·한계는 하위 근거로 남겼습니다. 이는 현재 대화에서 수행한 편집 검토이며 새로운 독립 실험이나 외부 LLM 호출 결과가 아닙니다.
+**The original research findings {original_count} {group_count}And then we rearranged it to the top items item.** The F-numbers were all preserved, and not eliminated by simply deleting the sentences. The same comparison terms, the same process, the same repeatable parts of the headline, and the other terms, the opposite limit, were left as a sub-base. This is an edited review that was conducted in the current conversation and is not the result of a new independent experiment or an external LLM call.
 
-[전체 F 대응표](rq-review-audit.md) · [읽는 순서와 파일 역할](rq-review-README.md) · [원본 104개 발견](findings.md)
+[F-correspondence chart](rq-review-audit.md) · [Reading order and file role](rq-review-README.md) · [Source] 104findings](findings.md)
 
-## 통합 기준과 연구 질문
+## Integrated standards and research questions
 
-RQ는 현행 논문 초안 `reports/run/20260924-paper-draft/PAPER-KO.md`의 3.3절을 사용했습니다. 통합 항목의 주 RQ를 하나 정하되, 복합 주장은 다른 RQ에도 연결했습니다. 원본에서 사용한 '기준 안내', '안내형', 'guided'는 Criteria-Guided Solving으로, '일반 풀이', 'unguided'는 Unguided Solving으로 표시합니다.
+RQ is a draft of a current paper. `reports/run/20260924-paper-draft/PAPER-KO.md` 3.3We used a section, set one of the main RQs of the integrated item, and we connected the complex argument to the other RQs. The standard guidance, the internal model, and the guided used in the original are the Criteria-Guided Solving, and the common root and the ungided are the Unguided Solving.
 
-**9개 항목 모두가 서로 독립된 발견이라는 뜻은 아닙니다.** RQ2는 설정 변화의 비교, RQ3는 조작 유형과 설명된 풀이 경로를 중심으로 같은 자료를 다른 각도에서 읽습니다. RQ1의 직접 근거 부족도 남겨 두었습니다. 기존 D001–D027 토의 안건과 4,066개 관찰의 재분류·실행은 이번 통합에 포함하지 않았습니다.
+**9That doesn't mean that all items items are independent discoveries.** RQ2 is a comparison of setup changes, RQ3 is a comparisons of the manipulation type and the described root path, and it reads the same data from different angles, leaving behind a lack of direct basis for RQ1.01–D027 And the towel. 4,066The re-allocation and practice of items observation was not included in this integration.
 
 {group_table}
 
 {body}
 
-## 수치와 해석을 통합할 때 보정한 설명
+## Correct explanation when combining numbers and interpretation
 
 {numerical_notes}
 
-동일한 전체 집계가 26개 요청에 반복 제공됐으므로 여러 F에서 같은 수치가 나와도 합산하지 않았습니다. 이 표본은 한 모델의 한 실행이며, 동일 설정 반복 비교와 모델 간 비교가 없습니다. 원본·변형 수치 일치, 모델의 classification, 설명에서 진술한 계산, 편집자의 해석을 구별합니다.
+The same total statistic. 26The items requests were repeated, so the same number was not added in multiple F's. This sample is a single run of a model, and there is no comparison between the same setup repetition and model comparison. The original and variable number matches, the classification of the model, the calculations stated in the description, the interpretation of the editor.
 
-## 다음 검토에 남겨 둔 부분
+## The part left for the next review.
 
-RQ1의 원본 MATCH/MISMATCH/UNEVALUATED별 변형 반응 비교, RQ4의 전수 정합성 오류율은 이번 104개 주장만으로 확정되지 않습니다. 기존 집계와 인용 사례가 뒷받침하는 범위만 정리했습니다. 각 통합 항목의 채택 여부는 사용자 토의 대상입니다.
+The original MATCH/MISMATCH/UNEVALUATED variation response comparison of RQ1 is the error rate of the RQ4's total complexity. 104We've sorted out the scope of the existing statistics and citation cases, and whether or not each integrated item is adopted is up to the user.

@@ -1,13 +1,13 @@
-# 실패 해석
+# Failure analysis
 
-읽는 순서: `job.json` → `snapshot.json` → `items/<문항>/<유형>/result.json` → 각 LLM의 `01-input`, `02-raw-response`, `03-result`.
+In order of reading: `job.json` → `snapshot.json` → `The following is a list of items/<br><br>/<br />/result.json` → Each LLM `01-input`, `02-raw-response`, `03-result`.
 
-- job.json: 확인창에서 승인한 대상·모델·호출 상한, 진행 상태와 해석 결과.
-- snapshot.json: 분석 시점 원본·보정 QCA, 단계 산출물, 코드·그래프·검증·실제 feedback 적용 기록과 파일 해시. 없는 단계는 명시합니다.
-- items: 영어 원문 분석과 별도 한국어 화면 번역. 근거 ID는 request.json의 실제 저장 파일에 연결됩니다.
-- queue.json / scheduler.log: 기존 preparation/generation 스케줄러의 실패 해석 모드 진행 기록.
-- api-usage: 실패한 API 응답까지 포함한 실제 토큰, 호출당 평균, 저장 단가에 따른 추정비용. 실제 청구액과 구분합니다.
+- job.json: Object, model, and interpretation approved in the verification window.
+- snapshot.json: The analysis time specifies the source, the QCA of the file, the step output, the code graph, the verification, the actual feedback application record and the file hash.
+- items: English source analysis and Korean screen translation. The base ID is connected to the actual storage file of request.json.
+- queue.json / scheduler.log: Failure to interpret the progress mode of the existing preparation/generation scheduler record.
+- API-usage: The actual token, the average per call, the estimated cost per storage unit, including the failed API response, to distinguish it from the actual bill.
 
-뷰어에서 해당 run을 선택하면 차수 안내 아래 접이식 전체 표와 각 human-review 화면에 표시됩니다. 대상 산출물의 해시가 달라지면 과거 해석으로 표시합니다. `.ref.json`은 동일한 해석을 가리키며 판정이나 다음 loop의 feedback이 아닙니다. 기존 실행·통과·실패·승인 상태를 변경하지 않습니다.
+If you select the run in the viewer, the entire folding table below the chart guide will appear on the human-review screen, and if the margin of the target output is changed, it will be shown as past interpretation. `.ref.json`It's not the same interpretation, it's not a judgment or feedback from the next loop, it doesn't change the current run, pain, failure, and status of the log.
 
-분석 1회, 표시 번역 1회가 최대 호출 수입니다. 자동 재시도는 없고 개별 실패는 나머지 분석을 중단하지 않습니다. 번역만 실패하면 영어 분석을 보존합니다. 형식/근거 ID 검사는 의미 정확성 보장이 아니므로 해석은 사람 검토용 의견입니다.
+Analysis 1Turn, mark translate 1The turn is the maximum number of calls. There's no automatic reset, and individual failures don't stop the rest of the analysis. Only translation fails to preserve the English analysis.

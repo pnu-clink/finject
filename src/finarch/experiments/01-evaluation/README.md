@@ -1,68 +1,84 @@
-# 01 Evaluation
+# Evaluation runbook
 
-[소스 전체](../README.md) · [실험 문서](../../../../docs/02-experiments/README.md) · [설정](../../../../config/experiments/README.md)
+This stage evaluates target models on original and generated questions. It does not construct new variants. Complete [installation and credentials](../../../../README.md#installation-and-credentials), then run every command from the repository root.
 
-run 대응: `01_evaluation`.
+## 1. Choose an input and inspect the configuration
 
-E01 준비 → E02 요청 동결 → E03 LLM 풀이 → E04 평가.
-
-일시 중지된 run은 새 호출 없이 상태를 반환합니다. Batch 대기는 동일 작업 ID로 이어가고, 전송 여부가 불명확한 시도는 자동 재전송하지 않습니다. 실패·미실행도 결과 목록에 남깁니다.
-
-## 사용법
-
-다음 명령은 프로젝트 루트에서 실행합니다. `RUN_PATH`는 `prepare`가 출력한 실험 폴더입니다. 이미 생성한 실험을 이어갈 때는 같은 경로를 사용합니다.
+The supplied [final release](../../../../data/final/README.md) is accepted directly by the generated-data loader: 1,354 families, each with one original and seven variants. The [reviewer smoke configuration](../../../../config/experiments/reviewer-smoke.toml) selects one family. Keep the dataset JSONL, schema, and manifest together; the loader checks hashes, IDs, counts, and required selection metadata.
 
 ```sh
-RUN_PATH=reports/experiments-run/20261003-exp-004-tatqa-luna
-PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline run --evaluation-only --run "$RUN_PATH"
-tail -f "$RUN_PATH/pipeline.log"
+PYTHONPATH=src .venv/bin/python -B -m finarch.experiments.pipeline config \
+  --config config/experiments/reviewer-smoke.toml
 ```
 
-이 명령은 E03 Batch 제출·조회·수집과 E04 검사를 이어가며 Analysis 전에 끝납니다. `evaluation --run "$RUN_PATH"`는 한 번의 제출/조회/수집 사이클만 수행하므로, 완료까지 계속 확인할 때는 위 `run --evaluation-only`를 사용합니다. 이미 같은 pipeline이 실행 중이면 추가로 띄우지 않습니다.
+Inspect the resolved dataset path/count, models, transports, reasoning modes, output limits, concurrency, key-file path, and separate Analysis backend. No model is called. For a new construction run, make a separate config with `evaluation.schedule.dataset.generated_path = "data/generated/<run-id>"`; do not point to an arbitrary Q/C/A JSONL.
 
-API Evaluation은 Native Batch입니다. 기존 Batch ID가 있으면 그 ID로 조회·수집합니다. 새 실험을 만들려는 경우에만 `prepare`를 사용합니다. 준비한 원본·변형 입력 × 풀이 지시 2종 × 추론 설정 2종이 계획 요청 수이며 이번 실행은 291 × 8 × 4 = 9,312건입니다.
+The smoke example preserves the existing Evaluation profiles: `gpt-6-luna`, Reasoning OFF=`none`, ON=`medium`. There are two prompt conditions, Unguided Solving and Criteria-Guided Solving. Profile names/model IDs are code settings, not confirmation that your account can use them. The example is not the complete paper experiment matrix.
 
-## 파일 책임과 읽는 순서
+## 2. Freeze inputs and requests without model calls
 
-|파일|입구|입력 → 처리 → 출력|
-|---|---|---|
-|[pipeline.py](pipeline.py)|`prepare / run`|설정 또는 run → E01~E04 실행·재개 → 상태·평가 자료. run별 승인된 Orca 연결 끊김은 해당 시도를 보존하고 같은 묶음의 응답 수신이 확인될 때만 미전송 요청을 계속 처리|
-|[01-preparation/prepare.py](01-preparation/prepare.py)|`prepare`|설정·입력 → 실행 폴더·기록 생성 → 동결 manifest|
-|[02-request/prepare.py](02-request/prepare.py)|`prepare`|public·prompt·schema → 모델별 요청 → manifest|
-|[03-execution/providers.py](03-execution/providers.py)|`call`|고정 요청 → 제공자 실행 → 원응답|
-|[04-validation/numeric_validation.py](04-validation/numeric_validation.py)|`build`|저장 응답·기준 → 숫자 비교 → E04 숫자 평가|
+```sh
+PYTHONPATH=src .venv/bin/python -B -m finarch.experiments.pipeline prepare \
+  --config config/experiments/reviewer-smoke.toml
+```
 
-Native Batch의 제공자 제출 거절은 `BATCH_REJECTED`, 처리 실패는 `BATCH_FAILED`, 조회 오류는 `BATCH_POLL_ERROR`로 루트 상태에도 기록합니다. 미실행 `INCOMPLETE`와 구별하며 다른 모델로 자동 재전송하지 않습니다.
+Save the printed `reports/experiments-run/<new-id>` path. On the supplied configuration this prepares 8 public inputs, 8 corresponding private records, and **32 requests**: one family × 8 items × 2 prompts × 2 reasoning modes × 1 model. The resulting state is `PREPARED`; the model is `PENDING`. This is not an executed experiment.
+
+Read these files before any dispatch:
+
+1. Run `README.md`, `config.json`, `manifest.json`, `state.json`: frozen definition and integrity/status.
+2. `00_input/selection.json`, `public.jsonl`, `private.jsonl`: selection and public/private boundary. Private reference/provenance/production metadata must not be merged into the target-model Q/C prompt. The public rows have `item_id`, `question`, `context`, and `answer_format`; each frozen request sends only `question`, `context`, and `answer_format` inside its `input`. Inspect the manifest for the exact prompt, schema, condition, and call settings.
+3. `01_evaluation/02_request/plan.json`: model, request counts, concurrency, transport, and estimated usage/cost. Character-based token estimates and embedded prices are not a billing quote; actual cost remains null before execution.
+4. `01_evaluation/02_request/<model-key>/manifest.jsonl`, saved prompts, and `response.schema.json`: exact frozen model requests and answer contract.
+
+The prepare command checks input/definition integrity, not API-key validity, model access, or provider payload support. Re-running prepare creates a new experiment. Keep the existing path to resume it.
+
+## 3. Execute Evaluation only
+
+This step makes billable API calls. Fill in your root `.env` as described in the [credential guide](../../../../config/README.md). Review the request plan, model access, output budgets, and cache requirements before running:
+
+```sh
+RUN_PATH=reports/experiments-run/REPLACE_WITH_PRINTED_RUN_ID
+PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline run \
+  --evaluation-only --run "$RUN_PATH"
+```
+
+For the supplied profile-based config, E03 uses the native OpenAI Batch transport. The coordinator submits, polls, collects, checks IDs, and runs E04 validation. It stops before Analysis. Progress remains in `pipeline.log`, `events.jsonl`, `state.json`, and per-model execution folders under `01_evaluation/03_execution/`. Preserve wire requests, provider job IDs, raw outputs/errors, normalized results, and usage. An HTTP success, a completed provider job, and a valid answer are separate states.
+
+The current cache policy requires verified cache-disable controls and explicit cache counters. Missing counters are unknown, not zero. Do not bypass a policy failure or count it as an evaluated answer. Inspect provider errors and saved usage records when collecting a live run.
+
+## 4. Inspect, resume, and hand off to Analysis
+
+Read `01_evaluation/04_validation/summary.json`, each model's `results.jsonl` and `summary.json`, and the generated report. E04 validates response shape/execution state; numeric comparison is a separate derived record. Keep errors, refusals, incomplete outputs, and unevaluated rows in their proper counts.
+
+Open the [experiment viewer](../../../../viewer/experiments/README.md), select the printed run, then choose Evaluation and its E01–E04 stages. Compare the selected Q/C, prompt/reasoning condition, actual response, validation, usage, and saved logs. A prepared-only run has no model answer to display.
+
+After interruption, rerun the same `run --evaluation-only --run "$RUN_PATH"` command; existing manifests and durable job state govern reuse/collection. Do not run two coordinators concurrently. Terminal cache failures, ambiguous delivery, or output-budget limits may require diagnosis and the explicit retry controls shown by `--help`; do not delete attempts or silently submit them again.
+
+Start [Analysis](../02-analysis/README.md) only when all selected model states are `FINISHED` and the saved Evaluation artifacts pass integrity checks.
+
+## Code flow
 
 ```mermaid
-flowchart LR
- IN["입력·설정"]
- subgraph F0["01-evaluation/pipeline.py"]
-  N0["prepare / run · E03.D01 승인된 Orca 연결 끊김과 묶음 응답 확인"]
- end
- subgraph F1["01-evaluation/01-preparation/prepare.py"]
-  N1["prepare"]
- end
- subgraph F2["01-evaluation/02-request/prepare.py"]
-  N2["prepare"]
- end
- subgraph F3["01-evaluation/03-execution/providers.py"]
-  N3["call"]
- end
- subgraph F4["01-evaluation/04-validation/numeric_validation.py"]
-  N4["build"]
- end
- IN --> N0
- N0 --> OUT["저장 자료·상태"]
- N0 -->|실패| ERR["오류·미평가 기록"]
- classDef python fill:#e3f2fd,stroke:#1565c0;
- classDef file fill:#eceff1,stroke:#607d8b;
- class N0,N1,N2,N3,N4 python;
- class IN,OUT,ERR file;
+flowchart TD
+  subgraph E01["01-preparation/prepare.py"]
+    E1["E01 Python: select dataset and freeze public/private inputs"]
+  end
+  subgraph E02["02-request/prepare.py"]
+    E2["E02 Python: freeze prompts, schemas, requests, plan"]
+  end
+  subgraph E03["03-execution/openai_batch.py"]
+    E3["E03 Python: credentials and cache gate; submit/poll/collect"]
+    EL["Provider LLM: target-model responses"]
+    EF["Failure/pending: preserve job IDs, raw data, delivery state"]
+  end
+  subgraph E04["04-validation/reporting.py and numeric_validation.py"]
+    E4["E04 Python: validate and report saved results"]
+  end
+  E1 --> E2 --> E3 --> EL --> E4
+  E3 -->|blocked or pending| EF
+  EL -->|error or incomplete| EF
+  EF -->|same run, permitted resume| E3
 ```
 
-회색은 입력·출력 파일, 파랑은 파일의 Python 함수입니다. 표의 함수는 해당 책임을 담당합니다. 세부 실행 순서·LLM 분기는 [실험 문서](../../../../docs/02-experiments/README.md)의 같은 번호 단계를 읽습니다.
-
-이 README는 `src/finarch/documentation/templates/source-layout/experiments/01-evaluation.md`에서 생성합니다.
-
-`models.<key>.disconnect_recovery`의 `continue_unsubmitted=true`와 승인 문구가 모두 있어야 연결 끊김 후 계속 실행할 수 있습니다. OFF/ON 선행 검사가 끝나야 하며, 같은 묶음에 수신 응답이 하나도 없으면 중단합니다. 해당 요청은 `UNKNOWN_DELIVERY`로 남고 자동 재전송하지 않습니다. 인증·계정 한도·캐시·다른 제공자 오류의 중단 조건은 유지합니다.
+E01/E02 prepare files locally. E03 calls the selected provider; E04 checks its saved responses.

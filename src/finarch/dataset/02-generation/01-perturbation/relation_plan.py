@@ -139,17 +139,17 @@ def create(case_dir):
         except Exception as error:
             ctx.save(base+'/03-result/failure.json',{'status':'FAIL','reason':str(error)});outcome.update(status='FAIL',reason=str(error));raise
 
-README='''# IC-RELATION · 14번 첫 관계 계획
+README='''# IC-RELATION · 14First relationship plan
 
-읽는 순서: plan.json의 추가 관계·선택한 분기·조건부 답 → B의 program.json과 graph.json → python-execution.json → 04-check-target/03-result.json.
+Readings: additional relationship of plan.json; selected quarter; conditional part answer → program.json and graph.json of B → python-execution.json → 04-check-target/03-result.json.
 
-원문과 원래 숫자는 보존합니다. B 실행 사본에서만 관계에 따라 한 관측을 채택하지 않고 그 변수를 계산합니다. 이는 완성 문맥의 삭제가 아닙니다. 질문의 합산 계산은 그대로입니다. 관계 문장은 로컬 초안이며 실제 LLM 응답이나 최종 본문이 아닙니다.
+It preserves the original and the original numbers. It doesn't just adopt one observation based on the relationship, but it calculates the variable based on the B execution copy. This is not a deletion of the finished context. The cumulative calculation of the questions is the same. The relationship sentence is a local draft, not the actual LLM response or final thesis.
 
-사용자 결정에 따라 한 개의 관계 적용 방향만 계산합니다. 반대 방향은 이번 범위에서 생략하며 가능한 답을 모두 열거했다는 뜻이 아닙니다. 원문 전체의 우회·모든 금융 관계에 대한 완전 검증은 아닙니다. 중간값은 유지하고 최종 답에 원본 precision을 적용합니다.
+It calculates only one direction of application of the relationship, depending on the user's decision. The opposite direction does not mean that it is omitted from this range and that it has all the possible answers. It is not a complete verification of the whole subset of the original, of all financial relationships.
 
-뷰어는 저장 그래프에서 한 줄 수식을 펼쳐 원본식과 관계 적용식을 비교합니다. 분홍은 원래 관측, 주황은 관계 적용 항이며 실행 코드를 바꾸지 않습니다.
+The viewer takes a linear formula from the storage graph and compares the original to the relationship application. The flower is the original observation, the orange is the relationship application and it doesn't change the execution code.
 
-문제 events.jsonl에 시작·종료·오류·경과시간이 남습니다. 중앙 viewer에서 실행 → test-0001 → IC-RELATION → 그래프 변경을 선택하면 원본과 한 관계 경로·코드를 볼 수 있습니다. 문장과 답변에는 원본식·관계 적용식과 그 아래 원문/문장 편집 미리보기를 표시합니다. 추가 관계 문장은 초록색이며 TEXT-PREVIEW-v2.md를 함께 읽습니다. 실제 문장화는 16번, 의미 검사는 17번이며 LLM 호출은 0회입니다.
+The problem is that events.jsonl has a start, finish, run time.0001 → IC-RELATION → Graph change, you can see the source and a relationship path code. The phrases and answers show the source language, the relationship application, and the preview of the source/item editing below. 16So, what's the meaning of the test? 17And the LLM call is 0calls.
 '''
 
 
@@ -166,7 +166,7 @@ def select_single_direction(case_dir):
         plan['relation_selection']='agent_selected_pilot; not automatic relation discovery'
         plan['revision']=2
         ctx.save(base+'/plan-v2.json',plan)
-        ctx.save_text(base+'/README-v2.md',README+'\n현재 plan-v2.json과 B/를 읽습니다. plan.json과 C/는 이전 기록으로 보존하며 활성 후보와 뷰어에서 제외했습니다.\n')
+        ctx.save_text(base+'/README-v2.md',README+'\nNow I\'m reading plan-v2.json and B/. plan.json and C/ are preserved in the previous record, excluding active candidates and viewers.\n')
         existing=json.loads((case/'04-perturbation/05-list-candidates/03-result.json').read_text());ctx.save(base+'/variants-before-v2.json',existing)
         for variant in existing:
             if variant['label']=='IC_RELATION_01':variant.update(plan=plan,reason='Original and one relation direction checked; reverse direction omitted; final semantics not evaluated')

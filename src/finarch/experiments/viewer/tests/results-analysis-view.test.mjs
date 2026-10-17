@@ -108,7 +108,7 @@ test('seed-suffixed run is selectable and an old unsuffixed link resolves to its
     assert.equal(await repository.runPath('20260927-exp-007'), await realpath(renamed));
     const listed = await repository.runs();
     assert.equal(listed.some(run => run.id === '20260927-exp-007-20260920'), true);
-    await assert.rejects(repository.runPath('../20260927-exp-007'), /올바르지/);
+    await assert.rejects(repository.runPath('../20260927-exp-007'), /\uc62c\ubc14\ub974\uc9c0/);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
@@ -172,7 +172,7 @@ test('saved response pairs are paged from the same group without changing source
   const last = repository.analysisPairs(snap, { group: '0', offset: '50' });
   assert.deepEqual([first.total, first.pairs.length, last.pairs.length, last.pairs[0].case], [55, 50, 5, 'test-50']);
   assert.equal(many.comparisons.paired_groups[0].pairs.length, 55);
-  assert.throws(() => repository.analysisPairs(snap, { group: '../0' }), /올바르지/);
+  assert.throws(() => repository.analysisPairs(snap, { group: '../0' }), /\uc62c\ubc14\ub974\uc9c0/);
 });
 
 test('a single-file export pages the same saved comparison pairs offline', async () => {

@@ -36,7 +36,7 @@ def check_policy(policy):
 
 @traced("tool")
 def authorize(policy, kind, name):
-    # LC10: 단계에 등록된 도구·스킬 이름을 정확히 대조하고 목록 밖 실행을 거절합니다.
+    # LC10: Exactly contrast the tool-skill name registered in the step and refuse to run it off the list.
     check_policy(policy)
     if kind not in ("tools", "skills") or not isinstance(name, str) or name not in policy[kind]:
         raise PolicyError("CAPABILITY_NOT_ALLOWED")
@@ -54,7 +54,7 @@ def dispatch(policy, kind, name, payload, handlers):
 
 @traced("tool")
 def hook_decision(event, policy):
-    # LC11: Codex PreToolUse가 보내준 요청을 실제 도구 실행 전에 allow/deny로 판단합니다.
+    # LC11: The request that Codex PreToolUse sent is judged as allow/deny before the actual tool is executed.
     try:
         if not isinstance(event, dict) or event.get("hook_event_name") != "PreToolUse":
             raise PolicyError("INVALID_TOOL_HOOK_EVENT")

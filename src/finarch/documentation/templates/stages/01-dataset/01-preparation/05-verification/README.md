@@ -1,46 +1,46 @@
-# P05 원문 풀이 검증
+# P05 The original grass is verified.
 
-[상위: Preparation](../README.md) · 이전: [P04](../04-graph/README.md) · 통과: [P07](../07-human-review/README.md) · 실패: [P06](../06-exception-handler/README.md)
+[Up: Preparation](../README.md) · Previous: [P0]4](../04-graph/README.md) · Passage: [P0]7](../07-human-review/README.md) · Failure: [P0]6](../06-exception-handler/README.md)
 
-값이 맞았더라도 다른 회사의 수치를 사용했다면 올바른 풀이로 확정할 수 없습니다. 이 단계는 Python으로 확인할 수 있는 실행·정답·출처 구조·그래프 검사와 LLM의 의미 검토를 구별합니다.
+Even if the value is right, you can't verify the correct value if you've used the numbers from other companies. This step distinguishes between the execution, response, resource structure, graph test that can be verified in Python and the meaning review of an LLM.
 
-## 요구사항과 판정
+## Requirements and judgments
 
-Python FAIL을 LLM PASS로 덮지 않습니다. 실행 성공·gold 일치만으로 의미 정확성을 확정하지 않습니다. 검토는 주어진 Q/C의 범위에서 수행하며, 외부 공식·데이터의 필요성과 적용 가능성을 확인합니다. 외부 출처 문자열이 있다는 사실은 외부 페이지의 사실 검증 완료가 아닙니다.
+Python FAIL doesn't cover up LLM PASS. Running success-gold matches alone doesn't confirm meaning accuracy. Reviews are done within a given range of Q/Cs, verifying the need and applicability of external formal data. The fact that there is an external source string isn't a complete fact-checking of an external page.
 
-현재 `pp08_record_verdict`는 Python 검사 모두 PASS, LLM findings 모두 PASS, cohort가 INTERNAL 또는 EXTERNAL일 때만 PASS입니다. UNKNOWN·PENDING·FAIL은 통과가 아닙니다. 이는 현재 코드의 판정이며 LLM 판단의 정확성 자체가 보장된다는 의미는 아닙니다.
+Current `pp08_record_verdict`All Python tests are PASS, all LLM findings are PASS only when the cohort is INNERAL or EXTERNAL. UNKNOWN;PENDING;FAIL is not a PASS. This is not a judgment of the current code, and it doesn't mean that the accuracy of the LLM judgment itself is guaranteed.
 
-|스텝|주체 / 함수|입력 → 출력|
+|Step by step|Subject / function|Input → output|
 |---|---|---|
-|P05.01|Python `pp01_collect_artifacts`|POT/실행/그래프 → 문항 자료와 파일 해시|
-|P05.02|Python `pp02_check_execution_and_answer`|exact_value·원본 A → 타입·정밀도 기준 비교|
-|P05.03|Python `pp03_check_provenance_structure`|facts/source_usage/외부지식 요구 → 스키마·Q/C 인용 위치 검사|
-|P05.04|Python `pp04_check_graph_consistency`|변수 trace·노드값·앞단 대조 → 일관성 판정|
-|P05.05|Python `pp05_build_verification_request`|자료·Python 결과 → 의미 검토 요청|
-|P05.06|LLM `pp06_LLM_verify_semantics`|동일 요청·응답 스키마 → 의미 항목별 판단·분류|
-|P05.07|Python `pp07_check_verification_response`|원응답 → 계약 검사 결과|
-|P05.08|Python `pp08_record_verdict`|Python/LLM 결과 → 종합 verdict, 실패 시 예외|
+|P05.01|Python `pp01_collect_artifacts`|POT/Action/Graph → case data and file hash|
+|P05.02|Python `pp02_check_execution_and_answer`|Exact_value: source A → type: accuracy reference comparison|
+|P05.03|Python `pp03_check_provenance_structure`|facts/source_usage/external knowledge requirements → Skimma Q/C|
+|P05.04|Python `pp04_check_graph_consistency`|The variable trace, node value, front-end contrast → consistency judgment|
+|P05.05|Python `pp05_build_verification_request`|Data·Python results → meaning review request|
+|P05.06|LLM `pp06_LLM_verify_semantics`|Same request; answer scheme → meaning item by item|
+|P05.07|Python `pp07_check_verification_response`|Raw response → Contract test results|
+|P05.08|Python `pp08_record_verdict`|Python/LLM results → Comprehensive verdict, exception when failed|
 
 ```mermaid
 flowchart TD
  subgraph V["p05_verification.py"]
-  A["P05.01 자료 수집"] --> B["P05.02 정답 대조"] --> C["P05.03 출처 구조"] --> D["P05.04 그래프 일관성"]
-  D --> E["P05.05 요청"] --> F["P05.06 LLM 의미 검토"] --> G["P05.07 응답 검사"] --> H["P05.08 종합"]
+  A["P05.01 Collecting data"] --> B["P05.02 The opposite of right."] --> C["P05.03 Source and protection"] --> D["P05.04 The graph consistency"]
+  D --> E["P05.05 Request"] --> F["P05.06 LLM meaning review"] --> G["P05.07 The response test"] --> H["P05.08 Combined"]
  end
- H -->|PASS| N["P07 검토 자료 준비"]
- H -->|FAIL/UNKNOWN| X["P06 오류 처리"]
- A & E & F & G -->|예외| X
+ H -->|PASS| N["P07 Preparing the review data"]
+ H -->|FAIL/UNKNOWN| X["P06 Error handling"]
+ A & E & F & G -->|Exceptions are made.| X
 ```
 
-파일 상자 안에서 P05.06만 LLM입니다. 분홍 확장 노드는 없습니다. Python 검사에서 FAIL 결과가 나더라도 코드가 요청을 구성할 수 있으면 의미 검토까지 수행한 뒤 종합합니다. 모든 Python 실패가 즉시 LLM 미호출을 뜻하지 않습니다.
+P0 in the file box.5.06It's only an LLM. There are no pink extension nodes. Even if the Python test fails, the code can configure the request and then merge until the meaning review is done. Not all Python failures mean that the LLM will fail immediately.
 
-`05-verification/01-collect-artifacts`부터 `08-record-verdict/01-result.json`까지 순서대로 읽습니다. 응답 형식 실패와 본문 의미 실패를 구분합니다.
+`05-verification/01-collect-artifacts`through `08-record-verdict/01-result.json`I read in order. I distinguish between the failure of the response form and the failure of text meaning.
 
-근거: [p05_verification.py](../../../../src/finarch/dataset/01-preparation/05-verification/stage.py), [verification.py](../../../../src/finarch/dataset/schemas/verification.py), [현재 의미 지침](../../../../src/finarch/dataset/prompts/01-preparation.05-verification.semantic.md), [검토 완료 요구](../../../../archive/20260923-documentation-reorganization/docs/68-preparation-reviewed-flow.md).
+The basis: [p0]5_verification.py](../../../../src/finarch/dataset/01-preparation/05-verification/stage.py), [verification.py](../../../../src/finarch/dataset/schemas/verification.py)[current meaning guidelines](../../../../src/finarch/dataset/prompts/01-preparation.05-verification.semantic.md)[Request for completion of inspection](../../../../archive/20260923-documentation-reorganization/docs/68-preparation-reviewed-flow.md).
 
-## 실제 run의 하위 폴더 순서
+## The order of the real run is the lower folder.
 
-채번 대조에 사용한 경로: `reports/run/20260917-003/01-preparation/test-0001/01-round/05-verification`. 아래는 해당 실행에서 실제 확인한 폴더이며, 미실행 분기까지 모두 존재한다는 뜻은 아닙니다.
+The path used in the gravel counterpart: `reports/run/20260917-003/01-preparation/test-0001/01-round/05-verification`The following is the actual verified folder in the execution, but that doesn't mean that all of them are in the wrong quarter.
 
 ```text
 05-verification/

@@ -301,7 +301,7 @@ def stage_paper():
         for text in list(doc.find_all(string=True)):
             if text.find_parent(['table','figure','pre','code','script','style']):continue
             value=str(text)
-            for a,b in [('five models','six models'),('five target models','six target models'),('다섯 모델','여섯 모델'),('다섯 대상 모델','여섯 대상 모델')]:value=value.replace(a,b)
+            for a,b in [('five models','six models'),('five target models','six target models'),('Five models.','Six models.'),('Five target models','Six target models')]:value=value.replace(a,b)
             value=value.replace('85.8–98.9%',support_range('ON','ON','A')+'%')
             value=value.replace('79.5–98.1%',support_range('OFF','ON','A')+'%')
             if section['id']=='s5':
@@ -310,15 +310,15 @@ def stage_paper():
                 value=value.replace('Luna, Haiku, Qwen3-8B','Luna, Haiku, DeepSeek, Qwen3-8B')
             if section['id']=='s11-results-rq2':
                 value=value.replace('the October 8, 2026 paper-response snapshot','the October 8, 2026 snapshot for the existing models and the October 12 DeepSeek snapshot')
-                value=value.replace('2026-10-08 논문 응답 스냅샷','기존 모델의 2026-10-08 응답 스냅샷과 DeepSeek의 2026-10-12 스냅샷')
+                value=value.replace('2026-10-08 \ub17c\ubb38 \uc751\ub2f5 \uc2a4\ub0c5\uc0f7','The existing model. 2026-10-08 And the answer is snapshots and DeepSeek. 2026-10-12 Snapshots.')
                 value=value.replace('the October 8, 2026 stored paper results','the existing models’ October 8, 2026 results and DeepSeek’s October 12 results')
-                value=value.replace('2026년 10월 8일 논문용 저장 결과의','기존 모델의 2026년 10월 8일 결과와 DeepSeek의 10월 12일 결과에서')
+                value=value.replace('2026\ub144 10\uc6d4 8\uc77c \ub17c\ubb38\uc6a9 \uc800\uc7a5 \uacb0\uacfc\uc758','The existing model. 2026Shit. 10month 8And the results of the work and the DeepSeek 10month 12And the results of the work.')
                 value=value.replace('0.4–5.3',guidance_range('OFF')).replace('34.1–54.0',guidance_range('ON'))
             if section['id']=='s11-results-rq3':
                 value=value.replace('15 of 20',f'{positive} of {len(group_comparisons)}')
-                value=value.replace('20개 비교 중 15개',f'{len(group_comparisons)}개 비교 중 {positive}개')
+                value=value.replace('20\uac1c \ube44\uad50 \uc911 15\uac1c',f'{len(group_comparisons)}comparisons {positive}items')
             if section['id']=='s11-experimental-settings':
-                value=value.replace('We disabled automatic retries in Evaluation.','We disabled automatic retries in Qwen Evaluation.').replace('Evaluation의 자동 재시도는 비활성화했다.','Qwen Evaluation의 자동 재시도는 비활성화했다.')
+                value=value.replace('We disabled automatic retries in Evaluation.','We disabled automatic retries in Qwen Evaluation.').replace('Evaluation\uc758 \uc790\ub3d9 \uc7ac\uc2dc\ub3c4\ub294 \ube44\ud65c\uc131\ud654\ud588\ub2e4.','Automatic re-enabling of Qwen Evaluation has been disabled.')
             text.replace_with(value)
         on=q['ON','ON'];off=q['OFF','OFF'];reason=q['OFF','ON']
         append(doc,'tab:v2-support',[[LABEL,pct(on['N']),pct(on['A']),pct(on['resolved']/6770)]])
@@ -396,12 +396,12 @@ def stage_paper():
         append(doc,'tab:api-generation',[[LABEL,'none','max','8,194–262,144']])
         if section['id']=='s11-experimental-settings':
             t=doc.find('table',id='tab:api-generation')
-            msg=('We request DeepSeek V4.1 Flash through OrcaRouter with reasoning effort none or max. The run initially uses a 65,536-token output limit and later starts new requests at 8,194 tokens, doubling the limit after length truncation. Recorded final-attempt limits range from 8,194 to 262,144 tokens. We preserve failed outputs and all attempts.' if lang=='en' else 'DeepSeek V4.1 Flash는 OrcaRouter를 통해 reasoning effort none 또는 max로 호출한다. 초기 출력 한도는 65,536 tokens이며, 이후 새 요청은 8,194 tokens에서 시작하고 길이 제한으로 잘리면 한도를 두 배로 늘린다. 저장된 최종 시도의 한도는 8,194–262,144 tokens다. 실패한 출력과 모든 시도는 보존한다.')
+            msg=('We request DeepSeek V4.1 Flash through OrcaRouter with reasoning effort none or max. The run initially uses a 65,536-token output limit and later starts new requests at 8,194 tokens, doubling the limit after length truncation. Recorded final-attempt limits range from 8,194 to 262,144 tokens. We preserve failed outputs and all attempts.' if lang=='en' else 'DeepSeek V4.1 Flash calls the reasoning effort none or max through OrcaRouter. 65,536 tokens, and then the new request is 8,194 If you start with tokens and cut the length limit, you double the limit. 8,194–262,144 Tokens. Failed output and all attempts are preserved.')
             t.insert_after(BeautifulSoup('<p>'+msg+'</p>','html.parser'))
         if section['id']=='s11-pooled-results':
             c=s['review_counts']
             assert s['review_state']['valid']==1354 and c.get('REVIEW_FAILED',0)==0
-            msg=(f'DeepSeek has assessment results for all 1,354 original families. Of 37,912 planned variant responses, {c["COMPLETED"]:,} have completed assessments and {c["NOT_REVIEWABLE"]:,} outputs are unreviewable. For the five base variants under G⁺R⁻, F contains {q["ON","OFF"]["F"]:,} invalid outputs. We retain these cases in the planned denominator. We preserve the October 8 snapshot for the existing models and use the October 12 snapshot for DeepSeek.' if lang=='en' else f'DeepSeek은 원본 1,354개 모두에 분석 결과가 있다. 계획 변형 응답 37,912개 중 {c["COMPLETED"]:,}개는 판정을 완료했고, 출력 {c["NOT_REVIEWABLE"]:,}개는 검토할 수 없다. G⁺R⁻의 다섯 기본 변형에서 F는 형식에 맞지 않는 출력 {q["ON","OFF"]["F"]:,}개를 포함한다. 이 항목도 계획 분모에 남긴다. 기존 모델은 10월 8일 스냅샷을 유지하고 DeepSeek은 10월 12일 스냅샷을 사용한다.')
+            msg=(f'DeepSeek has assessment results for all 1,354 original families. Of 37,912 planned variant responses, {c["COMPLETED"]:,} have completed assessments and {c["NOT_REVIEWABLE"]:,} outputs are unreviewable. For the five base variants under G⁺R⁻, F contains {q["ON","OFF"]["F"]:,} invalid outputs. We retain these cases in the planned denominator. We preserve the October 8 snapshot for the existing models and use the October 12 snapshot for DeepSeek.' if lang=='en' else f'DeepSeek is the original. 1,354All items have analytical results. 37,912of {c["COMPLETED"]:,}The items has completed the assessment, and the output is {c["NOT_REVIEWABLE"]:,}items can\x27t review. In the five basic variations of G+R−, F is the output that doesn\x27t fit the form. {q["ON","OFF"]["F"]:,}This item is also left in the plan denominator. 10month 8Keeping up with the work snapshots, DeepSeek is 10month 12I use work snapshots.')
             doc.insert(0,BeautifulSoup('<p>'+msg+'</p>','html.parser'))
         for fid,name in pnames.items():
             figure=doc.find('figure',id=fid)
@@ -437,7 +437,7 @@ def publish():
             f=doc.find('figure',id=fid)
             if f and f.img:f.img['src']='../../../paper/asset/figures/v2/'+name+'.png'
         return str(doc)
-    for lang,name in [('en','PAPER-EN.md'),('ko','PAPER-KO.md'),('ko','draft 압축.md')]:
+    for lang,name in [('en','PAPER-EN.md'),('ko','PAPER-KO.md'),('ko','Draft compression.md')]:
         path=repo.directory/name;prior=path.read_text();replacements=[]
         headings=copy.deepcopy(before)
         if lang=='en':
@@ -473,7 +473,7 @@ def publish():
                     normalized=str(BeautifulSoup(p[key],'html.parser').find(p.get('block_tag','p')))
                     if normalized in mapping:p[key]=mapping[normalized]
                     else:
-                        value=p[key].replace('다섯 모델','여섯 모델')
+                        value=p[key].replace('\ub2e4\uc12f \ubaa8\ub378','Six models.')
                         value=value.replace('Luna·Haiku·Qwen3-8B','Luna·Haiku·DeepSeek·Qwen3-8B')
                         value=value.replace('Luna, Haiku, Qwen3-8B','Luna, Haiku, DeepSeek, Qwen3-8B')
                         value=value.replace('85.8–98.9%','85.8–99.0%').replace('79.5–98.1%','79.5–98.6%')

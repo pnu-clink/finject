@@ -47,7 +47,7 @@ def normalize_sections(sections):
         before = {lang: item[lang+'html'] for lang in ['en', 'ko']}
         if item['id'] == 's5-2':
             item['en'] = '5.2 RQ2: How do model responses change when evidence conflicts or is removed?'
-            item['ko'] = '5.2 RQ2: 근거가 충돌하거나 제거될 때 모델의 응답은 어떻게 달라지는가?'
+            item['ko'] = '5.2 RQ2: How does the model respond when the evidence collides or is removed?'
         for lang in ['en', 'ko']:
             key = lang+'html'
             count_doc = BeautifulSoup(item[key], 'html.parser')
@@ -57,24 +57,24 @@ def normalize_sections(sections):
             text = str(count_doc)
             if item['id'] == 's1':
                 text = text.replace('source problems from FinanceReasoning,', 'source problems from FinanceReasoning and TAT-QA,')
-                text = text.replace('FinanceReasoning의 원천 문항', 'FinanceReasoning과 TAT-QA의 원천 문항')
-                text = text.replace('1,551 answerable', 'answerable').replace('답변 가능한 1,551개의', '답변 가능한').replace('답변 가능한 1,551개', '답변 가능한')
+                text = text.replace('FinanceReasoning\uc758 \uc6d0\ucc9c \ubb38\ud56d', 'Source phrase from FinanceReasoning and TAT-QA')
+                text = text.replace('1,551 answerable', 'answerable').replace('\ub2f5\ubcc0 \uac00\ub2a5\ud55c 1,551\uac1c\uc758', 'Answerable').replace('Answerable 1,551items', 'Answerable')
             if item['id'] == 's3-2':
                 text = re.sub(r'We use <strong>.*?</strong>\.', 'We draw seed problems from FinanceReasoning and TAT-QA. Appendix # reports source counts before human annotation; the final release size may change after annotation.', text, count=1)
-                text = re.sub(r'<strong>FinanceReasoning.*?</strong>를 사용한다\.', 'FinanceReasoning과 TAT-QA에서 원본 문제를 선정한다. human annotation 전 원천별 수량은 Appendix #에 기록하며, 사람 검증 후 최종 공개 수량은 달라질 수 있다.', text, count=1)
+                text = re.sub('<strong>FinanceReasoning.*?</strong>\ub97c \uc0ac\uc6a9\ud55c\ub2e4\\.', 'FinanceReasoning\uacfc TAT-QA\uc5d0\uc11c \uc6d0\ubcf8 \ubb38\uc81c\ub97c \uc120\uc815\ud55c\ub2e4. human annotation \uc804 \uc6d0\ucc9c\ubcc4 \uc218\ub7c9\uc740 Appendix #\uc5d0 \uae30\ub85d\ud558\uba70, \uc0ac\ub78c \uac80\uc99d \ud6c4 \ucd5c\uc885 \uacf5\uac1c \uc218\ub7c9\uc740 \ub2ec\ub77c\uc9c8 \uc218 \uc788\ub2e4.', text, count=1)
             if item['id'] == 's3-3':
                 text = re.sub(r'Including one original.*?separately in Section 4\.', 'Each family contains one original and seven variants. Appendix # records counts before human annotation; Section 4 describes human verification.', text, flags=re.S)
-                text = re.sub(r'원본 1개와 변형 7개를 합쳐.*?별도로 다룬다\.', '각 문항군은 원본 1개와 변형 7개로 구성된다. human annotation 전 수량은 Appendix #에 기록하고, 사람 검증은 4장에서 다룬다.', text, flags=re.S)
+                text = re.sub('\uc6d0\ubcf8 1\uac1c\uc640 \ubcc0\ud615 7\uac1c\ub97c \ud569\uccd0.*?\ubcc4\ub3c4\ub85c \ub2e4\ub8ec\ub2e4\\.', '\uac01 \ubb38\ud56d\uad70\uc740 \uc6d0\ubcf8 1\uac1c\uc640 \ubcc0\ud615 7\uac1c\ub85c \uad6c\uc131\ub41c\ub2e4. human annotation \uc804 \uc218\ub7c9\uc740 Appendix #\uc5d0 \uae30\ub85d\ud558\uace0, \uc0ac\ub78c \uac80\uc99d\uc740 4\uc7a5\uc5d0\uc11c \ub2e4\ub8ec\ub2e4.', text, flags=re.S)
             doc = BeautifulSoup(text, 'html.parser')
             if item['id'] == 's4':
                 for table in list(doc.find_all('table')):
-                    if 'Selection stage' in table.get_text() or '선정 단계' in table.get_text(): table.decompose()
+                    if 'Selection stage' in table.get_text() or '\uc120\uc815 \ub2e8\uacc4' in table.get_text(): table.decompose()
                 for p in list(doc.find_all('p')):
                     if re.search(r'2,238|1,050|1,551|,238|,080', p.get_text()): p.decompose()
-                    elif p.get_text(strip=True) in ['Release sampling stages', '공개 표본 선정 단계']: p.decompose()
+                    elif p.get_text(strip=True) in ['Release sampling stages', '\uacf5\uac1c \ud45c\ubcf8 \uc120\uc815 \ub2e8\uacc4']: p.decompose()
                 if not doc.find(id='cohort-status'):
                     p = doc.new_tag('p', id='cohort-status')
-                    p.string = ('Appendix # records the collection size before human annotation. Human annotation may change the final release size. We will report the final cohort, exclusions, and completed review coverage after annotation.' if lang == 'en' else 'Appendix #에 human annotation 전 수량을 기록한다. 사람 검증 과정에서 최종 공개 수량이 달라질 수 있다. 검증 후 최종 포함 수, 제외 내역, 판정 완료 범위를 별도로 보고한다.')
+                    p.string = ('Appendix # records the collection size before human annotation. Human annotation may change the final release size. We will report the final cohort, exclusions, and completed review coverage after annotation.' if lang == 'en' else 'In Appendix #, the human annotation records the amount prior to the person\'s verification. The final disclosure amount may vary during the verification process. The final inclusion, exclusion, and judgement completion range are reported separately after verification.')
                     doc.insert(0, p)
             for a in doc.select('a[data-reference], a[href*="fig:"]'):
                 target = a.get('data-reference') or a.get('href', '').lstrip('#')
@@ -97,7 +97,7 @@ def normalize_sections(sections):
                     fig.img['style'] = 'clip-path:inset(0 0 4% 0)'
                 if fid in figmap and fig.figcaption:
                     old = fig.figcaption.get_text(' ', strip=True)
-                    fig.figcaption.string = re.sub(r'^(?:Figure|그림)\s*\d+\.?\s*', f'Figure {figmap[fid]}. ', old)
+                    fig.figcaption.string = re.sub('^(?:Figure|\uadf8\ub9bc)\\s*\\d+\\.?\\s*', f'Figure {figmap[fid]}. ', old)
             # Existing Korean prose contains plain references rather than linked labels.
             if lang == 'ko':
                 targets = {'s5-1': 5, 's11-pipeline-1': 4, 's11-pipeline-2': 4, 's11-pipeline-3': 4, 's11-pipeline-4': 4}
@@ -106,7 +106,7 @@ def normalize_sections(sections):
                         continue
                     value = str(node)
                     if item['id'] in targets:
-                        value = re.sub(r'(그림|Figure)\s+[4-8](?!\d)', lambda m: m[1]+' '+str(targets[item['id']]), value)
+                        value = re.sub('(\uadf8\ub9bc|Figure)\\s+[4-8](?!\\d)', lambda m: m[1]+' '+str(targets[item['id']]), value)
                     node.replace_with(value)
             item[key] = str(doc)
         if any(item[lang+'html'] != before[lang] for lang in ['en', 'ko']):
@@ -114,7 +114,7 @@ def normalize_sections(sections):
                 if not item.get('old'+lang): item['old'+lang] = before[lang]
             item['state'] = 'revised'
     if not any(x['id']=='s11-counts' for x in sections):
-        sections.insert(next(i for i,x in enumerate(sections) if x['id']=='s11')+1, dict(id='s11-counts',en='Appendix #. Counts before human annotation',ko='Appendix #. Human annotation 전 수량',enhtml='',kohtml='',olden='',oldko='',state='revised',level=1))
+        sections.insert(next(i for i,x in enumerate(sections) if x['id']=='s11')+1, dict(id='s11-counts',en='Appendix #. Counts before human annotation',ko='Appendix #. Human annotation before quantity',enhtml='',kohtml='',olden='',oldko='',state='revised',level=1))
     item = next(x for x in sections if x['id']=='s11-counts')
     for lang in ['en','ko']:
         md = (ROOT/f'paper/local-preview-content/counts-{lang}.md').read_text()

@@ -79,14 +79,14 @@ def finish(root, *, finalize=True):
     for f in findings['findings']:
         ko = f['display_ko']
         lines.extend([f"## {f['id']} · {ko['title']}", '', ko['claim'], '',
-                      '**가능한 다른 설명:** ' + ko['alternatives'], '',
-                      '**한계:** ' + ko['limitation'], '', '**판정:** ' + ko['decision'], '',
-                      '근거 해석: ' + ', '.join(f['interpretation_ids']) + '.', ''])
-    lines += ['## 개선 토의 안건 — 실행 전', '']
+                      '**Other possible explanations:** ' + ko['alternatives'], '',
+                      '**Limitation:** ' + ko['limitation'], '', '**Judgment:** ' + ko['decision'], '',
+                      'The explanation of the reason: ' + ', '.join(f['interpretation_ids']) + '.', ''])
+    lines += ['## Improve the Torah before running', '']
     for d in findings['discussion']:
         lines += [f"- **{d['id']} {d['display_ko']['proposal']}** — {d['display_ko']['reason']}"]
-    lines += ['', '## 실제 응답으로 돌아가기', '',
-              '|해석|관찰과 한계|응답 근거|', '|---|---|---|']
+    lines += ['', '## Back to the real answer', '',
+              'I\'m not sure what the answer is.', '|---|---|---|']
     for i in interpretations:
         ko = i.get('display', i.get('display_ko', i))
         links = []
@@ -95,8 +95,8 @@ def finish(root, *, finalize=True):
             label = f"{row['case']} {row['variant']} {row['prompt_condition']}/{row['reasoning']}"
             links.append(f"[{label}](../../{row['result_path']})")
         lines += [f"|{i['id']} · {ko['title']}|{ko['observation']} {ko['limitation']}|{'<br>'.join(links)}|"]
-    execution_note = ('현재 Codex 대화의 분석을 기록했습니다. 별도 호출 0회.' if current_session else
-                      f"{common['execution_mode']} · {common['analysis_model']} · 분석 시도 {len(calls)}회. 원응답은 calls에 보존합니다.")
+    execution_note = ('I\'ve recorded an analysis of the Codex conversation now. 0Chapter two.' if current_session else
+                      f"{common['execution_mode']} · {common['analysis_model']} • Attempts to analyze {len(calls)}The raw response is to save calls.")
     collect.render(root, '03_research', source=comparisons['evaluation_source'], findings=len(findings['findings']), cited=len(refs), execution_note=execution_note)
     template = (store.PROJECT / 'src/finarch/experiments/templates/results-findings.md').read_text()
     store.write_text(base / '03_research/findings.md', template.format(run=root.name,
@@ -105,10 +105,10 @@ def finish(root, *, finalize=True):
         cited=len(refs), observations=len(interpretations), body='\n'.join(lines), execution_note=execution_note,
         original_count=len({r['case'] for r in rows.values()})))
     pairs = sum(g['planned_pairs'] for g in comparisons['paired_groups'])
-    collect.render(root, '02_comparison', source=comparisons['evaluation_source'], planned=len(rows), pairs=pairs, status='응답 관계 해석 저장 완료')
-    collect.render(root, 'analysis', source=comparisons['evaluation_source'], status='A01·A02·A03 완료 · 개선안 사용자 토의 대기')
+    collect.render(root, '02_comparison', source=comparisons['evaluation_source'], planned=len(rows), pairs=pairs, status='Reply to the relationship interpretation')
+    collect.render(root, 'analysis', source=comparisons['evaluation_source'], status='A01·A02·A03 Finished · Improvement of user feedback')
     if 'evaluation_reuse' in store.read(root / 'config.json'):
-        collect.render(root, 'run', source=comparisons['evaluation_source'], status='Analysis 완료 · 개선안 사용자 토의 대기', planned=len(rows))
+        collect.render(root, 'run', source=comparisons['evaluation_source'], status='Analysis completed · Improvement of user feedback', planned=len(rows))
     state = store.read(root / 'state.json')
     state['analysis'] = common | {'status': 'COMPLETE' if finalize else 'RUNNING',
         'stage': 'A03' if finalize else 'A04', 'discussion_status': 'USER_DISCUSSION_PENDING'}

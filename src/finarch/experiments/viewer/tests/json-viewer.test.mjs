@@ -49,7 +49,7 @@ test('JSONL preserves CRLF, blank line numbers, Unicode separators and raw offse
 });
 
 test('a malformed JSONL record reports its real line without omitting broken data', () => {
-  assert.throws(() => parseJsonDocument('{"ok":1}\n\n{"broken":\n', 'jsonl'), /JSONL 3행/);
+  assert.throws(() => parseJsonDocument('{"ok":1}\n\n{"broken":\n', 'jsonl'), /JSONL 3\ud589/);
 });
 
 test('paged expansion bounds rendered rows and keeps every value reachable', () => {

@@ -8,3 +8,6 @@ data/generated/
 data/experiments/
 .DS_Store
 apps/server-widget/build/
+.env
+.env.*
+!.env.example

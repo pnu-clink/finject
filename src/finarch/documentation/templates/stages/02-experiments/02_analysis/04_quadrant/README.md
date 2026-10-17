@@ -1,45 +1,45 @@
-# A04 사분면 정리
+# A04 So, we're going to do this.
 
-[Analysis](../README.md) · [담당 코드](../../../../src/finarch/experiments/02-analysis/04-quadrant/README.md)
+[Analysis](../README.md) · [Code of the employee](../../../../src/finarch/experiments/02-analysis/04-quadrant/README.md)
 
-## 입력과 순서
+## Input and sequence
 
-A03 수집 완료 → 연구 발견 F의 의미별 그룹화 → Python F 대응·인용 검사 → 실험 뷰어 **03 Quadrant → Q01 연구발견**. 같은 단계의 **Q02 유형·모델 비교**에서 데이터셋별 저장 결과를 비교합니다.
+A03 Completed collection → Research discovery → grouping by meaning of F → Python F correspondence; use test → experiment viewer **03 Quadrant → Q01 Research findings**It's the same level. **Q02 Type-model comparison**Comparing the data set-by-set storage results.
 
-그룹화 대상은 연구 발견만입니다. 토의 안건과 관찰은 모델 입력·그룹 항목에 넣지 않습니다. Python은 F의 인용 관찰을 따라 실제 응답 조건만 확인하고 `cited_conditions`로 전달합니다. 각 F는 주 그룹 하나에 포함되어야 하고 조건별 목록은 실제 연결과 일치해야 합니다. 비교 발견은 여러 칸에 나타날 수 있습니다.
+The grouping object is just research findings. The input and the observation are not in the model input and the group entry. Python only checks the actual response conditions based on the observation of the quotation of F. `cited_conditions`Each F should be in one of the main groups, and the list of conditions should match the actual connection.
 
-## 파일과 실행
+## File and run
 
-`02_analysis/04_quadrant/manifest.jsonl`·`prompt.md`·`schema.json`은 동결 요청, `calls/`는 원응답과 검사 결과, `01_findings/summary.json`은 그룹·네 조건 요약·원래 F 기록·응답 근거 연결입니다. A04의 후속 스텝은 `04-quadrant/pipeline.py`의 `STEPS`에 실행 순서대로 추가합니다.
+`02_analysis/04_quadrant/manifest.jsonl`·`prompt.md`·`schema.json`The request for a settlement, `calls/`The raw response and test results, `01_findings/summary.json`So the group, the four conditions, the original F record, the answer is the base link.4The next step is to `04-quadrant/pipeline.py` `STEPS`Add in the order of execution.
 
-표준 `pipeline run` / `analysis`는 A03 다음 A04를 진행합니다. 완료된 A03에 A04만 추가할 때는 다음 명령을 사용합니다.
+Standards `pipeline run` / `analysis`is A03 Next is A0.4Continue to A0.3A04When you add one, you use the following command.
 
 ```sh
 PYTHONPATH=src .venv/bin/python -u -B -m finarch.experiments.pipeline analysis-postprocess --run reports/experiments-run/20261003-exp-004-tatqa-luna-sol-low
 ```
 
-실제 모델·effort는 해당 run의 Analysis 동결 설정을 사용합니다. 성공 응답은 재사용합니다. 원응답·gold·점수를 바꾸지 않으며 F 누락·중복·조건 불일치·없는 인용은 다음 단계에 넘기지 않습니다. 전송 상태 미확인은 자동 중복 호출하지 않습니다. A04도 기존 backend의 기술 오류 재시도와 원기록 보존을 따릅니다.
+The actual model-effort uses the Analysis inference setting of the run. Success responses are reused. The raw response ·gold·score does not change, and the F misses, duplicates, condition inconsistencies, non-citations do not pass to the next step.4It also follows the technical error retrieval and archival preservation of the existing backend.
 
-## 실행 흐름
+## Running flow
 
 ```mermaid
 flowchart LR
  subgraph P["04-quadrant/pipeline.py · Python"]
-  P1["A04.01 A03 COLLECTED·출처 해시 확인"] --> P2["A04.02 F만 추출·조건 연결·동결 요청 구성"]
-  P3["A04.04 원천 해시 재확인·결과 취합"] --> P4["A04.05 D01 summary·state·README 저장"]
+  P1["A04.01 A03 Collected source hashing verified"] --> P2["A04.02 F million extract condition connection connection request configuration"]
+  P3["A04.04 Source hash re-validation and result merging"] --> P4["A04.05 D01 The summary state readme"]
  end
- subgraph B["llm_backend.py · 선택된 Codex / Native Batch"]
-  L["A04.03 LLM 의미별 그룹·조건별 요약"]
+ subgraph B["Selected Codex / Native Batch"]
+  L["A04.03 LLM meaning by group; conditional summary"]
  end
  subgraph G["01-findings/grouping.py / contracts.py · Python"]
-  C{"F 전체 1회 대응·네 조건·정확 인용 검사"}
+  C{"F is the whole. 1Re-reaction: four conditions: accurate citation testing"}
  end
  P2 --> L --> C
- C -->|유효| P3
- C -->|검사 실패| E["원응답·오류 보존; backend의 제한된 기술 재시도"]
- E -->|재시도 가능| L
- E -->|소진·전송 미확인| STOP["A04 중단·사유 확인"]
- P4 --> VIEW["실험 뷰어 Q01 연구발견"]
+ C -->|Valid| P3
+ C -->|Check failed| E["raw response ·stream conservation; limited technical re-use of the backend"]
+ E -->|Retry eligible| L
+ E -->|Sojin, transmission unknown| STOP["A04 Stop and check the supply"]
+ P4 --> VIEW["Experimental Viewer Q01 Research findings"]
  classDef python fill:#e3f2fd,stroke:#1565c0;
  classDef llm fill:#fff3e0,stroke:#ef6c00;
  classDef file fill:#eceff1,stroke:#607d8b;
@@ -48,4 +48,4 @@ flowchart LR
  class E,STOP,VIEW file;
 ```
 
-파랑은 Python, 주황은 실제 LLM 호출, 회색은 산출물·오류 기록입니다. 성공/실패 조건은 형식·참조 검사이며 연구 주장의 의미적 진위를 확정하는 검사는 아닙니다.
+Blue is Python, orange is the real LLM call, gray is the output and the flow record, and success/failure is not a form-and-participation test, but a test that confirms the meaningful truth of a research claim.

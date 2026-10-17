@@ -1,21 +1,21 @@
-## EA_INVERSE_REVIEW 전용 합본
+## I'm going to give you a copy of the EA_INVERSE_REVIEW.
 
-1. `EA_INVERSE_REVIEW.jsonl`: `dataset.jsonl`과 같은 최종 ID·순서의 **{cases}줄**입니다. 한 줄의 `variants`에는 EA_01, EA_02가 순서대로 들어 있어 총 **{ea_items}건**을 확인할 수 있습니다. 각 유형의 실제 `question`·`context`·`content_sha256`과 원천 연결 정보를 함께 담습니다.
-2. `EA_INVERSE_REVIEW.schema.json`: 합본 구조와 완료·호출 실패·기록 없음의 구분을 정의합니다.
-3. `manifest.json`의 `ea_inverse_review`: 출처·유형별 건수, 입력 해시, 실제 원기록과 Q/C의 연결 검사 결과입니다. 취합 이력은 기존 `events.jsonl`에 기록했습니다.
+1. `EA_INVERSE_REVIEW.jsonl`: `dataset.jsonl`The final ID sequence is like **{cases}lines**So, this is a line. `variants`In the case of EA_01, EA_02Go in the order. **{ea_items}entries**You can check for each type of real `question`·`context`·`content_sha256`And it's a link to the source.
+2. `EA_INVERSE_REVIEW.schema.json`It defines the composition of the syntax structure and the completion, the output, the failure, the no-record.
+3. `manifest.json` `ea_inverse_review`Sources: type-specific drainage, input time, actual source records and Q/C connectivity tests. `events.jsonl`I wrote it down.
 
-|출처|문항|EA 두 유형|역산 가능 true|역산 불가 false|호출 실패|기록 없음|
+|Source|Case|EA two types|This is true.|Reverse is not possible false|Failed call|No record|
 |---|---:|---:|---:|---:|---:|---:|
 |FinanceReasoning|{finance_cases}|{finance_ea_items}|{finance_true}|{finance_false}|{finance_failed}|{finance_missing}|
 |TAT-QA|{tatqa_cases}|{tatqa_ea_items}|{tatqa_true}|{tatqa_false}|{tatqa_failed}|{tatqa_missing}|
-|합계|{cases}|{ea_items}|{true_count}|{false_count}|{failed_count}|{missing_count}|
+|Total|{cases}|{ea_items}|{true_count}|{false_count}|{failed_count}|{missing_count}|
 
-`review_record`는 저장된 EA_INVERSE_REVIEW 전체 기록입니다. 내부 `inverse_review`의 `inverse_possible`, `missing_quantity`, `reason`, `evidence`, `formula`와 모델·시각·요청 참조를 그대로 보존합니다. `evidence_display_check`도 원래 표시 좌표 검사 기록을 복제하며, 원판정이나 인용 위치를 새로 고치지 않습니다. 원기록의 파일·SHA-256은 `source.review_file`과 `source.review_ref`에 남깁니다.
+`review_record`The entire record is stored in EA_INVERSE_REVIEW. `inverse_review` `inverse_possible`, `missing_quantity`, `reason`, `evidence`, `formula`And it preserves the model, the view, the request. `evidence_display_check`It also copies the original display coordinate check record, and it doesn't repair the original or the citation location.256 `source.review_file`and `source.review_ref`So let's just leave it there.
 
-검토가 완료된 {completed_count}건만 `inverse_possible=true/false`를 갖습니다. 호출 실패 {failed_count}건은 기존 `CALL_FAILED` 기록을 보존하고 `inverse_possible=null`입니다. 기록 없는 {missing_count}건은 `availability=MISSING`, `status=NOT_RECORDED`, `review_record=null`, `inverse_possible=null`입니다. 기록 없음은 false가 아닙니다. 누락 항목은 과거 `20260917-002` 제작분의 821문항 × 두 유형이며, 현재 선택된 최종 EA Q/C에 연결되는 저장 기록이 없습니다.
+The review is complete. {completed_count}entries only `inverse_possible=true/false`The call failed. {failed_count}entries use the existing `CALL_FAILED` We keep records. `inverse_possible=null`It's not recorded. {missing_count}entries `availability=MISSING`, `status=NOT_RECORDED`, `review_record=null`, `inverse_possible=null`So, the missing item is not false. `20260917-002` of the constructed data 821It's a case × two, and there's no storage record that connects to the final EA Q/C that's currently selected.
 
-원판정은 남아 있는 Q/C만 본 LLM의 역산 검토입니다. 식의 의미 타당성이나 독립적으로 확정한 정답·근거 gold를 새로 검증한 결과는 아닙니다. 원문 정답이나 대상 모델 응답을 이 합본의 판정에 섞지 않습니다. 새 LLM 호출은 0건입니다.
+The original review is a reverse review of the remaining Q/C-based LLM. It's not the result of a new verification of the validity of the meaning of the statement or an independently verified correct answer. 0entries.
 
-각 유형의 `source.viewer_url`은 위 공통 dataset viewer의 실제 제작 문항·EA 유형·검증 단계로 연결됩니다. `id-0031`의 EA_01은 [FinanceReasoning 역산 검토](http://127.0.0.1:8893/?run=20261003-concat-002&case=test-0086&variant=06-ea-earlier-input&stage=03-validation), `id-1072`의 EA_01은 [TAT-QA 역산 검토](http://127.0.0.1:8893/?run=20261003-003&case=test-0004&variant=06-ea-earlier-input&stage=03-validation)에서 원래 기록을 확인할 수 있습니다.
+Each type of `source.viewer_url`The above common dataset viewer is linked to the actual creation clause, type EA, verification step. `id-0031`The EA_01[FinanceReasoning reversal review](http://127.0.0.1:8893/?run=20261003-concat-002&case=test-0086&variant=06-ea-earlier-input&stage=03-validation), `id-1072`The EA_01The [TAT-QA reverse of the](http://127.0.0.1:8893/?run=20261003-003&case=test-0004&variant=06-ea-earlier-input&stage=03-validation)You can check the original records.
 
-이 절은 `src/finarch/documentation/templates/final-ea-inverse-review.md`에서 생성했습니다.
+This section is... `src/finarch/documentation/templates/final-ea-inverse-review.md`It's generated from.

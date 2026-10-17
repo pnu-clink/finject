@@ -57,12 +57,12 @@ def index_save(ctx, items):
     ctx.trace.artifact('04-perturbation/05-list-candidates/03-result.json')
 
 
-README='''# 실제 원문 기반 변경 계획
+README='''# The actual principle-based change plan
 
-읽는 순서: generation-spec.json(선정 대상·기간·단위·연산·삭제 범위) → variants.json → 유형별 plan.json과 Python/그래프 검사 → 05-text의 실제 생성·감사 기록.
-이 계획은 현재 10문항의 실제 원문을 읽고 에이전트가 지정했습니다. 자동 관계 발견이나 실제 출처 진위를 주장하지 않습니다. 문장 초안을 만들지 않으며 16번의 실제 응답만 완성 본문으로 씁니다.
-숫자·원본 코드·질문은 원본 파일에 보존합니다. 역산·우회 및 답의 비유일성 증명은 보류입니다. 질문에 남는 EA 값은 불가 사유를 기록하고 생성하지 않습니다.
-공통 뷰어에서 문항 → 유형 → 4 그래프 변경, 5 문장과 답변, 6 사람 판정으로 읽습니다. events.jsonl은 실제 실행 중 기록되며 18번은 제작에서 호출하지 않습니다.
+Read the following: generation-spec.json (prepared for purpose, time, category, mix, and scope) → variants.json → type plan.json and Python/graph testing → 05-Record the actual creation of the text.
+This plan is currently 10The agent read the actual source of the case and specified it. It doesn't automatically detect a relationship or claim authenticity of the actual source. 16I'm just writing the actual answer as a complete text.
+The numbers, source code, query are stored in the original file. The proof of inverse, subset, and non-uniformity of the answer is a backup. The remaining EA values in the query do not record and generate the unlikely attribute.
+In common viewer, the phrase → type → 4 Change the graph, 5 The phrases and the answers, 6 It reads like a human judgment. events.jsonl is recorded in real-time running and it's a real-time record. 18The bar does not call in the production.
 '''
 
 

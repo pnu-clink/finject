@@ -1,15 +1,15 @@
-# 017 Preparation 보완 1회 결과
+# 017 Preparation Supplement 1The results.
 
-최초 실패 11건을 대상으로 보완 기회를 한 번씩 적용했습니다. **추가 통과 {passed}건, 여전히 실패 {failed}건**입니다. 최초 통과 19건에 추가 통과 문항을 합쳐 Generation 대상은 23문항입니다. 자동 검사 통과와 의미 정답 확정은 구분합니다.
+Initial failure 11And we applied the supplementary opportunity once for the whole thing. **Additional passage {passed}That's still a failure. {failed}entries**That's the first pass. 19Adding an additional pass phrase to the next generation object 23It's the phrase that distinguishes automatic check-up and meaningful answer verification.
 
-실제 추가 LLM 호출은 {calls}회이며 모두 GPT Luna low입니다. 완료 호출 시간 합계는 {llm_seconds:.1f}초입니다. 호출별 응답 스키마와 종료 기록을 확인했습니다. 보완 중 실패한 문항의 무제한 반복 호출은 하지 않았습니다.
+The actual additional LLM call is {calls}The round and all GPT Luna low. {llm_seconds:.1f}Seconds. I checked the call-by-call response schemes and the termination records.
 
-| 문항 | 최초 실패 | 보완 결과 | 현재 근거 |
+| Case | Initial failure | Repair result | Currently based |
 |---|---|---|---|
 {rows}
 
-0010번은 질문의 `between`을 `during`으로 보완한 후 재검사했습니다. 0014번은 원문 숫자 인용 위치를 수정했고, 0018번은 POT 근거 연결 검사, 0026번은 POT·정답 대조와 그래프 검사를 통과했습니다. `math.erf`의 그래프 지원을 추가해 Python 수치와 대조했습니다.
+0010The question is, `between` `during`And then I went back and re-examined it. 0014And then he corrected the source numbers quotation position. 0018The POT base connection check, 0026And then he passed the POT-correct contrast and the graph test. `math.erf`And we added graph support to it and we contrasted it with Python numbers.
 
-`results.json`에서 문항별 전후 실패를 읽고, `01-original/test-...`에서 최초 원응답을 확인하십시오. 현재 단계 결과는 상위 Preparation 문항 폴더에 있습니다. `call-verification.json`은 실제 모델·호출 검사 기록입니다. 뷰어에서는 같은 017 실행의 보완 결과 표와 해당 문항의 QCA·코드·그래프를 확인할 수 있습니다.
+`results.json`In the first case, read the failure after the failure, `01-original/test-...`Check the first raw response in. The results of the current step are in the top Preparation phrase folder. `call-verification.json`The actual model is the record of the detection. 017 You can see the result table and the QCA code graph in the relevant case.
 
-Generation은 완료 유형을 보존하고 재개합니다. 최종 결과는 `../../02-generation/RESULTS.md`에서 확인합니다. 최종 사람 판정은 실행하지 않습니다.
+Generation preserves and restarts the completed type. `../../02-generation/RESULTS.md`Check in. The final person judgment does not run.

@@ -52,7 +52,7 @@ class CaseQueue:
             if archive.exists():
                 write(archive/'restart.json',{'case_ids':self.targets,'restart_from':'01-source',
                                              'previous_outputs_reused':False})
-                (archive/'README.md').write_text('중단 문항의 이전 산출물을 보존합니다. 현재 실행에 재사용하지 않습니다.\n')
+                (archive/'README.md').write_text('Preserves the previous output of the stop phrase. It\'s not reused in current execution.\n')
 
     def save(self):
         write(self.path,self.state)

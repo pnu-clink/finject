@@ -74,7 +74,7 @@ def load_rules():
 
 @traced()
 def normalize_number(value,rules,steps=None):
-    # [NN01] docs/02-architecture.md#NN01 — 규칙에 맞는 표현만 바꾸며 숫자의 의미는 해석하지 않는다.
+    # [NN01] docs/02-architecture.md#NN01 They change the expression that fits the rule of thumb and don't interpret the meaning of the numbers.
     if not isinstance(value,str):raise ValueError('NUMBER_STRING_REQUIRED')
     normalized=value;applied=[]
     for rule in rules['rules']:
@@ -94,7 +94,7 @@ def normalize_number(value,rules,steps=None):
 
 @traced()
 def align_source_text(fact,context,rules):
-    # [NN05] docs/02-architecture.md#NN05 — 원문으로 확인되는 표기 차이를 보정한 뒤 엄격한 원문 대조를 계속한다.
+    # [NN05] docs/02-architecture.md#NN05 After verifying the mark difference, which is identified by the ZIP code, the strict original contrast continues.
     text=fact['text'];steps=[];applied=[]
     for rule in rules.get('source_rules',[]):
         if not rule['enabled']:continue
@@ -109,7 +109,7 @@ def align_source_text(fact,context,rules):
 
 @traced()
 def prepare_numeric_values(program):
-    # [NN02] docs/02-architecture.md#NN02 — 원본과 계산용 값을 분리하고 변환 이력을 만든다.
+    # [NN02] docs/02-architecture.md#NN02 It separates the source and the computation value and makes the conversion power.
     rules,digest=load_rules();prepared=copy.deepcopy(program)
     audit={'status':'PASS','rules_version':rules['version'],'rules_sha256':digest,
            'rules':rules['rules'],'source_rules':rules.get('source_rules',[]),'facts':[]}

@@ -137,15 +137,15 @@ def build():
     write_json(OUTPUT / "sources.json", {"sources": sources})
     write_json(OUTPUT / "migration.json", [])
     catalog = [{"path": p, "title": (ROOT / p).read_text().splitlines()[0].removeprefix("# "),
-                "sha256": digest(ROOT / p), "group": "Analysis 안내"} for p in documents]
+                "sha256": digest(ROOT / p), "group": "I'm going to analyze."} for p in documents]
     references = {s["path"] for s in sources}
     references.update(f"reports/run/20260928-analysis-guide/{name}" for name in
                       ("example-evidence.json", "sources.json", "validation.json", "events.jsonl"))
     write_json(OUTPUT / "documentation.json", {
-        "kind": "PIPELINE_DOCUMENTATION", "title": "Analysis 쉽게 이해하기",
+        "kind": "PIPELINE_DOCUMENTATION", "title": "Analysis is easy to understand.",
         "entry_document": GUIDE, "documents": catalog, "reference_files": sorted(references), "model_calls": 0,
-        "navigation": [["쉬운 안내", GUIDE], ["A01 모으기", documents[2]], ["A02 비교하기", documents[3]],
-                       ["A03 설명하기", documents[4]], ["작성 기록", documents[5]]]})
+        "navigation": [["Easy to follow.", GUIDE], ["A01 Collect", documents[2]], ["A02 Compared to", documents[3]],
+                       ["A03 I'll explain.", documents[4]], ["Writing records", documents[5]]]})
     old = json.loads((OUTPUT / "validation.json").read_text()) if (OUTPUT / "validation.json").exists() else {}
     validation = {"status": "PASS", "scope": "Saved evidence identity and counts; not semantic validation",
                   "planned": request_count, "statuses": dict(counts), "examples": len(examples),

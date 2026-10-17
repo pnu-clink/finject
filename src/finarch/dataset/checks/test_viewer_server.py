@@ -16,7 +16,7 @@ class CentralViewerChecks(unittest.TestCase):
         self.root=Path(self.temp.name)/'run';self.root.mkdir()
         self.batch=self.root/'first';self.case=self.batch/'case';self.case.mkdir(parents=True)
         (self.case/'events.jsonl').write_text('{"phase":"START"}\n')
-        (self.batch/'README.md').write_text('실행 안내')
+        (self.batch/'README.md').write_text('\uc2e4\ud589 \uc548\ub0b4')
 
     def test_generation_overview_reads_saved_annotation(self):
         generation=self.batch/'02-generation';folder=generation/'01-round/test-1/01-ic-value-before'
@@ -102,9 +102,9 @@ class CentralViewerChecks(unittest.TestCase):
             with urlopen(url) as reply:
                 self.assertIn('"live":true',reply.read().decode())
             with urlopen(url+'/api/run?name=first') as reply:
-                self.assertEqual(json.load(reply)['batch']['readme'],'실행 안내')
+                self.assertEqual(json.load(reply)['batch']['readme'],'\uc2e4\ud589 \uc548\ub0b4')
             with urlopen(url+'/contract') as reply:
-                self.assertIn('응답 schema ↔ prompt 대조',reply.read().decode())
+                self.assertIn('\uc751\ub2f5 schema ↔ prompt \ub300\uc870',reply.read().decode())
             with urlopen(url+'/api/experiment-contract') as reply:
                 contract=json.load(reply)
                 self.assertEqual(contract['title'],'FinancialAnswerV7')

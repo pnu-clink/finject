@@ -1,46 +1,46 @@
-# 논문 기준 실험 준비 확인 · 2026-10-03
+# The paper's test-tested preparation 2026-10-03
 
-확인 시각: $checked_at · 새 모델 호출: **0건**. 이번 작업은 원고·저장 파일의 읽기와 수량·해시 확인입니다. 실험 실행, 재채점, 원본 수정은 하지 않았습니다.
+Check view: $checked_at · Call new model: **0entries**This is a reading and quantification of the original and archival files, and no experimental run, no re-recording, no original editing.
 
-## 읽는 순서
+## Reading order
 
-1. [readiness.json](readiness.json): 논문과 데이터의 경로·해시, 실제 선정 ID, 확인 범위와 후속 작업.
-2. [events.jsonl](events.jsonl): 확인 시각·수량·모델 호출 수.
-3. 현재 검토 원고: `$paper_path`의 3.5, 4, 5.1–5.2와 Evaluation/Analysis 부록.
-4. FinanceReasoning: `$finance_path`의 manifest → 00-input → 01–07.
-5. TAT-QA: `$tat_path`의 manifest → 00-input → 01–07. 전체 437행 중 Preparation와 최신 7유형 PASS, 명시적 Reject 없음에 해당하는 291문항을 선정합니다.
+1. [readiness.json](readiness.json): Path-sharing of papers and data, actual selection ID, verification scope and follow-up work.
+2. [events.jsonl](events.jsonl): Check visual; quantity; model call.
+3. Currently, the review paper: `$paper_path` 3.5, 4, 5.1–5.2And the Evaluation/Analysis add-on.
+4. FinanceReasoning: `$finance_path`The manifest of 00-input → 01–07.
+5. TAT-QA: `$tat_path`The manifest of 00-input → 01–07The whole thing. 437Preparation and the latest in the row 7Type PASS, corresponding to the absence of explicit Reject 291Select the case.
 
-## 실제 데이터
+## The real data.
 
-|묶음|선정 원본|원본 + 7변형|네 조건 요청 수 / 모델|
+|Bundle|Selected original|The original + 7Variant|Your condition request number / model|
 |---|---:|---:|---:|
 |FinanceReasoning|1,260|10,080|40,320|
 |TAT-QA|291|2,328|9,312|
-|합계|1,551|12,408|49,632|
+|Total|1,551|12,408|49,632|
 
-이 수량은 사람 검증 전 기준입니다. 16개 결과 파일의 SHA-256이 해당 manifest와 일치합니다. TAT-QA 선정 ID는 중복 제외 후 저장한 Export 기록과 일치합니다. 자동 PASS와 의미 정답·최종 사람 승인은 별개입니다.
+This is the pre-human test. 16The SHA of the items-result file--256This corresponds to the corresponding manifest. The TAT-QA selection ID matches the export record saved after the transcription is excluded. Automatic PASS and mean correct; the last person approval is separate.
 
-FinanceReasoning 묶음의 내부 원천은 FinQA 404, CodeTAT-QA 260, FinanceReasoning 565, FinanceMath 31입니다. 난이도는 easy 609, medium 578, hard 73입니다. 별도 TAT-QA는 CodeTAT-QA와 확인된 중복 원본 280문항을 제외한 기록을 사용합니다. 확정 대응을 찾지 못한 CodeTAT-QA 7문항은 중복이 없다는 증명이 아닙니다.
+The internal source of the FinanceReasoning set is FinQA. 404, CodeTAT-QA 260, FinanceReasoning 565, FinanceMath 31It's easy. 609, medium 578, hard 73The TAT-QA is a certified copy of the code. 280I use the record except for the case. 7The case is not proof that there is no overdub.
 
-## 논문에서 요구하는 평가
+## The evaluation required in the paper
 
-- **RQ1:** 답변·기권의 적절성. 원본·답변 가능 문항 정답률, 과잉 기권률, 기권 Precision/Recall/F1, 이유가 맞는 기권, 원본–변형 공동 성공률.
-- **RQ2:** 근거 변경에 따른 응답 변화. 후보 A/B/기타/null, 앞·뒤 배치, 부모 IC-value 대비 출처 추가, 관계식 충돌, EA 복원, 답·분류·설명·인용 정합성, 네 조건의 차이.
-- 같은 원본과 일곱 변형은 하나의 문항군입니다. 유형만으로 답변 불가능을 단정하지 않습니다. 실패·잘림·형식 오류는 기권으로 세지 않으며 분모에서 감추지 않습니다.
-- 공개 입력은 Q/C·필요한 답 형식입니다. 정답·유형·계산 그래프·제작 및 사람 판정·외부지식 분류는 private 평가/분석 자료입니다.
-- external_knowledge.used=true는 저장된 참조 풀이의 외부사용 확인입니다. false는 확인 조건 미충족이며, 대상 모델의 실제 외부지식 사용 여부가 아닙니다.
+- **RQ1:** Answer: The appropriateness of the authority. Original: The correctness of the possible cases, the excess authority rate, the authority Precision/Recall/F1, the authority for reasons, the authority for the change of the authority, the authority of the authority for change of the source, the authority to change the authority, and the authority for a change of the original.
+- **RQ2:** Changes in response to base changes: candidate A/B/guita/null, front and back placement, source addition against parent IC-value, relational conflict, EA restoration, answer, classification, explanation, usage complexity, four condition differences.
+- The same original and seven variations are a single set of cases. Types alone do not determine the impossible. Failure, failure, and form error are not counted as a subset, nor hidden in the denominator.
+- Public input is Q/C: the required response format, the correct answer, the model, the calculation graph, the product, and the human judgment, the external classification, the private assessment/analysis data.
+- external_knowledge.used=true is an external user verification of a stored reference file. false is not validated by the verification conditions, and is not whether the target model actually uses external knowledge.
 
-## 실행 전에 맞출 항목
+## Adjusted before running
 
-1. 현행 기본 config.toml은 과거 TAT-QA 557문항을 가리킵니다. 본 실험은 두 데이터 묶음의 선정 ID와 해시를 별도 설정에 동결해야 합니다.
-2. 두 run에 같은 test ID가 191개 존재합니다. 문항 키는 source run + case ID로 연결해야 합니다. 이것은 문항 내용의 중복 수가 아닙니다.
-3. 일부 기존 A03 RQ/SQ 연결은 20260924 원고를 기준으로 합니다. 새 논문의 RQ1/RQ2 정의로 연결해야 하며 과거 결과를 소급 덮어쓰지 않습니다.
-4. 기존 E04 숫자 비교와 A02 후보값 분포는 RQ1의 의미 판정 전체를 대신하지 않습니다. 최종 답변 가능성·복원 가능한 EA·기권 이유·응답 정합성의 판정 근거와 평가 범위를 연결해야 합니다.
-5. 과거 사람 주석은 같은 문항 버전임이 확인된 범위만 사용할 수 있습니다. 재생성한 CodeTAT-QA 260문항에는 이전 판정이 자동 승계되지 않았습니다.
-6. 대상 모델별 네 조건 지원, 실제 reasoning 옵션, 샘플링·출력 예산·cache 검사, 호출량·비용을 실행 전에 기록합니다. 이번 확인에서 모델 목록이나 새 실행을 확정하지 않았습니다.
+1. The current default config.toml is past TAT-QA 557This experiment is going to have to combine the selection ID and the hash of the two sets of data into the star setting.
+2. The same test ID for both runs. 191The key to the case has to be linked to the source run + case ID, which is not the number of duplicates of the case.
+3. Some of the existing A03 RQ/SQ connection is 20260924 It's based on the original, and it's supposed to be linked to the RQ1/RQ2 definition of the new paper, and it doesn't overlap past results.
+4. The existing E04 Compare the numbers to A0.2 The distribution of candidate values does not replace the entire semantic assessment of RQ1. It must link the final answer possibilities, recoverable EA rights, reason for the judgment and the scope of the assessment of the response compatibility.
+5. The previous person key can only be used to the extent that the same case version is verified. 260The previous case was not automatically updated.
+6. The four conditions for each target model are support, actual reasoning options, sampling, output budget, cache checks, call volume and cost before running.
 
-## 실제 자료를 보는 화면
+## The screen is actually looking at the data.
 
-[FinanceReasoning 데이터셋](http://127.0.0.1:8893/?run=20261003-concat-002) · [TAT-QA 데이터셋](http://127.0.0.1:8893/?run=20261003-003) · [공통 연구 뷰어](http://127.0.0.1:8896/viewer/research/)
+[FinanceReasoning data set](http://127.0.0.1:8893/?run=20261003-concat-002) · [TAT-QA data set](http://127.0.0.1:8893/?run=20261003-003) · [Public research viewer](http://127.0.0.1:8896/viewer/research/)
 
-데이터셋 뷰어의 전체 행 수와 실험 선정 수는 다를 수 있습니다. 이 README는 documentation/templates에서 생성하며 별도 결과 HTML을 만들지 않습니다.
+The entire row count and the number of experiment selections in the dataset viewer can be different. This README is generated from documentation/templates and does not create any resulting HTML.

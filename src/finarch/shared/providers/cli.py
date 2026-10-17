@@ -54,7 +54,7 @@ DISABLED_CODE_MODE_NOTICE = (
 
 @traced("python")
 def read_settings(path, role, *, profile_id=None, profiles_path=None):
-    # LC01: config/llm.json에서 명시한 CLI·모델·추론 강도·시간 제한을 읽습니다.
+    # LC01I read the CLI model, the promotional theft, the time limit, as specified in config/llm.json.
     from finarch.shared.providers.roles import normalize_config, resolve_role
     role = resolve_role(role)
     config = parse_json(Path(path).read_bytes())
@@ -106,7 +106,7 @@ def read_settings(path, role, *, profile_id=None, profiles_path=None):
 @traced("python")
 def inspect_runtime(provider):
     """Read help/version only. No model invocation and no auth contents returned."""
-    # LC02: 도움말·버전만 읽습니다. 실제 도구 차단 검증을 옵션 존재로 대신하지 않습니다.
+    # LC02Help: read only the version. It doesn't replace the actual tool block verification with an optional existence.
     binary = shutil.which(provider)
     if not binary:
         raise CLIError("CLI_EXECUTABLE_NOT_FOUND")
@@ -152,7 +152,7 @@ def build_command(settings, binary, work, schema_path, policy_path, audit_path):
         from finarch.shared.providers.profiles import read_profile
         if read_profile(settings['profile']['path'], settings['profile']['id']) != settings['profile']:
             raise CLIError('PROFILE_CHANGED_AFTER_LOAD')
-    # LC04: 새 세션과 응답 스키마 인자, 자동 로딩 제한 및 사전 hook을 구성합니다.
+    # LC04: New session and response schemes, automatic loading limits and pre-hook configuration.
     if settings["provider"] == "agy":
         return ["/usr/bin/sandbox-exec", "-p", cli_profile(), binary, "--new-project", "--model", settings["model"], "--effort", settings["effort"],
                 "--sandbox", "--disable-slash-commands", "--output-format", "json",
@@ -190,7 +190,7 @@ def build_command(settings, binary, work, schema_path, policy_path, audit_path):
 @traced("python")
 def run_process(argv, prompt, cwd, timeout, audit_path):
     """One process group, no retries. Preserve partial output on failure/timeout."""
-    # LC06: 독립 프로세스 그룹으로 한 번 실행하고 시작·종료·경과 시간을 측정합니다.
+    # LC06It runs as a single independent process group, and then starts, finishes, runs and times.
     started, start = datetime.now().astimezone().isoformat(sep=" ", timespec="milliseconds"), time.monotonic()
     state = "EXITED"
     env = {k: v for k, v in os.environ.items() if k not in ("OPENAI_API_KEY", "CODEX_API_KEY")}
@@ -204,7 +204,7 @@ def run_process(argv, prompt, cwd, timeout, audit_path):
         try:
             while process.poll() is None:
                 if audit_path.exists() and '"permissionDecision": "deny"' in audit_path.read_text():
-                    # LC07: 거절 또는 시간 초과는 해당 프로세스 그룹을 종료하고 부분 응답을 남깁니다.
+                    # LC07Rejection or time-call terminates the process group and leaves a partial response.
                     state = "TOOL_DENIED"
                     break
                 if time.monotonic() - start >= timeout:
@@ -231,7 +231,7 @@ def run_process(argv, prompt, cwd, timeout, audit_path):
 @traced("python")
 def parse_output(provider, text):
     """Check CLI envelope; business response validation belongs to structured.py."""
-    # LC08: CLI 응답 묶음에서 최종 응답을 꺼냅니다. 업무 형식은 structured.py가 검사합니다.
+    # LC08CLI pulls the final response from the response cluster. The task format is checked by structured.py.
     if provider == "agy":
         result = parse_json(text)
         if not isinstance(result, dict) or result.get("status") != "SUCCESS":
@@ -353,7 +353,7 @@ class CLITransport:
         try:
             return self._complete(role=role, payload=payload, response_schema=response_schema, schema_mode=schema_mode)
         except Exception as error:
-            # LC12: 통신 설정·실행·응답 처리 실패 이유를 덮어쓰지 않는 파일로 남깁니다.
+            # LC12: Communication settings, actions, response processing failures are left in uncovered files.
             self.save("03-result/failure.json", {"status": "FAIL", "role": role,
                       "reason": str(error) if isinstance(error, CLIError) else "CLI_TRANSPORT_ERROR",
                       "error_type": type(error).__name__, "timestamp": datetime.now().astimezone().isoformat(sep=" ", timespec="milliseconds"),
@@ -385,7 +385,7 @@ class CLITransport:
         self.save("01-input/cli-preflight.json", runtime)
         if not settings["execution_enabled"]:
             raise CLIError("MODEL_EXECUTION_DISABLED")
-        # LC03: CLI 내부 도구 차단을 검증하지 못했으면 모델 프로세스를 시작하지 않습니다.
+        # LC03If you can't verify the CLI's internal toolbar, you won't start the modeling process.
         if runtime["native_tool_enforcement"] != "VERIFIED":
             exception = settings.get('native_controls_exception')
             if settings['provider'] != 'agy' or exception != 'USER_ACCEPTED_AGY_UNVERIFIED_CONTROLS':
@@ -412,7 +412,7 @@ class CLITransport:
                       "prompt_selection": prompt_selection,
                       "response_schema": response_schema, "fresh_session": True, "automatic_retries": 0})
             # An immutable start record remains even if the process is killed externally.
-            # LC05: 실행 전에 원요청·응답 스키마와 시작 기록을 보존합니다.
+            # LC05It saves the request-response schemes and start records before running.
             self.save("01-input/cli-start.json", {"timestamp": datetime.now().astimezone().isoformat(sep=" ", timespec="milliseconds"), "role": role})
             # AGY's existing integration supplies the print prompt as an argument.
             stdin_prompt = prompt
@@ -446,7 +446,7 @@ class CLITransport:
             if result["state"] != "EXITED" or result["exit_code"] != 0:
                 raise CLIError("CLI_" + result["state"] if result["state"] != "EXITED" else "CLI_PROCESS_FAILED")
             raw, usage, turns = parse_output(settings["provider"], result["stdout"])
-            # LC09: 사용량·미확인 비용을 기록한 뒤 원응답을 공통 Python 검사로 반환합니다.
+            # LC09: Record usage and uncertainty costs and return the raw response to the common Python test.
             return raw
 
 

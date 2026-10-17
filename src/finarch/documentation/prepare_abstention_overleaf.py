@@ -45,7 +45,7 @@ def key_for(url):
     raise ValueError(f'Unmapped source: {url}')
 
 def tex(text, citations=True):
-    text = text.replace('“미평가” (“not evaluated”)', '“not evaluated” (shown in Korean)')
+    text = text.replace('“\ubbf8\ud3c9\uac00” (“not evaluated”)', '“not evaluated” (shown in Korean)')
     text = text.replace('✓', r'$\checkmark$').replace('κ', r'$\kappa$')
     text = text.replace('→', r'$\rightarrow$').replace('−', '-')
     if citations:

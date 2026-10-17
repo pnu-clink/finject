@@ -21,7 +21,7 @@ def build(case):
     stage='04-graph/00-diagnostic'
     with ctx.trace.activate():
         ctx.save(stage+'/01-result.json',{'status':'DIAGNOSTIC_ONLY','graph':graph,'program':program,'calculation_matches_execution':True,'source_status':report['status'],'source_reason':report.get('reason'),'approved_for_generation':False})
-        ctx.save_text(stage+'/README.md','실행된 POT 코드에서 만든 진단용 그래프입니다. 중간·최종값은 Python 실행과 대조했습니다. 정답·계산 가정의 타당성이나 Generation 승인을 의미하지 않습니다. 기존 실패·제외 판정은 유지됩니다.\n')
+        ctx.save_text(stage+'/README.md','It\'s a diagnostic graph made from executed POT code. The middle and maximum values contrasted with Python execution. It doesn\'t mean validity of the correct answer and calculation assumptions or Generation approval.\n')
     return str(case/stage/'01-result.json')
 
 if __name__=='__main__':

@@ -164,8 +164,8 @@ class ExportRejectionChecks(unittest.TestCase):
 
     def test_legacy_readme_does_not_claim_rejections_were_removed(self):
         text = export.results_readme('legacy-run', 4, 'ALL_SELECTED_ORIGINALS_WITH_ALL_VARIANT_STATES')
-        self.assertIn('기존 행이나 Reject 판정을 제외하지 않았습니다', text)
-        self.assertNotIn('현재 차수의 명시적', text)
+        self.assertIn('\uae30\uc874 \ud589\uc774\ub098 Reject \ud310\uc815\uc744 \uc81c\uc678\ud558\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4', text)
+        self.assertNotIn('\ud604\uc7ac \ucc28\uc218\uc758 \uba85\uc2dc\uc801', text)
 
     def test_model_document_is_readable_without_exposing_other_config_files(self):
         docs = importlib.import_module('finarch.dataset.viewer.reports.documentation')

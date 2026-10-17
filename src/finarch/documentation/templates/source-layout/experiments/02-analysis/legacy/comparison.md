@@ -1,12 +1,12 @@
-# 과거 비교·개선 실행
+# Previous comparison and progress execution
 
-[소스 전체](../../../README.md) · [실험 문서](../../../../../../docs/02-experiments/README.md) · [설정](../../../../../../config/experiments/README.md)
+[The whole sauce](../../../README.md) · [Experimental documentation](../../../../../../docs/02-experiments/README.md) · [Setting up](../../../../../../config/experiments/README.md)
 
-run 대응: `과거 run의 비교 폴더`.
+Run is a response: `Compare the past run to the folder`.
 
-기존 비교 자료에 대한 호환 기능.
+Compatibility with existing comparison data.
 
-과거 연구 비교·개선 실행 코드입니다. 신규 Analysis에서는 A02 비교와 A03 연구 해석을 사용하며 후속 실험을 자동 시작하지 않습니다.
+It's the code of conduct for past research comparisons and improvements.2 Comparison to A03 They don't start the follow-up experiment automatically using the research interpretation.
 
 
-이 README는 `src/finarch/documentation/templates/source-layout/experiments/02-analysis/legacy/comparison.md`에서 생성합니다.
+This README is generated from `src/finarch/documentation/templates/source-layout/experiments/02-analysis/legacy/comparison.md`.

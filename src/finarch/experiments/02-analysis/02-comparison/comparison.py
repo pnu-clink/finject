@@ -275,8 +275,8 @@ def build(root, *, preserve_execution_state=False):
     if previous is None:
         store.write(folder/'state.json',{'status':'COUNTS_READY_INTERPRETATION_PENDING','responses':len(rows),
                                        'paired_records':len(pairs),'method':collect.METHOD})
-    status = (f"수치 집계 완료 · 해석 {previous['status']} · 유효 {previous.get('valid', 0)}/{previous.get('requests', 0)}"
-              if previous and 'requests' in previous else '수치 집계 완료 · 응답 해석 진행')
+    status = (f"Numeric aggregation complete · interpretations {previous['status']} · valid {previous.get('valid', 0)}/{previous.get('requests', 0)}"
+              if previous and 'requests' in previous else 'Numeric aggregation complete \xb7 response interpretation in progress')
     collect.render(root,'02_comparison',source=comparisons['evaluation_source'],planned=len(rows),pairs=len(pairs),status=status)
     store.event(root,'A02_RELATION_COUNTS_BUILT',responses=len(rows),paired_records=len(pairs),new_target_model_calls=0)
     return comparisons

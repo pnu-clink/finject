@@ -1,11 +1,11 @@
-# RQ1 원천 유형별 뷰어 확인
+# RQ1 source type by type viewer verification
 
-대상 실행: `{run}`. 이 폴더는 저장된 응답을 원천 유형별로 다시 읽는 뷰어 변경의 확인 기록입니다. 새 실험이나 모델 호출 기록이 아닙니다.
+The target execution: `{run}`This folder is a verification record of the viewer's change reading back the saved response by source type, not a new experiment or model call record.
 
-## 파일과 읽는 순서
+## The file and the reading order.
 
-1. [verification.json](verification.json): 네 원천 유형의 분모, API·화면 확인 범위, 실행한 검사와 한계를 읽습니다.
-2. [실험 뷰어 RQ1](http://127.0.0.1:8894/?run={run}&tab=reports): **연구 질문으로 보기 → RQ1 → 한번에 보기**에서 네 그래프를 동시에 봅니다. 각 그래프의 칸을 누르면 그 유형의 문항 근거로 이동합니다.
-3. [뷰어 동작 문서](../../viewer/experiments/README.md): 저장 파일부터 유형별 그래프와 문항 조회까지의 처리 순서를 확인합니다.
+1. [verification.json](verification.json)It reads four source types denominator, API, screen check scope, run checks and limits.
+2. [Experimental Viewer RQ1](http://127.0.0.1:8894/?run={run}&tab=reports): **See it as a research question → RQ1 → See it at once**So we're going to see four graphs at the same time, and you click the space on each graph, and you're going back to the base of the case of that type.
+3. [Bloodle action document](../../viewer/experiments/README.md): Check the processing order from the file to the type graph and the paragraph view.
 
-원천 유형별 비율은 각각의 원본 문항 수로 계산합니다. 같은 숫자나 원본 숫자 일치는 의미 정답 판정이 아니며, 유형 간 비율 차이는 문항 구성 차이도 반영합니다.
+The ratio per source type is calculated by the number of each original case. The same number or the same original number is not a meaningful answer, and the difference in the ratio between types reflects the difference in case composition.

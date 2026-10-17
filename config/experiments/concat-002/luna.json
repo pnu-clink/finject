@@ -14,7 +14,7 @@
         "model": "gpt-6-luna",
         "transport": "openai_batch",
         "key_variable": "OPENAI_API_KEY",
-        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "key_file": ".env",
         "reasoning_efforts": {
           "off": "none",
           "on": "medium"
@@ -26,7 +26,7 @@
         "profiles": {
           "off": {
             "id": "luna6-none-api",
-            "path": "/Volumes/EX400U/workspace/논문/fin-arch/config/experiments/config.toml",
+            "path": "config/experiments/config.toml",
             "sha256": "7a8dc3d005e3d0ef6e121a46f2bf56e7331abf895064b754ba5edef0100f2571",
             "transport": "api",
             "provider": "openai",
@@ -39,7 +39,7 @@
           },
           "on": {
             "id": "luna6-medium-api",
-            "path": "/Volumes/EX400U/workspace/논문/fin-arch/config/experiments/config.toml",
+            "path": "config/experiments/config.toml",
             "sha256": "7a8dc3d005e3d0ef6e121a46f2bf56e7331abf895064b754ba5edef0100f2571",
             "transport": "api",
             "provider": "openai",

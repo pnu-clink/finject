@@ -68,7 +68,7 @@ test('live Python preparation is visible before any model request is planned', (
   assert.equal(data.activity.processor, 'PYTHON');
   assert.equal(data.activity.elapsed_seconds, 900);
   assert.equal(data.counts.total, null);
-  assert.match(data.warnings.join(' '), /Codex 호출은 아직 시작하지/);
+  assert.match(data.warnings.join(' '), /Codex \ud638\ucd9c\uc740 \uc544\uc9c1 \uc2dc\uc791\ud558\uc9c0/);
   assert.equal(buildProgress({ ...options(), stages: {}, scheduler: null, timingEvents: [row], alive: () => false }).status, 'NOT_STARTED');
   assert.equal(buildProgress({ ...options(), stages: {}, scheduler: null, timingEvents: [row, { ...row, event: 'END' }] }).status, 'NOT_STARTED');
 });
@@ -80,7 +80,7 @@ test('provider probe explains the serial wait without counting the configured li
   assert.equal(data.counts.running, 1);
   assert.equal(data.scheduler.limit, 100);
   assert.equal(data.activity.elapsed_seconds, 300);
-  assert.match(data.warnings.join(' '), /첫 Codex 응답/);
+  assert.match(data.warnings.join(' '), /\uccab Codex \uc751\ub2f5/);
   assert.equal(buildProgress({ ...settings, timingEvents: [], alive: () => false }).status, 'INTERRUPTED');
 });
 

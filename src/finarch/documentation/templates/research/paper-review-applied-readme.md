@@ -1,15 +1,15 @@
-# 리뷰 적용 · 한·영 Revision Draft
+# Review application · The Revision Draft by Han
 
-이 README는 문서 템플릿에서 생성합니다.
+This README is generated from a document template.
 
-## 읽는 순서
+## Reading order
 
-1. [변경 요약](RESEARCH-DIRECTION.md): 적용 내용과 확정하지 않은 사항.
-2. [공식 편집 기록](../../../paper/instructdion/reviews/20261003-review-application.md): 사용자 지침에 따른 판정과 범위.
-3. [영문](../20261003-paper-revision-draft/PAPER-EN.md) · [한국어](../20261003-paper-revision-draft/PAPER-KO.md) · [로컬 PDF](../../../paper/local-preview/main.pdf).
-4. [검사 결과](verification.json), [조판 로그](layout-build.log), [작업 로그](events.jsonl), [파일 해시](manifest.json).
-5. [수정 전 JSON](backup/paper-review.json): backup 폴더에 기존 LaTeX·PDF·템플릿도 보존합니다.
+1. [Summary of the change](RESEARCH-DIRECTION.md): Application content and unconfirmed information.
+2. [Official editing record](../../../paper/instructdion/reviews/20261003-review-application.md): Judgment and scope according to user instructions.
+3. [English](../20261003-paper-revision-draft/PAPER-EN.md) · [Korean](../20261003-paper-revision-draft/PAPER-KO.md) · [local PDF](../../../paper/local-preview/main.pdf).
+4. [Exam results](verification.json)[Signed log](layout-build.log)[Operating log](events.jsonl)[file hash](manifest.json).
+5. [JSON before correction](backup/paper-review.json)It also saves the existing LaTeX and PDF templates in the backup folder.
 
-공통 [연구 뷰어](http://127.0.0.1:8896/viewer/research/)에서 **2026-10-03 · 리뷰 적용 · 한·영 Draft와 로컬 PDF**를 선택합니다. 기존 Revision Draft HTML은 같은 파일 주소를 유지합니다.
+Common [Research Viewer](http://127.0.0.1:8896/viewer/research/)in **2026-10-03 · Review Application · Han-ing Draft and local PDF**The existing Revision Draft HTML keeps the same file address.
 
-Overleaf에는 반영하지 않았습니다. 의미 판정 기준은 제안이며 실제 채점 완료를 뜻하지 않습니다.
+The semantic assessment criteria are a suggestion and do not imply actual completion of the assignment.

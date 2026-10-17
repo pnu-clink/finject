@@ -98,7 +98,7 @@ test('all case conditions retain failed and truncated bodies, exact requests, mi
   }
   const missing = await offline.request(`/api/runs/${run}/case?case=case-1&reasoning=on`);
   assert.ok(missing.responses.every(r => r.status === 'NOT_PLANNED'));
-  await assert.rejects(offline.request(`/api/runs/${run}/case?case=unknown`), /없는 문항/);
+  await assert.rejects(offline.request(`/api/runs/${run}/case?case=unknown`), /\uc5c6\ub294 \ubb38\ud56d/);
 });
 
 test('case heatmap reads unselected saved responses and stays identical in exported HTML', async t => {
@@ -150,9 +150,9 @@ test('raw files, attempts, recursive report links and activity open without serv
   assert.deepEqual(await offline.request(`/api/runs/${run}/input-flow`), roundTrip(await f.repo.input(f.snap)));
   for (const id of Object.keys(bundle.files)) assert.deepEqual(await offline.request(`/api/runs/${run}/file?id=${id}`), await f.repo.file(f.snap, id));
   assert.deepEqual(await offline.request(`/api/runs/${run}/activity`), await f.repo.activity(f.snap));
-  assert.match(await offline.request(`/api/runs/${run}/export?status=NOT_RUN`), /분모: 2 요청/);
+  assert.match(await offline.request(`/api/runs/${run}/export?status=NOT_RUN`), /\ubd84\ubaa8: 2 \uc694\uccad/);
   await assert.rejects(offline.request(`/api/runs/${run}/file?id=../../secret`));
-  await assert.rejects(offline.request('/api/runs/20260920-exp-001/overview'), /선택한 회차/);
+  await assert.rejects(offline.request('/api/runs/20260920-exp-001/overview'), /\uc120\ud0dd\ud55c \ud68c\ucc28/);
 });
 
 test('single HTML uses exact inline CSP hashes, inert data and no external assets', async t => {
@@ -176,14 +176,14 @@ test('single HTML uses exact inline CSP hashes, inert data and no external asset
 
 test('stale snapshots, changed raw artifacts and symlinks cannot yield a misleading successful export', async t => {
   const f = await fixture(t);
-  await assert.rejects(buildBundle(f.repo, { ...f.snap, stale: true }), /정상 자료/);
+  await assert.rejects(buildBundle(f.repo, { ...f.snap, stale: true }), /\uc815\uc0c1 \uc790\ub8cc/);
   const altered = new Repository(f.root);
   const originalResponse = altered.response.bind(altered);
   altered.response = async (...args) => { const data = await originalResponse(...args); if (args[1].case === 'case-2') await fs.writeFile(path.join(f.folder, 'a/calls/trial-0/raw-response.json'), '{"changed":true}'); return data; };
-  await assert.rejects(buildBundle(altered, f.snap), /갱신/);
+  await assert.rejects(buildBundle(altered, f.snap), /\uac31\uc2e0/);
   await fs.unlink(path.join(f.folder, 'a/calls/trial-0/raw-response.json'));
   await fs.symlink('/etc/hosts', path.join(f.folder, 'a/calls/trial-0/raw-response.json'));
-  await assert.rejects(buildBundle(f.repo, f.snap), /심볼릭/);
+  await assert.rejects(buildBundle(f.repo, f.snap), /\uc2ec\ubcfc\ub9ad/);
 });
 
 test('missing requests stop export; oversized linked files disclose the existing viewer limit', async t => {
@@ -198,7 +198,7 @@ test('missing requests stop export; oversized linked files disclose the existing
   const incomplete = await f.repo.snapshot(run);
   assert.equal(incomplete.stale, true);
   assert.ok(incomplete.warnings.some(value => value.includes('요청 목록이 비어')));
-  await assert.rejects(buildBundle(f.repo, incomplete), /마지막 정상 자료/);
+  await assert.rejects(buildBundle(f.repo, incomplete), /\ub9c8\uc9c0\ub9c9 \uc815\uc0c1 \uc790\ub8cc/);
 });
 
 test('cancelled downloads stop work before reading and corrupt chunks fail explicitly', async t => {

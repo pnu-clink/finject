@@ -92,17 +92,17 @@ def build(program, fact_id):
     return graph,binding,audit
 
 
-README='''# EA · 결측 입력의 계산 그래프
+README='''# EA · Calculation graph of the input of the measurement
 
-읽는 순서: plan.json → calculation-input.json → graph.json → validation.json.
-calculation-input.json에는 원래 코드와 남은 값, 삭제한 근거 키만 있습니다. 삭제값은 계산 입력에 없습니다.
-graph.json은 같은 Python AST에서 만든 연결 구조입니다. 값 없는 입력은 MISSING, 이를 필요로 하는 연산·변수는 BLOCKED이며 숫자 computed를 저장하지 않습니다. 다른 입력과 독립 계산은 KNOWN입니다.
-plan.json의 원문 위치·삭제 전 인용은 제작용 private 삭제 계획입니다. 원본 코드·본문·기존 그래프는 별도 파일에 보존합니다. 최종 문장 삭제는 아직 하지 않았습니다.
+The order of reading: plan.json → calculation-input.json ← graph.json
+calculation-input.json has only the original code and the remaining value, the deleted base key.
+Graph.json is a connection structure made from the same Python AST. The valueless input is MISSING, the operation-variable that requires it is BLOCKED and does not store the computed numbers.
+The original location-edit pre-quotation of plan.json is a private deletion plan for creation. The original code, the original text, the existence graph is stored in the star file.
 
-공통 viewer에서 이 실행 → test-0001 → EA → 4 그래프 변경을 선택하면 원본과 결측 그래프, 같은 코드 줄과 연결을 확인합니다. 8 전체 기록에서 이 문서·입력·그래프·검사를 읽습니다. 문제별 events.jsonl에 EA01 시작·산출물·종료가 남습니다.
+In common viewer run this test-0001 → EA → 4 If you select graph change, you'll see the source and the geometry graph, the same line of code, and the connection. 8 Read this document, the input graph, the exam, and see the full record.1 It's a start, a start, and a finish.
 
-그래프 구성 성공과 수치 답 계산 불가는 별도 상태입니다. 원래 숫자로 EA 결과를 채우거나 0으로 대체하지 않습니다. Python의 exec를 결측 코드에 실행한 결과가 아니라 공유 AST 파서와 부분 계산기의 결과입니다. 문법 오류·잘못된 이름·알려진 연산 오류는 EA로 처리하지 않고 실패시킵니다.
-현재 표시된 경로에서 입력이 부족하다는 확인입니다. 역산·우회와 수학적 답의 비유일성 증명은 미평가이며 EA 성립 완료를 주장하지 않습니다. 추가 LLM 호출은 없습니다.
+The graph is a state of complete failure of the graph and the numerical answer to the calculation. 0It doesn't replace Python's exec with the default code, but with the shared AST browser and the partial calculator. Grammar errors, misnames, known compute errors fail without EA handling them.
+The proof of non-uniformity of the inverse and sub-component and mathematical answer is underestimated and EA does not claim completion of the composition. No additional LLM calls.
 '''
 
 

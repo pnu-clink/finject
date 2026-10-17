@@ -1,10 +1,10 @@
 const $ = id => document.getElementById(id);
 const node = (tag, className, text) => { const out = document.createElement(tag); if (className) out.className = className; if (text !== undefined) out.textContent = text; return out; };
 const svgNode = (tag, attrs = {}, text) => { const out = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const [key, value] of Object.entries(attrs)) out.setAttribute(key, String(value)); if (text !== undefined) out.textContent = text; return out; };
-const fmt = value => value == null ? '—' : Number(value).toLocaleString('ko-KR');
+const fmt = value => value == null ? '—' : Number(value).toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US');
 const duration = seconds => seconds == null ? '미측정' : seconds < 60 ? `${seconds.toFixed(1)}초` : `${Math.floor(Math.round(seconds) / 60)}분 ${Math.round(seconds) % 60}초`;
-const clock = value => new Date(value).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-const shortClock = value => new Date(value).toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit' });
+const clock = value => new Date(value).toLocaleTimeString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+const shortClock = value => new Date(value).toLocaleTimeString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
 const statuses = { RUNNING: '분석 실행 중', RETRY_WAIT: '재시도 대기', DRAINING: '진행 중 응답 수집 중', BLOCKED: '확인 필요', PARTIAL: '일부 미완료', COLLECTED: '검사 통과·수집 완료', COMPLETE: '완료', FINISHED: '수집 완료', PREPARED: '실행 대기', NOT_STARTED: '준비 전', INTERRUPTED: '실행기 종료·확인 필요', PAUSED_BY_USER: '일시 중지', VALID: '검사 통과', UNKNOWN_DELIVERY: '응답 미확인' };
 Object.assign(statuses, {SKIPPED_BY_USER:'사용자 지시로 생략', WAIT_EVALUATION_AND_TRANSFER:'Evaluation 완료·전송 대기', WAIT_PYTHON_OUTCOMES:'Python 후처리 완료 확인 대기', WAIT_A03:'A03 수집 대기', WAITING:'대기'});
 const colors = { completed: '#397565', running: '#4c7595', waiting: '#d9cebc', errors: '#b96354', average: '#88603d' };
@@ -152,7 +152,7 @@ function render(data) {
     if (errorMeaning[issue.message]) block.append(node('p', '', errorMeaning[issue.message]));
     block.append(node('p', 'issue-message', issue.message));
     const identity = issue.trial_id ? ` · 요청 ${issue.trial_id} · 시도 ${issue.attempt ?? '미기록'}` : '';
-    block.append(node('small', 'issue-source', `${issue.at ? new Date(issue.at).toLocaleString('ko-KR', { hour12: false }) : '시각 미기록'}${identity} · ${issue.source}`));
+    block.append(node('small', 'issue-source', `${issue.at ? new Date(issue.at).toLocaleString(globalThis.FinarchI18n?.language === 'ko' ? 'ko-KR' : 'en-US', { hour12: false }) : '시각 미기록'}${identity} · ${issue.source}`));
     return block;
   }));
   const m = data.metrics, sample = data.scheduler.last_cpu_sample;

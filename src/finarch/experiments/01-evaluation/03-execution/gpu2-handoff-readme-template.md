@@ -1,29 +1,29 @@
-# GPU-2 · FinanceReasoning 1,080문항 실험 인계
+# GPU-2 · FinanceReasoning 1,080The phrase experiment sequence
 
-실행 ID: **$run_id**. 준비 시각: $created_at. 이 폴더는 원격 실험에 전달할 자료입니다. 로컬에서 vLLM을 실행했다는 뜻이 아닙니다. 현재 상태는 [state.json](state.json)과 [인계 로그](events.jsonl)를 확인하세요.
+Running ID: **$run_id**This is a remote test file, which doesn't mean you've run vLLM locally.](state.json)And [the human log](events.jsonl)Check it out.
 
-읽는 순서:
+In order of reading:
 
-1. [위임 범위와 실행·취합 기준](PLAN.md)
-2. [입력·Luna 동일성 검증](verification.json)
-3. [모델·GPU·탐색 후보 설정](config.json)
-4. [선정·전달 로그](events.jsonl), [원격 전달용 파일 해시](manifest.json): 문항 연결은 원천 run의 모델별 요청 manifest에서 읽어 위 실행 조건 목록에 담습니다.
+1. [Range of assignment and execution/acquisition criteria](PLAN.md)
+2. [Input: Luna identity verification](verification.json)
+3. [GPU search model is set to candidate](config.json)
+4. [Record and Transmission Log](events.jsonl)[Hash file for identity transfer](manifest.json): The linking of the case is read in the model-by-model request manifest of the source run and put it on the list of run conditions above.
 
-| 파일 | 역할 |
+| File | Role |
 |---|---|
-| `00-definition/` | exp-006에서 바이트 그대로 복사한 영어 프롬프트·V4 응답 스키마 |
-| `01-input/public.jsonl` | 동결한 1,080원문·7,560변형의 Q/C. 이전 원응답을 포함하지 않음 |
-| `01-input/model-inputs.jsonl` | 모델에 보낼 Q/C와 `answer_format.decimal_places`만 담은 input |
-| `01-input/private.jsonl` | 정답·부호·제작 출처. 모델 요청에 넣지 않고 평가에만 사용 |
-| `01-input/trial-matrix.jsonl` | 두 추론 조건 기준 32,400조건 목록. 토글 미지원 모델은 해당 축을 제거하고 별도 분모 확정 |
-| `provenance/` | 과거 입력·정의 해시, 현재 제작본과 차이, 모델 호출 없는 검증 기록 |
-| `support/legacy-source-snapshot.json` | 기존 검사·집계·폴더 코드의 읽기 전용 사본. 원격 신규 구현으로 표현하지 않음 |
-| `support/exporter-source.txt` | 전송 파일을 표준 Python으로 검사할 수 있는 프로그램 소스 사본 |
+| `00-definition/` | exp-006English prompt v4 response scheme copied in byte |
+| `01-input/public.jsonl` | Frozen 1,080The original.7,560Q/C of variation. Does not include previous raw response |
+| `01-input/model-inputs.jsonl` | And Q/Cs to send to the model. `answer_format.decimal_places`Only the input. |
+| `01-input/private.jsonl` | Correct answer, error, output source. Use only for evaluation, not for model requests. |
+| `01-input/trial-matrix.jsonl` | The two conditions of inference 32,400The toggle sub-support model removes the corresponding axis and confirms the denominator of the denominator. |
+| `provenance/` | Past input-date hash, current production copy and difference, model call-free verification record |
+| `support/legacy-source-snapshot.json` | Read-only copy of existing check-in, collection, folder code. Not expressed as a remote new implementation |
+| `support/exporter-source.txt` | A copy of the source program that can scan the transfer file in standard Python. |
 
-**요청 수:** 추론 두 조건이면 원문 $originals × 2 = 2,160, 변형 $variants × P0/P1 × 2 = 30,240, 모델당 **32,400건**입니다. 한 조건이면 **16,200건**입니다. 배치 탐색·웜업·반복검증 호출은 본실험과 분리합니다. 정확한 전체 합계는 원격의 모델별 지원 조건표에서 확정합니다.
+**Requested number:** So if you have two conditions, the source items $originals x 2 = 2,160, the variance $variants × P0/P1 × 2 = 30,240For each model. **32,400entries**So if you have one condition, **16,200entries**That's the way the call for placement search, flip-up, and flip-down verification separates from the test. The exact total sum is determined by the model-by-model supporting conditions chart of the remote.
 
-목적은 **GPU 4장에서 전체 실험을 얼마나 빨리 마칠 수 있는지 실측**하는 것입니다. 사전 탐색 후보를 전역 최적이라고 부르지 않습니다. 로딩·탐색·본실험 시간을 각각 기록하고, 실제 측정 전에는 소요 시간이나 GPU 비용을 만들어 넣지 않습니다.
+The goal is to **GPU 4And you can actually see how fast you can complete the whole experiment in the bowl.**We don't call pre-browse candidates the optimum for all, recording the loading, searching, and copy time of each, and we don't create the time or GPU cost before the actual measurement.
 
-기존 exp-006 앞 100문항과 이번 자료의 해당 800개 Q/C·정답·형식 메타데이터는 동일합니다. 전체 1,080개는 당시 동결한 exp-002 입력을 사용합니다. 최신 제작본과 8,640개 Q/C가 모두 같지만 EA 라벨 정리 후 새로 계산하는 item_id는 다르므로 기존 ID를 보존합니다. [차이 기록](provenance/current-vs-frozen.json)을 확인하세요. 과거 응답은 실험 입력 또는 결과로 재사용하지 않습니다.
+The existing exp-006 before 100The article and the corresponding data in this document 800The items Q/C-correct-response metadata is the same. 1,080The items was a very close-knit exp-002 It uses input. 8,640The items Q/C is the same, but the item_id that you re-calculate after clearing the EA label is different, so it keeps the existing ID.](provenance/current-vs-frozen.json)Check that past responses are not reused as experimental inputs or results.
 
-주관 작업: **vllm gpu-2에서 Qwen3.8 27B 구동**. 원격 메인 작업이 서버 구성·탐색·본실험·실패 분석과 최종 취합을 담당합니다. 로컬은 자료 전송·무결성 확인을 담당합니다. 고정 루트는 `reports/experiments-run`; 기존 실험 뷰어에서 이 폴더의 Markdown 문서를 읽습니다.
+The title of the work: **vllm gpu-2From Qwen3.8 27B Drive the car.**The remote main task is to set up the server, search, test, fail, and analyze the data, and the local task is to verify data transmission and integrity. `reports/experiments-run`And in the existing experimental viewer, you read the Markdown document in this folder.

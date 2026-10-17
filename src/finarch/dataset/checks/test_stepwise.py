@@ -15,11 +15,11 @@ class StepwiseChecks(unittest.TestCase):
         self.assertEqual(name_constants(prepared)[0],prepared)
 
     def test_name_collisions_and_multibyte_identifiers_preserve_values(self):
-        program={'code':'합계_constant_1=7\n합계=x*100\n'}
+        program={'code':'\ud569\uacc4_constant_1=7\n\ud569\uacc4=x*100\n'}
         prepared,audit=name_constants(program)
         scope={'x':2};exec(prepared['code'],scope)
-        self.assertEqual(scope['합계_constant_1'],7)
-        self.assertEqual(scope['합계'],200)
+        self.assertEqual(scope['\ud569\uacc4_constant_1'],7)
+        self.assertEqual(scope['\ud569\uacc4'],200)
         self.assertEqual(audit['review']['status'],'PASS')
 
     def test_nested_expression_is_not_falsely_marked_ready(self):

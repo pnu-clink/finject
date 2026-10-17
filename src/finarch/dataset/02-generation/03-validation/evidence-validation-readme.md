@@ -1,7 +1,7 @@
-# 외부 근거 후보 · Python 검증
+# External base candidate · Python verification
 
-`run.json`에서 전체 검사와 표 선택값을 읽고, `comparison.json`에서 골드 대조를 확인합니다. `03-calculation/execute`에는 실제 Python 입력·실행 결과가 있습니다. 로그는 `events.jsonl`입니다.
+`run.json`In the whole test and the sample selection, `comparison.json`Check the gold contrast in. `03-calculation/execute`There's a real Python input and output. `events.jsonl`.
 
-응답 스키마 → 원문 숫자 위치·값 → 저장된 외부 출처 → Python 실행 → 골드 대조 → 저장 그래프 재현 → 모든 변수 대조 → 표 선택 내역 순서로 확인합니다. LLM을 새로 호출하지 않습니다.
+Answer schemes → Primary Numbers Location; Value → Saved External Sources → Python Running → Gold Contrast → Saved Graph Reproduction → All variables Contrast → Table Selection Check in order. Do not call the LLM new.
 
-PASS는 저장 후보의 계산·연결 검증입니다. 외부 규칙의 적용 가정이 원문에 명시되었다는 뜻이 아니며, 기존 사람 판정을 변경하지 않습니다. 공통 뷰어의 해당 문항 04 계산 그래프에서 검증 요약을 확인합니다.
+PASS is a calculation and binding verification of the storage candidate. It does not mean that the application assumptions of the external rules are specified in the original, nor does it change the existing person's judgment. 04 Check the verification summary on the calculation graph.

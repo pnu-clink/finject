@@ -12,7 +12,7 @@ from finarch.dataset.viewer.build import build, collect, import_decisions
 
 class ArithmeticChecks(unittest.TestCase):
     def setUp(self):
-        self.program = {"context": "매출 120 원가 80", "code": 'r = fact("r")\nc = fact("c")\nanswer = (r - c) / r * 100',
+        self.program = {"context": "\ub9e4\ucd9c 120 \uc6d0\uac00 80", "code": 'r = fact("r")\nc = fact("c")\nanswer = (r - c) / r * 100',
                         "facts": {"r": {"value": "120", "text": "120", "span": [3, 6]},
                                   "c": {"value": "80", "text": "80", "span": [10, 12]}}}
 
@@ -67,7 +67,7 @@ class ViewerChecks(unittest.TestCase):
 
     def decision_file(self, variant="IC_VALUE", decision="APPROVE"):
         payload = {"snapshot_sha256": collect(self.run)["snapshot_sha256"], "decisions": [
-            {"variant": variant, "decision": decision, "reviewer": "local-test", "reason": "검사용 판단", "reviewed_at": "2026-09-07T00:00:00Z"}]}
+            {"variant": variant, "decision": decision, "reviewer": "local-test", "reason": "\uac80\uc0ac\uc6a9 \ud310\ub2e8", "reviewed_at": "2026-09-07T00:00:00Z"}]}
         path = self.root / "decision.json"
         path.write_text(json.dumps(payload))
         return path

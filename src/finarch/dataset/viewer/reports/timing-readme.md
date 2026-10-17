@@ -1,14 +1,14 @@
-# 실행 시간과 LLM 사용량
+# Running time and use of LLM
 
-실행: `{run_id}`
+Running: `{run_id}`
 
-1. `timing.json`: 실행 당시 기록한 시작·종료 시각, 전체 소요 시간, CLI 명령. 기능 추가 이전 실행에는 없습니다.
-2. 각 차수의 `timing.json`: 차수별 시작·종료·소요 시간. 보완 지침 작성은 그 원인을 수집한 차수에 포함합니다.
-3. `timing-report.json`: 전체·차수·구간별 경과 시간, LLM 호출 시간 합계·겹침 제거 시간, 호출 수·토큰 사용량.
-4. `log/cli.log`, `log/run/{run_id}/default.log`: `execution.run`, `execution.round`, `execution.timing_summary`로 검색합니다. 기록 하나가 JSON 한 줄입니다.
+1. `timing.json`Start-up: Start-up, finish-up view, total time taken, CLI command.
+2. The number of each of the charts `timing.json`The complementary instruction writing includes the number of times the cause was collected.
+3. `timing-report.json`: total; numerical; interval observation time, LLM call time sum; overlapping removal time, call number; token usage.
+4. `log/cli.log`, `log/run/{run_id}/default.log`: `execution.run`, `execution.round`, `execution.timing_summary`One record is a JSON line.
 
-LLM 호출 시간 합계는 병렬 실행 때문에 전체 경과 시간보다 클 수 있습니다. **LLM 사용 구간**은 겹친 시간을 한 번만 셉니다. 이 시간은 CLI 전송·대기 등도 포함하며 모델의 순수 추론 시간이 아닙니다. 구간별 경과 시간도 서로 겹치므로 합산하지 않습니다.
+The sum of LLM call times can be greater than the total course time because of parallel running. **The scope of LLM**It takes only one time overlapping, including CLI transmission time, and it's not the time of pure model inference, and it doesn't add up because the time of intersection and time of interpolation overlapping.
 
-기능 추가 전 실행의 `observed_event_window`는 저장된 첫·마지막 처리 기록 사이입니다. 기록되지 않은 시작 준비·종료 구간은 포함하지 않으며, 정확한 전체 CLI 시간으로 표시하지 않습니다. 원응답과 과거 타임스탬프는 수정하지 않습니다.
+Additional functions before running `observed_event_window`The raw response and past timestamps do not modify. The raw response does not include the unrecorded start-preparation and completion interval, and does not display the exact full CLI time.
 
-[시간·사용량 뷰어](http://127.0.0.1:8893/?run={run_id}&round=01-round&case=test-0001&tab=dtt)에서 **시간·LLM 사용량** 버튼을 누르세요. 같은 화면에 전체·차수별 막대와 구간별 표가 나옵니다.
+[Time and volume viewer](http://127.0.0.1:8893/?run={run_id}&round=01-round&case=test-0001&tab=dtt)in **Time and LLM usage** You press the button, and you see a whole cross-sectional bar and a cross-sections chart on the same screen.

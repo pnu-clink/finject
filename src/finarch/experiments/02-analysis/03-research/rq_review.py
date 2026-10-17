@@ -40,20 +40,20 @@ def build(root):
             if g['primary_rq'] != rq['id']:
                 continue
             rq_lines += [f"### {g['id']} · {g['title_ko']}", '', g['claim_ko'], '',
-                         '**근거와 비교 조건:** ' + g['evidence_ko'], '',
-                         '**반례·다른 설명:** ' + g['alternatives_ko'], '',
-                         '**말할 수 있는 범위:** ' + g['boundary_ko'], '',
-                         '**주로 통합한 F:** ' + ', '.join(g['primary_finding_ids']), '',
-                         '**함께 참조한 F:** ' + (', '.join(g['related_finding_ids']) or '없음'), '',
-                         '**함께 관련된 RQ:** ' + (', '.join(g['secondary_rqs']) or '없음'), '']
-    audit = ['# F001–F104 전체 검토 대응표', '', '각 F를 한 개 주 통합 그룹에 배정하고, 여러 주제를 가진 F는 보조 연결을 보존했습니다. 삭제된 F는 없습니다.', '',
-             '|원본 F|원래 제목|주 그룹|보조 그룹|검토 판단|', '|---|---|---|---|---|']
+                         '**The basis and the comparison conditions:** ' + g['evidence_ko'], '',
+                         '**Other explanation:** ' + g['alternatives_ko'], '',
+                         '**The range of what we can say:** ' + g['boundary_ko'], '',
+                         '**Mainly integrated F:** ' + ', '.join(g['primary_finding_ids']), '',
+                         '**F with reference to:** ' + (', '.join(g['related_finding_ids']) or 'None'), '',
+                         '**Related RQ:** ' + (', '.join(g['secondary_rqs']) or 'None'), '']
+    audit = ['# F001–F104 Full review response chart', '', 'Each F is assigned to a single state integrated group, and F with multiple subjects preserves the auxiliary link.', '',
+             'The source code is F, the source code is the title of the source code.', '|---|---|---|---|---|']
     for r in rows:
         f = findings[r['finding_id']]
         audit.append('|'+ '|'.join([f['id'], f['display_ko']['title'].replace('|','/'), r['primary_group'], ', '.join(r['secondary_groups']) or '—', r['note_ko'].replace('|','/')])+'|')
-    audit += ['', '## 원본 추적', '', '[원본 연구 발견](findings.md) · [원본 JSON](findings.json) · [검토 기준 데이터](rq-review.json)', '']
+    audit += ['', '# Tracking the original', '', '[Findings from original research](findings.md) · [Source JSON]](findings.json) · [Examining data from the benchmark](rq-review.json)', '']
     template = Path(__file__).resolve().parents[2] / 'templates/rq-review.md'
-    table = ['|통합 항목|주 RQ|주로 묶은 원본 F 수|', '|---|---|---|']
+    table = ['The original F is bound to the RQ of the same number.', '|---|---|---|']
     table += [f"|{g['id']} {g['title_ko']}|{g['primary_rq']}|{len(g['primary_finding_ids'])}|" for g in groups]
     report = template.read_text().format(run=root.name, original_count=len(findings), group_count=len(groups), group_table='\n'.join(table), body='\n'.join(rq_lines), numerical_notes='\n'.join('- '+n for n in review['numerical_notes_ko']))
     (folder/'rq-review.md').write_text(report)

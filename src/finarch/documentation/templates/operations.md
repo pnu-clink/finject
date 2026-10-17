@@ -1,19 +1,19 @@
-# 제작 공통 운영
+# Production common operation
 
-[상위: 제작 전체](../README.md)
+[Top: The whole production.](../README.md)
 
-여러 단계에 적용되는 실행·호출·보존 규칙을 이곳에서 관리합니다. 각 단계 문서는 필요한 규칙으로 연결하며 전문을 반복하지 않습니다.
+We manage the execution, exit, and retention rules that apply to multiple levels here, linking each step document to the required rules and not repeating the expertise.
 
-2026-10-01 새 모델 호출은 `gpt-5.6-luna → gpt-6-luna`, `gpt-5.6-sol → gpt-6.1-sol`로 교체했습니다. 목적별 프로필·effort·토큰 한도는 유지합니다. [현재 모델표](../../../config/MODELS-README.md)에서 제작·Evaluation·Analysis를 구분하여 확인합니다. 과거 run의 동결 설정·원응답은 보존하며 모델 변경만으로 실행을 재개하지 않습니다.
+2026-10-01 The new model calls are: `gpt-5.6-luna → gpt-6-luna`, `gpt-5.6-sol → gpt-6.1-sol`It's replaced by a purpose-based profile, effort, token limit.](../../../config/MODELS-README.md)In the output, evaluation, and analysis, the raw response of the previous run is preserved and does not restart the run by changing the model.
 
-|읽는 순서|문서|역할|
+|Reading order|Documents|Role|
 |---|---|---|
-|1|[실행·차수·피드백](01-execution.md)|schedule/run 역할, 재시도·재사용·의존성|
-|2|[모델 호출 계약](02-model-calls.md)|실제 프롬프트·응답 스키마·원응답·사용량|
-|3|[산출물·로그](03-artifacts.md)|폴더와 상태를 읽는 순서, 원본/실행/집계 구별|
-|4|[공통 뷰어](04-viewer.md)|저장된 실제 결과·단계·문서 조회|
+|1|[Action, cross, feedback](01-execution.md)|The schedule/run role, the re-use, the purpose|
+|2|[Model call agreement](02-model-calls.md)|Actual prompt response schemes raw response usage|
+|3|[Footnote](03-artifacts.md)|The order of reading the folder and the state, the original/action/order differentiation|
+|4|[Custom Viewer](04-viewer.md)|The actual results, the steps, the documentation.|
 
-## 코드·서버 구조
+## Code-server architecture
 
-[소스 폴더·서버 구성](05-source-layout.md)에서 단계별 소스 위치와 서버 실행 방법을 확인합니다.
-[메뉴 막대 서버 위젯](../../../apps/server-widget/README.md)에서 네 조회 서버의 상태·시작·중지·화면 열기를 확인합니다.
+[Source folder and server configuration](05-source-layout.md)From step-by-step, check the source location and how the server runs.
+[Menu bar server widget](../../../apps/server-widget/README.md)Check the status, start, and center of the browser on your browsing server.

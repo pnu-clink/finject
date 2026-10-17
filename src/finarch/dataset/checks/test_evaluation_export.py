@@ -54,7 +54,7 @@ class EvaluationExportTests(unittest.TestCase):
             self.assertEqual(len(exported['generation']),7)
             self.assertEqual(len(batch['batch']['generation_overview']),7)
             data['runs']=rows[1:]
-            with patch('finarch.dataset.viewer.server.batch_data',return_value=data),self.assertRaisesRegex(ValueError,'7유형'):
+            with patch('finarch.dataset.viewer.server.batch_data',return_value=data),self.assertRaisesRegex(ValueError,'7\uc720\ud615'):
                 build(root,[{'name':'named-merge'}])
 
     def test_projected_evidence_and_no_call_history(self):

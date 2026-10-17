@@ -1,13 +1,13 @@
-# DeepSeek 결과 추가
+# DeepSeek results added
 
-기존 20261008 논문 집계에 저장된 DeepSeek 결과를 추가합니다. 새 모델 호출은 0건이며 기존 실험 파일과 기존 모델 집계는 보존합니다.
+Existing 20261008 And then you add the DeepSeek results to the paper's data. 0It's a building that preserves the existing experimental files and the existing model set.
 
-1. `deepseek-summary.json`: 추가 모델의 지원율, 출처 대응쌍, 복원 가능성 비교.
-2. `summary.json`: 기존 스냅샷과 추가 모델을 합친 결과.
-3. `manifest.json`: 입력 경로·해시와 검증 결과.
-4. `responses.jsonl`: 추가 모델의 계획 응답 43,328건. 원본 응답과 판정 경로는 기존 run을 참조합니다.
-5. `execution.log`: 저장된 결과의 검증·집계 이력. 실제 모델 실행 이력은 원본 run에 있습니다.
+1. `deepseek-summary.json`: support rate of additional models, source correspondence pair, recovery probability comparison.
+2. `summary.json`The result of a combination of the existing snapshots and the additional models.
+3. `manifest.json`: input path; interpretation and verification results.
+4. `responses.jsonl`: Planned response of additional models 43,328The original response and the judgement path refer to the existing run.
+5. `execution.log`The verification and collection of the stored results. The actual model execution dynamics are in the original run.
 
-원본 단위 판정 1,354건 중 {valid:,}건이 수집되어 있습니다. 계획 변형 응답 37,912건 중 판정 완료는 {reviewed:,}건, 검토 불가 출력은 {failed:,}건, 결과 미확인 판정은 {pending:,}건입니다. 분모는 기존 논문과 동일하게 유지하며, 복원 가능성 비교는 기존 복원 가능 여부 기록과 원본 단위 10,000회 재표집(seed 20261009)을 사용합니다.
+The original unit judgment 1,354of {valid:,}The plan is to change the response. 37,912The verdict is over. {reviewed:,}That's the unreviewed output. {failed:,}That's the result of an uncertain verdict. {pending:,}The denominator is the same as the original paper, and the restoration comparison is the original unit of the original record of the restoration. 10,000Re-seed 20261009I'm using the .
 
-[기존 실험 뷰어](http://127.0.0.1:8894/?run={run_id}&tab=answerable)에서 원응답과 판정을 확인할 수 있습니다.
+[Existence experiment viewer](http://127.0.0.1:8894/?run={run_id}&tab=answerable)You can check the raw response and the judgement.

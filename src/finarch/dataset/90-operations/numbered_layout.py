@@ -3,11 +3,11 @@ from pathlib import Path
 import json
 
 STAGES = (
- ('00-data-preparation','데이터 준비'),('01-source','원문 비교'),
- ('02-calculation','계산과 정답'),('03-graph','계산 그래프 작성'),
- ('04-perturbation','그래프 변경'),('05-text','문장과 답변'),
- ('06-human-review','사람 판정'),('07-freeze-experiment','동결·실험'),
- ('08-records','전체 기록'),
+ ('00-data-preparation','Data is ready.'),('01-source','Source comparison'),
+ ('02-calculation','Calculation and answer'),('03-graph','Write a calculation graph'),
+ ('04-perturbation','Graph perturbation'),('05-text','The phrases and answers'),
+ ('06-human-review','Human decision'),('07-freeze-experiment','The Conclusion: Experiment'),
+ ('08-records','All records'),
 )
 
 def write_index(case, finalize=False):
@@ -27,8 +27,8 @@ def write_index(case, finalize=False):
     for folder,title in STAGES:
         matches=[p for p in files if p.startswith(folder+'/')]
         sections+=['## '+folder+' · '+title,'']
-        sections+=['- ['+p+']('+p+')' for p in matches] or ['미실행 또는 아직 산출물 없음.']
+        sections+=['- ['+p+']('+p+')' for p in matches] or ['Missed or no output yet.']
         sections+=['']
         if finalize and matches:
-            (case/folder/'README.md').write_text('# '+title+'\n\n실제 저장 순서의 하위 폴더를 따라 읽습니다. 각 파일은 경로에 표시된 단계의 입력·원응답·검사·결과입니다.\n\n'+'\n'.join('- ['+p[len(folder)+1:]+']('+p[len(folder)+1:]+')' for p in matches)+'\n')
+            (case/folder/'README.md').write_text('# '+title+'\n\nYou read it through the bottom folder of the actual storage sequence, and each file is the input, raw response, scan, and result of the steps shown in the path.\n\n'+'\n'.join('- ['+p[len(folder)+1:]+']('+p[len(folder)+1:]+')' for p in matches)+'\n')
     (case/'README.md').write_text(Path(__file__).with_name('numbered-readme.md').read_text().format(case_name=case.name,sections='\n'.join(sections)))

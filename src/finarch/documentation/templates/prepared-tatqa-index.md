@@ -1,17 +1,17 @@
-# TAT-QA 데이터 준비·결과 전달
+# TAT-QA data preparation and delivery of results
 
-## 현재 우선 실험의 결과 세트
+## The results of the current priority experiment are set
 
-[20261003-003 전달본](20261003-003/README.md)은 [20261003-003 · TAT-QA Generation](../../../reports/run/20261003-003/README.md)의 취합 결과를 보존한 실험용 데이터 폴더입니다. 원본 437건의 결과·실패 기록을 보존하며 원본과 7변형이 모두 자동 PASS인 291문항군을 새 Evaluation 대상으로 선정합니다.
+[20261003-003 Distributed copy](20261003-003/README.md)[Footnote]20261003-003 · TAT-QA Generation](../../../reports/run/20261003-003/README.md)It's an experimental data folder that preserves the results of the sampling. 437We're going to keep records of the results and failures of the building, and we're going back to the original and the original. 7All the variations are automatic PASS. 291And we're going to select the phrase group for the new Evaluation.
 
-- 전달 데이터: `data/prepared/tatqa/20261003-003/00-input.json`과 `01`~`07` 유형 JSON.
-- 원천 해시·선정 범위: [prepared-results.json](20261003-003/prepared-results.json), [manifest.json](20261003-003/manifest.json).
-- 제작 과정·원응답·사람 판정: 원래 `reports/run/20261003-003`에 보존.
-- 전달·입력 동일성 검사: [작업 기록](../../../log/tatqa-prepared-20261003/README.md).
-- Evaluation 요청·원응답·상태: 별도 `reports/experiments-run`에 저장하고 [공통 실험 뷰어](http://127.0.0.1:8894/)에서 확인.
+- The data is transmitted: `data/prepared/tatqa/20261003-003/00-input.json`and `01`~`07` Type JSON.
+- The source hash: range of corrections: [prepared-results.json](20261003-003/prepared-results.json), [manifest.json](20261003-003/manifest.json).
+- Production process raw response human judgment: original `reports/run/20261003-003`Keep it.
+- Transmission-input identification test: [Operating record](../../../log/tatqa-prepared-20261003/README.md).
+- Evaluation request; raw response; status: not yet `reports/experiments-run`Save it to the [common experiment viewer](http://127.0.0.1:8894/)Check it out.
 
-## 기존 원천 입력
+## The current source input
 
-[full-20260917](full-20260917/README.md)은 원천에서 준비한 원본 입력입니다. 새 Generation 결과 전달본이나 이번 291문항군의 실험 결과와 구별합니다.
+[full-20260917](full-20260917/README.md)The original input is prepared from the source. 291It's different from the results of the case group.
 
-이 README는 `src/finarch/documentation/templates/prepared-tatqa-index.md`에서 생성합니다.
+This README is generated from `src/finarch/documentation/templates/prepared-tatqa-index.md`.

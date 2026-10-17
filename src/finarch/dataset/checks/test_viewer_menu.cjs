@@ -28,7 +28,7 @@ check('Saved CLI prompt, input, response, schema and result refer to one call',(
  const calls=ctx.savedMenuCalls(prep,'03-calculation/','pot.author');assert.equal(calls.length,1);const c=calls[0];assert(c.cli.prompt.includes(c.model.input.question));assert.equal(typeof c.raw.text,'string');assert.equal(c.check.status,'PASS');assert(c.responsePath.includes('03-LLM-call/02-raw-response.json'));
 });
 check('Failed API response remains inspectable with its actual role name',()=>{
- const c=ctx.savedMenuCalls(failure,'03-calculation/','pot.author');assert.equal(c.length,1);assert.equal(c[0].cli.role,'01-preparation.03-calculation.pot');assert.equal(c[0].check.reason,'RESPONSE_SCHEMA_INVALID');assert.equal(typeof c[0].raw.text,'string');assert(ctx.llmCallState(c[0]).includes('수신 검사 실패'));
+ const c=ctx.savedMenuCalls(failure,'03-calculation/','pot.author');assert.equal(c.length,1);assert.equal(c[0].cli.role,'01-preparation.03-calculation.pot');assert.equal(c[0].check.reason,'RESPONSE_SCHEMA_INVALID');assert.equal(typeof c[0].raw.text,'string');assert(ctx.llmCallState(c[0]).includes('\uc218\uc2e0 \uac80\uc0ac \uc2e4\ud328'));
 });
 check('No cross-stage call leakage or fabricated missing response',()=>{
  assert.equal(ctx.savedMenuCalls(failure,'04-graph/','pot.author').length,0);
@@ -44,7 +44,7 @@ check('All 5 preparation and all 28 generation menus have explicit steps',()=>{
 check('Preview buttons open exactly their saved files; absence is explicit',()=>{
  const panel=el('div');ctx.renderMenuGuide(panel,prep,null,'03-calculation');const buttons=descendants(panel).filter(n=>n.tagName==='button'&&n.dataset.previewPaths);assert(buttons.length>=4);
  for(const button of buttons){const paths=JSON.parse(button.dataset.previewPaths);button.onclick();assert(opened.textContent);for(const path of paths){assert(Object.hasOwn(prep.run.artifacts,path));assert(opened.textContent.includes(JSON.stringify(prep.run.artifacts[path])));}}
- const empty=el('div');ctx.renderMenuGuide(empty,{run:{artifacts:{}}},null,'03-calculation');assert(empty.textContent.includes(' 저장 기록 없음'));assert.equal(descendants(empty).filter(n=>n.tagName==='button'&&n.dataset.previewPaths).length,0);
+ const empty=el('div');ctx.renderMenuGuide(empty,{run:{artifacts:{}}},null,'03-calculation');assert(empty.textContent.includes(' \uc800\uc7a5 \uae30\ub85d \uc5c6\uc74c'));assert.equal(descendants(empty).filter(n=>n.tagName==='button'&&n.dataset.previewPaths).length,0);
 });
 check('Generation preview keeps its producing round and variant path',()=>{
  const variant='01-ic-value-before',path=variant+'/02-generate-text/04-observation.json',resolved=ctx.stageFilePath(prep,variant,path);assert(resolved.includes('/01-round/test-0001/'+variant+'/'));assert(!resolved.includes('/03-round/'));

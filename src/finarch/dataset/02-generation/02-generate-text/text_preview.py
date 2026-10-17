@@ -12,15 +12,15 @@ def compose_relation(sample, plan, original_graph, programs):
     raise ValueError('MANUAL_TEXT_PREVIEW_REMOVED: use an actual LLM response')
 
 
-RELATION_PREVIEW_README = '''# IC-RELATION 문장 편집 미리보기
+RELATION_PREVIEW_README = '''# IC-RELATION edit the phrase preview
 
-읽는 순서: 활성 후보의 plan-v2.json(없으면 plan.json) → text-preview-v2.json → B/program.json과 B/graph.json.
+Read in the following order: Plan-v2.json of active candidates (if not plan.json) → text-preview-v2. json → B/program.json and B/graph.json.
 
-text-preview-v2.json은 저장된 관계 문장을 지정 위치에 삽입한 검토용 사본입니다. 원문·질문·관측 금액은 보존하며, 추가 구간과 코드·그래프 연결을 기록합니다. 원본 A와 관계 적용 B만 비교합니다.
+text-preview-v2.json is a review copy inserted into the location of the stored relationship phrase. It preserves the original, query, and observation amount, and records additional frameworks and code-graph connections. Compare the relationship application B to the original A.
 
-공통 viewer에서 이 실행과 문항 → IC-RELATION → 5 문장과 답변을 선택합니다. 원본식·관계 적용식 바로 아래의 원문/미리보기 비교에서 추가 문장은 초록색입니다. 조건부 계산값은 별도 모델의 응답이 아닙니다.
+This is the execution and case from the common viewer → IC-RELATION → 5 You select the sentence and the answer. In the font/minuscript comparison right below the font/relationship application, the additional sentence is green. The conditional calculation value is not the answer of a separate model.
 
-관계와 문장 초안은 에이전트가 작성했습니다. 추가 문장 생성용 LLM 호출은 없으며, 16번 최종 문장 생성과 17번 의미 검사는 미실행입니다. 전체 작업이 LLM을 사용하지 않았다는 뜻이 아닙니다. events.jsonl에 TP02 처리와 산출물 기록이 남습니다.
+Relationship and phrasing drafts were written by agents. 16And the final sentence is the creation of the 17The bar means check is a mismatch. It doesn't mean the whole job didn't use the LLM.2 And we have records of processing and production.
 '''
 
 
@@ -73,16 +73,16 @@ def save_ea(case_dir, label='EA_01'):
         ctx.save(root+'/05-text-input-preview.json', preview)
         ctx.save_text(root+'/context-tagged.txt', preview['intermediate']['context'])
         ctx.save_text(root+'/context-preview-v2.txt', preview['preview_context'])
-        ctx.save_text(root+'/05-text-input-preview.md', '''# EA · 삭제 태그에서 자연스러운 문장으로
+        ctx.save_text(root+'/05-text-input-preview.md', '''# EA · Delete the tag to a natural sentence
 
-읽는 순서: plan.json → text-preview-v2.json → context-tagged.txt → context-preview-v2.txt.
-plan.json에 지정한 입력 금액 위치만 제작용 삭제 태그로 바꾼 중간 본문을 저장합니다. 다음 수정본 초안은 대상 수익 항목을 남기고 금액을 소개하는 표현과 숫자만 제거한 사본입니다. 태그·삭제 안내를 수정본 본문에 넣지 않습니다. 원본 파일은 보존했습니다. 다른 세 금액·질문·계산식은 그대로이며 삭제 위치와 그래프 연결은 text-preview-v2.json에 있습니다. 첫 문항의 서비스 수수료 80,000 삭제와 판매 수수료 45,000 삭제를 지원하며, 파생 중간합을 지우는 방식이 아닙니다.
+The following is the order of reading: plan.json → text-preview-v2.json → context-tagged.txt → context-preview -v2.txt.
+The middle text is saved in the plan.json, where the input amount is located, and then the deleted tag is used for the creation. The next draft of the revision is a copy that leaves the subject revenue item and removes the expression and the number that introduces the amount. The tag-delete guide is not put in the modified copy. The original file is saved. The other three amounts: query-calculation is the same, and the deleted position and the graph link is in text-preview-v2.json. 80,000 Removal and sale fees 45,000 It supports deletion, not the way to delete the derivative intermediate.
 
-공통 뷰어에서 이 실행 → test-0001 → EA → 5 문장과 답변을 선택합니다. 원문 전체 → 태그가 있는 전체 본문 → 다듬은 문장 하나를 세로로 쌓아 비교합니다. 2번에서는 태그를 포함한 작업 문장 전체, 3번에서는 변경한 문장만 색으로 표시합니다. 변경 문장 복사는 3번의 문장만 복사합니다. 8 전체 기록에서도 파일을 읽을 수 있습니다.
+In common viewer, this run → test-0001 → EA → 5 Select the sentence and answer, and compare one sentence with the whole sentence → tag, and then compare it with the whole phrase → the whole sentence. 2In the bar, the entire task phrase, including the tag, 3In the bar, you'll only see the color of the changed phrase. 3I'm just copying the phrase. 8 You can read the entire file.
 
-에이전트가 지정한 첫 문항 편집을 Python으로 적용한 미리보기이며, 문장 생성용 추가 LLM 호출은 없습니다. 미리보기 파일 저장은 최종 본문 승인·의미 검사·독립 모델 답변 완료가 아닙니다. 결과의 근거 부족 표시는 현재 계산 경로의 상태입니다. 역산·우회 및 EA 의미 성립은 미평가로 유지합니다.
+It is a preview where the agent has applied the first case editing set to Python, and there are no additional LLM calls for case creation. The preview file cache is not final text approval, validation checks, independent model responses completed. The lack of evidence indicating the results is the current state of the computational pathway.
 
-이 README는 저장 함수의 템플릿에서 자동 생성됩니다. 문제별 events.jsonl에 TP03의 시작·산출물·종료를 기록합니다. 앞선 그래프 안내의 '본문 삭제 미적용'은 원본 및 최종 산출물 기준이며, 이 사본에서만 삭제 편집을 적용했습니다.
+This README is automatically generated from the template of the save function.3The "Delete Aesthetic" in the front graph guide is the original and final output criteria, and only this copy has deleted editing.
 ''')
         outcome.update(status='PASS', reason='EA_DELETION_PREVIEW_SAVED_NOT_FINAL_TEXT')
         return preview
@@ -95,6 +95,6 @@ def save(case_dir,label):
         payload=json.loads((case/root/'realization-input.json').read_text())
         preview=compose(payload)
         ctx.save(root+'/05-text-input-preview.json',preview)
-        ctx.save_text(root+'/05-text-input-preview.md','이 파일은 첫 수수료 문항의 편집 미리보기입니다. LLM이 생성한 최종 본문이나 모델 답변이 아닙니다. text-preview-v2.json에 값 주장·A 출처·B 출처 구간 및 삽입 위치·문구·원문·미리보기·그래프 연결을 보존합니다. 공통 뷰어 5번에서 비교합니다.\n')
+        ctx.save_text(root+'/05-text-input-preview.md','This file is an edited preview of the first fee clause. It\'s not the final text or model answer created by the LLM. It preserves the value arguments in text-preview-v2.json, source A, source B, and the insertion location, query, source, microblog, graph connection. Common Viewer 5Compare it to the bar.\n')
         outcome.update(status='PASS',reason='EDITORIAL_PREVIEW_SAVED_NOT_FINAL_TEXT')
         return preview

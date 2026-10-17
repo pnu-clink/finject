@@ -17,7 +17,7 @@ class SourceTypeTests(unittest.TestCase):
         code = (ROOT / 'viewer/dataset/source-type.js').read_text()
         script = code + '\nconsole.log(JSON.stringify(JSON.parse(process.argv[1]).map(originalSourceType)));'
         actual = json.loads(subprocess.check_output(['node', '-e', script, json.dumps(provenance)], text=True))
-        expected = ['출처 미확인' if source_kind(p) == 'UNKNOWN' else source_kind(p) for p in provenance]
+        expected = ['\ucd9c\ucc98 \ubbf8\ud655\uc778' if source_kind(p) == 'UNKNOWN' else source_kind(p) for p in provenance]
         self.assertEqual(actual, expected)
         self.assertEqual(set(actual), {'FinQA', 'TAT-QA', 'FinanceMath', 'FinanceReasoning'})
 

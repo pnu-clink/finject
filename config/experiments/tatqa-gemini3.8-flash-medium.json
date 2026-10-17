@@ -14,7 +14,7 @@
         "model": "gemini-3.8-flash",
         "transport": "gemini_batch",
         "key_variable": "GEMINI_API_KEY",
-        "key_file": "/Volumes/EX400U/workspace/논문/fin-arch/.env",
+        "key_file": ".env",
         "reference_price_per_million": {"input": 0.375, "output": 1.875},
         "price_source": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.8-flash",
         "thinking_levels": {"on": "medium"},

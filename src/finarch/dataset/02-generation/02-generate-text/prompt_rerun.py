@@ -30,30 +30,30 @@ def write(path, value):
     tmp.replace(path)
 
 
-README = '''# 유형별 프롬프트 실제 재실행 — {name}
+README = '''# Type by type prompt for actual re-enactment {name}
 
-상태: {status}. 기존 10문항 중 test-0008은 정답 불일치 제외를 유지합니다.
-원문·POT·계산 그래프·변경 계획은 {source}의 해시가 같은 사본을 재사용합니다.
-16번 문장과 17번 의미 검사는 첫 문항까지 새로 호출합니다. 예전 생성문·판정은 복사하지 않습니다.
+State of play: {status}The old one. 10In the case, test-0008The equation keeps the equation of the equation unchanged.
+The basic POT calculation graphs and transformation plans {source}The hash reuses the same copy.
+16And the phrase "B" 17The bar-meaning check calls up to the first case. The old generated case judgment doesn't copy.
 
-읽는 순서:
-1. plan.json / config.json: 대상·최대 호출 수·모델·추론 설정·지침 해시.
-2. production-progress.json: 문항별 진행·실패·Ready for review: 개수.
-3. 각 문항 05-text/stage16-typed-v1/review.json: 생성 결과와 실패 원인.
-4. 각 문항 05-text/stage17-typed-v1/review.json: 세 판단 검사 결과.
-5. PRODUCTION-RESULTS.json: 전체 집계·비교·실제 호출 시간·사용량.
-6. 각 문항 06-human-review/01-collect-results/typed-v1: 사람 검토 자료. 판정은 PENDING입니다.
+In order of reading:
+1. plan.json / config.json: object; maximum call number; model; referral setting; directional hash.
+2. Production-progress.json: Progress by case; failure; Ready for review: number.
+3. Each case 05-text/stage16-typed-v1/review.json: Created results and causes of failure.
+4. Each case 05-text/stage17-typed-v1/review.json: Three judgments from the tests.
+5. PRODUCTION-RESULTS.json: total estimate; nearby; actual call time; usage.
+6. Each case 06-human-review/01-collect-results/typed-v1: Human review data. Judgment is pending.
 
-각 호출의 realize/ 또는 audit/에서 01-input.json(실제 프롬프트와 유형·파일 해시),
-01-input/response-schema.json, 02-raw-response.json, 03-result/schema-check.json, 03-result/usage.json을 읽습니다.
-events.jsonl은 이번 실행 중 기록한 시간순 로그입니다. 예전 POT 호출은 replay-source.json으로 연결합니다.
-copied-inputs.json은 재사용 파일 목록·출처·해시이며, 재사용을 새 모델 호출로 세지 않습니다.
+Every call is realized or audited. 01-input.json(real prompt and type; file hash ),
+01-input/response-schema.json, 02-raw-response.json, 03-result/schema-check.json, 03-result/usage.json is read.
+events.jsonl is a timeline log recorded during this run. The old POT call connects to replay-source.json.
+copied-inputs.json is a reuse file list, source, and not a new model call.
 
-공통 뷰어: http://127.0.0.1:8893/?run={name}&case=test-0002&tab=dtt
-실시간 로그: http://127.0.0.1:8893/live?run={name}
-5번 생성·검증 → 6번 사람 판정 순서로 봅니다. 자동 재시도·역산·18번·자동 승인은 없습니다.
-비용은 CLI 단가 미확인입니다. 호출 시간 합은 실제 전체 경과 시간과 구분합니다.
-이 README는 prompt_rerun.py 템플릿에서 자동 생성합니다.
+Common viewer: http://127.0.0.1:8893/?run={name}&case=test-0002&tab=dtt
+Real time log: http://127.0.0.1:8893/live?run={name}
+5The generated and verified 6I see it in the order of the person's judgement.18There is no automatic approval.
+The cost is CLI, the uncertain sum of the call time, which separates the actual total visit and time.
+This README automatically generates from the prompt_rerun.py template.
 '''
 
 
@@ -61,7 +61,7 @@ def guide(root, state):
     table='\n'.join(f"|{name}|{row['status']}|{row.get('ready','—')} / {row.get('total','—')}|{row.get('reason','')}|"
                     for name,row in state['cases'].items())
     (root/'README.md').write_text(README.format(name=root.name, source=state['source'], status=state['status'])+
-        '\n## 문항별 현재 상태\n\n|문항|상태|사람 Ready for review: / 대상|이유|\n|---|---|---|---|\n'+table+'\n')
+        '\n## The current state of each case\n\nReady for review: / the target is the target\n|---|---|---|---|\n'+table+'\n')
 
 
 def prepare(source, root):

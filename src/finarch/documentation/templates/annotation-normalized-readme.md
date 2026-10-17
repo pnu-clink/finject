@@ -1,5 +1,5 @@
-# 형식 보완 JSON
+# Format is complemented by JSON
 
-[상위 입력과 읽는 순서](../README.md)를 먼저 확인합니다. 각 JSON은 날짜 폴더의 같은 이름 원본에 형식 보완만 적용한 파일입니다. 12자리 접두사는 원본 SHA-256의 앞부분입니다. `annotator / labels` 또는 `finarch-evaluation-results-v1`의 입력 구조를 유지합니다.
+[Input and read order](../README.md)First, check out. Each JSON is a file that only applies a format complement to the same name of the date folder. 12The placeholder is the original SHA-256It's the front of the. `annotator / labels` Or `finarch-evaluation-results-v1`Keep the input structure.
 
-판정·주석·추가/삭제 본문은 그대로입니다. 변경 전후는 `../_manager/normalization-log.jsonl`, 현재 집계는 `../_manager/summary.json`에서 확인합니다. 관리자 화면은 최상위 원본을 다시 읽기 때문에 이 보완 폴더를 두 번째 annotator 입력으로 세지 않습니다.
+The sentence, sentence, and sentence are the same. `../_manager/normalization-log.jsonl`And the current statistics are `../_manager/summary.json`Check in. The admin screen reads the top-level copy again so this supplementary folder doesn't count as a second annotator input.

@@ -64,9 +64,9 @@ class AuditChecks(unittest.TestCase):
     def test_semantic_failure_or_unknown_is_blocked(self):
         request=self.request()
         for judgment,expected in [('FAIL','FAIL'),('UNKNOWN','NOT_EVALUATED')]:
-            r=response_for(request);r['findings'][2].update(judgment=judgment,reason='문장 결함 또는 불확실')
+            r=response_for(request);r['findings'][2].update(judgment=judgment,reason='\ubb38\uc7a5 \uacb0\ud568 \ub610\ub294 \ubd88\ud655\uc2e4')
             self.assertEqual(evaluate(request,r)['status'],expected)
-        r['findings'][0].update(judgment='FAIL',reason='다른 기간의 금액')
+        r['findings'][0].update(judgment='FAIL',reason='\ub2e4\ub978 \uae30\uac04\uc758 \uae08\uc561')
         self.assertEqual(evaluate(request,r)['status'],'FAIL')
 
     def test_source_assignment_input_preserved_without_second_gate(self):
@@ -131,9 +131,9 @@ class AuditChecks(unittest.TestCase):
             case=Path(d)/'test-0001';shutil.copytree(CASE,case);calls=[]
             def local(config,role,payload,*,save):
                 calls.append(role);r=response_for(payload)
-                if 'next quarter' in payload['context']:r['findings'][0].update(judgment='FAIL',reason='다른 기간')
+                if 'next quarter' in payload['context']:r['findings'][0].update(judgment='FAIL',reason='\ub2e4\ub978 \uae30\uac04')
                 if payload['axis']=='IC_SOURCE' and payload['intent']['source_condition']=='A_ONLY' and '90000 dollars for the same bank, according' in payload['context']:
-                    r['findings'][0].update(judgment='FAIL',reason='출처가 다른 값에 배정됨')
+                    r['findings'][0].update(judgment='FAIL',reason='\ucd9c\ucc98\uac00 \ub2e4\ub978 \uac12\uc5d0 \ubc30\uc815\ub428')
                 save('02-raw-response.json',{'text':json.dumps(r)})
                 return StepResult('PASS','local control test only',r)
             with patch('finarch.dataset.shared.review.dtt_audit.call',local):

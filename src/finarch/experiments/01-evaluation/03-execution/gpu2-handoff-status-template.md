@@ -1,20 +1,20 @@
-# 원격 전달 상태
+# Remote transmission.
 
-확인 시각: $checked_at. **자료 전달·검증과 원격 메인 작업의 수신 확인은 완료했습니다. GPU 본실험 완료 보고서는 아직 없습니다.**
+Check-in view: $checked_at. **Data transmission verification and receipt verification of remote main work is complete.**
 
-| 구분 | 확인 내용 |
+| Category | Confirmation of the |
 |---|---|
-| 원격 메인 작업 | vllm gpu-2에서 Qwen3.8 27B 구동 |
-| 입력 경로 | `/home/clink-wooix/workspace/datset/20260921-exp-001` |
-| 프로그램 작업 경로 | `/home/clink-wooix/workspace/fexperiment/gpu2-finance-timing-20260921` |
-| 전송 검증 | 자료 23파일·지원 코드 15파일의 해시 일치, 원문 1,080·변형 7,560 확인 |
-| Luna 동일성 | exp-006 실제 3,000요청과 입력·프롬프트·V4 스키마·출력 상한 대조 통과 |
-| GPU 관측 | 기존 Pod에서 A100-SXM4-40GB 4장 확인. Kubernetes GPU limit 미기재여서 실제 격리 방식을 원격이 점검 |
-| 현재 서비스 | 원격 사전 점검에서는 실제 모델이 Qwen3-8B이고 prefix cache 활성 상태였음 |
-| 금융 모델 | 원격이 5개 모델의 revision·설정을 확인했고 다운로드·GGUF 플러그인 호환성 확인 진행 |
-| 실행 위임 | 캐시 해제 확인 → 모델별 배치 탐색 → 전체 실험 → 시간·실패·응답 취합까지 위임 |
-| 아직 확인 안 된 것 | 선정 최적 설정, 본실험 시작/종료, 전체 처리 시간·GPU-hours |
+| Remote main work | vllm gpu-2From Qwen3.8 27B Drive the car. |
+| The input path. | `/home/clink-wooix/workspace/datset/20260921-exp-001` |
+| Program work path | `/home/clink-wooix/workspace/fexperiment/gpu2-finance-timing-20260921` |
+| Verification of transmission | The data. 23File support code 15The hash matching of the file, the original. 1,080· Variable 7,560 Check |
+| The Luna equation | exp-006 Actual 3,000Request and input prompt V4 schema output bypass |
+| GPU observation | A1 from the existing Pod.00-SXM4-40GB 4The Kubernetes GPU limit is unknown, so the actual isolation method is remote checking. |
+| Current service | In remote pre-examination, the actual model is Qwen3-8BThe prefix cache was active. |
+| Financial model | Remote 5Check the revision and setup of the items model and download the GGUF plugin to check compatibility |
+| The execution assignment | Cache uncheck → model-by-model search search → full experiment → time; failure; assignment to response setup |
+| Not yet confirmed. | Select optimal settings, sample start/finish, full processing time;GPU-hours |
 
-[검증 영수증](transfer-receipt.json) · [로컬 검사](local-handoff-check.json) · [실행 기준](PLAN.md) · [파일 안내](../../README.md)
+[Certified receipt](transfer-receipt.json) · [local inspection](local-handoff-check.json) · [Code of conduct](PLAN.md) · [File directory](../../README.md)
 
-수신 확인은 2026-09-21 18:21 KST 원격 작업의 진행 메시지에서 확인했습니다. 그 작업은 동결 입력을 보존하고 캐시를 끈 표본 실험부터 실행 파이프라인을 이어가겠다고 밝혔습니다. 이 메시지를 모델 실험 결과로 세지 않습니다. 이후 실제 진행 상태와 결과는 원격 메인 작업이 관리합니다.
+The receiving confirmation is 2026-09-21 18:21 The KST remote verified the progress message, which said it would preserve the incoming input and move the running pipeline from the cached-string sample test, not counting the results of the model test, but the actual progress and results, which are then managed by the remote main task.

@@ -8,39 +8,39 @@ RunContext = __import__('finarch.dataset.90-operations.staging', fromlist=['RunC
 from finarch.dataset.schemas.validation import validate, parse_json_object
 from finarch.dataset.schemas.registry import describe
 
-README = '''# 16번 실제 문장 생성 · 첫 문항
+README = '''# 16The first case
 
-현재 결과: **{passed}/{total} 조건 편집 검사 통과**, 실제 CLI 호출 {calls}회.
-모델: gpt-5.3-codex-spark / low. 입력 {input_tokens:,} 토큰, 출력 {output_tokens:,} 토큰
-(캐시 입력 {cached_tokens:,} 포함). 과금액·단가 미확인으로 비용을 0으로 표시하지 않습니다.
+The current results: **{passed}/{total} Pass the conditioned editing check**Call the real CLI. {calls}Chapter two.
+Model: gpt-5.3-codex-spark / low. {input_tokens:,} Tokens, output {output_tokens:,} tokens
+(cache input) {cached_tokens:,} Include) overpayment of uncertain amounts 0It doesn't show up as.
 
-읽는 순서:
-1. `STAGE16-REVIEW.json`: 현재 성공 결과 7개와 재검사·원본 해시·전체 사용량.
-2. `stage16/plan.json`, `stage16/review.json`: 최초 6회 호출과 실패 사유.
-3. `stage16-v2/review.json`: 프롬프트 수정 후 값 1회·출처 2회 추가 생성.
-4. 유형별 `latest-realization.json`이 있으면 가리키는 폴더, 없으면 유형 폴더의 `README.md`.
-5. 해당 폴더의 `realize/01-input.json`(실제 프롬프트·응답 스키마),
-   `02-raw-response.json`(원응답), `03-result/schema-check.json`, `03-result/validation.json`,
-   `03-result/patches.json`, `04-final-observation.json`(C/Q만) 순서로 읽습니다.
+In order of reading:
+1. `STAGE16-REVIEW.json`The current success rate: 7items and re-exams, source code, hashing, whole use.
+2. `stage16/plan.json`, `stage16/review.json`The first: 6Turn and fail causes.
+3. `stage16-v2/review.json`: Prompt value after modification 1Rescue and recovery 2Additional generated rounds.
+4. By type `latest-realization.json`If this is a directory, if not a type folder, `README.md`.
+5. The folder is the same as the folder. `realize/01-input.json`(Real prompt response scheme)
+   `02-raw-response.json`(Raw response) `03-result/schema-check.json`, `03-result/validation.json`,
+   `03-result/patches.json`, `04-final-observation.json`(C/Q) I read it in order.
 
-|유형|현재 결과 폴더|
+|Type|Current results are in the folder|
 |---|---|
 {rows}
 
-IC-VALUE 앞/뒤는 동일 생성 문장을 Python으로 배치하며 뒤 조건의 추가 호출은 0회입니다.
-출처 A/B도 그 값 문장을 고정합니다. EA는 수익 항목을 남기고 ` totaling 80,000` 또는
-` reaching 45,000`만 제거합니다. 태그·대체 숫자·결측 안내문은 완성 본문에 없습니다.
+IC-VALUE is the same generated phrase in Python, and the additional call to the back condition is 0calls.
+So the source A/B also fixes the value phrase. ` totaling 80,000` Or
+` reaching 45,000`The tag, the replacement number, the end guide are not in the finished text.
 
-최초 값 문장의 Python 변수명 노출, 출처 B 응답의 고정 접두문 누락,
-출처 미리보기의 axis 누락에 따른 표시 조립 오류를 확인하고 수정했습니다.
-초기 원응답·검사 결과는 보존하며 현재 성공 revision만 뷰어 본문으로 선택합니다.
+Exposure to the Python variable of the first value phrase, the default default default of the source B response,
+I've identified and corrected a mark assembly error that follows the axis gap in the source preview.
+The initial raw response results are saved and the current success revision is selected as the viewer text.
 
-공통 로그: 문항 루트 `events.jsonl`, 각 호출 폴더 `03-result/usage.json`과 `02-raw-response/cli-execution.json`.
-뷰어: http://127.0.0.1:8893/?run={run}&case={case}&tab=dtt
-문항 → 유형 버튼 → **5 문장과 답변**에서 실제 문장, 하단 LLM 디버그의 전송·수신 두 묶음을 확인합니다.
+Common log: the root of the case `events.jsonl`, each call to the folder `03-result/usage.json`and `02-raw-response/cli-execution.json`.
+Viewer: http://127.0.0.1:8893/?run={run}&case={case}&tab=dtt
+The type button **5 The phrases and answers**In the actual sentence, check the two sets of LLM debugging transmissions and transmissions below.
 
-17번 의미 검사·18번 독립 답변·역산/우회는 미실행입니다. 이 검사는 문장 편집 계약과
-저장 일치를 확인하며 충돌/답변 불가의 의미적 보장은 하지 않습니다. 다른 9문항을 새로 생성하지 않았습니다.
+17The meaning of the word18The test is a misreading of the terms of the agreement and the terms of a sentence editing agreement.
+It doesn't make a meaningful guarantee of collision/response inflation. 9I didn't create a new case.
 '''
 
 

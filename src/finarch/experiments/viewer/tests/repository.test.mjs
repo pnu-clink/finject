@@ -61,7 +61,7 @@ test('path escapes, absolute paths and symlinks are rejected', async t => {
   await assert.rejects(safePath(f.folder, '../secret'));
   await assert.rejects(safePath(f.folder, '/etc/passwd'));
   await fs.symlink(os.tmpdir(), path.join(f.folder, 'outside'));
-  await assert.rejects(safePath(f.folder, 'outside/something'), /심볼릭/);
+  await assert.rejects(safePath(f.folder, 'outside/something'), /\uc2ec\ubcfc\ub9ad/);
   await assert.rejects(f.repository.snapshot('../other'));
 });
 
@@ -127,13 +127,13 @@ test('unfinished writes preserve the last complete snapshot and show stale warni
 test('an initial malformed file fails visibly and does not fabricate an empty run', async t => {
   const f = await fixture(t);
   await fs.writeFile(path.join(f.folder, '01-input/public.jsonl'), '{');
-  await assert.rejects(f.repository.snapshot(run), /완성되지/);
+  await assert.rejects(f.repository.snapshot(run), /\uc644\uc131\ub418\uc9c0/);
 });
 
 test('duplicate result IDs fail instead of inflating denominators', async t => {
   const f = await fixture(t);
   await f.write('model/03-results/results.jsonl', [f.row, f.row], true);
-  await assert.rejects(f.repository.snapshot(run), /중복 요청/);
+  await assert.rejects(f.repository.snapshot(run), /\uc911\ubcf5 \uc694\uccad/);
 });
 
 test('model manifests supply unique item totals and logs supply exclusion history', async t => {
@@ -161,7 +161,7 @@ test('model manifests supply unique item totals and logs supply exclusion histor
 test('contradictory manifest identities fail rather than guessing from private data', async t => {
   const f = await fixture(t);
   await f.write('model/01-requests/manifest.jsonl', [f.row, { ...f.row, trial_id: 'other', case: 'different-case' }], true);
-  await assert.rejects(f.repository.snapshot(run), /문항 연결 정보가 서로/);
+  await assert.rejects(f.repository.snapshot(run), /\ubb38\ud56d \uc5f0\uacb0 \uc815\ubcf4\uac00 \uc11c\ub85c/);
 });
 
 test('semantic judgments join exact trial identities and preserve audit uncertainty', async t => {
@@ -182,9 +182,9 @@ test('semantic judgments join exact trial identities and preserve audit uncertai
 test('foreign, duplicate, or mismatched semantic judgments fail closed', async t => {
   const f = await fixture(t), semantic = { ...f.row, model: 'model' };
   for (const [rows, message] of [
-    [[semantic, semantic], /중복 요청/],
-    [[{ ...semantic, trial_id: 'not-a-real-request' }], /실제 요청에 없는/],
-    [[{ ...semantic, case: 'wrong-case' }], /연결이 다릅니다/]
+    [[semantic, semantic], /\uc911\ubcf5 \uc694\uccad/],
+    [[{ ...semantic, trial_id: 'not-a-real-request' }], /\uc2e4\uc81c \uc694\uccad\uc5d0 \uc5c6\ub294/],
+    [[{ ...semantic, case: 'wrong-case' }], /\uc5f0\uacb0\uc774 \ub2e4\ub985\ub2c8\ub2e4/]
   ]) {
     await f.write('02_analysis/02_comparison/rows.jsonl', rows, true);
     await assert.rejects(new Repository(f.root).snapshot(run), message);

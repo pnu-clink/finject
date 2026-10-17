@@ -1,12 +1,12 @@
-# 캐시 금지 정책 로컬 검사
+# Local cache-disable policy check
 
-검사 시각: {checked_at}. 실제 모델 호출은 0건입니다.
+The time of the inspection: {checked_at}The actual model call is 0entries.
 
-1. `verification.json`: 검사 결과·파일 해시·005 미호출·004와 조건 동일성.
-2. `tests.log`: 합성 요청으로 검사한 {tests_run}개 테스트 로그. 결과는 **{test_status}**입니다.
-3. `cli-evidence.json`, `codex-exec-help.txt`: 설치 CLI 버전, 도움말과 스키마에서 캐시 차단 옵션을 조사한 결과. 검색 결과 없음만으로 모든 미래 CLI 버전에서도 불가능하다고 주장하지 않습니다.
-4. [005 캐시 보고서](../../experiments-run/20260920-exp-005/CACHE-AUDIT.md) → [실행 상태](../../experiments-run/20260920-exp-005/REPORT.md).
+1. `verification.json`The results of the test.005 The mythology004And the condition of the same.
+2. `tests.log`I'm looking for a new one. {tests_run}items test log. The results are **{test_status}**.
+3. `cli-evidence.json`, `codex-exec-help.txt`: Install CLI version, help and check the cache blocking options in the schema. Not claiming that it's impossible in all future CLI versions without search results.
+4. [005 The Cashi report.](../../experiments-run/20260920-exp-005/CACHE-AUDIT.md) → [Acting status](../../experiments-run/20260920-exp-005/REPORT.md).
 
-사전 검사에서 Codex·Gemini 개별 API·Gemini Batch 모두 실제 프로세스/네트워크 호출 전 차단되는지, 캐시 읽기·쓰기 양수 및 사용량 누락을 정상 결과로 처리하지 않는지, 캐시 오류 후 새 투입·재실행이 중단되는지 검사합니다. 기존 입력 선정·응답 형식·호출 경로·재개·자원 제어 회귀 검사도 포함합니다. 과거 모델 응답을 새 실험 결과로 사용하지 않습니다.
+In the pre-test, it checks whether each of the Codex; Gemini's individual APIs; Gemini Batch is blocked before the actual process/network call, the cached read-write and usage-rate losses are not treated as normal results, and new input and execution is stopped after a cached error. It also includes existing input selection, response format, route of exit, reboot, and resource control return checks.
 
-UI 코드는 변경하지 않았으며 [실험 전용 뷰어](http://127.0.0.1:8894/?run=20260920-exp-005&tab=overview)가 005 상태를 읽을 수 있는지 읽기 전용 API로 확인한 결과를 verification에 기록합니다. 브라우저 화면을 사람이 확인했다고 주장하지 않습니다. 별도 HTML을 생성하지 않습니다.
+UI code hasn't changed and [Experimental View](http://127.0.0.1:8894/?run=20260920-exp-005&tab=overview) 005 It records the results verified by the read-only API to verify whether the state can be read. It doesn't claim that the browser screen was verified by a person. It doesn 't generate any HTML.

@@ -18,7 +18,7 @@ assert len(package['cases'])==1354
 assert sum(len(c['items']) for c in package['cases'])==2708
 for c in package['cases']:
  for v in c['items']:
-  for s in v['display_ko'].values():assert re.search('[가-힣]',s)
+  for s in v['display_ko'].values():assert re.search('[\uac00-\ud7a3]',s)
   assert v['removals']
   for removed in v['removals']:assert c['original_context'][removed['start']:removed['end']]==removed['text']
   source=project/v['removal_source']['path']

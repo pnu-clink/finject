@@ -9,7 +9,7 @@ prepare = import_module("finarch.dataset.00-input.build").prepare
 
 
 def main():
-    # [DP01] docs/02-architecture.md#DP01 — 준비 인자·개수 옵션을 읽어 prepare에 전달합니다.
+    # [DP01] docs/02-architecture.md#DP01 Read the preparation of the enzyme and the opening options and send them to prepare.
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("prepare", help="Create source-derived Q/C/A inputs without LLM calls")
@@ -22,7 +22,7 @@ def main():
     args = parser.parse_args()
     try:
         result = prepare(args.sources, args.output, args.per_source, args.seed, total=args.total)
-    # [DP02] docs/02-architecture.md#DP02 — 준비 오류는 종료 코드 1, 정상 반환은 JSON 요약으로 표시합니다.
+    # [DP02] docs/02-architecture.md#DP02 The shutdown code is error-prepared. 1So, normal returns are shown as JSON abstractions.
     except (OSError, ValueError, KeyError, TypeError) as error:
         parser.exit(1, f"PREPARATION_FAILED: {error}\n")
     print(json.dumps(result, ensure_ascii=False, indent=2))
