@@ -53,13 +53,13 @@ final class ServerController: ObservableObject {
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
-        panel.prompt = "선택"
+        panel.prompt = "Choose"
         panel.directoryURL = projectRoot
         guard panel.runModal() == .OK, let selected = panel.url else { return }
         let root = selected.standardizedFileURL.resolvingSymlinksInPath()
         guard FileManager.default.fileExists(atPath: root.appendingPathComponent("viewer/dataset/start.command").path),
               FileManager.default.fileExists(atPath: root.appendingPathComponent("src/finarch").path) else {
-            errorMessage = "fin-arch 프로젝트 폴더를 선택해 주세요."
+            errorMessage = "Choose the FInject repository folder."
             return
         }
         projectRoot = root
@@ -83,7 +83,7 @@ final class ServerController: ObservableObject {
         let initial = await probe(service)
         phases[service.id] = initial
         if initial == .occupied {
-            fail("\(service.title) 포트 \(service.port)를 다른 서비스나 다른 프로젝트가 사용하고 있어 제어하지 않았습니다.", service, action)
+            fail("Port \(service.port) belongs to another service or project. \(service.title) was not controlled.", service, action)
             return
         }
         do {
@@ -92,11 +92,11 @@ final class ServerController: ObservableObject {
                 if initial == .unresponsive { try await stopAndWait(service) }
                 if initial != .running { try await launchAndWait(service) }
                 guard NSWorkspace.shared.open(service.address) else {
-                    throw ControlError.message("브라우저에서 \(service.title) 화면을 열지 못했습니다.")
+                    throw ControlError.message("Could not open \(service.title) in your browser.")
                 }
             case .start:
                 if initial == .unresponsive {
-                    throw ControlError.message("\(service.title)이 응답하지 않습니다. 재시작 또는 중지를 사용해 주세요.")
+                    throw ControlError.message("\(service.title) is not responding. Use Restart or Stop.")
                 }
                 if initial != .running { try await launchAndWait(service) }
             case .stop:
@@ -116,7 +116,7 @@ final class ServerController: ObservableObject {
     private func launchAndWait(_ service: ServerSpec) async throws {
         let script = projectRoot.appendingPathComponent(service.script)
         guard FileManager.default.fileExists(atPath: script.path) else {
-            throw ControlError.message("실행 파일이 없습니다: \(service.script)")
+            throw ControlError.message("Launch script not found: \(service.script)")
         }
         let directory = projectRoot.appendingPathComponent("log/server-widget", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -146,31 +146,31 @@ final class ServerController: ObservableObject {
             let current = await probe(service)
             if current == .running { phases[service.id] = .running; return }
             if !process.isRunning {
-                throw ControlError.message("\(service.title) 시작에 실패했습니다. \(output.path) 로그를 확인해 주세요.")
+                throw ControlError.message("Could not start \(service.title). Check the log at \(output.path).")
             }
             try await Task.sleep(nanoseconds: 250_000_000)
         }
-        throw ControlError.message("\(service.title) 준비 시간을 초과했습니다. \(output.path) 로그를 확인해 주세요.")
+        throw ControlError.message("Timed out waiting for \(service.title). Check the log at \(output.path).")
     }
 
     private func stopAndWait(_ service: ServerSpec) async throws {
         let observed = await probe(service)
         if observed == .stopped { return }
         guard observed == .running || observed == .unresponsive else {
-            throw ControlError.message("서버 상태가 바뀌어 \(service.title) 중지를 취소했습니다.")
+            throw ControlError.message("The server state changed. Stopping \(service.title) was cancelled.")
         }
         guard let pid = await listenerPID(service.port),
               let command = await ProcessTools.output("/bin/ps", ["-p", String(pid), "-o", "args="]),
               command.contains(service.processMarker),
               (observed == .running || isKnownExperimentProcess(command, service)) else {
-            throw ControlError.message("서버 프로세스를 확인하지 못해 \(service.title)을 중지하지 않았습니다.")
+            throw ControlError.message("Could not verify the server process. \(service.title) was not stopped.")
         }
         guard await listenerPID(service.port) == pid else {
-            throw ControlError.message("서버 프로세스가 바뀌어 중지를 취소했습니다.")
+            throw ControlError.message("The server process changed. Stop was cancelled.")
         }
         phases[service.id] = .stopping
         guard Darwin.kill(pid, SIGTERM) == 0 else {
-            throw ControlError.message("\(service.title) 중지 신호를 보내지 못했습니다.")
+            throw ControlError.message("Could not send the stop signal to \(service.title).")
         }
         event("terminate", service: service, result: "SIGNALLED", pid: pid)
         for _ in 0..<(observed == .unresponsive ? 12 : 40) {
@@ -185,10 +185,10 @@ final class ServerController: ObservableObject {
             guard await listenerPID(service.port) == pid,
                   let currentCommand = await ProcessTools.output("/bin/ps", ["-p", String(pid), "-o", "args="]),
                   isKnownExperimentProcess(currentCommand, service) else {
-                throw ControlError.message("서버 프로세스가 바뀌어 \(service.title) 강제 종료를 취소했습니다.")
+                throw ControlError.message("The server process changed. Force-stopping \(service.title) was cancelled.")
             }
             guard Darwin.kill(pid, SIGKILL) == 0 else {
-                throw ControlError.message("\(service.title) 서버의 강제 종료 신호를 보내지 못했습니다.")
+                throw ControlError.message("Could not send the force-stop signal to \(service.title).")
             }
             event("force_terminate", service: service, result: "SIGNALLED", pid: pid)
             for _ in 0..<20 {
@@ -200,7 +200,7 @@ final class ServerController: ObservableObject {
                 try await Task.sleep(nanoseconds: 250_000_000)
             }
         }
-        throw ControlError.message("\(service.title) 서버가 제한 시간 안에 중지되지 않았습니다.")
+        throw ControlError.message("\(service.title) did not stop within the time limit.")
     }
 
     private func probe(_ service: ServerSpec) async -> ServerPhase {

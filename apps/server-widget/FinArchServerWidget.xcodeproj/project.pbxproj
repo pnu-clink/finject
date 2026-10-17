@@ -14,7 +14,7 @@
 
 /* Begin PBXFileReference section */
 		47F0FC8019E42173E4B25596 /* ServerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSpec.swift; sourceTree = "<group>"; };
-		4AA1B8B0F449250F01297318 /* FinArchServerWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinArchServerWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AA1B8B0F449250F01297318 /* FInjectServerWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FInjectServerWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95405CB3264CB47EFACFDD0A /* ServerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerController.swift; sourceTree = "<group>"; };
 		CC85F20045D332DBDDAE894F /* ServerWidgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerWidgetApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -23,7 +23,7 @@
 		5F566C428EA7118598309C0D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4AA1B8B0F449250F01297318 /* FinArchServerWidget.app */,
+				4AA1B8B0F449250F01297318 /* FInjectServerWidget.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -63,7 +63,7 @@
 			packageProductDependencies = (
 			);
 			productName = FinArchServerWidget;
-			productReference = 4AA1B8B0F449250F01297318 /* FinArchServerWidget.app */;
+			productReference = 4AA1B8B0F449250F01297318 /* FInjectServerWidget.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -121,8 +121,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wooix.finarch.serverwidget;
-				PRODUCT_NAME = FinArchServerWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = org.finject.serverwidget;
+				PRODUCT_NAME = FInjectServerWidget;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -202,8 +202,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wooix.finarch.serverwidget;
-				PRODUCT_NAME = FinArchServerWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = org.finject.serverwidget;
+				PRODUCT_NAME = FInjectServerWidget;
 				SDKROOT = macosx;
 			};
 			name = Release;

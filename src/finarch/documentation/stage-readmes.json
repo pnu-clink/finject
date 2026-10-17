@@ -138,5 +138,6 @@
   "generated-index.md": "data/generated/README.md",
   "source-layout/dataset/publication.md": "src/finarch/dataset/03-release/publication/README.md",
   "stages/02-experiments/02_analysis/04_quadrant/README.md": "docs/02-experiments/02_analysis/04_quadrant/README.md",
-  "source-layout/experiments/02-analysis/04-quadrant.md": "src/finarch/experiments/02-analysis/04-quadrant/README.md"
+  "source-layout/experiments/02-analysis/04-quadrant.md": "src/finarch/experiments/02-analysis/04-quadrant/README.md",
+  "apps.md": "apps/README.md"
 }

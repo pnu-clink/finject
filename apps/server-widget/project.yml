@@ -1,6 +1,6 @@
 name: FinArchServerWidget
 options:
-  bundleIdPrefix: com.wooix.finarch
+  bundleIdPrefix: org.finject
   deploymentTarget:
     macOS: "13.0"
 settings:
@@ -16,13 +16,15 @@ targets:
       - path: Sources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.wooix.finarch.serverwidget
-        PRODUCT_NAME: FinArchServerWidget
+        PRODUCT_BUNDLE_IDENTIFIER: org.finject.serverwidget
+        PRODUCT_NAME: FInjectServerWidget
         ENABLE_APP_SANDBOX: NO
     info:
       path: Config/Info.plist
       properties:
-        CFBundleDisplayName: FinArch Servers
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en]
+        CFBundleDisplayName: FInject Servers
         LSUIElement: true
         FinArchProjectRoot: "$(SRCROOT)/../.."
         NSAppTransportSecurity:

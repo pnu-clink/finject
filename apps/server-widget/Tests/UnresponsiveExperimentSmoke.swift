@@ -51,7 +51,7 @@ struct UnresponsiveExperimentSmoke {
             if listenerPID(foreignPort) == foreignProcess.processIdentifier { break }
             try? await Task.sleep(nanoseconds: 100_000_000)
         }
-        let foreign = ServerSpec(id: .experiments, title: "실험 결과 검사", port: foreignPort,
+        let foreign = ServerSpec(id: .experiments, title: "Experiment server check", port: foreignPort,
                                  script: service.script, landing: service.landing,
                                  processMarker: service.processMarker)
         await controller.execute(.restart, foreign)

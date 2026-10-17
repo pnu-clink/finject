@@ -7,7 +7,7 @@ struct FinArchServerWidgetApp: App {
     @StateObject private var controller = ServerController()
 
     var body: some Scene {
-        MenuBarExtra("FinArch Servers", systemImage: "server.rack") {
+        MenuBarExtra("FInject Servers", systemImage: "server.rack") {
             ServerPanel(controller: controller)
         }
         .menuBarExtraStyle(.window)
@@ -23,8 +23,8 @@ struct ServerPanel: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("fin-arch 서버").font(.headline)
-                    Text("로컬 서비스 · 8893–8896").font(.caption).foregroundStyle(.secondary)
+                    Text("FInject Servers").font(.headline)
+                    Text("Local services · 8893–8896").font(.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
                 Button {
@@ -32,7 +32,7 @@ struct ServerPanel: View {
                 } label: {
                     Image(systemName: "arrow.clockwise")
                 }
-                .help("상태 새로고침")
+                .help("Refresh status")
             }
 
             ForEach(ServerSpec.all) { service in
@@ -50,9 +50,9 @@ struct ServerPanel: View {
 
             Divider()
             HStack {
-                Button("프로젝트 폴더…") { controller.chooseProjectFolder() }
+                Button("Project Folder…") { controller.chooseProjectFolder() }
                 Spacer()
-                Button("종료") { NSApp.terminate(nil) }
+                Button("Quit") { NSApp.terminate(nil) }
             }
             .controlSize(.small)
             Text(controller.projectRoot.path)
@@ -88,13 +88,13 @@ struct ServerPanel: View {
             .accessibilityIdentifier("status-\(service.id.rawValue)")
 
             HStack(spacing: 6) {
-                Button("열기") { controller.open(service) }
-                    .help("꺼져 있으면 시작하고, 확인된 실험 서버가 응답하지 않으면 재시작한 뒤 엽니다")
-                Button("시작") { controller.start(service) }
+                Button("Open") { controller.open(service) }
+                    .help("Start the server if needed, then open it in your browser. Recover a verified unresponsive experiment server first.")
+                Button("Start") { controller.start(service) }
                     .disabled(phase != .stopped)
-                Button("중지") { controller.stop(service) }
+                Button("Stop") { controller.stop(service) }
                     .disabled(phase != .running && phase != .unresponsive)
-                Button("재시작") { controller.restart(service) }
+                Button("Restart") { controller.restart(service) }
                     .disabled(phase == .occupied)
             }
             .controlSize(.small)

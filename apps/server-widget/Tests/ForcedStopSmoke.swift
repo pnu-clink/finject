@@ -40,7 +40,7 @@ struct ForcedStopSmoke {
             fputs("FAIL: test server did not reach stopped simulation\n", stderr)
             exit(1)
         }
-        let target = ServerSpec(id: .experiments, title: "실험 복구 검사", port: port,
+        let target = ServerSpec(id: .experiments, title: "Experiment recovery check", port: port,
                                 script: experiment.script, landing: experiment.landing,
                                 processMarker: experiment.processMarker)
         let controller = ServerController()

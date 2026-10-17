@@ -19,16 +19,16 @@ struct ServerSpec: Identifiable {
     let processMarker: String
 
     static let all: [ServerSpec] = [
-        .init(id: .dataset, title: "데이터셋·문서", port: 8893,
+        .init(id: .dataset, title: "Dataset", port: 8893,
               script: "viewer/dataset/start.command", landing: "/",
               processMarker: "finarch.dataset.viewer.server"),
-        .init(id: .experiments, title: "실험 결과", port: 8894,
+        .init(id: .experiments, title: "Experiments", port: 8894,
               script: "viewer/experiments/start.command", landing: "/",
               processMarker: "finarch/experiments/viewer/server.mjs"),
-        .init(id: .dashboard, title: "대시보드", port: 8895,
+        .init(id: .dashboard, title: "Dashboard", port: 8895,
               script: "viewer/dashboard/start.command", landing: "/dashboard/03-project/",
               processMarker: "finarch.dashboard.viewer.server"),
-        .init(id: .research, title: "연구 자료", port: 8896,
+        .init(id: .research, title: "Research", port: 8896,
               script: "viewer/research/start.command", landing: "/viewer/research/",
               processMarker: "finarch.shared.research_viewer"),
     ]
@@ -62,13 +62,13 @@ enum ServerPhase: Equatable {
 
     var label: String {
         switch self {
-        case .checking: return "확인 중"
-        case .stopped: return "꺼짐"
-        case .running: return "실행 중"
-        case .unresponsive: return "응답 없음"
-        case .occupied: return "다른 서비스 또는 확인 실패"
-        case .starting: return "시작 중"
-        case .stopping: return "중지 중"
+        case .checking: return "Checking"
+        case .stopped: return "Stopped"
+        case .running: return "Running"
+        case .unresponsive: return "Not responding"
+        case .occupied: return "Port in use / unverified"
+        case .starting: return "Starting"
+        case .stopping: return "Stopping"
         }
     }
 
