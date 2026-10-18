@@ -1,12 +1,21 @@
-# 00-input: FinanceReasoning and TAT-QA conversion
+# 00-input: source conversion implementations
 
-This page covers the existing source adapters. To bring a new raw dataset, follow
-[Write an adapter](ADAPTER.md) for the template, coding-agent prompt, conversion
-command and validation steps.
+This directory holds executable source-conversion implementations. Prompts,
+authoring guides and templates are in [0-template](../0-template/README.md).
+For a new source layout, run `make_adapter.py` as shown in that guide. It adds
+`<name>.py`, appends `adapters.<name>()` and registers provenance in
+`../schemas/prepared.py`; existing Finance/TAT-QA functions are preserved.
+The [ten-question FinQA example](../../../../data/sample/README.md) demonstrates
+this route. Once an adapter is installed, reuse its source runner with new
+files of the same layout; no new code or model call is required for conversion.
+
+The rest of this page describes the preexisting FinanceReasoning/TAT-QA
+catalog-based runners. Their catalog requirement does not apply to the
+generated source runner.
 
 For example, `finance(record, source)` receives a FinanceReasoning record and pinned source metadata. It returns the original question, rendered context, numeric reference fields, source locations, and provenance. The builder adds the common item ID and validates the result. It does not solve the question, call a model, or execute an upstream solution program.
 
-Start with the actual [two-source sample](../../../../data/sample/README.md). The common command is `python -m finarch.cli prepare --sources CATALOG --output NEW_DIRECTORY --per-source N --seed SEED`, with `PYTHONPATH=src` and the repository's `.venv/bin/python`. Catalog paths are relative to the catalog's directory. SHA-256 must match the exact local file bytes.
+Start with the [two-source sample](../../../../data/sample/README.md#built-in-financereasoning-and-tat-qa-check). The common command is `python -m finarch.cli prepare --sources CATALOG --output NEW_DIRECTORY --per-source N --seed SEED`, with `PYTHONPATH=src` and the repository's `.venv/bin/python`. Catalog paths are relative to the catalog's directory. SHA-256 must match the exact local file bytes.
 
 ## Existing adapters and selection
 
@@ -41,4 +50,4 @@ flowchart TD
   I03 -->|count or schema error| IF
 ```
 
-The legacy conversion steps in this diagram use Python without model calls. Its input files and five output files are explained in the [sample guide](../../../../data/sample/README.md). Keep that complete bundle together for the next stage. For a different raw format, follow [Write an adapter](ADAPTER.md).
+The legacy conversion steps in this diagram use Python without model calls. Its input files and five output files are explained in the [sample guide](../../../../data/sample/README.md). Keep that complete bundle together for the next stage. For a different raw format, follow [Write an adapter](../0-template/ADAPTER.md).

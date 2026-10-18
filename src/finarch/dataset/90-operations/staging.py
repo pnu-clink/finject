@@ -19,6 +19,7 @@ from typing import Callable, Literal, Mapping, Protocol
 from pydantic import ValidationError
 from finarch.dataset.schemas.registry import LLM_ROLES, describe, require_llm_schema, SchemaContractError
 from finarch.dataset.schemas.validation import validate, parse_json
+from finarch.dataset.shared.adapter import input_run_directory
 
 
 Status = Literal["PASS", "FAIL", "NOT_EVALUATED", "NOT_IMPLEMENTED"]
@@ -108,7 +109,9 @@ class PreparedInputs:
         # [DP14] docs/02-architecture.md#DP14 Check the PASS manifest hashed schema identifier that is registered.
         # [BI01] docs/02-architecture.md#BI01 The current number for the integrated input integrity check is DP1.4·DP15And then it goes on.
         self.path = Path(input_path).resolve()
-        root = self.path.parent
+        root = self.path.parent  # Existing collocated input bundles.
+        if not (root / "preparation-result.json").is_file():
+            root = input_run_directory(root)
         result_path = root / "preparation-result.json"
         if not result_path.exists():
             raise ValueError("PREPARATION_NOT_COMPLETE")
@@ -141,7 +144,7 @@ class PreparedInputs:
         samples = parse_json(input_bytes)
         validate(input_schema_id, samples)
         if input_schema_id == "01-preparation.01-source.custom-input":
-            if file_hash(root / "intermediate.json") != manifest.get("intermediate_file_sha256"):
+            if file_hash(self.path.parent / "intermediate.json") != manifest.get("intermediate_file_sha256"):
                 raise ValueError("PREPARATION_INTERMEDIATE_HASH_MISMATCH")
         self.providers = json.loads(provider_bytes)
         self.samples = {}

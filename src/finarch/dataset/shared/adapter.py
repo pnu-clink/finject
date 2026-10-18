@@ -3,7 +3,27 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 from finarch.dataset.schemas.custom_input import IntermediateSample
-from finarch.shared.reference import extract_reference, load_raw
+from finarch.shared.reference import SourceFloat, extract_reference, load_raw
+
+
+def input_run_directory(data_directory):
+    """Pair data/prepared/<name> with reports/run/<name>/00-input.
+
+    Standalone outputs outside a data tree use a sibling run/<name>/00-input.
+    The same rule lets Preparation locate evidence without a pointer in data.
+    """
+    output = Path(data_directory).resolve()
+    if output.name == 'data':
+        raise ValueError('NAMED_DATA_OUTPUT_REQUIRED')
+    for parent in output.parents:
+        if parent.name == 'data':
+            relative = output.relative_to(parent)
+            if relative.parts[0] == 'prepared':
+                relative = Path(*relative.parts[1:])
+            if relative == Path('.'):
+                raise ValueError('NAMED_DATA_OUTPUT_REQUIRED')
+            return parent.parent / 'reports/run' / relative / '00-input'
+    return output.parent / 'run' / output.name / '00-input'
 
 
 @dataclass(frozen=True)
@@ -48,21 +68,26 @@ class ExcludedRecord:
     origins: tuple[Origin, ...]
 
 
-def make_record(*, q, c, a, origins):
+def make_record(*, question, context, reference_answer, origins):
     """Extract precision from the answer token, never from question wording.
 
     Numeric strings must contain only a JSON number. Dataset-specific currency,
     grouping or percent syntax needs an explicitly documented adapter rule.
     Ordinary Python floats are rejected because their original precision is lost.
     """
-    if isinstance(a, str):
-        if not re.fullmatch(r'-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?', a):
+    if isinstance(reference_answer, str):
+        if not re.fullmatch(r'-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?',
+                            reference_answer):
             raise ValueError('ANSWER_MUST_BE_AN_UNAMBIGUOUS_NUMERIC_TOKEN')
-        a = load_raw(a)
-    reference = extract_reference(a)
-    data = IntermediateSample(q=q, c=c, a=reference.reference_answer,
-                              a_type=reference.reference_answer_type,
-                              a_precision=reference.reference_precision)
+        token = reference_answer
+        reference_answer = load_raw(reference_answer)
+    else:
+        token = reference_answer.token if isinstance(reference_answer, SourceFloat) else str(reference_answer)
+    reference = extract_reference(reference_answer)
+    # Keep lexical distinctions such as 100 versus 1e2 without adding a type field.
+    data = IntermediateSample(question=question, context=context,
+                              reference_answer=token,
+                              reference_precision=reference.reference_precision)
     return ConvertedRecord(data, tuple(origins))
 
 

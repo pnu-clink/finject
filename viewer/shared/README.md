@@ -4,7 +4,7 @@
 
 |ID|Actual file|Input → process → output|
 |---|---|---|
-|UI-L01|`viewer/shared/i18n.js`|URL: Language of the screen → Korean default; one/either button → Screen language|
+|UI-L01|`viewer/shared/i18n.js`|URL `lang`, then saved language choice → English by default when no valid preference is available → English/Korean display controls|
 |UI-L02|`viewer/shared/i18n.js`|Guidance, including screen phrases; numbers; dynamic update → full sentence dictionary; dynamic sentence rules; maximum 4,096items conversion reuse, original display value conservation → step, substrate, graph, popup, proximity name|
 |UI-L03|`common/failure-analysis.js`, `experiments/app.js`|Save `display_ko`·English original → Language text selection → Failure/research interpretation|
 |UI-L04|`src/finarch/dataset/viewer/assets.py`, `evaluation_export.py`|Common assets: Selection execution → Inline assembly → Dataset screen: evaluator HTML|
@@ -17,9 +17,9 @@
 ```mermaid
 flowchart TD
  subgraph PREF["i18n.js · Browser"]
-  A["UI-L01 Select URL lang or saved"] --> B{"Valid co/en"}
+  A["UI-L01 Read URL lang, then saved preference"] --> B{"Valid ko/en preference?"}
   B -->|Yes| C["Language of choice"]
-  B -->|No, the ground is blocked.| D["Korean default / current screen switching"]
+  B -->|No valid preference or storage unavailable| D["English default / language controls remain available"]
   D --> C
   C --> E["UI-L02 Added to DOM phrase-speed-flight screen view"]
   E --> CACHE["The same English translation reuse / max 4,096items"]
@@ -58,6 +58,4 @@ The file box is the actual responsibility unit, and there is no pink extension n
 
 The language selection button on the English screen is **Korean / English**It's the process of converting the phrases in the stages, numbers, graphs, pop-ups into whole phrases. The dynamic phrases rule doesn't change the execution ID, numerator, calculator. `fin-arch/` The front local folder name is omitted from the English mark. The hangal file name is shown as a URL tag, while the actual file link and copy path keeps the source. When returned to Korean, it restores the original mark value that was saved.
 
-The dynamic change sensor remembers the character-speed value immediately after the translation and does not process the same sign again. When the external code changes to a new phrase, it translates as before. 4,096If you keep it up to the items, and you cross the limit, you remove the oldest results. 1,080[Speed and return checks](../../log/annotation-manager-20261001/README.md)It distinguishes between the first server visit and the time of the screen's movement.
-
-[Real data for authentication](../../outputs/viewer-i18n-20261002/README.md) · [Check log verification limit](../../log/viewer-i18n-20261002/README.md)
+The dynamic-change observer remembers the value after translation and does not process the same value again. When external code supplies a new phrase, it translates that phrase. The translation cache holds up to 4,096 entries and removes the oldest entries when that limit is exceeded.

@@ -18,14 +18,16 @@ This repository provides:
 
 ```mermaid
 flowchart LR
-    P["Set up once"] --> D["Dataset<br/>Use supplied data or construct variants"]
-    D --> E["Evaluation<br/>Collect model responses"]
+    P["Set up once"] --> D["Dataset example<br/>Construct variants from raw FinQA"]
+    P --> R["Evaluation example<br/>Use the supplied final dataset"]
+    D -->|Configure generated input| E["Evaluation<br/>Collect model responses"]
+    R --> E
     E --> A["Analysis<br/>Inspect results and evidence"]
 ```
 
-For a first pass, check the two source examples in [Dataset](#4-dataset), then use one supplied, completed family for [Evaluation](#5-evaluation) and [Analysis](#6-analysis). Reconstructing the full dataset is not required. Each section gives the sample command, what to check, and a link to details.
+Choose either entry point: construct data from the ten-question FinQA example in [Dataset](#4-dataset), or evaluate one supplied, completed family in [Evaluation](#5-evaluation) and continue to [Analysis](#6-analysis). The Evaluation example does not require running the FinQA example first. Each section gives the sample command, what to check, and a link to details.
 
-Source conversion, planning, request preparation, and viewing saved files need **no API key**. Live construction and Evaluation use your own credentials and incur provider charges. The Analysis example aggregates saved responses locally; model-assisted assessment has the compatibility requirement described in Section 6.
+Adapter code generation, live construction and Evaluation use your own credentials and incur provider charges. Converting data with an installed adapter, planning, request preparation, and viewing saved files need **no API key**. The Analysis example aggregates saved responses locally; model-assisted assessment has the compatibility requirement described in Section 6.
 
 <a id="installation-and-credentials"></a>
 
@@ -53,45 +55,83 @@ Open `.env` and set `OPENAI_API_KEY=your-key`. Keep it private. Your account mus
 
 ## 4. Dataset
 
-### Sample command
+### Generate an adapter from the FinQA example
 
-Convert the two supplied source examples into common pipeline inputs and validate their format. These commands make no model calls:
+The [FinQA sample](data/sample/finqa_10.json) contains **ten unchanged raw
+questions in one JSON array**. Source, selection and license details are in the
+[sample guide](data/sample/README.md). With the API key configured, run:
 
 ```sh
-python -B -m finarch.cli prepare \
-  --sources data/sample/source-catalog.json \
-  --output data/prepared/reviewer-sample \
-  --per-source 1 --seed reviewer-sample-v1
-
-python -B -m finarch.dataset.schemas.validation \
-  --schema 01-preparation.01-source.prepared-input \
-  --input data/prepared/reviewer-sample/input.json
+.venv/bin/python -B src/finarch/dataset/0-template/make_adapter.py \
+  data/sample/finqa_10.json --name finqa --output data/prepared/finqa_10
 ```
 
-Use a new `--output` folder if you run source conversion again.
+This calls `gpt-6.1-sol` with reasoning effort `low` to generate and check three
+code additions. Normally there are three calls, with at most nine attempts
+across the three stages. Subsequent conversion uses Python only.
 
-### What to check
+| Code location | Change made after all checks pass |
+| --- | --- |
+| `src/finarch/dataset/00-input/finqa.py` | New source reader, preprocessor and conversion runner. |
+| `src/finarch/dataset/00-input/adapters.py` | Append `finqa(record, question, source)`; existing functions are preserved. |
+| `src/finarch/dataset/schemas/prepared.py` | Add `FinqaProvenance` and its union member; common fields and validators are preserved. |
 
-`data/prepared/reviewer-sample/preparation-result.json` should report **PASS**, **two inputs**, and **zero model calls**. Read `input.json` for the selected questions and contexts. These are source inputs; the seven variants are created during Preparation and Generation.
+`finqa` names the reusable source format; `finqa_10` names this sample's output
+folder. The generated FinQA registration is intentionally absent from a fresh
+checkout so this command can create it. Prompts and templates stay in
+`src/finarch/dataset/0-template/`. See the [adapter guide](src/finarch/dataset/0-template/README.md)
+for the complete generated-file list, validation and rerun behavior.
 
-To construct fresh variants, follow [Preparation and Generation](src/finarch/dataset/README.md). Inspect its plan before live calls. Construction evidence goes to `reports/run/<run-id>/`; completed consolidation writes `data/generated/<run-id>/dataset.jsonl`.
+### Inspect the converted input and continue
 
-For construction screens, start the server in a separate terminal:
+A successful conversion reports `PASS`, `records: 10`, and `excluded: 0`.
+Inspect these files against the raw questions:
+
+- `data/prepared/finqa_10/intermediate.json`: `question`, `context`, `reference_answer`, `reference_precision`.
+- `data/prepared/finqa_10/input.json`: complete common input for Preparation.
+
+Source records, manifests and validation results go to
+`reports/run/finqa_10/00-input/`; code-generation requests, checks, original-code
+backups and `changes.patch` go to `reports/run/finqa_10/adapter-generation/`.
+Keep the original raw file and both output directories. No hand-written source
+catalog or manifest is needed.
+
+Follow the [construction commands](src/finarch/dataset/README.md) to inspect the
+plan, run Preparation, then run Generation with the **actual construction run**.
+These later stages make additional model calls using their configured profiles.
+Input conversion PASS does not guarantee all generated variants pass.
+Completed consolidation writes `data/generated/<construction-run>/dataset.jsonl`,
+including failures and selection metadata.
+
+### Reuse the adapter with more data
+
+For another file with the same FinQA layout, call the installed `finqa.py` with
+that file and a new output folder. Do not regenerate or edit the adapter just
+because the data changed. For example, reconvert the supplied sample without
+model calls:
+
+```sh
+.venv/bin/python -B src/finarch/dataset/00-input/finqa.py \
+  data/sample/finqa_10.json --output data/prepared/finqa_10-repeat
+```
+
+For a different source layout, follow the [new-format guide](src/finarch/dataset/0-template/ADAPTER.md).
+The existing FinanceReasoning/TAT-QA [two-source check](data/sample/README.md#built-in-financereasoning-and-tat-qa-check)
+remains available without adapter authoring or API calls.
+
+### View construction results
+
+In a separate terminal at the repository root:
 
 ```sh
 PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.viewer.server --open
 ```
 
-Open the [Dataset viewer](http://127.0.0.1:8893/?lang=en), select the construction run, round, case, and variant. Source conversion alone does not create a viewer run. Section 5 provides the route for viewing supplied final examples.
-
-**Details:** [Sample files](data/sample/README.md) · [Construction steps](src/finarch/dataset/README.md) · [Write an adapter](src/finarch/dataset/00-input/ADAPTER.md) · [Dataset viewer](viewer/dataset/README.md)
-
-**Bring your own raw data:** use the [new-dataset adapter guide](src/finarch/dataset/00-input/ADAPTER.md)
-and [coding-agent prompt](src/finarch/dataset/00-input/ADAPTER-PROMPT.md). The
-`prepare-custom` command accepts your adapter and one or more raw files, then
-creates the five-field intermediate and a complete Preparation input bundle.
-No hand-written source catalog or manifest is required. Conversion is Python
-only; later Q/C review and dataset construction use models.
+Open the [Dataset viewer](http://127.0.0.1:8893/?lang=en), choose **Select a run**,
+then the construction run, round, case and variant. Inspect Preparation first,
+then Generation; **Generated dataset archive** exposes the consolidated JSONL.
+Source conversion alone does not create a viewer construction run. See the
+[viewer guide](viewer/dataset/README.md) for the screens and saved evidence.
 
 ## 5. Evaluation
 
@@ -145,6 +185,6 @@ The command should report **AGGREGATES_REFRESHED** and `new_model_calls: 0`. Out
 
 In the same experiment viewer, select **02 Analysis** and inspect the available result/comparison views. Local aggregation does not create semantic assessments or research findings. Those require model-assisted Analysis; their views remain incomplete until the corresponding records exist.
 
-**Model-assisted Analysis:** the supplied API profile and Codex CLI backend are currently rejected by the pipeline's cache policy (`CACHE_POLICY_BLOCKED`). Adding an API key alone does not resolve this requirement. Follow the [Analysis guide](src/finarch/experiments/02-analysis/README.md) for the full assessment stages, configuration compatibility, and evidence inspection.
+**Model-assisted Analysis:** the supplied `gpt-6.1-sol` API profile is rejected before Batch submission by the current cache policy; adding an API key alone does not resolve this. Codex Analysis uses a separate backend that requires an installed Codex CLI and ChatGPT login and records provider-managed caching. Follow the [Analysis guide](src/finarch/experiments/02-analysis/README.md) for backend requirements, full assessment stages, and evidence inspection.
 
 **Details:** [Analysis steps and outputs](src/finarch/experiments/02-analysis/README.md) · [Analysis configuration](config/README.md) · [Read the Analysis screens](viewer/experiments/README.md#read-the-screens)

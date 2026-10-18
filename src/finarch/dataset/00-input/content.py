@@ -5,10 +5,26 @@ JSON pointers refer to the record inside raw-record.json.
 """
 import re
 import importlib
+from finarch.shared.reference import SourceFloat
 
 json_context = importlib.import_module("finarch.dataset.00-input.json_context")
 
 NUMBER = re.compile(r"(?<!\w)[+-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?%?(?!\w)")
+
+
+def literal_text(value):
+    """Render an original scalar without losing a raw numeric token."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, SourceFloat):
+        return value.token
+    if type(value) is int:
+        return str(value)
+    if value is None:
+        return 'null'
+    if type(value) is bool:
+        return 'true' if value else 'false'
+    raise ValueError('CONTEXT_FRAGMENT_MUST_BE_SCALAR')
 
 
 def assemble(record, kind):
@@ -16,6 +32,7 @@ def assemble(record, kind):
 
     Source IDs remain provenance; they do not force prose into JSON conversion.
     Existing TAT-QA tables use their native table and paragraph bindings.
+    New source preprocessors provide ordered context_parts with raw pointers.
     """
     chunks, paragraphs, tables, segments = [], [], [], []
     offset = 0
@@ -68,6 +85,48 @@ def assemble(record, kind):
             span = append(paragraph["text"], pointer, identity)
             paragraphs.append({"id": identity, "text": paragraph["text"], "source_pointer": pointer,
                                "context_span": span})
+    elif kind == "parts":
+        for part in record['context_parts']:
+            if set(part) != {'kind', 'source_pointer', 'value'}:
+                raise ValueError('CONTEXT_PART_FIELDS_MISMATCH')
+            pointer, value = part['source_pointer'], part['value']
+            if not isinstance(pointer, str) or not pointer.startswith('/'):
+                raise ValueError('ORIGINAL_CONTEXT_POINTER_REQUIRED')
+            if chunks:
+                append('\n\n')
+            if part['kind'] == 'text':
+                text = literal_text(value)
+                identity = f'paragraph-{len(paragraphs)}'
+                span = append(text, pointer, identity)
+                paragraphs.append({'id': identity, 'text': text,
+                                   'source_pointer': pointer, 'context_span': span})
+            elif part['kind'] == 'table':
+                if not isinstance(value, list) or not value or any(not isinstance(row, list) for row in value):
+                    raise ValueError('TABLE_MUST_BE_NONEMPTY_ARRAY_OF_ROWS: ' + pointer)
+                if not value[0] or any(len(row) != len(value[0]) for row in value):
+                    raise ValueError('RECTANGULAR_TABLE_REQUIRED: ' + pointer)
+                table_id = f'table-{len(tables)}'
+                cells, rows = [], []
+                for r, row in enumerate(value):
+                    if r:
+                        append('\n')
+                    rendered = []
+                    for c, cell in enumerate(row):
+                        if c:
+                            append(' | ')
+                        text = literal_text(cell)
+                        rendered.append(text)
+                        cell_pointer = f'{pointer}/{r}/{c}'
+                        identity = f'{table_id}-cell-{r}-{c}'
+                        span = append(text, cell_pointer, identity)
+                        cells.append({'id': identity, 'row': r, 'column': c, 'text': text,
+                                      'source_pointer': cell_pointer, 'context_span': span})
+                    rows.append(rendered)
+                tables.append({'id': table_id, 'source_pointer': pointer, 'rows': rows, 'cells': cells})
+            else:
+                raise ValueError('UNKNOWN_CONTEXT_PART_KIND')
+        if not ''.join(chunks).strip():
+            raise ValueError('NONEMPTY_CONTEXT_REQUIRED')
     else:
         raise ValueError("UNKNOWN_CONTENT_KIND")
     return {"context": "".join(chunks),

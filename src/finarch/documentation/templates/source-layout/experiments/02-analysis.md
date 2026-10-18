@@ -2,7 +2,7 @@
 
 Analysis reads saved Evaluation responses. It must not re-solve source questions, reconstruct missing target-model answers, or re-run Evaluation to fill gaps. Finish the [Evaluation runbook](../01-evaluation/README.md) first and keep its exact experiment path.
 
-**Configuration compatibility:** the supplied API Analysis profile (`gpt-6.1-sol`, `low`) and Codex CLI backend are rejected by the current cache policy. Model-assisted execution stops with `CACHE_POLICY_BLOCKED`. The aggregate-only command below works with completed Evaluation records without calling a model. See [configuration](../../../../config/README.md).
+**Configuration compatibility:** the supplied API Analysis profile (`gpt-6.1-sol`, `low`) is rejected before Batch submission by the current cache policy (`TRANSPORT_NO_VERIFIED_PROMPT_CACHE_DISABLE_CONTROL`). Codex Analysis follows a separate backend that requires the Codex CLI and ChatGPT login. It does not apply the target-model Evaluation cache-disable gate and records caching as `PROVIDER_MANAGED_NOT_DISABLED`. Select the backend and model profile before freezing Analysis settings; the supplied smoke configuration selects API. The aggregate-only command below works with completed Evaluation records without calling a model. See [configuration](../../../../config/README.md).
 
 ## 1. Verify prerequisites and freeze Analysis settings
 

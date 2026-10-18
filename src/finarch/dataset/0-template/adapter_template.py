@@ -16,8 +16,8 @@ def adapt(sources):
         for index, raw in enumerate(records):
             origin = source.origin(raw, locator=f'/{index}', index=index)
             yield make_record(
-                q=raw['question'],
-                c=raw['context'],
-                a=raw['ground_truth'],
+                question=raw['question'],
+                context=raw['context'],
+                reference_answer=raw['ground_truth'],
                 origins=[origin],
             )

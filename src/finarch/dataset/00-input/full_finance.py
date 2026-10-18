@@ -175,7 +175,7 @@ def prepare(catalog_path, output, *, source_prefix=None, id_map=None, expected_c
                               'No old LLM output was used. This cannot measure fresh POT failure rates.']}
         write_json(output/'code-syntax-audit.json',audit)
         write_json(output/'selection-log.json',{'counts':counts,'totals':totals,'exclusions':exclusions})
-        readme=Path(__file__).with_name('full-finance-readme.md').read_text()
+        readme=(Path(__file__).parent.parent / '0-template' / 'full-finance-readme.md').read_text()
         (output/'README.md').write_text(readme.format(count=len(samples), **totals))
         write_json(output/'preparation-result.json',{'status':'PASS','families':len(samples),
                    'model_calls':0,'manifest_sha256':sha256((output/'selection-manifest.json').read_bytes()),

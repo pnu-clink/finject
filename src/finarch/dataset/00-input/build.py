@@ -264,5 +264,5 @@ def prepare_cohort_finance(raw_manifest, output, selections, *, per_cohort=15):
                              'Selection labels and original solutions are not author inputs.']}
     write_json(output/'selection-manifest.json',manifest)
     write_json(output/'preparation-result.json',{'status':'PASS','manifest_sha256':sha256((output/'selection-manifest.json').read_bytes()),'model_calls':0})
-    (output/'README.md').write_text(Path(__file__).with_name('cohort-readme.md').read_text().replace('{total}',str(len(selections))).replace('{per_cohort}',str(per_cohort)))
+    (output/'README.md').write_text((Path(__file__).parent.parent / '0-template' / 'cohort-readme.md').read_text().replace('{total}',str(len(selections))).replace('{per_cohort}',str(per_cohort)))
     return output/'input.json'

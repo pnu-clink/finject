@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 ROOT = (Path(__file__).resolve().parent / '../../../..').resolve()
-TEMPLATE = Path(__file__).with_name("dataset-survey-readme-template.md")
+TEMPLATE = Path(__file__).parent.parent / "0-template" / "dataset-survey-readme-template.md"
 
 
 def write_json(path, value):

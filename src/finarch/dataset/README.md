@@ -1,107 +1,206 @@
-# Dataset construction runbook
+# Dataset construction: raw input to generated variants
 
-Complete the [installation and credentials setup](../../../README.md#installation-and-credentials) first. Construction creates and checks data; it is separate from target-model Evaluation and Analysis.
+Complete [installation and credentials](../../../README.md#installation-and-credentials).
+Run commands from the repository root. Adapter authoring, Preparation and
+Generation use models at separate stages; converting more files with an
+installed adapter and inspecting a plan use Python only.
 
-## 1. Prepare real source inputs without model calls
+## 1. Create the FinQA adapter and input once
 
-Run the [source sample](../../../data/sample/README.md). It produces `data/prepared/reviewer-sample/input.json` and its integrity/provenance files. The existing FinanceReasoning/TAT-QA conversion is explained in the [built-in adapter guide](00-input/README.md). Prepared source input is not a generated seven-variant dataset.
+The [FinQA example](../../../data/sample/README.md) supplies ten unchanged raw
+records in `data/sample/finqa_10.json`. On a fresh checkout:
 
-### Use your own raw data: write an adapter
+```sh
+.venv/bin/python -B src/finarch/dataset/0-template/make_adapter.py \
+  data/sample/finqa_10.json --name finqa --output data/prepared/finqa_10
+```
 
-Follow [Write an adapter](00-input/ADAPTER.md) to turn your own raw files into
-pipeline inputs. The guide explains how to give the supplied template and English
-prompt to a coding agent, create your adapter, run conversion and validate the
-result. One or multiple raw files are supported; no hand-written catalog or
-manifest is required.
+The command creates `00-input/finqa.py`, appends `adapters.finqa()` and adds
+`FinqaProvenance` in `schemas/prepared.py`. See the
+[exact changes and outputs](0-template/README.md#files-created-or-modified).
+It reports PASS only after source mapping, native schema and loader checks.
+Inspect `intermediate.json` and `input.json`; both should contain ten records.
+This is source conversion, not yet a generated seven-variant dataset.
 
-The adapter produces `q`, `c`, `a`, `a_precision` and `a_type` deterministically.
-The common builder saves these in `intermediate.json` and creates `input.json`
-with its supporting files. Continue at Step 2 below, replacing
-`data/prepared/reviewer-sample/input.json` with your generated input path in each
-command. The remaining Preparation, Generation and viewer steps are the same.
+If `finqa.py` is already installed, use it directly with your raw file and a
+new output directory. Do not run adapter authoring again merely to change data:
+
+```sh
+.venv/bin/python -B src/finarch/dataset/00-input/finqa.py \
+  data/sample/finqa_10.json --output data/prepared/finqa_10-repeat
+```
+
+For that repeated conversion, use its `input.json` path below. For another
+source layout, use the [new-format guide](0-template/ADAPTER.md).
 
 ## 2. Inspect the Preparation plan without model calls
 
+For the first command's output, set:
+
 ```sh
+export INPUT_PATH='data/prepared/finqa_10/input.json'
+
 PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.01-preparation.prepare_schedule \
-  --input data/prepared/reviewer-sample/input.json \
-  --config config/llm.json --plan-only
+  --input "$INPUT_PATH" --config config/llm.json --plan-only
 ```
 
-The plan lists selected cases, models, reasoning settings, concurrency, rounds, and estimated call counts. Inspect `roles`, `parallelism`, and `schedule` before execution. The supplied two-input sample plans up to 24 model calls plus 6 handler calls; Generation has additional calls. A null cost means no price estimate is available.
+Check `case_count` (10 for the sample), `roles`, `parallelism`, `schedule` and
+maximum call counts. A null cost means no price estimate is available.
+Adapter authoring defaults to `gpt-6.1-sol` / `low`; the models used here and in
+Generation are resolved separately from [pipeline configuration](../../../config/README.md).
+Shared API settings currently select concurrency 200; the active case count is
+bounded by the selected inputs. Do not assume the adapter's model choice also
+changes Preparation or Generation.
 
-Shared API settings currently select concurrency **200**, overriding the smaller values in `llm.json`. See [configuration](../../../config/README.md) for the files used to resolve schedules and model profiles.
+## 3. Execute Preparation
 
-## 3. Execute Preparation after configuring credentials and model usage
-
-The following command makes live model calls and executes generated Python solutions locally. Use it only after reviewing the plan, configured models, account limits, and expected usage.
+This command makes live API calls and executes generated Python solutions
+locally, using the reviewed configuration and your `.env` credentials:
 
 ```sh
 PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.01-preparation.prepare_schedule \
-  --input data/prepared/reviewer-sample/input.json --config config/llm.json
+  --input "$INPUT_PATH" --config config/llm.json
 ```
 
-Preparation verifies source evidence, obtains and checks a Python solution, compares the computed answer with the reference, builds a computation graph, and verifies it. Bounded revisions/rounds and exception handling preserve earlier attempts. The output prints a newly allocated `reports/run/YYYYMMDD-NNN` path. Keep that exact run path for Generation.
+Preparation checks source evidence, generates and executes a solution,
+compares it with the displayed reference, constructs a computation graph and
+verifies it. Failed calls and bounded retries keep their earlier evidence.
+An API failure, an answer mismatch and a semantic failure have different reasons.
 
-Read the run's `README.md`, `config.json`, `input-selection.json`, `01-preparation/summary.json`, and each selected item's `run.json`, then the saved source review, prompts, schemas, raw responses, Python execution, graph, and verification artifacts for its round. A computation/reference mismatch is distinct from an API failure. Automated PASS and a human review decision are distinct records.
+It allocates a **new construction run** under `reports/run/` and prints its
+`run` path in the final JSON. This is different from `reports/run/finqa_10/`,
+which holds adapter/source-conversion evidence. Wait for Preparation to finish
+before starting Generation for that run.
 
-To resume unfinished Preparation, inspect `--help` and use `--run RUN_PATH --resume` with the original input/config. The resume path restarts unfinished cases from source; it is not a guarantee of continuing inside an interrupted individual model call. Do not create a second concurrent scheduler for the same run.
+The terminal prints the plan and final result; intermediate progress is saved
+in `01-preparation/queue.json`, `schedule-state.json`, `summary.json` and each
+case's `run.json`. A quiet terminal alone does not mean execution stopped.
+Use the viewer below to inspect active stages and saved responses. Do not
+start a duplicate scheduler while the current one is active.
 
-## 4. Execute Generation in the same run
+To resume unfinished Preparation, use `--run` with the actual construction
+path and `--resume`. Resumption restarts unfinished cases from source; it does
+not promise to continue inside an interrupted API call. Finished failures are
+preserved and are not automatically unfinished work.
+
+## 4. Find the construction run and execute Generation
+
+The following read-only lookup finds the completed Preparation run whose
+`input-selection.json` points to `INPUT_PATH`. It avoids copying a placeholder
+or accidentally using a run from another sample. If multiple runs match,
+it stops and lists their paths; choose the intended run explicitly.
 
 ```sh
-RUN_PATH=reports/run/REPLACE_WITH_PRINTED_RUN_ID
-PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.02-generation.generate_schedule \
+RUN_PATH=$(.venv/bin/python -B - <<'PYRUN'
+import json
+import os
+from pathlib import Path
+
+expected = Path(os.environ['INPUT_PATH']).resolve()
+matched = []
+for selection in Path('reports/run').glob('*/input-selection.json'):
+    data = json.loads(selection.read_text())
+    if data.get('input_path') and Path(data['input_path']).resolve() == expected:
+        matched.append(selection.parent)
+if len(matched) != 1:
+    raise SystemExit('Expected one matching construction run; found: ' +
+                     ', '.join(str(path) for path in matched))
+run = matched[0]
+summary = json.loads((run / '01-preparation/summary.json').read_text())
+if summary.get('status') != 'COMPLETED':
+    raise SystemExit('Preparation is not complete: ' + str(run))
+if not (run / 'config.json').is_file():
+    raise SystemExit('Missing construction configuration: ' + str(run))
+print(run)
+PYRUN
+)
+
+if [ -n "$RUN_PATH" ] && [ -f "$RUN_PATH/config.json" ]; then
+  printf 'Generation run: %s\n' "$RUN_PATH"
+  PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.02-generation.generate_schedule \
   --run "$RUN_PATH"
+fi
 ```
 
-This command makes further model calls. Generation checks that all selected Preparation items have finished and their required artifacts are intact. Only automated PASS items proceed; failed/error items remain recorded. Unfinished or invalid prerequisite artifacts block entry.
+Generation makes additional API calls. It requires completed, intact
+Preparation artifacts and proceeds with automated PASS items. Failed inputs
+remain recorded. It generates IC-VALUE before/after, IC-SOURCE Type 1/2,
+IC-RELATION and EA-01/02, with validation and bounded retries in the same run.
+Human review decisions remain separate from automated validation.
 
-The seven variants are IC-VALUE before/after, IC-SOURCE Type 1/2, IC-RELATION, and EA-01/02. Outputs and bounded retry records stay under the same run's `02-generation`, with exception handling and `05-human-review` materials. Read its README, round summaries, item/type `run.json`, perturbation plan, actual generated Q/C, validation, and human decisions. Retryable failures differ from terminal limits or cases requiring plan review. Reuse the same run to inspect/resume it; preserve previous rounds.
+A terminal status such as `LIMIT_REACHED` preserves failed variants; it does
+not mean every record passed. The scheduler still consolidates its completed
+attempts. Inspect each family's selection status before using generated data.
+The full scheduler's `--plan-only` is not a standalone dry run: that option
+requires an explicit stage range. Do not add it to the command above.
 
-The Generation `--plan-only` flag requires an explicit stage range (`--start-stage`, `--stop-after`, or `--only-stage`); it is not a standalone dry run of the full Generation scheduler. Check `--help` rather than adding it to the command above.
+## 5. Read the outputs and viewer
 
-## 5. Locate generated data and distinguish the final release
-
-| Location | Role |
+| Location | Contents |
 | --- | --- |
-| `data/prepared/<name>/` | Source conversion, reference values, source locations, and provenance; no generated variants. |
-| `reports/run/<run-id>/01-preparation/` | Construction checks and their saved evidence. |
-| `reports/run/<run-id>/02-generation/` | Variant plans, text, validation, retries, and human review materials. |
-| `data/generated/<run-id>/dataset.jsonl` | Automatically consolidated records after Generation completes, including failures/rejections and selection metadata. |
-| `data/final/finject-20261007/` | Supplied frozen release: 1,354 families selected after the recorded construction and human-review criteria. |
+| `data/prepared/finqa_10/` | Only `intermediate.json` and `input.json`. |
+| `reports/run/finqa_10/00-input/` | Raw-record copies, manifest, exclusions, schema, validation and README. |
+| `reports/run/finqa_10/adapter-generation/` | Authoring requests/responses, checks, code backups and changes. |
+| `reports/run/<construction-run>/01-preparation/` | Solutions, executions, graphs, verification and retries. |
+| `reports/run/<construction-run>/02-generation/` | Seven variant types, validation, retries and human review material. |
+| `data/generated/<construction-run>/dataset.jsonl` | Consolidated selected cases, including failures/rejections and selection metadata. |
 
-Completion triggers consolidation into `data/generated/<run-id>/`; merely starting Generation does not create a completed dataset. Read the generated folder's README and manifest before its JSONL. A selected generated record is not automatically a newly human-approved final publication. Use the supplied [final data](../../../data/final/README.md) directly for Evaluation.
+Read each run's README and summaries before individual prompts, raw responses
+and execution artifacts. Consolidation occurs after the full Generation
+scheduler finishes. A generated selected record is not automatically a
+human-approved final release. The supplied frozen release remains in
+[data/final](../../../data/final/README.md).
 
-## 6. Inspect construction evidence in the viewer
+In another terminal at the repository root:
 
-Follow the [Dataset viewer guide](../../../viewer/dataset/README.md). Select the exact construction run, round, case, and variant. The viewer lists construction runs. For supplied final data, prepare an Evaluation run and open its inputs in the [experiment viewer](../../../viewer/experiments/README.md).
+```sh
+PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.viewer.server --open
+```
+
+Open [the Dataset viewer](http://127.0.0.1:8893/?lang=en), choose **Select a run**
+and the construction run found above, then a round and case. Inspect the
+Preparation question/context, Python solution, graph and verification; select
+one of the seven Generation types to inspect the variant and its evidence.
+**Include Preparation failures** exposes failed inputs. **Generated dataset
+archive** displays/downloads the consolidated JSONL. If a viewer for this
+checkout is already running, reuse it rather than starting a second server.
+See the [screen guide](../../../viewer/dataset/README.md).
+
+Evaluation and Analysis follow the separate
+[Evaluation runbook](../experiments/01-evaluation/README.md) and use the
+[experiment viewer](../../../viewer/experiments/README.md).
 
 ## File responsibilities and execution order
 
 ```mermaid
 flowchart TD
-  subgraph INPUT["00-input/build.py and adapters.py, or custom.py and your adapter"]
-    D00["D00 Python: built-in or custom source conversion to prepared input"]
+  subgraph AUTHOR["0-template/make_adapter.py"]
+    D00["D00 LLM + Python: generate and check source reader, adapter and provenance"]
+  end
+  subgraph INPUT["00-input/name.py, adapters.py and schemas/prepared.py"]
+    D01["D01 Python: deterministic raw conversion and native input validation"]
   end
   subgraph PREP["01-preparation/prepare_schedule.py"]
-    D01["D01 Python: prerequisites and plan"]
-    D02["D02 LLM + Python: source review, solution, execution, graph, verification"]
-    DF["FAIL/ERROR: preserve evidence; bounded revision or stop"]
+    D02["D02 Python: source checks and execution plan"]
+    D03["D03 LLM + Python: review, solution, execution, graph, verification"]
+    DF["FAIL/ERROR: preserve evidence; bounded retry or stop"]
   end
   subgraph GEN["02-generation/generate_schedule.py"]
-    D03["D03 Python: Preparation completion and PASS gate"]
-    D04["D04 LLM + Python: seven variant plans, text, checks, bounded retries"]
+    D04["D04 Python: Preparation completion and automated PASS gate"]
+    D05["D05 LLM + Python: seven variant plans, text, checks and retries"]
     DR["Human review material and decisions remain separate"]
   end
   subgraph RELEASE["03-release/publication/consolidate.py"]
-    D05["D05 Python: generated JSONL, manifest, selection metadata"]
+    D06["D06 Python: generated JSONL, manifest and selection metadata"]
   end
-  D00 --> D01 --> D02 --> D03 -->|eligible| D04 --> D05
-  D02 -->|failed| DF
-  D03 -->|unfinished or invalid| DF
-  D04 -->|retryable| D04
-  D04 --> DR
+  D00 --> D01 --> D02 --> D03 --> D04 -->|eligible| D05 --> D06
+  D03 -->|failed| DF
+  D04 -->|unfinished or invalid| DF
+  D05 -->|retryable| D05
+  D05 --> DR
 ```
 
-The [Evaluation runbook](../experiments/01-evaluation/README.md) starts from a generated-format dataset, independently of construction runs.
+Boxes group the responsible files. Node labels distinguish Python processing
+from LLM calls. All nodes use the default color; no collapsed detail links or
+pink expansion nodes are used. Later stages remain unevaluated when a required
+earlier stage fails.

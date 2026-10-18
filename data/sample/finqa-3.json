@@ -1,0 +1,1363 @@
+[
+    {
+        "pre_text": [
+            "entergy corporation and subsidiaries management 2019s financial discussion and analysis a result of the entergy louisiana and entergy gulf states louisiana business combination , results of operations for 2015 also include two items that occurred in october 2015 : 1 ) a deferred tax asset and resulting net increase in tax basis of approximately $ 334 million and 2 ) a regulatory liability of $ 107 million ( $ 66 million net-of-tax ) as a result of customer credits to be realized by electric customers of entergy louisiana , consistent with the terms of the stipulated settlement in the business combination proceeding .",
+            "see note 2 to the financial statements for further discussion of the business combination and customer credits .",
+            "results of operations for 2015 also include the sale in december 2015 of the 583 mw rhode island state energy center for a realized gain of $ 154 million ( $ 100 million net-of-tax ) on the sale and the $ 77 million ( $ 47 million net-of-tax ) write-off and regulatory charges to recognize that a portion of the assets associated with the waterford 3 replacement steam generator project is no longer probable of recovery .",
+            "see note 14 to the financial statements for further discussion of the rhode island state energy center sale .",
+            "see note 2 to the financial statements for further discussion of the waterford 3 write-off .",
+            "results of operations for 2014 include $ 154 million ( $ 100 million net-of-tax ) of charges related to vermont yankee primarily resulting from the effects of an updated decommissioning cost study completed in the third quarter 2014 along with reassessment of the assumptions regarding the timing of decommissioning cash flows and severance and employee retention costs .",
+            "see note 14 to the financial statements for further discussion of the charges .",
+            "results of operations for 2014 also include the $ 56.2 million ( $ 36.7 million net-of-tax ) write-off in 2014 of entergy mississippi 2019s regulatory asset associated with new nuclear generation development costs as a result of a joint stipulation entered into with the mississippi public utilities staff , subsequently approved by the mpsc , in which entergy mississippi agreed not to pursue recovery of the costs deferred by an mpsc order in the new nuclear generation docket .",
+            "see note 2 to the financial statements for further discussion of the new nuclear generation development costs and the joint stipulation .",
+            "net revenue utility following is an analysis of the change in net revenue comparing 2015 to 2014 .",
+            "amount ( in millions ) ."
+        ],
+        "post_text": [
+            "the retail electric price variance is primarily due to : 2022 formula rate plan increases at entergy louisiana , as approved by the lpsc , effective december 2014 and january 2015 ; 2022 an increase in energy efficiency rider revenue primarily due to increases in the energy efficiency rider at entergy arkansas , as approved by the apsc , effective july 2015 and july 2014 , and new energy efficiency riders at entergy louisiana and entergy mississippi that began in the fourth quarter 2014 ; and 2022 an annual net rate increase at entergy mississippi of $ 16 million , effective february 2015 , as a result of the mpsc order in the june 2014 rate case .",
+            "see note 2 to the financial statements for a discussion of rate and regulatory proceedings. ."
+        ],
+        "filename": "ETR/2016/page_23.pdf",
+        "table_ori": [
+            [
+                "",
+                "Amount (In Millions)"
+            ],
+            [
+                "2014 net revenue",
+                "$5,735"
+            ],
+            [
+                "Retail electric price",
+                "187"
+            ],
+            [
+                "Volume/weather",
+                "95"
+            ],
+            [
+                "Waterford 3 replacement steam generator provision",
+                "(32)"
+            ],
+            [
+                "MISO deferral",
+                "(35)"
+            ],
+            [
+                "Louisiana business combination customer credits",
+                "(107)"
+            ],
+            [
+                "Other",
+                "(14)"
+            ],
+            [
+                "2015 net revenue",
+                "$5,829"
+            ]
+        ],
+        "table": [
+            [
+                "",
+                "amount ( in millions )"
+            ],
+            [
+                "2014 net revenue",
+                "$ 5735"
+            ],
+            [
+                "retail electric price",
+                "187"
+            ],
+            [
+                "volume/weather",
+                "95"
+            ],
+            [
+                "waterford 3 replacement steam generator provision",
+                "-32 ( 32 )"
+            ],
+            [
+                "miso deferral",
+                "-35 ( 35 )"
+            ],
+            [
+                "louisiana business combination customer credits",
+                "-107 ( 107 )"
+            ],
+            [
+                "other",
+                "-14 ( 14 )"
+            ],
+            [
+                "2015 net revenue",
+                "$ 5829"
+            ]
+        ],
+        "qa": {
+            "question": "what is the net change in net revenue during 2015 for entergy corporation?",
+            "answer": "94",
+            "explanation": "",
+            "ann_table_rows": [
+                1,
+                8
+            ],
+            "ann_text_rows": [],
+            "steps": [
+                {
+                    "op": "minus2-1",
+                    "arg1": "5829",
+                    "arg2": "5735",
+                    "res": "94"
+                }
+            ],
+            "program": "subtract(5829, 5735)",
+            "gold_inds": {
+                "table_1": "the 2014 net revenue of amount ( in millions ) is $ 5735 ;",
+                "table_8": "the 2015 net revenue of amount ( in millions ) is $ 5829 ;"
+            },
+            "exe_ans": 94.0,
+            "tfidftopn": {
+                "text_9": "net revenue utility following is an analysis of the change in net revenue comparing 2015 to 2014 ."
+            },
+            "program_re": "subtract(5829, 5735)",
+            "model_input": [
+                [
+                    "table_1",
+                    "the 2014 net revenue of amount ( in millions ) is $ 5735 ;"
+                ],
+                [
+                    "table_3",
+                    "the volume/weather of amount ( in millions ) is 95 ;"
+                ],
+                [
+                    "table_8",
+                    "the 2015 net revenue of amount ( in millions ) is $ 5829 ;"
+                ]
+            ]
+        },
+        "id": "ETR/2016/page_23.pdf-2",
+        "table_retrieved": [
+            {
+                "score": 3.0425944328308105,
+                "ind": "table_8"
+            },
+            {
+                "score": 2.630547046661377,
+                "ind": "table_1"
+            },
+            {
+                "score": 0.7781655788421631,
+                "ind": "table_3"
+            },
+            {
+                "score": 0.606473982334137,
+                "ind": "table_7"
+            }
+        ],
+        "text_retrieved": [
+            {
+                "score": 0.3962186276912689,
+                "ind": "text_10"
+            }
+        ],
+        "table_retrieved_all": [
+            {
+                "score": 3.0425944328308105,
+                "ind": "table_8"
+            },
+            {
+                "score": 2.630547046661377,
+                "ind": "table_1"
+            },
+            {
+                "score": 0.7781655788421631,
+                "ind": "table_3"
+            },
+            {
+                "score": 0.606473982334137,
+                "ind": "table_7"
+            },
+            {
+                "score": 0.3680412769317627,
+                "ind": "table_2"
+            },
+            {
+                "score": -0.06215459108352661,
+                "ind": "table_5"
+            },
+            {
+                "score": -0.23549103736877441,
+                "ind": "table_4"
+            },
+            {
+                "score": -1.1832187175750732,
+                "ind": "table_6"
+            },
+            {
+                "score": -3.0562329292297363,
+                "ind": "table_0"
+            }
+        ],
+        "text_retrieved_all": [
+            {
+                "score": 0.3962186276912689,
+                "ind": "text_10"
+            },
+            {
+                "score": -0.6703973412513733,
+                "ind": "text_0"
+            },
+            {
+                "score": -0.8628821969032288,
+                "ind": "text_11"
+            },
+            {
+                "score": -0.9996260404586792,
+                "ind": "text_9"
+            },
+            {
+                "score": -1.4163694381713867,
+                "ind": "text_2"
+            },
+            {
+                "score": -1.4738928079605103,
+                "ind": "text_7"
+            },
+            {
+                "score": -1.6805188655853271,
+                "ind": "text_5"
+            },
+            {
+                "score": -1.8574978113174438,
+                "ind": "text_12"
+            },
+            {
+                "score": -2.2638840675354004,
+                "ind": "text_6"
+            },
+            {
+                "score": -2.363234519958496,
+                "ind": "text_8"
+            },
+            {
+                "score": -2.428662061691284,
+                "ind": "text_4"
+            },
+            {
+                "score": -2.465285062789917,
+                "ind": "text_1"
+            },
+            {
+                "score": -2.482703924179077,
+                "ind": "text_3"
+            }
+        ]
+    },
+    {
+        "pre_text": [
+            "item 1b .",
+            "unresolved staff comments not applicable .",
+            "item 2 .",
+            "properties as of december 26 , 2015 , our major facilities consisted of : ( square feet in millions ) united states countries total owned facilities1 .",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            "30.7 17.2 47.9 leased facilities2 .",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            ".",
+            "2.1 6.0 8.1 ."
+        ],
+        "post_text": [
+            "1 leases on portions of the land used for these facilities expire on varying dates through 2062 .",
+            "2 leases expire on varying dates through 2030 and generally include renewals at our option .",
+            "our principal executive offices are located in the u.s .",
+            "and a majority of our wafer fabrication activities are also located in the u.s .",
+            "we completed construction of development fabrication facilities in oregon during 2014 that we expect will enable us to maintain our process technology lead .",
+            "we also completed construction of a large-scale fabrication building in arizona in 2013 .",
+            "a portion of the new oregon and arizona facilities are currently not in use and we are reserving the new buildings for additional capacity and future technologies .",
+            "incremental construction and equipment installation are required to ready the facilities for their intended use .",
+            "our massachusetts fabrication facility was our last manufacturing facility on 200mm wafers and ceased production in q1 2015 .",
+            "outside the u.s. , we have wafer fabrication facilities in ireland , israel , and china .",
+            "our fabrication facility in ireland has transitioned to our 14nm process technology , with manufacturing continuing to ramp in 2016 .",
+            "additionally , in the second half of 2016 , we will start using our facility in dalian , china to help expand our manufacturing capacity in next-generation memory .",
+            "our assembly and test facilities are located in malaysia , china , and vietnam .",
+            "in addition , we have sales and marketing offices worldwide that are generally located near major concentrations of customers .",
+            "we believe that the facilities described above are suitable and adequate for our present purposes and that the productive capacity in our facilities is substantially being utilized or we have plans to utilize it .",
+            "we do not identify or allocate assets by operating segment .",
+            "for information on net property , plant and equipment by country , see 201cnote 26 : operating segments and geographic information 201d in part ii , item 8 of this form 10-k .",
+            "item 3 .",
+            "legal proceedings for a discussion of legal proceedings , see 201cnote 25 : contingencies 201d in part ii , item 8 of this form 10-k .",
+            "item 4 .",
+            "mine safety disclosures not applicable. ."
+        ],
+        "filename": "INTC/2015/page_41.pdf",
+        "table_ori": [
+            [
+                "(Square Feet in Millions)",
+                "UnitedStates",
+                "OtherCountries",
+                "Total"
+            ],
+            [
+                "Owned facilities<sup>1</sup>",
+                "30.7",
+                "17.2",
+                "47.9"
+            ],
+            [
+                "Leased facilities<sup>2</sup>",
+                "2.1",
+                "6.0",
+                "8.1"
+            ],
+            [
+                "Total facilities",
+                "32.8",
+                "23.2",
+                "56.0"
+            ]
+        ],
+        "table": [
+            [
+                "( square feet in millions )",
+                "unitedstates",
+                "othercountries",
+                "total"
+            ],
+            [
+                "owned facilities1",
+                "30.7",
+                "17.2",
+                "47.9"
+            ],
+            [
+                "leased facilities2",
+                "2.1",
+                "6.0",
+                "8.1"
+            ],
+            [
+                "total facilities",
+                "32.8",
+                "23.2",
+                "56.0"
+            ]
+        ],
+        "qa": {
+            "question": "what percentage of total facilities as measured in square feet are leased?",
+            "answer": "14%",
+            "explanation": "",
+            "ann_table_rows": [
+                2,
+                3
+            ],
+            "ann_text_rows": [],
+            "steps": [
+                {
+                    "op": "divide2-1",
+                    "arg1": "8.1",
+                    "arg2": "56.0",
+                    "res": "14%"
+                }
+            ],
+            "program": "divide(8.1, 56.0)",
+            "gold_inds": {
+                "table_2": "( square feet in millions ) the leased facilities2 of unitedstates is 2.1 ; the leased facilities2 of othercountries is 6.0 ; the leased facilities2 of total is 8.1 ;",
+                "table_3": "( square feet in millions ) the total facilities of unitedstates is 32.8 ; the total facilities of othercountries is 23.2 ; the total facilities of total is 56.0 ;"
+            },
+            "exe_ans": 0.14464,
+            "tfidftopn": {
+                "text_3": "properties as of december 26 , 2015 , our major facilities consisted of : ( square feet in millions ) united states countries total owned facilities1 ."
+            },
+            "program_re": "divide(8.1, 56.0)",
+            "model_input": [
+                [
+                    "table_1",
+                    "( square feet in millions ) the owned facilities1 of unitedstates is 30.7 ; the owned facilities1 of othercountries is 17.2 ; the owned facilities1 of total is 47.9 ;"
+                ],
+                [
+                    "table_2",
+                    "( square feet in millions ) the leased facilities2 of unitedstates is 2.1 ; the leased facilities2 of othercountries is 6.0 ; the leased facilities2 of total is 8.1 ;"
+                ],
+                [
+                    "table_3",
+                    "( square feet in millions ) the total facilities of unitedstates is 32.8 ; the total facilities of othercountries is 23.2 ; the total facilities of total is 56.0 ;"
+                ]
+            ]
+        },
+        "id": "INTC/2015/page_41.pdf-4",
+        "table_retrieved": [
+            {
+                "score": 2.7798845767974854,
+                "ind": "table_3"
+            },
+            {
+                "score": 2.1943860054016113,
+                "ind": "table_2"
+            },
+            {
+                "score": 1.1247011423110962,
+                "ind": "table_1"
+            }
+        ],
+        "text_retrieved": [
+            {
+                "score": -0.8847692608833313,
+                "ind": "text_3"
+            },
+            {
+                "score": -1.1477758884429932,
+                "ind": "text_61"
+            }
+        ],
+        "table_retrieved_all": [
+            {
+                "score": 2.7798845767974854,
+                "ind": "table_3"
+            },
+            {
+                "score": 2.1943860054016113,
+                "ind": "table_2"
+            },
+            {
+                "score": 1.1247011423110962,
+                "ind": "table_1"
+            },
+            {
+                "score": -3.7865664958953857,
+                "ind": "table_0"
+            }
+        ],
+        "text_retrieved_all": [
+            {
+                "score": -0.8847692608833313,
+                "ind": "text_3"
+            },
+            {
+                "score": -1.1477758884429932,
+                "ind": "text_61"
+            },
+            {
+                "score": -1.3475852012634277,
+                "ind": "text_120"
+            },
+            {
+                "score": -1.5343549251556396,
+                "ind": "text_122"
+            },
+            {
+                "score": -1.642305850982666,
+                "ind": "text_132"
+            },
+            {
+                "score": -1.920128583908081,
+                "ind": "text_121"
+            },
+            {
+                "score": -2.119826078414917,
+                "ind": "text_129"
+            },
+            {
+                "score": -2.292726516723633,
+                "ind": "text_123"
+            },
+            {
+                "score": -2.3381285667419434,
+                "ind": "text_131"
+            },
+            {
+                "score": -2.6917669773101807,
+                "ind": "text_133"
+            },
+            {
+                "score": -2.8534789085388184,
+                "ind": "text_124"
+            },
+            {
+                "score": -2.880967378616333,
+                "ind": "text_136"
+            },
+            {
+                "score": -2.975090742111206,
+                "ind": "text_130"
+            },
+            {
+                "score": -2.997239351272583,
+                "ind": "text_128"
+            },
+            {
+                "score": -3.0237936973571777,
+                "ind": "text_125"
+            },
+            {
+                "score": -3.090102195739746,
+                "ind": "text_126"
+            },
+            {
+                "score": -3.1458911895751953,
+                "ind": "text_134"
+            },
+            {
+                "score": -3.1566405296325684,
+                "ind": "text_1"
+            },
+            {
+                "score": -3.1998672485351562,
+                "ind": "text_138"
+            },
+            {
+                "score": -3.3808138370513916,
+                "ind": "text_127"
+            },
+            {
+                "score": -3.408226251602173,
+                "ind": "text_135"
+            },
+            {
+                "score": -3.579127311706543,
+                "ind": "text_119"
+            },
+            {
+                "score": -3.7636542320251465,
+                "ind": "text_137"
+            },
+            {
+                "score": -3.7823452949523926,
+                "ind": "text_2"
+            },
+            {
+                "score": -3.78277587890625,
+                "ind": "text_0"
+            },
+            {
+                "score": -3.7860255241394043,
+                "ind": "text_140"
+            },
+            {
+                "score": -3.7998170852661133,
+                "ind": "text_139"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_4"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_5"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_6"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_7"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_8"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_9"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_10"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_11"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_12"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_13"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_14"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_15"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_16"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_17"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_18"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_19"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_20"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_21"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_22"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_23"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_24"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_25"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_26"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_27"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_28"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_29"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_30"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_31"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_32"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_33"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_34"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_35"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_36"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_37"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_38"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_39"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_40"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_41"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_42"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_43"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_44"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_45"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_46"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_47"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_48"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_49"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_50"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_51"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_52"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_53"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_54"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_55"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_56"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_57"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_58"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_59"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_60"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_62"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_63"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_64"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_65"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_66"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_67"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_68"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_69"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_70"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_71"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_72"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_73"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_74"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_75"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_76"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_77"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_78"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_79"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_80"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_81"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_82"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_83"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_84"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_85"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_86"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_87"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_88"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_89"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_90"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_91"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_92"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_93"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_94"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_95"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_96"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_97"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_98"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_99"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_100"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_101"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_102"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_103"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_104"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_105"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_106"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_107"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_108"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_109"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_110"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_111"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_112"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_113"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_114"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_115"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_116"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_117"
+            },
+            {
+                "score": -3.8645660877227783,
+                "ind": "text_118"
+            }
+        ]
+    },
+    {
+        "pre_text": [
+            "undesignated hedges was $ 41.2 million and $ 42.1 million , respectively .",
+            "the fair value of these hedging instruments in the company 2019s consolidated balance sheets as of october 29 , 2011 and october 30 , 2010 was immaterial .",
+            "interest rate exposure management 2014 on june 30 , 2009 , the company entered into interest rate swap transactions related to its outstanding 5.0% ( 5.0 % ) senior unsecured notes where the company swapped the notional amount of its $ 375 million of fixed rate debt at 5.0% ( 5.0 % ) into floating interest rate debt through july 1 , 2014 .",
+            "under the terms of the swaps , the company will ( i ) receive on the $ 375 million notional amount a 5.0% ( 5.0 % ) annual interest payment that is paid in two installments on the 1st of every january and july , commencing january 1 , 2010 through and ending on the maturity date ; and ( ii ) pay on the $ 375 million notional amount an annual three month libor plus 2.05% ( 2.05 % ) ( 2.42% ( 2.42 % ) as of october 29 , 2011 ) interest payment , payable in four installments on the 1st of every january , april , july and october , commencing on october 1 , 2009 and ending on the maturity date .",
+            "the libor- based rate is set quarterly three months prior to the date of the interest payment .",
+            "the company designated these swaps as fair value hedges .",
+            "the fair value of the swaps at inception was zero and subsequent changes in the fair value of the interest rate swaps were reflected in the carrying value of the interest rate swaps on the balance sheet .",
+            "the carrying value of the debt on the balance sheet was adjusted by an equal and offsetting amount .",
+            "the gain or loss on the hedged item ( that is , the fixed-rate borrowings ) attributable to the hedged benchmark interest rate risk and the offsetting gain or loss on the related interest rate swaps for fiscal year 2011 and fiscal year 2010 were as follows : statement of income ."
+        ],
+        "post_text": [
+            "the amounts earned and owed under the swap agreements are accrued each period and are reported in interest expense .",
+            "there was no ineffectiveness recognized in any of the periods presented .",
+            "the market risk associated with the company 2019s derivative instruments results from currency exchange rate or interest rate movements that are expected to offset the market risk of the underlying transactions , assets and liabilities being hedged .",
+            "the counterparties to the agreements relating to the company 2019s derivative instruments consist of a number of major international financial institutions with high credit ratings .",
+            "based on the credit ratings of our counterparties as of october 29 , 2011 , we do not believe that there is significant risk of nonperformance by them .",
+            "furthermore , none of the company 2019s derivative transactions are subject to collateral or other security arrangements and none contain provisions that are dependent on the company 2019s credit ratings from any credit rating agency .",
+            "while the contract or notional amounts of derivative financial instruments provide one measure of the volume of these transactions , they do not represent the amount of the company 2019s exposure to credit risk .",
+            "the amounts potentially subject to credit risk ( arising from the possible inability of counterparties to meet the terms of their contracts ) are generally limited to the amounts , if any , by which the counterparties 2019 obligations under the contracts exceed the obligations of the company to the counterparties .",
+            "as a result of the above considerations , the company does not consider the risk of counterparty default to be significant .",
+            "the company records the fair value of its derivative financial instruments in the consolidated financial statements in other current assets , other assets or accrued liabilities , depending on their net position , regardless of the purpose or intent for holding the derivative contract .",
+            "changes in the fair value of the derivative financial instruments are either recognized periodically in earnings or in shareholders 2019 equity as a component of oci .",
+            "changes in the fair value of cash flow hedges are recorded in oci and reclassified into earnings when the underlying contract matures .",
+            "changes in the fair values of derivatives not qualifying for hedge accounting are reported in earnings as they occur .",
+            "the total notional amounts of derivative instruments designated as hedging instruments as of october 29 , 2011 and october 30 , 2010 were $ 375 million of interest rate swap agreements accounted for as fair value hedges and $ 153.7 million and $ 139.9 million , respectively , of cash flow hedges denominated in euros , british pounds and analog devices , inc .",
+            "notes to consolidated financial statements 2014 ( continued ) ."
+        ],
+        "filename": "ADI/2011/page_61.pdf",
+        "table_ori": [
+            [
+                "Statement of Income",
+                "October 29, 2011",
+                "October 30, 2010"
+            ],
+            [
+                "Classification",
+                "Loss on Swaps",
+                "Gain on Note",
+                "Net Income Effect",
+                "Gain on Swaps",
+                "Loss on Note",
+                "Net Income Effect"
+            ],
+            [
+                "Other income",
+                "$(4,614)",
+                "$4,614",
+                "$\u2014",
+                "$20,692",
+                "$(20,692)",
+                "$\u2014"
+            ]
+        ],
+        "table": [
+            [
+                "statement of income classification",
+                "statement of income loss on swaps",
+                "statement of income gain on note",
+                "statement of income net income effect",
+                "statement of income gain on swaps",
+                "loss on note",
+                "net income effect"
+            ],
+            [
+                "other income",
+                "$ -4614 ( 4614 )",
+                "$ 4614",
+                "$ 2014",
+                "$ 20692",
+                "$ -20692 ( 20692 )",
+                "$ 2014"
+            ]
+        ],
+        "qa": {
+            "question": "what is the percentage change in cash flow hedges in 2011 compare to the 2010?",
+            "answer": "9.9%",
+            "explanation": "",
+            "ann_table_rows": [],
+            "ann_text_rows": [
+                22
+            ],
+            "steps": [
+                {
+                    "op": "minus2-1",
+                    "arg1": "153.7",
+                    "arg2": "139.9",
+                    "res": "13.8"
+                },
+                {
+                    "op": "divide2-2",
+                    "arg1": "#0",
+                    "arg2": "139.9",
+                    "res": "9.9%"
+                }
+            ],
+            "program": "subtract(153.7, 139.9), divide(#0, 139.9)",
+            "gold_inds": {
+                "text_22": "the total notional amounts of derivative instruments designated as hedging instruments as of october 29 , 2011 and october 30 , 2010 were $ 375 million of interest rate swap agreements accounted for as fair value hedges and $ 153.7 million and $ 139.9 million , respectively , of cash flow hedges denominated in euros , british pounds and analog devices , inc ."
+            },
+            "exe_ans": 0.09864,
+            "tfidftopn": {
+                "text_20": "changes in the fair value of cash flow hedges are recorded in oci and reclassified into earnings when the underlying contract matures .",
+                "text_5": "the company designated these swaps as fair value hedges ."
+            },
+            "program_re": "divide(subtract(153.7, 139.9), 139.9)",
+            "model_input": [
+                [
+                    "text_0",
+                    "undesignated hedges was $ 41.2 million and $ 42.1 million , respectively ."
+                ],
+                [
+                    "text_8",
+                    "the gain or loss on the hedged item ( that is , the fixed-rate borrowings ) attributable to the hedged benchmark interest rate risk and the offsetting gain or loss on the related interest rate swaps for fiscal year 2011 and fiscal year 2010 were as follows : statement of income ."
+                ],
+                [
+                    "text_22",
+                    "the total notional amounts of derivative instruments designated as hedging instruments as of october 29 , 2011 and october 30 , 2010 were $ 375 million of interest rate swap agreements accounted for as fair value hedges and $ 153.7 million and $ 139.9 million , respectively , of cash flow hedges denominated in euros , british pounds and analog devices , inc ."
+                ]
+            ]
+        },
+        "id": "ADI/2011/page_61.pdf-2",
+        "table_retrieved": [],
+        "text_retrieved": [
+            {
+                "score": -0.08387626707553864,
+                "ind": "text_0"
+            },
+            {
+                "score": -1.206732153892517,
+                "ind": "text_8"
+            },
+            {
+                "score": -1.5992318391799927,
+                "ind": "text_22"
+            },
+            {
+                "score": -1.931937336921692,
+                "ind": "text_3"
+            },
+            {
+                "score": -2.7196240425109863,
+                "ind": "text_18"
+            }
+        ],
+        "table_retrieved_all": [
+            {
+                "score": -2.742973804473877,
+                "ind": "table_1"
+            },
+            {
+                "score": -3.105851411819458,
+                "ind": "table_0"
+            }
+        ],
+        "text_retrieved_all": [
+            {
+                "score": -0.08387626707553864,
+                "ind": "text_0"
+            },
+            {
+                "score": -1.206732153892517,
+                "ind": "text_8"
+            },
+            {
+                "score": -1.5992318391799927,
+                "ind": "text_22"
+            },
+            {
+                "score": -1.931937336921692,
+                "ind": "text_3"
+            },
+            {
+                "score": -2.7196240425109863,
+                "ind": "text_18"
+            },
+            {
+                "score": -2.8137259483337402,
+                "ind": "text_11"
+            },
+            {
+                "score": -2.8324623107910156,
+                "ind": "text_1"
+            },
+            {
+                "score": -2.8405938148498535,
+                "ind": "text_21"
+            },
+            {
+                "score": -2.948547601699829,
+                "ind": "text_6"
+            },
+            {
+                "score": -2.9618232250213623,
+                "ind": "text_23"
+            },
+            {
+                "score": -3.010707139968872,
+                "ind": "text_19"
+            },
+            {
+                "score": -3.086777925491333,
+                "ind": "text_20"
+            },
+            {
+                "score": -3.103817939758301,
+                "ind": "text_17"
+            },
+            {
+                "score": -3.1383585929870605,
+                "ind": "text_4"
+            },
+            {
+                "score": -3.1415581703186035,
+                "ind": "text_5"
+            },
+            {
+                "score": -3.1573009490966797,
+                "ind": "text_9"
+            },
+            {
+                "score": -3.1689419746398926,
+                "ind": "text_16"
+            },
+            {
+                "score": -3.171579360961914,
+                "ind": "text_2"
+            },
+            {
+                "score": -3.1725070476531982,
+                "ind": "text_10"
+            },
+            {
+                "score": -3.2093472480773926,
+                "ind": "text_12"
+            },
+            {
+                "score": -3.236121654510498,
+                "ind": "text_7"
+            },
+            {
+                "score": -3.2526447772979736,
+                "ind": "text_13"
+            },
+            {
+                "score": -3.2948830127716064,
+                "ind": "text_14"
+            },
+            {
+                "score": -3.375572443008423,
+                "ind": "text_15"
+            }
+        ]
+    }
+]

@@ -4,13 +4,15 @@ from decimal import Decimal
 from hashlib import sha256
 from importlib import import_module
 import json
+import os
 from pathlib import Path
 from types import ModuleType
 
 from finarch.dataset.schemas.custom_input import IntermediateSample
 from finarch.dataset.schemas.registry import describe
 from finarch.dataset.schemas.validation import validate
-from finarch.dataset.shared.adapter import RawSource, ConvertedRecord, ExcludedRecord, Origin
+from finarch.dataset.shared.adapter import RawSource, ConvertedRecord, ExcludedRecord, Origin, input_run_directory
+from finarch.shared.reference import extract_reference, load_raw
 
 SCHEMA = '01-preparation.01-source.custom-input'
 build = import_module('finarch.dataset.00-input.build')
@@ -20,7 +22,7 @@ NUMBER = import_module('finarch.dataset.00-input.content').NUMBER
 def content_fields(text, index):
     """Map the normalized context, without pretending it is a raw source field."""
     location = {'id': 'paragraph-0', 'text': text,
-                'source_pointer': '/c', 'context_span': [0, len(text)]}
+                'source_pointer': '/context', 'context_span': [0, len(text)]}
     numbers = [{'text': m.group(), 'source_text_span': [m.start(), m.end()],
                 'context_span': [m.start(), m.end()]} for m in NUMBER.finditer(text)]
     return {'context': text, 'source_content': {'paragraphs': [location], 'tables': []},
@@ -32,21 +34,33 @@ def content_fields(text, index):
 
 def prepare(adapter_path, input_paths, output, *, name):
     adapter_path, output = Path(adapter_path).resolve(), Path(output).resolve()
+    run_directory = input_run_directory(output)
     paths = [Path(path).resolve() for path in input_paths]
     if not paths or len(paths) != len(set(paths)):
         raise ValueError('SUPPLY_DISTINCT_INPUT_FILES')
     if not isinstance(name, str) or not name.strip():
         raise ValueError('DATASET_NAME_REQUIRED')
-    # Never replace source data, the adapter or an existing output directory.
-    if any(path == output or path.is_relative_to(output) for path in [adapter_path, *paths]):
+    # Never replace source data, the adapter or either existing output directory.
+    if output.is_relative_to(run_directory) or run_directory.is_relative_to(output):
+        raise ValueError('DATA_AND_RUN_OUTPUTS_MUST_BE_SEPARATE')
+    if any(path.is_relative_to(target) for target in (output, run_directory)
+           for path in [adapter_path, *paths]):
         raise ValueError('OUTPUT_MUST_NOT_CONTAIN_INPUT_FILES')
+    for target in (output, run_directory):
+        if target.exists():
+            raise FileExistsError(target)
     adapter_bytes = adapter_path.read_bytes()
     sources = [RawSource(f'source-{i:04d}', path, path.read_bytes())
                for i, path in enumerate(paths, 1)]
     source_meta = {s.name: {'name': s.name, 'path': str(s.path),
                            'sha256': sha256(s.content).hexdigest()} for s in sources}
     output.mkdir(parents=True, exist_ok=False)
-    write = lambda filename, value: build.write_json(output / filename, value)
+    try:
+        run_directory.mkdir(parents=True, exist_ok=False)
+    except OSError:
+        output.rmdir()
+        raise
+    write = lambda filename, value: build.write_json(run_directory / filename, value)
     adapter_hash = sha256(adapter_bytes).hexdigest()
     write('preparation-start.json', {'status': 'RUNNING', 'model_calls': 0,
           'adapter': {'path': str(adapter_path), 'sha256': adapter_hash},
@@ -78,17 +92,19 @@ def prepare(adapter_path, input_paths, output, *, name):
             # Origin + Q distinguishes questions sharing a document, while rejecting
             # a repeated conversion of the same question at the same source location.
             identity = json.dumps({'origins': [(o.source, o.locator) for o in item.origins],
-                                   'question': data['q']}, ensure_ascii=False, sort_keys=True)
+                                   'question': data['question']}, ensure_ascii=False, sort_keys=True)
             if identity in identities:
                 raise ValueError('DUPLICATE_SOURCE_QUESTION')
             identities.add(identity)
             raw_id = 'custom-' + sha256(identity.encode()).hexdigest()
             source_ids = list(dict.fromkeys(o.source for o in item.origins))
+            # Existing Preparation still needs the raw numeric representation type.
+            # Derive it here from the preserved token, not from question wording.
+            reference = extract_reference(load_raw(data['reference_answer']))
             sample = {'id': f'test-{len(samples)+1:04d}', 'raw_id': raw_id,
-                      'question': data['q'], **content_fields(data['c'], len(samples)),
-                      'reference_answer': data['a'], 'reference_answer_type': data['a_type'],
-                      'reference_precision': data['a_precision'],
-                      'answer_metadata': {'scale': None, 'negative': Decimal(data['a']).is_signed()},
+                      'question': data['question'], **content_fields(data['context'], len(samples)),
+                      **reference.fields(),
+                      'answer_metadata': {'scale': None, 'negative': Decimal(reference.reference_answer).is_signed()},
                       'provenance': {'dataset': 'custom', 'name': name,
                           'adapter_sha256': adapter_hash,
                           'sources': [{k: source_meta[s][k] for k in ('name', 'sha256')}
@@ -107,8 +123,8 @@ def prepare(adapter_path, input_paths, output, *, name):
         if adapter_path.read_bytes() != adapter_bytes:
             raise ValueError('ADAPTER_CHANGED_DURING_CONVERSION')
         validate(SCHEMA, samples)
-        write('intermediate.json', intermediate)
-        write('input.json', samples)
+        build.write_json(output / 'intermediate.json', intermediate)
+        build.write_json(output / 'input.json', samples)
         write('provider-records.json', providers)
         write('selection-log.json', {'selected': len(samples), 'excluded': exclusions,
                                     'selection_policy': 'All adapter outputs; no sampling or context deduplication.'})
@@ -120,17 +136,19 @@ def prepare(adapter_path, input_paths, output, *, name):
                     'selection_policy': 'All adapter outputs; no sampling or context deduplication.',
                     'exclusions': exclusions,
                     'input_file_sha256': build.sha256((output / 'input.json').read_bytes()),
-                    'provider_file_sha256': build.sha256((output / 'provider-records.json').read_bytes()),
+                    'provider_file_sha256': build.sha256((run_directory / 'provider-records.json').read_bytes()),
                     'intermediate_file_sha256': build.sha256((output / 'intermediate.json').read_bytes())}
         write('selection-manifest.json', manifest)
-        template = Path(__file__).with_name('custom-input-readme-template.md').read_text()
-        (output / 'README.md').write_text(template.format(count=len(samples), excluded=len(exclusions)))
+        template = (Path(__file__).parent.parent / '0-template' / 'custom-input-readme-template.md').read_text()
+        (run_directory / 'README.md').write_text(template.format(
+            count=len(samples), excluded=len(exclusions),
+            data_directory=Path(os.path.relpath(output, run_directory)).as_posix()))
         result = {'status': 'PASS', 'families': len(samples), 'excluded': len(exclusions), 'model_calls': 0,
-                  'manifest_sha256': build.sha256((output / 'selection-manifest.json').read_bytes())}
+                  'manifest_sha256': build.sha256((run_directory / 'selection-manifest.json').read_bytes())}
         write('preparation-result.json', result)
-        return {'output': str(output), **result}
+        return {'output': str(output), 'run': str(run_directory), **result}
     except Exception as error:
-        if not (output / 'selection-log.json').exists():
+        if not (run_directory / 'selection-log.json').exists():
             write('selection-log.json', {'selected': len(samples), 'excluded': exclusions})
         write('preparation-result.json', {'status': 'FAIL', 'model_calls': 0,
               'adapter_output_index': current, 'error_type': type(error).__name__, 'reason': str(error)})
