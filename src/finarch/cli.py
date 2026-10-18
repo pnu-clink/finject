@@ -19,9 +19,19 @@ def main():
     size.add_argument("--total", type=int, help="Total inputs in the fixed easy:medium:hard:TAT-QA ratio 3:2:1:4")
     size.add_argument("--per-source", type=int, help="Legacy equal-count mode")
     p.add_argument("--seed", required=True)
+    custom = sub.add_parser("prepare-custom", help="Convert raw files with a local deterministic adapter")
+    custom.add_argument("--adapter", type=Path, required=True)
+    custom.add_argument("--input", type=Path, action="append", required=True,
+                        help="Raw input file; repeat for multiple files, in deterministic order")
+    custom.add_argument("--output", type=Path, required=True)
+    custom.add_argument("--name", required=True, help="Dataset display name")
     args = parser.parse_args()
     try:
-        result = prepare(args.sources, args.output, args.per_source, args.seed, total=args.total)
+        if args.command == "prepare-custom":
+            convert = import_module("finarch.dataset.00-input.custom").prepare
+            result = convert(args.adapter, args.input, args.output, name=args.name)
+        else:
+            result = prepare(args.sources, args.output, args.per_source, args.seed, total=args.total)
     # [DP02] docs/02-architecture.md#DP02 The shutdown code is error-prepared. 1So, normal returns are shown as JSON abstractions.
     except (OSError, ValueError, KeyError, TypeError) as error:
         parser.exit(1, f"PREPARATION_FAILED: {error}\n")

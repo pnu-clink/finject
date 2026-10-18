@@ -120,13 +120,16 @@ class PreparedInputs:
             raise ValueError("PREPARATION_MANIFEST_HASH_MISMATCH")
         manifest = json.loads(manifest_path.read_text())
         recorded_schema = manifest.get("input_schema")
+        input_schema_id = "01-preparation.01-source.prepared-input"
         if recorded_schema is not None:
             recorded_id = recorded_schema.get("schema_id")
-            if recorded_id not in ("prepared.input", "01-preparation.01-source.prepared-input"):
+            if recorded_id not in ("prepared.input", "01-preparation.01-source.prepared-input",
+                                   "01-preparation.01-source.custom-input"):
                 raise ValueError("PREPARATION_SCHEMA_VERSION_MISMATCH")
             current = describe(recorded_id)
             if any(recorded_schema.get(k) != current[k] for k in ("schema_id", "version", "sha256")):
                 raise ValueError("PREPARATION_SCHEMA_VERSION_MISMATCH")
+            input_schema_id = recorded_id
         # [DP15] docs/02-architecture.md#DP15 Read the hash-schema-ID source once and save it to memory.
         # [BI02] docs/02-architecture.md#BI02 Full input 1It's the current number of the reading cycle.
         input_bytes = self.path.read_bytes()
@@ -136,7 +139,10 @@ class PreparedInputs:
         if hashlib.sha256(provider_bytes).hexdigest() != manifest.get("provider_file_sha256"):
             raise ValueError("PREPARATION_RECORD_HASH_MISMATCH")
         samples = parse_json(input_bytes)
-        validate("01-preparation.01-source.prepared-input", samples)
+        validate(input_schema_id, samples)
+        if input_schema_id == "01-preparation.01-source.custom-input":
+            if file_hash(root / "intermediate.json") != manifest.get("intermediate_file_sha256"):
+                raise ValueError("PREPARATION_INTERMEDIATE_HASH_MISMATCH")
         self.providers = json.loads(provider_bytes)
         self.samples = {}
         required = ("id", "raw_id", "context", "question", "reference_answer",

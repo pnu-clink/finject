@@ -84,7 +84,14 @@ PYTHONPATH=src .venv/bin/python -B -m finarch.dataset.viewer.server --open
 
 Open the [Dataset viewer](http://127.0.0.1:8893/?lang=en), select the construction run, round, case, and variant. Source conversion alone does not create a viewer run. Section 5 provides the route for viewing supplied final examples.
 
-**Details:** [Sample files](data/sample/README.md) · [Construction steps](src/finarch/dataset/README.md) · [Write an adapter](src/finarch/dataset/00-input/README.md) · [Dataset viewer](viewer/dataset/README.md)
+**Details:** [Sample files](data/sample/README.md) · [Construction steps](src/finarch/dataset/README.md) · [Write an adapter](src/finarch/dataset/00-input/ADAPTER.md) · [Dataset viewer](viewer/dataset/README.md)
+
+**Bring your own raw data:** use the [new-dataset adapter guide](src/finarch/dataset/00-input/ADAPTER.md)
+and [coding-agent prompt](src/finarch/dataset/00-input/ADAPTER-PROMPT.md). The
+`prepare-custom` command accepts your adapter and one or more raw files, then
+creates the five-field intermediate and a complete Preparation input bundle.
+No hand-written source catalog or manifest is required. Conversion is Python
+only; later Q/C review and dataset construction use models.
 
 ## 5. Evaluation
 

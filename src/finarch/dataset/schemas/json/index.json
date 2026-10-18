@@ -198,5 +198,13 @@
     "pydantic_version": "2.13.5",
     "sha256": "002e7a6a51dca614b9a7a242be94c829f570b437a21aec85776a5cbdf7764ee0",
     "file": "shared.01-02.02-03.review-and-validation.response.v2.schema.json"
+  },
+  {
+    "schema_id": "01-preparation.01-source.custom-input",
+    "version": 1,
+    "readiness": "defined",
+    "pydantic_version": "2.13.5",
+    "sha256": "c57deaecc907ea3f2bacd5aa3399b7388a26bc90e7f5c9d90ecddc8b2d5fefb3",
+    "file": "01-preparation.01-source.custom-input.schema.json"
   }
 ]

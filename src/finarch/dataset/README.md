@@ -4,7 +4,21 @@ Complete the [installation and credentials setup](../../../README.md#installatio
 
 ## 1. Prepare real source inputs without model calls
 
-Run the [source sample](../../../data/sample/README.md). It produces `data/prepared/reviewer-sample/input.json` and its integrity/provenance files. For other sources, follow the [adapter guide](00-input/README.md). Prepared source input is not a generated seven-variant dataset.
+Run the [source sample](../../../data/sample/README.md). It produces `data/prepared/reviewer-sample/input.json` and its integrity/provenance files. The existing FinanceReasoning/TAT-QA conversion is explained in the [built-in adapter guide](00-input/README.md). Prepared source input is not a generated seven-variant dataset.
+
+### Use your own raw data: write an adapter
+
+Follow [Write an adapter](00-input/ADAPTER.md) to turn your own raw files into
+pipeline inputs. The guide explains how to give the supplied template and English
+prompt to a coding agent, create your adapter, run conversion and validate the
+result. One or multiple raw files are supported; no hand-written catalog or
+manifest is required.
+
+The adapter produces `q`, `c`, `a`, `a_precision` and `a_type` deterministically.
+The common builder saves these in `intermediate.json` and creates `input.json`
+with its supporting files. Continue at Step 2 below, replacing
+`data/prepared/reviewer-sample/input.json` with your generated input path in each
+command. The remaining Preparation, Generation and viewer steps are the same.
 
 ## 2. Inspect the Preparation plan without model calls
 
@@ -67,8 +81,8 @@ Follow the [Dataset viewer guide](../../../viewer/dataset/README.md). Select the
 
 ```mermaid
 flowchart TD
-  subgraph INPUT["00-input/build.py and adapters.py"]
-    D00["D00 Python: hash-verified sources to prepared input"]
+  subgraph INPUT["00-input/build.py and adapters.py, or custom.py and your adapter"]
+    D00["D00 Python: built-in or custom source conversion to prepared input"]
   end
   subgraph PREP["01-preparation/prepare_schedule.py"]
     D01["D01 Python: prerequisites and plan"]

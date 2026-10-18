@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from finarch.dataset.schemas.feedback import FeedbackRequest, FeedbackResponse, LegacyFeedbackRequest
 from finarch.dataset.schemas.preparation import RevisionRequest, RevisionResponse, EvidenceRequest, EvidenceResponse
 from finarch.dataset.schemas.prepared import PreparedInputsSchema
+from finarch.dataset.schemas.custom_input import CustomInputsSchema
 from finarch.dataset.schemas.llm import ProgramResponse, ProgramResponseV5, RealizationResponse, LegacyAuditResponse, AuditResponse, AuditRequest, ProgramRequest, RealizationRequest
 
 @dataclass(frozen=True)
@@ -44,6 +45,7 @@ CONTRACTS = {
     "02-generation.feedback.case-feedback.request": Contract(FeedbackRequest, version=2),
     "02-generation.feedback.case-feedback.response": Contract(FeedbackResponse),
     "01-preparation.01-source.prepared-input": Contract(PreparedInputsSchema, version=2),
+    "01-preparation.01-source.custom-input": Contract(CustomInputsSchema),
     "01-preparation.03-calculation.pot.request": Contract(ProgramRequest, version=2),
     "01-preparation.03-calculation.pot.response": Contract(ProgramResponseV5, version=5),
     "02-generation.02-generate-text.realization.response": Contract(RealizationResponse),
@@ -70,6 +72,7 @@ SCHEMA_FILES = {"01-preparation.05-verification.semantic.request": "01-preparati
  'shared.01-02.02-03.review-and-validation.response.v2': 'shared.01-02.02-03.review-and-validation.response.v2.schema.json'}
 
 SCHEMA_FILES["02-generation.03-validation.ea-recovery-bindings"] = "02-generation.03-validation.ea-recovery-bindings.schema.json"
+SCHEMA_FILES["01-preparation.01-source.custom-input"] = "01-preparation.01-source.custom-input.schema.json"
 SCHEMA_FILES.update({INVERSE_ROLE+"."+direction: INVERSE_ROLE+"."+direction+".schema.json" for direction in ("request", "response")})
 
 SCHEMA_FILES.update({role+"."+direction:role+"."+direction+".schema.json" for role in (ROLE,TRANSLATION_ROLE) for direction in ("request","response")})
