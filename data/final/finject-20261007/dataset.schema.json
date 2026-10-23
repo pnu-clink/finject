@@ -79,7 +79,12 @@
         "metadata": {
           "additionalProperties": true,
           "title": "Metadata",
-          "type": "object"
+          "type": "object",
+          "properties": {
+            "inverse_review": {
+              "$ref": "#/$defs/EmbeddedInverseReview"
+            }
+          }
         }
       },
       "required": [
@@ -91,10 +96,310 @@
         "automatic_validation",
         "production_review",
         "source",
-        "annotation"
+        "annotation",
+        "metadata"
       ],
       "title": "Item",
+      "type": "object",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "EA_01",
+                  "EA_02"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "metadata": {
+                "required": [
+                  "inverse_review"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "metadata": {
+                "not": {
+                  "required": [
+                    "inverse_review"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "InverseEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "field": {
+          "enum": [
+            "question",
+            "context"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 0,
+          "title": "End",
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field",
+        "start",
+        "end",
+        "quote"
+      ],
+      "title": "InverseEvidence",
       "type": "object"
+    },
+    "ReviewModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "model",
+        "effort"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effort": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "EmbeddedInverseReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "inverse_possible",
+        "missing_quantity",
+        "reason",
+        "formula",
+        "evidence",
+        "evidence_display_check",
+        "model",
+        "timestamp",
+        "affects_quality_status",
+        "failure_reason"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "COMPLETED",
+            "CALL_FAILED",
+            "NOT_RECORDED"
+          ]
+        },
+        "inverse_possible": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "missing_quantity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "formula": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/InverseEvidence"
+          }
+        },
+        "evidence_display_check": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReviewModel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timestamp": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "affects_quality_status": {
+          "const": false
+        },
+        "failure_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "COMPLETED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "inverse_possible": {
+                "type": "boolean"
+              },
+              "missing_quantity": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence": {
+                "type": "array"
+              },
+              "model": {
+                "$ref": "#/$defs/ReviewModel"
+              },
+              "timestamp": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_display_check": {
+                "type": "object"
+              },
+              "failure_reason": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "inverse_possible": {
+                "type": "null"
+              },
+              "missing_quantity": {
+                "type": "null"
+              },
+              "reason": {
+                "type": "null"
+              },
+              "formula": {
+                "type": "null"
+              },
+              "evidence": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "CALL_FAILED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "failure_reason": {
+                "type": "string",
+                "minLength": 1
+              },
+              "model": {
+                "$ref": "#/$defs/ReviewModel"
+              },
+              "timestamp": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_display_check": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "NOT_RECORDED"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_display_check": {
+                "type": "null"
+              },
+              "model": {
+                "type": "null"
+              },
+              "timestamp": {
+                "type": "null"
+              },
+              "failure_reason": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "additionalProperties": false,
@@ -142,6 +447,9 @@
     "variants",
     "production_selection"
   ],
-  "title": "DatasetCase",
-  "type": "object"
+  "title": "FInject compact dataset with embedded EA inverse reviews",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finarch:generated-dataset:compact-ea:v1",
+  "description": "One family per JSONL line. Questions, contexts, answers and edit provenance are unchanged; saved EA reviews are embedded in EA metadata."
 }

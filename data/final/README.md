@@ -9,18 +9,20 @@ Provenance paths are repository-relative; historical construction paths may iden
 ## Files and reading order
 
 1. [manifest.json](finject-20261007/manifest.json): release format, source counts, construction/human-selection policy, file hashes, and saved provenance.
-2. [dataset.jsonl](finject-20261007/dataset.jsonl): one family per line, including `source_input`, `original`, `variants`, production-selection metadata, actual Q/C, and content hashes.
+2. [dataset.jsonl](finject-20261007/dataset.jsonl): one family per line, including `source_input`, `original`, `variants`, production-selection metadata, actual Q/C, content hashes, and embedded EA inverse reviews.
 3. [dataset.schema.json](finject-20261007/dataset.schema.json): record contract. [events.jsonl](finject-20261007/events.jsonl): saved release assembly/check events.
 4. [Connection table](finject-20261007-connection-table.csv): links each final ID to the source dataset/run/case/file/line. These are provenance references; excluded historical folders are not prerequisites for reading the released JSONL.
-5. [EA_INVERSE_REVIEW.jsonl](finject-20261007/EA_INVERSE_REVIEW.jsonl) and [its schema](finject-20261007/EA_INVERSE_REVIEW.schema.json): separate saved EA inverse-recoverability annotations described below.
+5. [EA_INVERSE_REVIEW.jsonl](finject-20261007/EA_INVERSE_REVIEW.jsonl) and [its schema](finject-20261007/EA_INVERSE_REVIEW.schema.json): the unchanged source annotations used for the embedded EA reviews described below.
 
-The seven variants are IC-VALUE before/after, IC-SOURCE Type 1/2, IC-RELATION, and EA-01/02. Use the saved identifiers rather than inferring type from the order of arbitrary files. Final IDs and item IDs were assigned during publication; original IDs remain in saved publication metadata/connection records. Do not assume that an original reference answer is the answer to a perturbed question.
+The [field guide](finject-20261007/dataset.README.md) describes the embedded `variants[].metadata.inverse_review` structure and omitted fields. The former dataset and schema are preserved as [dataset-original.jsonl](finject-20261007/dataset-original.jsonl) and [dataset-original.schema.json](finject-20261007/dataset-original.schema.json). [manifest-original.json](finject-20261007/manifest-original.json) preserves the previous manifest, including its historical filenames; `manifest.json` identifies the current files.
+
+The seven variants are IC-VALUE before/after, IC-SOURCE Type 1/2, IC-RELATION, and EA-01/02. Use the saved identifiers rather than inferring type from the order of arbitrary files. Final IDs and item IDs were assigned during publication; original IDs remain in the connection table and the preserved original dataset. Do not assume that an original reference answer is the answer to a perturbed question.
 
 ## Meaning of approval and missing annotations
 
 The release selection requires the saved construction-selection criteria and confirmed APPROVED decisions from both annotators for all seven variants. Released `annotation` objects expose only `status: PASS`; individual rating details are not distributed in that field. The original's PASS represents construction checks, not an additional human rating of the original. Automated validation, publication selection, and human annotation are distinct.
 
-The EA inverse file contains 1,354 rows and 2,708 EA entries. Its saved counts are:
+The active dataset includes all 2,708 EA reviews in `variants[].metadata.inverse_review`. The unchanged source EA inverse file contains 1,354 rows and the same 2,708 EA entries. Their saved counts are:
 
 | Source | EA entries | Inverse possible | Inverse not possible | Call failed | Not recorded |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -28,7 +30,7 @@ The EA inverse file contains 1,354 rows and 2,708 EA entries. Its saved counts a
 | TAT-QA | 566 | 485 | 77 | 4 | 0 |
 | Total | 2,708 | 898 | 163 | 5 | 1,642 |
 
-Only 1,061 completed reviews have true/false `inverse_possible`. Failed and missing records have null; missing is not false. Saved `review_record` and evidence-display checks are preserved, not rerun. These are LLM judgments from the remaining Q/C, not independently certified answer/evidence gold and not target-model Evaluation results.
+Only 1,061 completed reviews have true/false `inverse_possible`. Failed and missing records have null; missing is not false. The source file preserves the saved `review_record` wrappers. The active dataset carries their review contents and complete evidence-display checks in the embedded structure; no reviews were rerun. These are LLM judgments from the remaining Q/C, not independently certified answer/evidence gold and not target-model Evaluation results.
 
 ## Use in Evaluation and view examples
 

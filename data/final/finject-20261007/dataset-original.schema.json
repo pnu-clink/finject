@@ -1,0 +1,147 @@
+{
+  "$defs": {
+    "Annotation": {
+      "title": "FinalAnnotation",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "const": "PASS"
+        }
+      },
+      "required": [
+        "status"
+      ]
+    },
+    "Item": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "question": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Question"
+        },
+        "context": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Context"
+        },
+        "content_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Content Sha256"
+        },
+        "automatic_validation": {
+          "additionalProperties": true,
+          "title": "Automatic Validation",
+          "type": "object"
+        },
+        "production_review": {
+          "additionalProperties": true,
+          "title": "Production Review",
+          "type": "object"
+        },
+        "annotation": {
+          "$ref": "#/$defs/Annotation"
+        },
+        "source": {
+          "additionalProperties": true,
+          "title": "Source",
+          "type": "object"
+        },
+        "metadata": {
+          "additionalProperties": true,
+          "title": "Metadata",
+          "type": "object"
+        }
+      },
+      "required": [
+        "item_id",
+        "type",
+        "question",
+        "context",
+        "content_sha256",
+        "automatic_validation",
+        "production_review",
+        "source",
+        "annotation"
+      ],
+      "title": "Item",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "finarch-generated-dataset-v1",
+      "default": "finarch-generated-dataset-v1",
+      "title": "Format",
+      "type": "string"
+    },
+    "run": {
+      "title": "Run",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "source_input": {
+      "additionalProperties": true,
+      "title": "Source Input",
+      "type": "object"
+    },
+    "original": {
+      "$ref": "#/$defs/Item"
+    },
+    "variants": {
+      "items": {
+        "$ref": "#/$defs/Item"
+      },
+      "title": "Variants",
+      "type": "array"
+    },
+    "production_selection": {
+      "additionalProperties": true,
+      "title": "Production Selection",
+      "type": "object"
+    }
+  },
+  "required": [
+    "run",
+    "id",
+    "source_input",
+    "original",
+    "variants",
+    "production_selection"
+  ],
+  "title": "DatasetCase",
+  "type": "object"
+}

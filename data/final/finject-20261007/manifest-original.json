@@ -1,0 +1,212 @@
+{
+  "format": "finarch-generated-dataset-v1",
+  "release_name": "finject-20261007",
+  "source_run": "finject-20261007",
+  "created_at": "2026-10-07T07:08:07.989003+00:00",
+  "archive_policy": "HUMAN_APPROVED_ALL_SEVEN_VARIANTS",
+  "production_selection_policy": "ALL_SEVEN_AUTOMATIC_PASS_NO_HUMAN_REJECTION",
+  "human_selection_policy": "ALL_SEVEN_CONFIRMED_APPROVED_BY_BOTH_REVIEWERS",
+  "source_datasets": [
+    {
+      "dataset": "FinanceReasoning",
+      "source_run": "20261003-concat-002",
+      "selected_cases": 1071,
+      "evaluated_cases": 1260,
+      "id_start": "id-0001",
+      "id_end": "id-1071"
+    },
+    {
+      "dataset": "TAT-QA",
+      "source_run": "20261003-003",
+      "selected_cases": 283,
+      "evaluated_cases": 291,
+      "id_start": "id-1072",
+      "id_end": "id-1354"
+    }
+  ],
+  "source_completion": {
+    "status": "COMPLETED",
+    "source_runs": [
+      "20261003-concat-002",
+      "20261003-003"
+    ]
+  },
+  "sources": {
+    "data/generated/20261003-concat-002/manifest.json": "15dd50577aa94aefd1509d98e7234435ce586df0ca78f47c9b57c4722bf845b2",
+    "data/generated/20261003-concat-002/dataset.jsonl": "fed434d9baa57d3d2f320548d9dd33ce2dfa85915d1db73613279811ecbbf3f3",
+    "data/generated/20261003-concat-002/annotations.json": "c91cd13a69f9d1b029c605d58f9e0635d3bb49bbde572b04544b97438a5bb0c9",
+    "data/generated/20261003-003/manifest.json": "1de5d3ceaa11ef4cc63092125c535e7bc7360ed38654f773f9f6091ee57dc377",
+    "data/generated/20261003-003/dataset.jsonl": "05dbd01ff6e35ba73887b3a32e094695c09894e3e471c06d928ddf54838b87ff",
+    "data/generated/20261003-003/annotations.json": "3b49f709e8f54d4aa619773661f268d35a12680af48f377e951f6f31178400dd"
+  },
+  "source_signature": "07ae31dc85c4b2ec90bf2712e2f79cb29fb1ad009d5502b98c953ca35de1530c",
+  "counts": {
+    "cases": 1354,
+    "variant_slots": 9478,
+    "saved_variants": 9478,
+    "production_eligible_cases": 1354,
+    "production_rejected_cases": 0,
+    "automatic_original": {
+      "PASS": 1354
+    },
+    "automatic_variants": {
+      "PASS": 9478
+    },
+    "annotation_pass_items": 10832
+  },
+  "annotation_state": "PASS",
+  "annotation_sources": [
+    "data/generated/20261003-concat-002/annotations.json",
+    "data/generated/20261003-003/annotations.json"
+  ],
+  "human_annotation": {
+    "reviewers": [
+      "Annotator 1",
+      "Annotator 2"
+    ],
+    "selected_cases": 1354,
+    "annotated_variants": 9478,
+    "ratings": 18956,
+    "decisions": {
+      "APPROVED": 18956
+    },
+    "annotation_date": "20261007"
+  },
+  "connection_table": {
+    "path": "../finject-20261007-connection-table.csv",
+    "sha256": "0ae9e40ae06c80b474475b9ef754bf38d9004aba92377e088ec54f67e09f6a40",
+    "bytes": 300696,
+    "rows": 1354,
+    "lookup_key": "final_id",
+    "encoding": "UTF-8 with BOM"
+  },
+  "files": {
+    "dataset.jsonl": {
+      "sha256": "d97b6faa54da2ddcf3a07967e323e3ab9bb31574b0ac311ee9acfe76aeb322ff",
+      "bytes": 57788703
+    },
+    "events.jsonl": {
+      "sha256": "2ed50b0612d3d356ffca066f3dd0d0e52a76b663566cd83263ca6b063c63956d",
+      "bytes": 1892
+    },
+    "README.md": {
+      "sha256": "e63b2bcc8680c51fb071194d45e195d4c2893a1b541aeec9f55bed964b65de69",
+      "bytes": 4068
+    },
+    "dataset.schema.json": {
+      "sha256": "0e352401038dd7861c3bc23f7054a05a2754b631eaef311360d6402d2297f0e9",
+      "bytes": 3081
+    },
+    "EA_INVERSE_REVIEW.jsonl": {
+      "sha256": "e49a464bfbcea9ee4475e86befeab2266d0e0b73e8cff4f1e8cfc127f476df8f",
+      "bytes": 13564957
+    },
+    "EA_INVERSE_REVIEW.schema.json": {
+      "sha256": "4259c70b1ef236453edc1a67dab240bc34b6075e2484e1b5727c42bc62a98b0a",
+      "bytes": 7726
+    }
+  },
+  "model_calls": 0,
+  "updated_at": "2026-10-07T12:30:44.649087+00:00",
+  "annotation_format": {
+    "status": "PASS",
+    "ratings_included": false,
+    "original_basis": "AUTOMATIC_VALIDATION_PASS",
+    "variants_basis": "ALL_SEVEN_CONFIRMED_APPROVED_BY_BOTH_REVIEWERS"
+  },
+  "annotation_detail_archive": "archive/20261007-final-before-pass-annotation-162626/finject-20261007/dataset.jsonl",
+  "ea_inverse_review": {
+    "format": "finarch-ea-inverse-review-dataset-v1",
+    "path": "EA_INVERSE_REVIEW.jsonl",
+    "schema": "EA_INVERSE_REVIEW.schema.json",
+    "created_at": "2026-10-07T12:30:44.649087+00:00",
+    "cases": 1354,
+    "counts": {
+      "variant_items": 2708,
+      "NOT_RECORDED": 1642,
+      "COMPLETED": 1061,
+      "recorded": 1066,
+      "inverse_possible_false": 163,
+      "inverse_possible_true": 898,
+      "CALL_FAILED": 5
+    },
+    "by_source_dataset": {
+      "FinanceReasoning": {
+        "cases": 1071,
+        "variant_items": 2142,
+        "NOT_RECORDED": 1642,
+        "COMPLETED": 499,
+        "recorded": 500,
+        "inverse_possible_false": 86,
+        "inverse_possible_true": 413,
+        "CALL_FAILED": 1
+      },
+      "TAT-QA": {
+        "cases": 283,
+        "variant_items": 566,
+        "COMPLETED": 562,
+        "recorded": 566,
+        "inverse_possible_true": 485,
+        "inverse_possible_false": 77,
+        "CALL_FAILED": 4
+      }
+    },
+    "by_variant": {
+      "EA_01": {
+        "variant_items": 1354,
+        "NOT_RECORDED": 821,
+        "COMPLETED": 531,
+        "recorded": 533,
+        "inverse_possible_false": 81,
+        "inverse_possible_true": 450,
+        "CALL_FAILED": 2
+      },
+      "EA_02": {
+        "variant_items": 1354,
+        "NOT_RECORDED": 821,
+        "COMPLETED": 530,
+        "recorded": 533,
+        "inverse_possible_false": 82,
+        "inverse_possible_true": 448,
+        "CALL_FAILED": 3
+      }
+    },
+    "source_inputs": {
+      "dataset.jsonl": "d97b6faa54da2ddcf3a07967e323e3ab9bb31574b0ac311ee9acfe76aeb322ff",
+      "../finject-20261007-connection-table.csv": "0ae9e40ae06c80b474475b9ef754bf38d9004aba92377e088ec54f67e09f6a40",
+      "concat_row_source_map": {
+        "path": "reports/run/20261003-concat-002/results/manifest.json",
+        "sha256": "deb0b97f145ecde6451c11696a4e54a290a523ec08d901faf84992f9d50eb061"
+      },
+      "review_response_schema": {
+        "path": "src/finarch/dataset/schemas/json/02-generation.03-validation.ea-recoverability-review.response.schema.json",
+        "sha256": "1f2855cc3291efeb3d7042b7dcb212a591f8a6a36fc800548daeda98cfe92063"
+      }
+    },
+    "checks": {
+      "final_qc_hashes": 2708,
+      "source_observations": 2708,
+      "confirmed_missing_review_references_and_records": 1642,
+      "final_id_and_source_id_links": 1354,
+      "unchanged_saved_review_records": 1066,
+      "review_file_hashes": 1066,
+      "qc_only_requests": 1066,
+      "unchanged_evidence_display_checks": 1066
+    },
+    "evidence_display_status_counts": {
+      "PASS": 973,
+      "WARNING": 88,
+      "NOT_RUN": 5
+    },
+    "missing_record_source": {
+      "generation_run": "20260917-002",
+      "cases": 821,
+      "variant_items": 1642
+    },
+    "selection": "EXACT_FINAL_1354_IDS_EA_01_AND_EA_02_ONLY",
+    "scope": "Saved LLM inverse annotations, not independently verified answer or evidence gold.",
+    "original_dataset_unchanged": true,
+    "original_judgments_unchanged": true,
+    "model_calls": 0
+  }
+}

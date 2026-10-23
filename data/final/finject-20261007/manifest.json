@@ -82,20 +82,20 @@
   },
   "files": {
     "dataset.jsonl": {
-      "sha256": "d97b6faa54da2ddcf3a07967e323e3ab9bb31574b0ac311ee9acfe76aeb322ff",
-      "bytes": 57788703
+      "sha256": "77f6a191f071b7ef5c0e4c05363319b38bbeafd3589fe729e2eca7d5ef8f7faa",
+      "bytes": 44906912
     },
     "events.jsonl": {
       "sha256": "2ed50b0612d3d356ffca066f3dd0d0e52a76b663566cd83263ca6b063c63956d",
       "bytes": 1892
     },
     "README.md": {
-      "sha256": "e63b2bcc8680c51fb071194d45e195d4c2893a1b541aeec9f55bed964b65de69",
-      "bytes": 4068
+      "sha256": "0f4ccce373a77059793ad6b44f8444ca4f07fa1fc74c3e415e7637ad0232de4d",
+      "bytes": 4839
     },
     "dataset.schema.json": {
-      "sha256": "0e352401038dd7861c3bc23f7054a05a2754b631eaef311360d6402d2297f0e9",
-      "bytes": 3081
+      "sha256": "c6a043a389d7ceeea50f3d48dbcc4ea76aed63547c1ed1563dd8b387f29eb0df",
+      "bytes": 10039
     },
     "EA_INVERSE_REVIEW.jsonl": {
       "sha256": "e49a464bfbcea9ee4475e86befeab2266d0e0b73e8cff4f1e8cfc127f476df8f",
@@ -104,10 +104,26 @@
     "EA_INVERSE_REVIEW.schema.json": {
       "sha256": "4259c70b1ef236453edc1a67dab240bc34b6075e2484e1b5727c42bc62a98b0a",
       "bytes": 7726
+    },
+    "dataset-original.jsonl": {
+      "sha256": "d97b6faa54da2ddcf3a07967e323e3ab9bb31574b0ac311ee9acfe76aeb322ff",
+      "bytes": 57788703
+    },
+    "dataset-original.schema.json": {
+      "sha256": "0e352401038dd7861c3bc23f7054a05a2754b631eaef311360d6402d2297f0e9",
+      "bytes": 3081
+    },
+    "manifest-original.json": {
+      "sha256": "4eb6c17e4013ba9768cd0108a2ec611236a23122f8f0fc6e978a0a5228d625ad",
+      "bytes": 7101
+    },
+    "dataset.README.md": {
+      "sha256": "1e7c19401a912c8e0637228ec8477cd749c7fc81c96360a22621f396bd612f6c",
+      "bytes": 6397
     }
   },
   "model_calls": 0,
-  "updated_at": "2026-10-07T12:30:44.649087+00:00",
+  "updated_at": "2026-10-23T16:40:11.471870+00:00",
   "annotation_format": {
     "status": "PASS",
     "ratings_included": false,
@@ -172,7 +188,6 @@
       }
     },
     "source_inputs": {
-      "dataset.jsonl": "d97b6faa54da2ddcf3a07967e323e3ab9bb31574b0ac311ee9acfe76aeb322ff",
       "../finject-20261007-connection-table.csv": "0ae9e40ae06c80b474475b9ef754bf38d9004aba92377e088ec54f67e09f6a40",
       "concat_row_source_map": {
         "path": "reports/run/20261003-concat-002/results/manifest.json",
@@ -181,7 +196,8 @@
       "review_response_schema": {
         "path": "src/finarch/dataset/schemas/json/02-generation.03-validation.ea-recoverability-review.response.schema.json",
         "sha256": "1f2855cc3291efeb3d7042b7dcb212a591f8a6a36fc800548daeda98cfe92063"
-      }
+      },
+      "dataset-original.jsonl": "d97b6faa54da2ddcf3a07967e323e3ab9bb31574b0ac311ee9acfe76aeb322ff"
     },
     "checks": {
       "final_qc_hashes": 2708,
@@ -207,6 +223,10 @@
     "scope": "Saved LLM inverse annotations, not independently verified answer or evidence gold.",
     "original_dataset_unchanged": true,
     "original_judgments_unchanged": true,
-    "model_calls": 0
+    "model_calls": 0,
+    "embedded_in": {
+      "path": "dataset.jsonl",
+      "field": "variants[].metadata.inverse_review"
+    }
   }
 }
