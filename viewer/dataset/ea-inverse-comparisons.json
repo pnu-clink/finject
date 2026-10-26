@@ -8,8 +8,8 @@
       "summary_sha256": "61c8d1f6fb32b44e7601318a9496cf280f297689a0de00901d9f545593572f62",
       "comparison_sha256": "47f5da9a9874f49e76489b922d518e640f5ea000c0f52eaa80046f1bae08b1b5",
       "annotators": [
-        "\uc815\uc720\ubbf8",
-        "\uae40\uc9c4\uc218"
+        "reviewer1",
+        "reviewer2"
       ],
       "source_sha256": [
         "6155c9b42548254bf5d6cca049e95d8bd0858abfa8bc5484c7a9e5acfc492197",

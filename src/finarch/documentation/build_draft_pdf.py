@@ -690,26 +690,7 @@ preamble=r'''\documentclass[11pt,a4paper]{article}
 \definecolor{aclhyperlink}{HTML}{000099}
 \hypersetup{colorlinks=true,citecolor=aclhyperlink,linkcolor=aclhyperlink,urlcolor=aclhyperlink,pdftitle={FInject: Grounded Answering and Abstention of Perturbation-Injected Financial Questions}}
 \title{FInject: Grounded Answering and Abstention of Perturbation-Injected Financial Questions}
-\author{
-  \textbf{Wooik Park}\textsuperscript{1}\thanks{\protect\hypertarget{Hfootnote.1}{}Lead author.}\quad
-  \textbf{Jinkyu Kim}\textsuperscript{2}\quad
-  \textbf{Jinsu Kim}\textsuperscript{1}\quad
-  \textbf{Yumi Jung}\textsuperscript{1} \\
-  \textbf{Mujeen Sung}\textsuperscript{3}\quad
-  \textbf{Mogan Gim}\textsuperscript{4}\quad
-  \textbf{Donghee Choi}\textsuperscript{1}\thanks{\protect\hypertarget{Hfootnote.2}{}Corresponding author.} \\[2pt]
-  {\normalfont\textsuperscript{1}Pusan National University\quad
-  \textsuperscript{2}Korea University} \\
-  {\normalfont\textsuperscript{3}Kyung Hee University\quad
-  \textsuperscript{4}Hankuk University of Foreign Studies} \\[2pt]
-  % Keep the two email rows in author order within the existing title block.
-  {\normalfont\strut{\fontsize{9.5}{14}\selectfont
-  \texttt{wipark@pusan.ac.kr}\enspace\texttt{jkcost2511@gmail.com}\enspace
-  \texttt{\{jinsu.kim,jungyumi\}@pusan.ac.kr}}} \\
-  {\normalfont\strut{\fontsize{9.5}{14}\selectfont
-  \texttt{mujeensung@khu.ac.kr}\enspace\texttt{gimmogan@hufs.ac.kr}\enspace
-  \texttt{dchoi@pusan.ac.kr}}}
-}
+\author{Anonymous Authors}
 \begin{document}
 \maketitle
 \begin{abstract}\input{sections/abstract}\end{abstract}

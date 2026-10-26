@@ -12,13 +12,13 @@
 </header>
 <div class="filter-bar" id="filters">
   <div class="type-tabs" role="group" aria-label="ER 유형"><button data-type="EA_01" aria-pressed="true">ER-1 <span></span></button><button data-type="EA_02" aria-pressed="false">ER-2 <span></span></button><button data-type="all" aria-pressed="false">전체 <span></span></button></div>
-  <label class="filter-label">판정 조합<select id="scope" aria-label="판정 조합"><option value="any">한 분 이상 Reject</option><option value="disagree">불일치만</option><option value="both">두 분 모두 Reject</option><option value="first">정유미 Reject</option><option value="second">김진수 Reject</option></select></label>
+  <label class="filter-label">판정 조합<select id="scope" aria-label="판정 조합"><option value="any">한 분 이상 Reject</option><option value="disagree">불일치만</option><option value="both">두 분 모두 Reject</option><option value="first">reviewer1 Reject</option><option value="second">reviewer2 Reject</option></select></label>
   <label class="filter-label">역산 판정<select id="inverse" aria-label="역산 판정"><option value="all">true / false 전체</option><option value="true">true · 역산 가능</option><option value="false">false · 복원 미확립</option></select></label>
   <label class="search-label"><span class="sr-only">문항·질문·의견 검색</span><input id="search" type="search" placeholder="문항 번호 · 질문 · 의견 검색" autocomplete="off"></label>
   <button id="reset">초기화</button>
 </div>
 <div class="layout">
-  <aside class="sidebar"><div class="sidebar-top"><h2>문항 목록</h2><span id="list-count"></span></div><p class="nav-legend">● 정유미 · ● 김진수 <span>초록 Accept / 빨강 Reject</span></p><nav id="case-nav" aria-label="Reject 항목 바로 이동"></nav><p class="sidebar-note">Q / E 이전·다음 항목<br>A / D ER-1·ER-2 선택</p></aside>
+  <aside class="sidebar"><div class="sidebar-top"><h2>문항 목록</h2><span id="list-count"></span></div><p class="nav-legend">● reviewer1 · ● reviewer2 <span>초록 Accept / 빨강 Reject</span></p><nav id="case-nav" aria-label="Reject 항목 바로 이동"></nav><p class="sidebar-note">Q / E 이전·다음 항목<br>A / D ER-1·ER-2 선택</p></aside>
   <main>
     <div class="list-toolbar"><p id="visible-summary" aria-live="polite"></p><div class="reading-tools"><button id="expand">본문 모두 펼치기</button><button id="collapse">본문 모두 접기</button><label>글자<select id="font"><option value="15">보통</option><option value="17">크게</option><option value="19">더 크게</option></select></label></div></div>
     <p class="reading-note">Accept는 저장된 역산 판정에 동의, Reject는 비동의입니다. 제거된 수치는 ER-1 <del class="er1-removal">분홍</del> / ER-2 <del class="er2-removal">보라</del> 취소선으로 표시합니다.</p>

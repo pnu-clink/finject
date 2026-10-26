@@ -14,17 +14,16 @@ The widget does not request Accessibility, Automation / AppleScript, Screen Reco
 
 The app is a Universal build for Apple Silicon and Intel Macs, targeting macOS 13 or later. The viewer servers require Python 3.11 or later. The Experiments viewer also requires Node.js 20 or later. Xcode is not required to use the packaged app.
 
-Download the complete repository. The app ZIP does not contain Python, Node.js, or the viewer server code. In Terminal, run:
+Download the complete repository from the [anonymous repository](https://anonymous.4open.science/r/finject-20261012/). Extract it and name the extracted repository folder `2026-ACL`. The app ZIP does not contain Python, Node.js, or the viewer server code. In Terminal, navigate to the parent of the extracted folder and run:
 
 ```sh
-git clone --branch 2026-ACL --single-branch https://github.com/pnu-clink/finject.git 2026-ACL
 cd 2026-ACL
 python3 -m venv .venv
 .venv/bin/python -m pip install -e '.[viewer]'
 node --version
 ```
 
-If you already downloaded the repository, skip `git clone` and run the remaining commands from its root folder. Install Python from [python.org](https://www.python.org/downloads/macos/) and Node.js from [nodejs.org](https://nodejs.org/en/download) if needed.
+If you already opened Terminal in the repository root, skip `cd 2026-ACL` and run the remaining commands there. Install Python from [python.org](https://www.python.org/downloads/macos/) and Node.js from [nodejs.org](https://nodejs.org/en/download) if needed.
 
 ## 2. Extract and launch the app
 
